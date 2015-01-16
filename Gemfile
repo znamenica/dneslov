@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 ruby '2.1.4'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 4.2.0'
 gem 'pg'
 #NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
+gem 'postgres_ext'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -33,7 +34,7 @@ gem "figaro"
 gem 'therubyracer', platform: :ruby
 
 # Slim html renderer
-gem 'slim-rails', github: 'slim-template/slim-rails'
+gem 'slim-rails', '~> 3.0.1'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
