@@ -1,0 +1,6 @@
+if [ -d "$(pwd)/.bundle" ]; then
+   rvm use $(cat .ruby-version)@$(cat .ruby-gemset) --create
+   export PATH=$(pwd)/.bundle/bin:$PATH
+   export GEM_HOME=$(pwd)/.bundle
+   export GEM_PATH=$GEM_HOME:$GEM_PATH
+fi
