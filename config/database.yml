@@ -4,7 +4,7 @@ default: &default
   database: dneslov_development
   pool: 5
   username: dneslov
-  password: dneslov_password
+  password: 
 
 development:
   <<: *default
