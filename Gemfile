@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 ruby '2.1.4'
 
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 4.2.2'
+# Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
+gem 'rack', '~> 1.6.2'
 gem 'pg'
 #NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 gem 'postgres_ext'
@@ -43,6 +45,8 @@ gem 'slim-rails', '~> 3.0.1'
 gem "simple_form"
 # Use Less for Rails for CSS
 gem "less-rails"
+# Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
+gem 'rest-client', '~> 1.8.0'
 
 group :development do
 #   gem 'capistrano-rails'
