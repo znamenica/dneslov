@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.4'
+ruby '2.3.0'
 
 gem 'rails', '~> 4.2.2'
 # Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
@@ -9,11 +9,9 @@ gem 'pg'
 gem 'postgres_ext'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 2.7.2'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -24,16 +22,11 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
-
 gem 'param_protected'
 
 gem 'globalize'
 
 gem "figaro"
-
-gem 'therubyracer', platform: :ruby
 
 # Slim html renderer
 gem 'slim-rails', '~> 3.0.1'
@@ -43,8 +36,9 @@ gem 'slim-rails', '~> 3.0.1'
 
 # Use Simple Forms for forms
 gem "simple_form"
-# Use Less for Rails for CSS
-gem "less-rails"
+# Use Sass for Rails for CSS
+gem "sass-rails"
+gem "bootstrap-sass"
 # Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
 gem 'rest-client', '~> 1.8.0'
 
@@ -54,16 +48,19 @@ group :development do
 end
 
 group :development, :test do
+   gem 'ruby-prof'
    gem "factory_girl_rails"
    gem 'pry-rails'
    gem 'pry_debug'
-   # Use twitter bootstrap as the JavaScript library
-   gem 'less-rails-bootstrap'
+   gem 'spring'
+   gem 'spring-commands-cucumber'
 end
 
 group :test do
    gem 'cucumber-rails', require: nil
-   gem 'shoulda'
+   gem 'shoulda-matchers', '3.0'
+   gem 'rspec-expectations'
+   gem 'rspec-wait'
    gem 'simplecov'
    gem 'database_cleaner'
    gem "launchy"
