@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
-gem 'rails', '~> 4.2.2'
+gem 'rails', '~> 4.2.5.1'
 # Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
 gem 'rack', '~> 1.6.2'
 gem 'pg'
@@ -41,6 +41,13 @@ gem "sass-rails"
 gem "bootstrap-sass"
 # Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
 gem 'rest-client', '~> 1.8.0'
+
+# Explicitly defined to fix CVE-2015-7499 - HEAP-BASED BUFFER OVERFLOW VULNERABILITY IN LIBXML2 and other in LIBXML2
+gem 'nokogiri', '~> 1.6.7.2'
+
+# Explicitly defined to fix CVE-2015-7579 - XSS VULNERABILITY IN STRIP_TAGS
+# CVE-2015-7578 - POSSIBLE XSS VULNERABILITY
+gem 'rails-html-sanitizer', '~> 1.0.3'
 
 group :development do
 #   gem 'capistrano-rails'
