@@ -14,7 +14,8 @@ gem 'uglifier', '>= 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+# CVE-2015-1840 - CSRF VULNERABILITY fix
+gem 'jquery-rails', '~> 4.0.4'
 # Widelinks makes following links in your web application faster.
 gem 'wiselinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -52,6 +53,7 @@ gem 'rails-html-sanitizer', '~> 1.0.3'
 group :development do
 #   gem 'capistrano-rails'
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
+   gem 'pattern_generator'
 end
 
 group :development, :test do
