@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
 
-gem 'rails', '~> 4.2.5.1'
+gem 'rails', '~> 4.2.5.2'
 # Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
 gem 'rack', '~> 1.6.2'
 gem 'pg'
