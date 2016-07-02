@@ -44,7 +44,8 @@ gem "bootstrap-sass"
 gem 'rest-client', '~> 1.8.0'
 
 # Explicitly defined to fix CVE-2015-7499 - HEAP-BASED BUFFER OVERFLOW VULNERABILITY IN LIBXML2 and other in LIBXML2
-gem 'nokogiri', '~> 1.6.7.2'
+# and CVE-2015-8806 - Denial of service or RCE from libxml2 and libxslt
+gem 'nokogiri', '~> 1.6.8'
 
 # Explicitly defined to fix CVE-2015-7579 - XSS VULNERABILITY IN STRIP_TAGS
 # CVE-2015-7578 - POSSIBLE XSS VULNERABILITY

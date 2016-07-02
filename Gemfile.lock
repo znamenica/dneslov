@@ -120,18 +120,20 @@ GEM
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
     mime-types (2.99.1)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.8.4)
     multi_json (1.11.1)
     multi_test (0.1.1)
     netrc (0.10.3)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     param_protected (4.0.0)
     pattern_generator (0.0.4)
       rails (>= 4.0.0)
     pg (0.18.1)
     pg_array_parser (0.0.9)
+    pkg-config (1.1.7)
     postgres_ext (2.4.0)
       activerecord (>= 4.0.0)
       arel (>= 4.0.1)
@@ -270,7 +272,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails (~> 4.0.4)
   launchy
-  nokogiri (~> 1.6.7.2)
+  nokogiri (~> 1.6.8)
   param_protected
   pattern_generator
   pg
