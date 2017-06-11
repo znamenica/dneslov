@@ -1,5 +1,11 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
+ruby '2.3.4'
 
 gem 'rails', '~> 4.2.5.2'
 # Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
@@ -26,6 +32,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'param_protected'
 
 gem 'globalize'
+# gem 'globalize-versioning'
 
 gem "figaro"
 
@@ -34,6 +41,8 @@ gem 'slim-rails', '~> 3.0.1'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 3.0'
 
 # Use Simple Forms for forms
 gem "simple_form"
@@ -52,9 +61,10 @@ gem 'nokogiri', '~> 1.6.8'
 gem 'rails-html-sanitizer', '~> 1.0.3'
 
 group :development do
-#   gem 'capistrano-rails'
+   gem 'capistrano-rails'
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'pattern_generator'
+   gem 'web-console', '>= 3.3.0'
 end
 
 group :development, :test do
@@ -62,8 +72,10 @@ group :development, :test do
    gem "factory_girl_rails"
    gem 'pry-rails'
    gem 'pry_debug'
+   gem 'listen', '>= 3.0.5', '< 3.2'
    gem 'spring'
    gem 'spring-commands-cucumber'
+   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :test do
@@ -80,6 +92,6 @@ group :test do
 end
 
 group :production do
-   gem 'puma'
+   gem 'puma', '~> 3.7'
 end
 
