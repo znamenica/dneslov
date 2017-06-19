@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   root 'memories#index'
 
   get '/index' => 'memories#index'
-  get '/:slug' => 'memories#show'
+  get '/:slug' => 'memories#show', as: 'slug'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

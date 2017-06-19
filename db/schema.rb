@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611025100) do
+ActiveRecord::Schema.define(version: 20170615180100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,13 +19,11 @@ ActiveRecord::Schema.define(version: 20170611025100) do
     t.string "date"
     t.string "language_code"
     t.string "alphabeth_code"
-    t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "place_id"
     t.string "author_name"
     t.string "council"
-    t.index ["slug"], name: "index_calendaries_on_slug", unique: true
   end
 
   create_table "canto_memories", id: :serial, force: :cascade do |t|
@@ -127,7 +125,6 @@ ActiveRecord::Schema.define(version: 20170611025100) do
     t.datetime "updated_at", null: false
     t.integer "covers_to_id"
     t.string "view_string"
-    t.string "short"
     t.string "quantity"
     t.string "order"
     t.string "council"
@@ -196,6 +193,14 @@ ActiveRecord::Schema.define(version: 20170611025100) do
     t.string "ref_title"
     t.integer "tone"
     t.index ["name", "alphabeth_code"], name: "index_services_on_name_and_alphabeth_code", unique: true
+  end
+
+  create_table "slugs", id: :serial, force: :cascade do |t|
+    t.string "text", null: false
+    t.string "sluggable_type"
+    t.integer "sluggable_id"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_slugs_on_sluggable_type_and_sluggable_id"
+    t.index ["text"], name: "index_slugs_on_text"
   end
 
 end
