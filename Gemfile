@@ -63,6 +63,9 @@ gem 'rails-html-sanitizer', '~> 1.0.3'
 gem 'bukovina', path: '/home/majioa/git/bukovina'
 gem 'has_scope'
 
+# pagination
+gem 'kaminari'
+
 group :development do
    gem 'capistrano-rails'
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]

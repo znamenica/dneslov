@@ -7,7 +7,7 @@ class MemoriesController < ApplicationController
   # GET /memories
   # GET /memories.json
   def index
-    @memories = apply_scopes(Memory).all
+    @memories = apply_scopes(Memory).all.page(params[:page])
   end
 
   # GET /memories/1
