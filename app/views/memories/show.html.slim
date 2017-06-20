@@ -1,14 +1,31 @@
 p#notice = notice
+
 div.row
-   span.red.badge = @memory.order
-   span = @memory.short_name
-   span = @memory.date
+   div.col.s12
+      span.chip.small.orange = @memory.order
+      span
+         b = @memory.short_name
+      span.chip.white = @memory.date
+
 div.row = @memory.councils
-div.row = @memory.description
+
+div.row
+   - if description = @memory.description_for(locale)
+      div.col.s2
+         b = t '.description'
+      div.col.s12 = description.text
+
 div.row = @memory.being_line
 div.row = @memory.wiki_line
 div.row = @memory.pateric_line
+div.row
+   - if @memory.memos.present?
+      div.col.s2
+         b = t '.calendaries'
+      div.col.s12
+         - @memory.memo_chips_each do | memo, link, date, text, color |
+            = @memory.chip_for( link, date, color )
+
 div.row = @memory.icon_feed
-div.row = @memory.memo_line
 div.row = @memory.troparion
 div.row = @memory.kontakion

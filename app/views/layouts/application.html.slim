@@ -1,8 +1,18 @@
 html
    head
-      title Dneslov
+      title Днеслов
       = stylesheet_link_tag 'application', media: 'all'
+      = stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons'
       = javascript_include_tag 'application'
       = csrf_meta_tags
    body
-      = yield
+      header
+         nav.red
+            .nav-wrapper
+               a.brand-logo(href='#') = 'Днеслов'
+
+      main
+         .container
+            .row
+               .col.s3
+               .col.s9 = yield

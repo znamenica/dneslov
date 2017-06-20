@@ -1,0 +1,9 @@
+ru:
+   hello: "Привет мир"
+   memories:
+      index:
+         title: Памяти
+      show:
+         title: Карточка памяти
+         description: Описание
+         calendaries: Месяцесловы

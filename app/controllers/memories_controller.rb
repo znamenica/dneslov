@@ -13,6 +13,7 @@ class MemoriesController < ApplicationController
   # GET /memories/1
   # GET /memories/1.json
   def show
+     render :show, locals: { locale: :ру }
   end
 
   protected
