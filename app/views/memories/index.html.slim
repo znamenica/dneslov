@@ -10,6 +10,6 @@ table
   tbody
     - @memories.each do |memory|
       tr
-        td = link_to(memory.slug&.text, memory.slug)
+        td = link_to(memory.slug&.text, memory.slug&.text)
 
 = paginate @memories, remote: true

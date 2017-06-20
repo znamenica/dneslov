@@ -19,4 +19,5 @@ class MemoriesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_memory
-    @memory = Memory.by_slug(params[:slug]).first || raise(ActiveRecord::NotFound) ;end;end
+#     binding.pry
+    @memory = Memory.by_slug(params[:slug]).first&.decorate || raise(ActiveRecord::RecordNotFound) ;end;end

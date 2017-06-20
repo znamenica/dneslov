@@ -1,6 +1,14 @@
 p#notice = notice
-
-
-= link_to 'Edit', edit_memory_path(@memory)
-'|
-= link_to 'Back', memories_path
+div.row
+   span.red.badge = @memory.order
+   span = @memory.short_name
+   span = @memory.date
+div.row = @memory.councils
+div.row = @memory.description
+div.row = @memory.being_line
+div.row = @memory.wiki_line
+div.row = @memory.pateric_line
+div.row = @memory.icon_feed
+div.row = @memory.memo_line
+div.row = @memory.troparion
+div.row = @memory.kontakion

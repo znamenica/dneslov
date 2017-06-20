@@ -38,6 +38,11 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.1.1)
       activesupport (= 5.1.1)
+    activemodel-serializers-xml (1.0.1)
+      activemodel (> 5.x)
+      activerecord (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.1.1)
       activemodel (= 5.1.1)
       activesupport (= 5.1.1)
@@ -110,6 +115,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
+    draper (3.0.0)
+      actionpack (~> 5.0)
+      activemodel (~> 5.0)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (~> 5.0)
+      request_store (~> 1.0)
     dry_crud (3.0.0)
       rails (>= 3.2)
     email_spec (1.6.0)
@@ -164,6 +175,8 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
+    materialize-sass (0.98.2)
+      sass (~> 3.3)
     method_source (0.8.2)
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
@@ -222,6 +235,7 @@ GEM
     rdoba (0.9.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    request_store (1.3.2)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -324,6 +338,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2.2)
   cucumber-rails
   database_cleaner
+  draper
   dry_crud
   email_spec
   factory_girl_rails
@@ -334,6 +349,7 @@ DEPENDENCIES
   kaminari
   launchy
   listen (>= 3.0.5, < 3.2)
+  materialize-sass
   nokogiri (~> 1.6.8)
   pattern_generator
   pg

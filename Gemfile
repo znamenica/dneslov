@@ -37,6 +37,9 @@ gem "figaro"
 # Slim html renderer
 gem 'slim-rails', '~> 3.1.2'
 
+# css
+gem 'materialize-sass'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Use Redis adapter to run Action Cable in production
@@ -63,8 +66,12 @@ gem 'rails-html-sanitizer', '~> 1.0.3'
 gem 'bukovina', path: '/home/majioa/git/bukovina'
 gem 'has_scope'
 
-# pagination
+# view
+## pagination
 gem 'kaminari'
+
+## decoration
+gem 'draper'
 
 group :development do
    gem 'capistrano-rails'
