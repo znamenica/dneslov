@@ -1,31 +1,78 @@
 p#notice = notice
 
-div.row
-   div.col.s12
+.row
+   .col.s12
       span.chip.small.orange = @memory.order
       span
          b = @memory.short_name
       span.chip.white = @memory.date
 
-div.row = @memory.councils
+.row
+   - if @memory.council
+      .col.s12 = @memory.council_chips
 
-div.row
-   - if description = @memory.description_for(locale)
-      div.col.s2
+.row
+   - if description = @memory.description_for( locale )
+      .col.s2
          b = t '.description'
-      div.col.s12 = description.text
+      .col.s12 = description.text 
 
-div.row = @memory.being_line
-div.row = @memory.wiki_line
-div.row = @memory.pateric_line
-div.row
+.row
+   - if beings = @memory.beings_for( locale )
+      .col.s2
+         b = t '.being'
+      .col.s12
+         - beings.each do | link |
+            = @memory.chip_for( link.url )
+
+.row
+   - if wikies = @memory.wikies_for( locale )
+      .col.s2
+         b = t '.wiki'
+      .col.s12
+         - wikies.each do | link |
+            = @memory.chip_for( link.url )
+
+.row
+   - if paterics = @memory.paterics_for( locale )
+      .col.s2
+         b = t '.pateric'
+      .col.s12
+         - paterics.each do | link |
+            = @memory.chip_for( link.url )
+
+.row
    - if @memory.memos.present?
-      div.col.s2
+      .col.s2
          b = t '.calendaries'
-      div.col.s12
+      .col.s12
          - @memory.memo_chips_each do | memo, link, date, text, color |
-            = @memory.chip_for( link, date, color )
+            = @memory.chip_for( link&.url, date, color )
 
-div.row = @memory.icon_feed
-div.row = @memory.troparion
-div.row = @memory.kontakion
+.row
+   - if @memory.valid_icon_links.present?
+      .col.s12
+         .carousel
+            - @memory.valid_icon_links.each do | link |
+               a.carousel-item( href='#' )
+                  img( src=link.url )
+
+.row
+   - if troparion = @memory.troparions.first
+      .col.s3
+         b
+            - if troparion.tone.present?
+               = t '.troparion_with_tone', tone: troparion.tone
+            - else
+               = t '.troparion'
+      .col.s12 = troparion.text
+
+.row
+   - if kontakion = @memory.kontakions.first
+      .col.s3
+         b
+            - if kontakion.tone.present?
+               = t '.kontakion_with_tone', tone: kontakion.tone
+            - else
+               = t '.kontakion'
+      .col.s12 = kontakion.text

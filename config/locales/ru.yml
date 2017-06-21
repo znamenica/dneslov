@@ -6,4 +6,11 @@ ru:
       show:
          title: Карточка памяти
          description: Описание
+         being: Бытие
+         wiki: Вики
+         pateric: Отечник
          calendaries: Месяцесловы
+         troparion_with_tone: Тропарь, глас %{tone}
+         troparion: Тропарь
+         kontakion_with_tone: Кондак, глас %{tone}
+         kontakion: Кондак
