@@ -67,6 +67,9 @@ gem 'bukovina', path: '/home/majioa/git/bukovina'
 gem 'has_scope'
 
 # view
+## NPM packaging
+gem 'webpacker'
+
 ## pagination
 gem 'kaminari'
 

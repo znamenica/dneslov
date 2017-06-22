@@ -20,3 +20,5 @@
 
 .ruby-gemset
 .ruby-version
+/public/packs
+/node_modules
