@@ -11,11 +11,12 @@
  * file per style scope.
  *
  *= require materialize
+ *= require webpack/app
  *= require_tree .
  *= require_self
  */
 
-@import '~pickmeup/css/pickmeup'
+//#import '~pickmeup/css/pickmeup'
 
 /*div:empty {
    display: none;

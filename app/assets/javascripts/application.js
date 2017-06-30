@@ -20,3 +20,4 @@ $(document).ready(function(){
    pickmeup('#calendar');
    $('.carousel').carousel();
 });
+//= require webpack/app

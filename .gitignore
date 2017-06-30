@@ -22,3 +22,9 @@
 .ruby-version
 /public/packs
 /node_modules
+
+/node_modules
+/vendor/assets/stylesheets/webpack
+/vendor/assets/javascripts/webpack
+
+*.log

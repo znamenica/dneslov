@@ -69,6 +69,7 @@ gem 'has_scope'
 # view
 ## NPM packaging
 gem 'webpacker'
+gem 'npm-pipeline-rails'
 
 ## pagination
 gem 'kaminari'
