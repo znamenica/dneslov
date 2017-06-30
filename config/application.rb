@@ -24,5 +24,19 @@ module Dneslov
     config.paths['db/migrate'] = Bukovina::Engine.paths['db/migrate'].existent
 
     config.web_console.whitelisted_ips = '176.193.83.144'
+
+    config.npm.enable_watch = Rails.env.development?
+
+    config.npm.install = ['npm install']
+
+    # Command to build production assets
+    config.npm.build = ['npm run build']
+
+    # Command to start a file watcher
+    config.npm.watch = ['npm run start']
+
+    config.npm.install_on_asset_precompile = true
+
+    config.npm.install_on_rails_server = true
   end
 end

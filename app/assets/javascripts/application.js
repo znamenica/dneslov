@@ -13,11 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require materialize-sprockets
-//= require pickmeup
+//= require webpack/app
 //= require_tree .
 
 $(document).ready(function(){
-   pickmeup('#calendar');
+//   pickmeup('#calendar');
    $('.carousel').carousel();
 });
-//= require webpack/app

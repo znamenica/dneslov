@@ -10,6 +10,12 @@ var LiveReloadPlugin = require('webpack-livereload-plugin')
 var PROD = process.env.NODE_ENV === 'production'
 var DEBUG = !PROD
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
+const extractSCSS = new ExtractTextPlugin({ filename: '[name].scss', allChunks: true })
+//const postcssOpts = {postcss: {plugins: [autoprefixer(autoprefixerOpts)], sourceMap: true}}
+const postcssOpts = {sourceMap: true}
+
 module.exports = {
   cache: true,
 
@@ -33,19 +39,31 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.css$/,
+        loader: extractCSS.extract([ 'css-loader', 'postcss-loader' ])
+      },
+      {
         test: /\.scss$/,
-        loader: DEBUG
-          ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
-          : ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url!postcss-loader!sass-loader'})
+        //loader: DEBUG
+        //  ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
+        loader : extractSCSS.extract({
+          fallback: 'style-loader',
+          use: [ 'css-loader', 'sass-loader' ]
+        })
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
         use: [{
-           loader: 'babel-loader',
-           options: {
-             cacheDirectory: true
-           },
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          },
+        }]
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+        use: [{
+          loader: 'file-loader',
         }]
       },
     ],
@@ -58,15 +76,21 @@ module.exports = {
   plugins: [
     // allChunks will preserve source maps
     new ExtractTextPlugin({ filename: '[name].css.erb', allChunks: true }),
+    extractSCSS,
+    extractCSS,
 
+    new UglifyJsPlugin({
+      sourceMap: true
+    }),
     // Ignore locales because it's around 400kb
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.LoaderOptionsPlugin({
       test: /\.xxx$/, // may apply this only for some modules
+      debug: DEBUG ? true : false,
       options: {
         sassLoader: {
           includePaths: join(__dirname, 'node_modules'),
-          outputStyle: 'compressed'
+          outputStyle: DEBUG ? 'nested' : 'compressed'
         },
       },
       postcss: [
@@ -76,15 +100,6 @@ module.exports = {
     })
   ].concat(DEBUG ? [
     new LiveReloadPlugin({ appendScriptTag: true }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true,
-      options: {
-        sassLoader: {
-          includePaths: join(__dirname, 'node_modules'),
-          outputStyle: 'nested'
-        }
-      },
-    })
   ] : []),
 
   // Best trade-off with compatibility and speed

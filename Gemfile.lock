@@ -312,9 +312,6 @@ GEM
     tilt (2.0.7)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    uglifier (2.7.2)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
@@ -382,7 +379,6 @@ DEPENDENCIES
   spring
   spring-commands-cucumber
   spring-watcher-listen (~> 2.0.0)
-  uglifier (>= 2.7.2)
   web-console (>= 3.3.0)
   webpacker
 

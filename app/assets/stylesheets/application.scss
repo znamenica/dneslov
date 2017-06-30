@@ -18,7 +18,58 @@
 
 //#import '~pickmeup/css/pickmeup'
 
-/*div:empty {
+main > .container {
+   margin-top: 20pt;
+   width: 85%;
+}
+
+p#notice {
+   margin: 0;
+}
+
+body > .pickmeup {
+   display: none;
+}
+
+#calendar {
+   background: transparent;
+
+   .pickmeup {
+      background-color: transparent;
+   }
+
+   .pmu-instance > nav {
+      height: auto;
+      background-color: auto;
+      width: auto;
+   }
+
+   .pmu-day-of-week {
+      background-color: #f79eb3;
+   }
+
+   .pmu-button {
+      color: #717171;
+   }
+
+   .pmu_button:hover {
+      background-color: #17384d
+   }
+
+   .pmu-not-in-month {
+      color: #212121;
+   }
+
+   .pmu-today {
+      background-color: #c7d8ed
+   }
+
+   .pmu-selected {
+      background-color: #80a8cd
+   }
+}
+
+div:empty {
    display: none;
 }
 
@@ -28,9 +79,9 @@
 
 nav .brand-logo {
    padding-left: 10pt;
-}*/
+}
 
-/*span {
+span {
    margin-left: 3px;
    margin-right: 3px;
-};*/
+};
