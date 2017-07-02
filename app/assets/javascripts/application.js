@@ -17,6 +17,5 @@
 //= require_tree .
 
 $(document).ready(function(){
-//   pickmeup('#calendar');
    $('.carousel').carousel();
 });

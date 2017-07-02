@@ -73,9 +73,22 @@ div:empty {
    display: none;
 }
 
-.carousel {
-   margin-top: -70pt;
+.pickmeup.pmu-hidden {
+   display: block;
 }
+
+//.carousel .carousel-item {
+//   z-index: 0;
+//}
+
+//.carousel {
+//   margin-top: -70pt;
+//}
+
+//.carousel-wrap {
+//   margin-top: -70pt;
+//   height: auto;
+//}
 
 nav .brand-logo {
    padding-left: 10pt;

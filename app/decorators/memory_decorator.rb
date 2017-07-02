@@ -2,12 +2,18 @@ class MemoryDecorator < Draper::Decorator
    delegate_all
 
    def date
-      "(#{filtered_events.first.happened_at})" ;end
+      # TODO if no proper event, just skip, remove then
+      year = (filtered_events.first.try(:happened_at) || "").split(".").last
+      year && "(#{year.strip})" ;end
 
    def council_chips
       council.split(',').map do |council|
-         chip_for( nil, council ) end
+         /(?<pure_council>[^?]*)\??\z/ =~ council # NOTE crop ? mark
+         chip_for( nil, pure_council ) end
       .join.html_safe ;end
+
+   def memo_chips_present?
+      memos.any? { | memo | memo.calendary } ;end
 
    def memo_chips_each
       memos.map do | memo |
@@ -34,7 +40,8 @@ class MemoryDecorator < Draper::Decorator
 
       h.content_tag :span, args do
          if link
-            /https?:\/\/(?<domain>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
+            /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
+            domain = domains.split(".").select { |d| d.size > 2 }.first
             # binding.pry
             h.content_tag :a, href: link, target: :blank do
                text || domain ;end
