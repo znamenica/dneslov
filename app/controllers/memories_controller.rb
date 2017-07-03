@@ -8,7 +8,9 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      @memories = apply_scopes(Memory).all.page(params[:page]) ;end
+      @memories = apply_scopes(Memory).all.page(params[:page])
+
+      render :index, locals: { locale: %i(ру цс) } ;end
 
    # GET /memories/1
    # GET /memories/1.json

@@ -17,5 +17,7 @@
 //= require_tree .
 
 $(document).ready(function(){
+   $('.materialboxed').materialbox();
+   $('.collapsible').collapsible();
    $('.carousel').carousel();
 });

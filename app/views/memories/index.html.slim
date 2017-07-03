@@ -1,15 +1,17 @@
-h4 = t('.title')
-
-table.highlight
-  thead
-    tr
-      th
-      th
-      th
-
-  tbody
-    - @memories.each do |memory|
-      tr
-        td = link_to(memory.slug.text, memory.slug.text)
+- # query line
+- @memories.decorate.each do |memory|
+   ul.collection.collapsible( data-collapsible="expandable" )
+      li.collection-item.avatar
+         .collapsible-header
+            - if url = memory.default_icon_url
+               img.circle( src=url width="50" height="50" )
+            - else # TODO detect type of default avatar
+               i.material-icons.circle.red perm_identity
+            span.chip.small.orange = memory.order
+            span.title = memory.short_name
+            span.chip.white = memory.date
+         - if description = memory.description_for( locale )
+            .collapsible-body
+               span = description.text
 
 = paginate @memories, remote: true

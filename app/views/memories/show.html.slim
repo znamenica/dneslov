@@ -55,8 +55,7 @@ p#notice = notice
          .carousel
             .carousel-wrap
                - @memory.valid_icon_links.each do | link |
-                  a.carousel-item( href=link.url target='blank' )
-                     img( src=link.url )
+                  img( class="materialboxed" data-caption="" src=link.url )
 
 - if troparion = @memory.troparions_for( locale ).first
    .row

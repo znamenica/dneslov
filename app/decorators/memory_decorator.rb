@@ -31,8 +31,10 @@ class MemoryDecorator < Draper::Decorator
       coeff = 10.0 / ( POSES.size - 1 )
       colors = slug.split("").map { |c| 5 + coeff * POSES.index( c ) }
       letters = colors.map { |c| c < 10 && (c.to_i + '0'.ord) || (c.to_i - 10 + 'a'.ord) }.pack("c*")
-      letters << '5' * (6 - letters.size)
-   end
+      letters << '5' * (6 - letters.size) ;end
+
+   def default_icon_url
+      self.valid_icon_links.first&.url ;end
 
    def chip_for link, text = nil, color = nil
       args = { class: 'chip' }
