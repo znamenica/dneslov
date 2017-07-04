@@ -5,7 +5,8 @@ p#notice = notice
       span.chip.small.orange = @memory.order
       span
          b = @memory.short_name
-      span.chip.white = @memory.date
+      - if date = @memory.date
+         span.chip.date = date
 
 - if @memory.council
    .row
@@ -53,9 +54,9 @@ p#notice = notice
    .row
       .col.s12
          .carousel
-            .carousel-wrap
-               - @memory.valid_icon_links.each do | link |
-                  img( class="materialboxed" data-caption="" src=link.url )
+            - @memory.valid_icon_links.each do | link |
+               //img.carousel-item( class="materialboxed" data-caption=link.description&.text src=link.url )
+               img.carousel-item( data-caption=link.description&.text src=link.url )
 
 - if troparion = @memory.troparions_for( locale ).first
    .row

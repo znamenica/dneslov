@@ -1,15 +1,16 @@
 - # query line
 - @memories.decorate.each do |memory|
    ul.collection.collapsible( data-collapsible="expandable" )
-      li.collection-item.avatar
+      li.collection-item.avatar.memory
          .collapsible-header
-            - if url = memory.default_icon_url
-               img.circle( src=url width="50" height="50" )
-            - else # TODO detect type of default avatar
-               i.material-icons.circle.red perm_identity
+            = link_to( memory.slug.text ) do
+               - if url = memory.default_icon_url
+                  img.circle( src=url width="50" height="50" )
+               - else # TODO detect type of default avatar
+                  i.material-icons.circle.terracota perm_identity
             span.chip.small.orange = memory.order
             span.title = memory.short_name
-            span.chip.white = memory.date
+            span.chip.date = memory.date
          - if description = memory.description_for( locale )
             .collapsible-body
                span = description.text

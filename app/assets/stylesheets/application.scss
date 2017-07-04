@@ -31,6 +31,14 @@ body > .pickmeup {
    display: none;
 }
 
+div:empty {
+   display: none;
+}
+
+.pickmeup.pmu-hidden {
+   display: block;
+}
+
 #calendar {
    background: transparent;
 
@@ -69,12 +77,26 @@ body > .pickmeup {
    }
 }
 
-div:empty {
-   display: none;
+.collection {
+   .collection-item.memory {
+      min-height: auto;
+      padding: 3pt 0 0 0;
+      color: black;
+      background-color: white;
+
+      .collapsible-header {
+         padding: 0 1rem 0 50pt;
+
+         .chip.date {
+            padding-left: 0;
+            background-color: white !important;
+         }
+      }
+   }
 }
 
-.pickmeup.pmu-hidden {
-   display: block;
+.terracota {
+   background-color: #ee6e73 !important;
 }
 
 //.carousel .carousel-item {

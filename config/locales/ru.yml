@@ -1,5 +1,4 @@
 ru:
-   hello: "Привет мир"
    memories:
       index:
          title: Памяти
@@ -14,3 +13,10 @@ ru:
          troparion: Тропарь
          kontakion_with_tone: Кондак, глас %{tone}
          kontakion: Кондак
+   views:
+      pagination:
+         first: В начало
+         previous: Ранее
+         truncate: Усечь
+         next: Далее
+         last: В конец
