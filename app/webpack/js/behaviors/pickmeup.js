@@ -21,15 +21,8 @@ $(document).ready(function(){
       request = {
          url: form.attr('action') + '.js',
          data: valuesToSubmit,
-         dataType: "html",
-         context: $('#page'),
-         global: false,
          complete: function(_, state) {
             console.log("/index.js:", state)
-         },
-         success: function(response) {
-            $('#page').replaceWith( "<div id='#page'>" + response + "</div>" )
-            history.pushState({ "html": response }, '', '/');
          },
       }
 

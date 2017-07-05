@@ -2,7 +2,7 @@ p#notice = notice
 
 .row
    .col.s12
-      span.chip.small.orange = @memory.order
+      = @memory.chip
       span
          b = @memory.short_name
       - if date = @memory.date
@@ -54,7 +54,7 @@ p#notice = notice
    .row
       .col.s12
          .carousel
-            - @memory.valid_icon_links.each do | link |
+            - @memory.valid_icon_links.includes(:description).each do | link |
                //img.carousel-item( class="materialboxed" data-caption=link.description&.text src=link.url )
                img.carousel-item( data-caption=link.description&.text src=link.url )
 

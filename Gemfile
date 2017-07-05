@@ -82,6 +82,7 @@ group :development do
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'pattern_generator'
    gem 'web-console', '>= 3.3.0'
+   gem 'bullet'
 end
 
 group :development, :test do

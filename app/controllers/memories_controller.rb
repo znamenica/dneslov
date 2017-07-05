@@ -8,9 +8,9 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      @memories = apply_scopes(Memory).all.page(params[:page])
+      @memories = apply_scopes(Memory).page(params[:page])
 
-      render :index, locals: { locale: %i(ру цс) } ;end
+      render :index, locals: { locale: %i(ру цс), query: params[:with_text] } ;end
 
    # GET /memories/1
    # GET /memories/1.json
@@ -20,8 +20,7 @@ class MemoriesController < ApplicationController
    protected
 
    def set_date
-      @date = params[:with_date] || Date.today
-   end
+      @date = params[:with_date] || Date.today ;end
 
    def set_memory
       @memory = Memory.by_slug(params[:slug]).first&.decorate || raise(ActiveRecord::RecordNotFound) ;end;end

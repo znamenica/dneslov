@@ -10,14 +10,14 @@ html
       header
          nav.terracota
             .nav-wrapper
-               a.brand-logo(href='#') = 'Днесловъ'
+               a.brand-logo(href='/') = 'Днесловъ'
 
       main
          .container
             .row
                .col.s3
-                  form#calendar-date(action='index')
-                     input(type='hidden' name='with_date' value=@date)
+                  form#calendar-date( action='index' )
+                     input( type='hidden' name='with_date' value=@date )
                   #calendar
                .col.s9
                   #page = yield

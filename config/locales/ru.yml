@@ -1,7 +1,8 @@
 ru:
    memories:
       index:
-         title: Памяти
+         what_search: Что ищем?
+         not_found: Ничегошеньки не обнаружено
       show:
          title: Карточка памяти
          description: Описание
@@ -15,8 +16,8 @@ ru:
          kontakion: Кондак
    views:
       pagination:
-         first: В начало
-         previous: Ранее
-         truncate: Усечь
-         next: Далее
-         last: В конец
+         first: "&laquo;В начало"
+         previous: "&lsaquo; Ранее"
+         next: "Далее &rsaquo;"
+         last: "В конец &raquo;"
+         truncate: "&hellip;"

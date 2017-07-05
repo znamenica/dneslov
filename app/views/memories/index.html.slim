@@ -1,18 +1,31 @@
 - # query line
-- @memories.decorate.each do |memory|
-   ul.collection.collapsible( data-collapsible="expandable" )
-      li.collection-item.avatar.memory
-         .collapsible-header
-            = link_to( memory.slug.text ) do
-               - if url = memory.default_icon_url
-                  img.circle( src=url width="50" height="50" )
-               - else # TODO detect type of default avatar
-                  i.material-icons.circle.terracota perm_identity
-            span.chip.small.orange = memory.order
-            span.title = memory.short_name
-            span.chip.date = memory.date
-         - if description = memory.description_for( locale )
-            .collapsible-body
-               span = description.text
+form.row#query( action='index' )
+   .input-field.col.s12
+      i.material-icons.prefix youtube_searched_for
+      input(
+         type="search"
+         name="with_text"
+         placeholder=t( '.what_search' )
+         value=query )
 
-= paginate @memories, remote: true
+.row
+   - if @memories.present?
+      ul.collection.collapsible( data-collapsible="expandable" )
+         - @memories.decorate.each do |memory|
+            li.collection-item.avatar.memory
+               .collapsible-header
+                  = link_to( memory.slug.text ) do
+                     - if url = memory.default_icon_url
+                        img.circle( src=url )
+                     - else # TODO detect type of default avatar
+                        i.material-icons.circle.terracota perm_identity
+                  = memory.chip
+                  span.title = memory.short_name
+                  span.chip.date = memory.date
+               - if description = memory.description_for( locale )
+                  .collapsible-body
+                     span = description.text
+   - else
+     span = t('.not_found')
+
+      = paginate @memories, remote: true

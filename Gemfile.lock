@@ -64,6 +64,9 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     builder (3.2.3)
+    bullet (5.5.1)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     capistrano (3.8.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -315,6 +318,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
+    uniform_notifier (1.10.0)
     validate_url (1.0.2)
       activemodel (>= 3.0.0)
       addressable
@@ -338,6 +342,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass
   bukovina!
+  bullet
   capistrano-rails
   capybara
   capybara-webkit
