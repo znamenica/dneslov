@@ -52,6 +52,8 @@ handle_search_request = ->
 init_js = (context) ->
    $(context).find('.collapsible').collapsible()
    $(context).find('.carousel').carousel()
+   $(context).find('.chips').material_chip();
+   # $(context).find('.chips-initial').material_chip();
    $(context).find('input[type=search]').donetyping(handle_search_request)
    return
 

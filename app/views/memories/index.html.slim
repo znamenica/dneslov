@@ -9,6 +9,18 @@ form.row#query( action='index' )
          value=query )
 
 .row
+   .col.s12.chips-initial.chips-placeholder
+      .chip.white = t('.selection')
+      - if date.present?
+         .chip( data-tag: date )
+            = date
+            i.close.material-icons close
+      - if query.present?
+         .chip( data-tag: query )
+            = query
+            i.close.material-icons close
+
+.row
    - if @memories.present?
       ul.collection.collapsible( data-collapsible="expandable" )
          - @memories.decorate.each do |memory|

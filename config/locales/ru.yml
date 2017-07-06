@@ -3,6 +3,7 @@ ru:
       index:
          what_search: Что ищем?
          not_found: Ничегошеньки не обнаружено
+         selection: 'Выборка: '
       show:
          title: Карточка памяти
          description: Описание

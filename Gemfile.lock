@@ -7,6 +7,7 @@ PATH
       i18n
       rdoba (>= 0.9.2)
       validate_url
+      when_easter
 
 GEM
   remote: https://rubygems.org/
@@ -333,6 +334,7 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    when_easter (0.3.1)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
