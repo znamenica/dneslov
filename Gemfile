@@ -78,10 +78,14 @@ gem 'kaminari'
 gem 'draper'
 
 group :development do
-   gem 'capistrano-rails'
+   gem 'capistrano', '~> 3.6'
+   gem 'capistrano-rails', '~> 1.3'
+   gem 'capistrano3-nginx'
+   gem 'capistrano-bundler'
+   gem 'capistrano-rvm'
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
-   gem 'pattern_generator'
    gem 'web-console', '>= 3.3.0'
+   gem 'pattern_generator'
    gem 'bullet'
 end
 

@@ -23,8 +23,6 @@ module Dneslov
 
     config.paths['db/migrate'] = Bukovina::Engine.paths['db/migrate'].existent
 
-    config.web_console.whitelisted_ips = '176.193.83.144'
-
     config.npm.enable_watch = Rails.env.development?
 
     config.npm.install = ['npm install']
