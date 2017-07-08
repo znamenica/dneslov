@@ -1,5 +1,6 @@
-PATH
-  remote: /home/majioa/git/bukovina
+GIT
+  remote: https://github.com/znamenica/bukovina.git
+  revision: 8f99634f409b4ce9f6e041540e675321796c5ee6
   specs:
     bukovina (0.0.3)
       activerecord (>= 4.2)
@@ -132,7 +133,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.2)
     erubi (1.6.0)
-    excon (0.57.0)
+    excon (0.57.1)
     execjs (2.2.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
