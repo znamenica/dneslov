@@ -15,7 +15,7 @@ gem 'pg'
 # gem 'postgres_ext'
 
 # Use Uglifier as compressor for JavaScript assets
-# gem 'uglifier', '>= 2.7.2'
+gem 'uglifier', '>= 2.7.2'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.2.2'
 
@@ -82,6 +82,7 @@ group :development do
    gem 'capistrano-rails', '~> 1.3'
    gem 'capistrano3-nginx'
    gem 'capistrano-bundler'
+   gem 'capistrano-rake'
    gem 'capistrano-rvm'
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.3.0'
