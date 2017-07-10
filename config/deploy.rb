@@ -48,7 +48,7 @@ set(:symlinks, [
 set :migration_role, :app
 
 # Default value for default_env is {}
-set :default_env, { path: "#{release_path}/node_modules/yarn/bin:#{release_path}/bin:$PATH" }
+set :default_env, { path: "#{release_path}/bin:#{release_path}/node_modules/yarn/bin:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
