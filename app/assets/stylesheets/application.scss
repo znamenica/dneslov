@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require materialize
- *= require webpack/app
+ *= !require webpack/app
  *= require_tree .
  *= require_self
  */
