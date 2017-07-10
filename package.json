@@ -30,17 +30,20 @@
     "webpack-manifest-plugin": "~1.1.0",
     "path-complete-extname": "~0.1.0",
     "precss": "~2.0.0",
-    "postcss-smart-import": "~0.7.4",
-    "resolve-url-loader": "~2.1.0",
-    "pickmeup": "~3.0.8"
+    "postcss-smart-import": "~0.7.4"
   },
   "dependencies": {
     "css-loader": "0.26.1",
-    "webpack-livereload-plugin": "^0.9.0"
+    "webpack-livereload-plugin": "^0.9.0",
+    "compression-webpack-plugin": "~0.4.0",
+    "n": "~2.1.8",
+    "yarn": "~0.27.5",
+    "resolve-url-loader": "~2.1.0",
+    "pickmeup": "~3.0.8"
   },
-  "license" : "UNLICENSED",
+  "license": "UNLICENSED",
   "repository": {
-     "type": "git",
-     "url": "https://github.com/znamenica/dneslov.git"
+    "type": "git",
+    "url": "https://github.com/znamenica/dneslov.git"
   }
 }
