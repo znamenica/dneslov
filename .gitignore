@@ -27,4 +27,7 @@
 /vendor/assets/stylesheets/webpack
 /vendor/assets/javascripts/webpack
 
+config/secrets.yml
+config/database.yml
+
 *.log

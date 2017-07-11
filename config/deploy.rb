@@ -39,15 +39,19 @@ set(:config_files, %w(
 
 set(:symlinks, [
    {
-      source: "nginx.conf",
-      link: "/etc/nginx/sites-enabled/#{fetch(:full_app_name)}"
+      source: "node_modules/pickmeup/css/pickmeup.scss",
+      link: "app/webpack/css/components/pickmeup.scss"
    },
+#   {
+#      source: "nginx.conf",
+#      link: "/etc/nginx/sites-enabled/#{fetch(:full_app_name)}"
+#   },
 ])
 
 set :migration_role, :app
 
 # Default value for default_env is {}
-set :default_env, { path: "#{release_path}/bin:#{release_path}/node_modules/yarn/bin:$PATH" }
+set :default_env, { path: "#{release_path}/node_modules/yarn/bin:#{release_path}/bin:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -65,12 +69,10 @@ set :rvm_ruby_version, '2.3.4@dneslov'    # Defaults to: 'default'
 set :rvm_roles, [:app, :web]
 
 namespace :deploy do
-   # before :deploy, "deploy:check_revision"
-   # before :deploy, "deploy:run_tests"
    #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
    after :finishing, 'deploy:cleanup'
+   after 'deploy:updating', 'deploy:symlink:custom'
    #before 'deploy:setup_config', 'nginx:remove_default_vhost'
    #after 'deploy:setup_config', 'nginx:reload'
-   # after 'deploy:setup_config', 'monit:restart'
    after 'deploy:publishing', 'deploy:restart'
 end
