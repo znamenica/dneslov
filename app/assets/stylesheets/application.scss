@@ -74,6 +74,10 @@ div:empty, .chip:empty {
    margin-top: 10px;
 }
 
+.row.calendary {
+   height: 13rem;
+}
+
 #calendar {
    background: transparent;
 
@@ -132,6 +136,10 @@ div:empty, .chip:empty {
 
       .collapsible-header {
          padding: 0 1rem 0 4rem;
+      }
+
+      .collapsible-body {
+         padding: 1rem;
       }
    }
 }

@@ -24,7 +24,7 @@ p#notice = notice
          b = t '.being'
       .col.s12
          - beings.each do | link |
-            = @memory.chip_for( link.url )
+            = @memory.slugged_chip( link.url )
 
 - if wikies = @memory.wikies_for( locale )
    .row
@@ -32,7 +32,7 @@ p#notice = notice
          b = t '.wiki'
       .col.s12
          - wikies.each do | link |
-            = @memory.chip_for( link.url )
+            = @memory.slugged_chip( link.url )
 
 - if paterics = @memory.paterics_for( locale )
    .row
@@ -40,7 +40,7 @@ p#notice = notice
          b = t '.pateric'
       .col.s12
          - paterics.each do | link |
-            = @memory.chip_for( link.url )
+            = @memory.slugged_chip( link.url )
 
 - if @memory.memo_chips_present?
    .row
@@ -48,7 +48,7 @@ p#notice = notice
          b = t '.calendaries'
       .col.s12
          - @memory.memo_chips_each do | memo, link, date, text, color |
-            = @memory.chip_for( link&.url, date, color )
+            = @memory.slugged_chip( link&.url, date, color )
 
 - if @memory.valid_icon_links.present?
    .row

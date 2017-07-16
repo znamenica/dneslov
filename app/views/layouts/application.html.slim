@@ -1,6 +1,6 @@
 html
    head
-      title Днеслов
+      title Днесловъ
       = stylesheet_link_tag 'application', media: 'all'
       = stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons'
       = javascript_include_tag 'application'
@@ -15,9 +15,14 @@ html
       main
          .container
             .row
-               .col.s3
-                  form#calendar-date( action='index' )
-                     input( type='hidden' name='with_date' value=@date )
-                  #calendar
-               .col.s9
+               .col.s12.m3.l3.xl3
+                  .row.calendary
+                     form#calendar-date( action='index' )
+                        input( type='hidden' name='with_date' value=@date )
+                     #calendar
+                  .row
+                     - if @calendary_cloud.present?
+                        - @calendary_cloud.each do |calendary|
+                           = calendary.chip_for( @locales )
+               .col.s12.m9.l9.xl9
                   #page = yield

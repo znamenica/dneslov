@@ -8,17 +8,12 @@ form.row#query( action='index' )
          placeholder=t( '.what_search' )
          value=query )
 
-.row
-   .col.s12.chips-initial.chips-placeholder
-      .chip.white = t('.selection')
-      - if date.present?
-         .chip( data-tag: date )
-            = date
-            i.close.material-icons close
-      - if query.present?
-         .chip( data-tag: query )
-            = query
-            i.close.material-icons close
+- if @selections.present?
+   .row
+      .col.s12.chips
+         .chip.white = t('.selection')
+         - @selections.each do |slug|
+            = slugged_chip( slug_path( slug.text ), slug.sluggable.text, color_by_slug( slug.text ), 'close')
 
 .row
    - if @memories.present?
