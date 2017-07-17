@@ -65,7 +65,6 @@ gem 'rails-html-sanitizer', '~> 1.0.3'
 #gem 'bukovina', github: 'znamenica/bukovina'
 gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
 gem 'has_scope'
-gem 'active_model_serializers'
 
 # view
 ## NPM packaging

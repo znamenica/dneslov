@@ -22,7 +22,8 @@ html
                      #calendar
                   .row
                      - if @calendary_cloud.present?
-                        - @calendary_cloud.each do |calendary|
-                           = calendary.chip_for( @locales )
+                        - @calendary_cloud.decorate.each do |calendary|
+                           - action = ! @calendary_cloud.include?(calendary.object) && 'add' || nil
+                           = calendary.chip_for( @locales, action )
                .col.s12.m9.l9.xl9
                   #page = yield

@@ -2,63 +2,63 @@ p#notice = notice
 
 .row
    .col.s12
-      = @memory.chip
+      = memory.chip
       span
-         b = @memory.short_name
-      - if date = @memory.date
+         b = memory.short_name
+      - if date = memory.date
          span.chip.date = date
 
-- if @memory.council
+- if memory.council
    .row
-      .col.s12 = @memory.council_chips
+      .col.s12 = memory.council_chips
 
-- if description = @memory.description_for( locale )
+- if description = memory.description_for( locale )
    .row
       .col.s2
          b = t '.description'
       .col.s12 = description.text 
 
-- if beings = @memory.beings_for( locale )
+- if beings = memory.beings_for( locale )
    .row
       .col.s2
          b = t '.being'
       .col.s12
          - beings.each do | link |
-            = @memory.slugged_chip( link.url )
+            = memory.slugged_chip( link.url )
 
-- if wikies = @memory.wikies_for( locale )
+- if wikies = memory.wikies_for( locale )
    .row
       .col.s2
          b = t '.wiki'
       .col.s12
          - wikies.each do | link |
-            = @memory.slugged_chip( link.url )
+            = memory.slugged_chip( link.url )
 
-- if paterics = @memory.paterics_for( locale )
+- if paterics = memory.paterics_for( locale )
    .row
       .col.s2
          b = t '.pateric'
       .col.s12
          - paterics.each do | link |
-            = @memory.slugged_chip( link.url )
+            = memory.slugged_chip( link.url )
 
-- if @memory.memo_chips_present?
+- if memory.memo_chips_present?
    .row
       .col.s2
          b = t '.calendaries'
       .col.s12
-         - @memory.memo_chips_each do | memo, link, date, text, color |
-            = @memory.slugged_chip( link&.url, date, color )
+         - memory.memo_chips_each do | memo, link, date, text, color |
+            = memory.slugged_chip( link&.url, date, color )
 
-- if @memory.valid_icon_links.present?
+- if memory.valid_icon_links.present?
    .row
       .col.s12
          .carousel
-            - @memory.valid_icon_links.includes(:description).each do | link |
+            - memory.valid_icon_links.includes(:description).each do | link |
                //img.carousel-item( class="materialboxed" data-caption=link.description&.text src=link.url )
                img.carousel-item( data-caption=link.description&.text src=link.url )
 
-- if troparion = @memory.troparions_for( locale ).first
+- if troparion = memory.troparions_for( locale ).first
    .row
       .col.s3
          b
@@ -68,7 +68,7 @@ p#notice = notice
                = t '.troparion'
       .col.s12 = troparion.text
 
-- if kontakion = @memory.kontakions_for( locale ).first
+- if kontakion = memory.kontakions_for( locale ).first
    .row
       .col.s3
          b

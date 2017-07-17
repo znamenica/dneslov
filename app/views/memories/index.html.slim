@@ -1,4 +1,3 @@
-- # query line
 form.row#query( action='index' )
    .input-field.col.s12
       i.material-icons.prefix youtube_searched_for
@@ -6,14 +5,26 @@ form.row#query( action='index' )
          type="search"
          name="with_text"
          placeholder=t( '.what_search' )
-         value=query )
+         value=query&.join(" ")&.gsub(/\s+\+/, '+')  )
 
-- if @selections.present?
+- if date.present? || query.present? || calendaries.present?
    .row
-      .col.s12.chips
+      .col.s12
          .chip.white = t('.selection')
-         - @selections.each do |slug|
-            = slugged_chip( slug_path( slug.text ), slug.sluggable.text, color_by_slug( slug.text ), 'close')
+         - if date.present?
+            .chip
+               = date
+               i.close.material-icons close
+         - if query.present?
+            - query.each do |token|
+               .chip
+                  = token
+                  i.close.material-icons close
+         - if calendaries.present?
+            - calendaries.each do |calendary|
+               .chip
+                  = calendary.name_for( locale ).text
+                  i.close.material-icons close
 
 .row
    - if @memories.present?
@@ -33,6 +44,6 @@ form.row#query( action='index' )
                   .collapsible-body
                      span = description.text
    - else
-     span = t('.not_found')
+      span = t('.not_found')
 
       = paginate @memories, remote: true

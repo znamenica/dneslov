@@ -1,9 +1,8 @@
 class MemoriesController < ApplicationController
    before_action :set_locales
-   before_action :set_calendary_cloud
    before_action :set_date, only: %i(index)
    before_action :set_calendaries, only: %i(index)
-   before_action :set_selections, only: %i(index)
+   before_action :set_calendary_cloud
    before_action :set_memory, only: %i(show)
 
    has_scope :with_date, only: %i(index)
@@ -16,30 +15,34 @@ class MemoriesController < ApplicationController
    def index
       @memories = apply_scopes(Memory).page(params[:page])
 
-      render :index, locals: { locale: @locales, query: params[:with_text], date: @date } ;end
+      render :index, locals: {
+         locale: @locales,
+         date: @date,
+         query: params[:with_text]&.gsub( /\+\s*/, ' +' )&.split(/\s+/),
+         calendaries: @calendaries } ;end
 
    # GET /memories/1
    # GET /memories/1.json
    def show
-      render :show, locals: { locale: @locales } ;end
+      render :show, locals: { locale: @locales, memory: @memory.decorate } ;end
 
    protected
+
+   def is_html?
+      request.formats.first.symbol == :html ;end
 
    def set_locales
       @locales = %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
    def set_calendaries
-      params[:for_calendaries] ||= 'рпц' if not params[:for_calendaries] #TODO dehardcode
-      @calendaries = Calendary.by_slug( params[:for_calendaries] ).decorate ;end
+      params[:for_calendaries] ||= 'рпц' if is_html? and params[:for_calendaries].blank? #TODO dehardcode
+      @calendaries = Calendary.by_slug( params[:for_calendaries] ) ;end
 
    def set_calendary_cloud
-      @calendary_cloud = Calendary.licit.decorate ;end
-
-   def set_selections
-      @selections = SelectionSerializer.new( @date, @calendaries )
+      @calendary_cloud = Calendary.licit ;end
 
    def set_date
-      params[:with_date] ||= Date.today.strftime("%Y-%m-%d") if not params[:with_text]
+      params[:with_date] ||= (Time.zone.now + 9.hours).strftime("%Y-%m-%d") if not params[:with_text]
       @date = params[:with_date] ;end
 
    def set_memory

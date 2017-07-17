@@ -16,7 +16,7 @@
 /tmp
 
 *~
-*.swp
+*.sw*
 
 .ruby-gemset
 .ruby-version
