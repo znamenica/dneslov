@@ -7,8 +7,8 @@ class MemoriesController < ApplicationController
 
    has_scope :with_date, only: %i(index)
    has_scope :with_text, only: %i(index)
-   has_scope :for_calendaries, only: %i(index) do |_, scope, value|
-      scope.for_calendaries( value.split(',') ) ;end
+   has_scope :in_calendaries, only: %i(index) do |_, scope, value|
+      scope.in_calendaries( value.split(',') ) ;end
 
    # GET /memories,/,/index
    # GET /memories.js,/index.js
@@ -35,14 +35,14 @@ class MemoriesController < ApplicationController
       @locales = %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
    def set_calendaries
-      params[:for_calendaries] ||= 'рпц' if is_html? and params[:for_calendaries].blank? #TODO dehardcode
-      @calendaries = Calendary.by_slug( params[:for_calendaries] ) ;end
+      params[:in_calendaries] ||= 'рпц' if is_html? and params[:in_calendaries].blank? #TODO dehardcode
+      @calendaries = Calendary.by_slug( params[:in_calendaries] ).decorate ;end
 
    def set_calendary_cloud
       @calendary_cloud = Calendary.licit ;end
 
    def set_date
-      params[:with_date] ||= (Time.zone.now + 9.hours).strftime("%Y-%m-%d") if not params[:with_text]
+      params[:with_date] ||= (Time.now + 9.hours).strftime("%Y-%m-%d") if not params[:with_text]
       @date = params[:with_date] ;end
 
    def set_memory

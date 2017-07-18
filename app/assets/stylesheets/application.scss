@@ -53,6 +53,10 @@ div:empty, .chip:empty {
    border-radius: 50%;
 }
 
+.hidden {
+   display: none !important;
+}
+
 //#####
 
 .terracota {
@@ -122,9 +126,17 @@ div:empty, .chip:empty {
    }
 }
 
-.chip.date {
+.chip.year-date {
    padding: 0 5px 0 5px;
    background-color: #f8f8f8 !important;
+}
+
+.chip.date {
+   background-color: #f8f8f8 !important;
+}
+
+.chip.calendary {
+   background-color: #f0f8ff !important;
 }
 
 .collection {

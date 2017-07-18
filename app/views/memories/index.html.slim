@@ -12,19 +12,19 @@ form.row#query( action='index' )
       .col.s12
          .chip.white = t('.selection')
          - if date.present?
-            .chip
+            .chip.date
                = date
-               i.close.material-icons close
-         - if query.present?
-            - query.each do |token|
-               .chip
-                  = token
-                  i.close.material-icons close
+               i.close.remove.material-icons close
          - if calendaries.present?
             - calendaries.each do |calendary|
-               .chip
+               .chip.calendary( data-slug=calendary.slug.text )
                   = calendary.name_for( locale ).text
-                  i.close.material-icons close
+                  i.close.remove.material-icons close
+         - if query.present?
+            - query.each do |token|
+               .chip.token( data-token=token )
+                  = token
+                  i.close.remove.material-icons close
 
 .row
    - if @memories.present?
@@ -39,7 +39,7 @@ form.row#query( action='index' )
                         i.material-icons.circle.terracota perm_identity
                   = memory.chip
                   span.title = memory.short_name
-                  span.chip.date = memory.date
+                  span.chip.year-date = memory.date
                - if description = memory.description_for( locale )
                   .collapsible-body
                      span = description.text

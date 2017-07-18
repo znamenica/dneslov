@@ -49,5 +49,5 @@ class MemoryDecorator < ApplicationDecorator
       self.valid_icon_links.first&.url ;end
 
    def chip
-      # slugged_chip( slug_path( order ), order, color_by_slug( slug.text ) ) ;end;end
-      slugged_chip( nil, order, color_by_slug( slug.text ) ) ;end;end
+      # slugged_chip( slug_path( order ), order, color_by_slug( slug.text ), slug.text ) ;end;end #TODO
+      slugged_chip( nil, order, color_by_slug( slug.text ), slug.text ) ;end;end

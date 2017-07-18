@@ -18,11 +18,12 @@ class ApplicationDecorator < Draper::Decorator
       a = letters.split("")
       [a[0...a.size/2], a[a.size/2...a.size]].transpose.flatten.join ;end
 
-   def chip_button_if kls
-      kls && h.content_tag( :i, kls, class: "material-icons close" ).html_safe || '' ;end
+   def chip_button_if kls, kls_class
+      kls && h.content_tag( :i, kls, class: "material-icons close #{kls_class}" ).html_safe || '' ;end
 
-   def slugged_chip link, text = nil, color = nil, kls = nil
-      args = { class: 'chip' }
+   def slugged_chip link, text = nil, color = nil, slug = nil, kls = nil, kls_class = nil, self_class = nil
+      args = { class: (%w(chip) << self_class).compact.join(" ") }
+      args[ :'data-slug' ] = slug if slug
       args[ :style ] = "background-color: ##{color};" if color
 
       h.content_tag :span, args do
@@ -32,6 +33,6 @@ class ApplicationDecorator < Draper::Decorator
                text = domains.split(".").sort_by { |d| d.size }.last ;end
 
             # binding.pry
-            h.content_tag( :a, href: link, target: :blank ) { text } + chip_button_if( kls )
+            h.content_tag( :a, href: link, target: :blank ) { text } + chip_button_if( kls, kls_class )
          else
             text ;end;end;end;end

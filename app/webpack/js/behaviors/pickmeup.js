@@ -6,7 +6,12 @@ $(document).ready(function(){
       months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
       monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
    }
+   selected = new Date();
+   selected.setTime(selected.getTime() + 9*60*60*1000);
+   selected_string = selected.getDate() + "/" + (selected.getMonth() + 1) + "/" + selected.getFullYear();
    pickmeup('#calendar', {
+      date: selected_string, // plus 9 hours
+      today_offset: 8*60*60*1000,
       locale: 'ру',
       first_day: 0,
    }).show()
@@ -15,17 +20,7 @@ $(document).ready(function(){
    cal.appendTo('#calendar')
    $('#calendar').on('pickmeup-change', function (e) {
       console.log("selected date", e.detail.date)
-      $('form#calendar-date input').attr('value', e.detail.formatted_date);
-      form = $('form#calendar-date');
-      valuesToSubmit = form.serialize();
-      request = {
-         url: form.attr('action') + '.js',
-         data: valuesToSubmit,
-         complete: function(_, state) {
-            console.log("/index.js:", state)
-         },
-      }
-
-      $.ajax(request)
+      $('form#common-data input[name=with_date]').attr('value', e.detail.formatted_date);
+      filter_request()
    })
 })
