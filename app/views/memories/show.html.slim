@@ -42,13 +42,18 @@ p#notice = notice
          - paterics.each do | link |
             = memory.slugged_chip( link.url )
 
-- if memory.memo_chips_present?
+- if memory.memos_present?
    .row
       .col.s2
          b = t '.calendaries'
       .col.s12
-         - memory.memo_chips_each do | memo, link, date, text, color |
-            = memory.slugged_chip( link&.url, date, color )
+         - memory.grouped_calendaries.each do | calendary, memos |
+            .chip.z-depth-1.calendary[ style=calendary.style data-slug=calendary.s ]
+               span.name
+                  a[ href=calendary.href target='blank' ]
+                     = calendary.name_for( locale ).text
+               - memos.each do |memo|
+                  span.date = memo.humanized_date
 
 - if memory.valid_icon_links.present?
    .row

@@ -6,7 +6,7 @@
     total_pages  : total number of pages
     per_page     : number of items to fetch per page
     remote       : data-remote
-span class="page#{' current' if page.current?}"
+span class="waves-effect page#{' current active' if page.current?}"
    - uri = URI.parse(url)
    - uri.path = '/index.js' if uri.path == '/'
    == link_to_unless page.current?, page, uri.to_s, {remote: remote, rel: page.rel, context: '#page'}

@@ -17,7 +17,7 @@ form.row#query( action='index' )
                i.close.remove.material-icons close
          - if calendaries.present?
             - calendaries.each do |calendary|
-               .chip.calendary( data-slug=calendary.slug.text )
+               .chip.calendary( data-slug=calendary.s )
                   = calendary.name_for( locale ).text
                   i.close.remove.material-icons close
          - if query.present?
@@ -32,11 +32,11 @@ form.row#query( action='index' )
          - @memories.decorate.each do |memory|
             li.collection-item.avatar.memory
                .collapsible-header
-                  = link_to( memory.slug.text ) do
+                  = link_to( memory.slug.text, target: 'blank' ) do
                      - if url = memory.default_icon_url
-                        img.circle( src=url )
+                        img.circle.z-depth-1( src=url )
                      - else # TODO detect type of default avatar
-                        i.material-icons.circle.terracota perm_identity
+                        i.material-icons.circle.terracota.z-depth-1 perm_identity
                   = memory.chip
                   span.title = memory.short_name
                   span.chip.year-date = memory.date
