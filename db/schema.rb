@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170712120700) do
+ActiveRecord::Schema.define(version: 20170719001700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20170712120700) do
     t.string "quantity"
     t.string "order"
     t.string "council"
+    t.integer "base_year"
     t.index ["short_name"], name: "index_memories_on_short_name", unique: true
   end
 
