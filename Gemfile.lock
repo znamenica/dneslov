@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/znamenica/bukovina.git
-  revision: 87eeeecd2de792205153566c805d6b356fc2f62f
+  revision: de92e17e6f270018109e5e68a00af29c90b10c1a
   specs:
     bukovina (0.0.3)
       activerecord (>= 4.2)

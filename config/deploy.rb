@@ -71,7 +71,7 @@ set :rvm_roles, [:app, :web]
 namespace :deploy do
    #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
    after :finishing, 'deploy:cleanup'
-   after 'deploy:updating', 'deploy:symlink:custom'
+   #after 'deploy:updating', 'deploy:symlink:custom'
    #before 'deploy:setup_config', 'nginx:remove_default_vhost'
    #after 'deploy:setup_config', 'nginx:reload'
    after 'deploy:publishing', 'deploy:restart'
