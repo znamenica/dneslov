@@ -36,7 +36,7 @@ p#notice {
    margin: 0;
 }
 
-body > .pickmeup, div:empty, .chip:empty, .hidden {
+body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
    display: none !important;
 }
 
@@ -128,12 +128,6 @@ a[href] {
    }
 }
 
-.carousel {
-   .carousel-item {
-      width: auto;
-   }
-}
-
 .chip.year-date {
    padding: 0 5px 0 5px;
    background-color: #f8f8f8 !important;
@@ -164,9 +158,110 @@ a[href] {
    }
 }
 
-.carousel {
+.carousel.carousel-slider {
+   min-height: 20rem;
+
+   .carousel-item {
+      min-height: auto;
+   }
+}
+
+.carousel.compact {
    margin-bottom: -100px;
    margin-top: -100px;
    // z-index: -1;
    // pointer-events: none;
+
+   .carousel-item {
+      width: auto;
+      cursor: pointer !important
+   }
+}
+
+#slider-modal {
+   width: 70em;
+   overflow: hidden;
+   background: rgba(0, 0, 0, 0);
+
+   .modal-content {
+      padding: 0;
+   }
+}
+
+img.icon {
+   height: 30em;
+}
+
+.lory_slider {
+    margin: 0 auto 0;
+    width: auto;
+    position: relative;
+    -moz-user-select: none;
+
+   .frame {
+      font-size: 0;
+      line-height: 0;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      white-space: nowrap;
+      padding: 0;
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+      border: 0 none;
+
+      .slides {
+         font-size: 0;
+         line-height: 0;
+         white-space: nowrap;
+         display: inline-block;
+
+         li {
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 1) none repeat scroll 0 0;
+            color: #fff;
+            display: inline-block;
+            font-family: "Source Sans Pro", sans-serif;
+            font-size: 15px;
+            height: 30em;
+            line-height: 30px;
+            position: relative;
+            text-align: center;
+         }
+      }
+   }
+
+   .prev, .next {
+      position: absolute;
+      top: 50%;
+      margin-top: -25px;
+      display: block;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.1);
+
+      svg {
+         width: 25px;
+      }
+   }
+
+   .next {
+      right: 0;
+   }
+
+   .prev {
+      left: 0;
+   }
+
+   .modal-close {
+      background: rgba(0, 0, 0, 0.1);
+      position: absolute;
+      bottom: 1em;
+      display: block;
+      cursor: pointer;
+      right: 1em;
+      color: #DEB3AA;
+   }
+
+   .prev:hover, .next:hover, .modal-close:hover {
+      background: rgba(0, 0, 0, 0.2);
+   }
 }

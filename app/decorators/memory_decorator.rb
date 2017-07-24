@@ -29,6 +29,9 @@ class MemoryDecorator < ApplicationDecorator
    def default_icon_url
       self.valid_icon_links.first&.url ;end
 
+   def described_icon_links
+      @described_icon_links ||= self.valid_icon_links ;end
+
    def chip
       # slugged_chip( slug_path( order ), order, color_by_slug( slug.text ), slug.text ) ;end;end #TODO
       slugged_chip( nil, order, color_by_slug( slug.text ), slug.text ) ;end;end

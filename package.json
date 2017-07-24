@@ -18,12 +18,15 @@
     "babel-preset-react": "~6.24.1",
     "extract-text-webpack-plugin": "~2.1.2",
     "uglifyjs-webpack-plugin": "~0.4.6",
+    "coffee-script": "~1.12.7",
     "node-sass": "4.5.3",
     "postcss-asset-url-rails": "1.0.0",
     "postcss-loader": "1.2.1",
     "sass-loader": "~6.0.6",
     "style-loader": "0.13.1",
     "file-loader": "~0.11.2",
+    "coffee-loader": "~0.7.3",
+    "ignore-loader": "~0.1.2",
     "webpack": "~2.6.1",
     "webpack-config": "~7.0.0",
     "webpack-merge": "~4.1.0",
@@ -40,7 +43,8 @@
     "n": "~2.1.8",
     "yarn": "~0.27.5",
     "resolve-url-loader": "~2.1.0",
-    "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git"
+    "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git",
+    "lory.js": "~2.2.1"
   },
   "license": "UNLICENSED",
   "repository": {

@@ -36,38 +36,48 @@ module.exports = {
     devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
   },
 
-  module: {
-    loaders: [
-      {
-        test: /\.css$/,
-        loader: extractCSS.extract([ 'css-loader', 'postcss-loader' ])
-      },
-      {
-        test: /\.scss$/,
-        //loader: DEBUG
-        //  ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
-        loader : extractSCSS.extract({
-          fallback: 'style-loader',
-          use: [ 'css-loader', 'sass-loader' ]
-        })
-      },
-      {
-        test: /\.(js|jsx)$/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true
-          },
-        }]
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
-        use: [{
-          loader: 'file-loader',
-        }]
-      },
-    ],
-  },
+   module: {
+      loaders: [
+         {
+            test: /~$/,
+            loader: 'ignore-loader'
+         },
+         {
+            test: /\.css$/,
+            loader: extractCSS.extract([ 'css-loader', 'postcss-loader' ])
+         },
+         {
+            test: /\.scss$/,
+            //loader: DEBUG
+            //  ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
+            loader : extractSCSS.extract({
+               fallback: 'style-loader',
+               use: [ 'css-loader', 'sass-loader' ]
+            })
+         },
+         {
+            test: /\.(js|jsx)$/,
+            use: [{
+               loader: 'babel-loader',
+               options: {
+                  cacheDirectory: true
+               },
+            }]
+         },
+         {
+            test: /\.coffee$/,
+            use: [{
+               loader: 'coffee-loader',
+            }]
+         },
+         {
+            test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+            use: [{
+               loader: 'file-loader',
+            }]
+         },
+      ],
+   },
 
   resolve: {
     extensions: ['.js', '.jsx']

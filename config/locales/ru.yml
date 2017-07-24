@@ -15,6 +15,7 @@ ru:
          troparion: Тропарь
          kontakion_with_tone: Кондак, глас %{tone}
          kontakion: Кондак
+         close: Закрыть
    views:
       pagination:
          first: "&laquo;В начало"

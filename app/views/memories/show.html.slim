@@ -58,10 +58,9 @@ p#notice = notice
 - if memory.valid_icon_links.present?
    .row
       .col.s12
-         .carousel
-            - memory.valid_icon_links.includes(:description).each do | link |
-               //img.carousel-item( class="materialboxed" data-caption=link.description&.text src=link.url )
-               img.carousel-item( data-caption=link.description&.text src=link.url )
+         .carousel.compact
+            - memory.described_icon_links.each.with_index do | link, index |
+               img.carousel-item( alt=link.description_for( locale )&.text src=link.url data-index=index )
 
 - if troparion = memory.troparions_for( locale ).first
    .row
@@ -82,3 +81,21 @@ p#notice = notice
             - else
                = t '.kontakion'
       .col.s12 = kontakion.text
+
+.modal#slider-modal
+   .modal-content
+      .lory_slider.js_lory_slider
+         .frame.js_frame
+            ul.slides.js_slides
+               - memory.described_icon_links.each do | link |
+                  li
+                     img.icon( src=link.url alt=link.description_for( locale )&.text )
+         .js_prev.prev
+            svg ( xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 501.5 501.5")
+               g
+                  path ( fill="#DEB3AA" d="M302.67 90.877l55.77 55.508L254.575 250.75 358.44 355.116l-55.77 55.506L143.56 250.75z" )
+         .js_next.next
+            svg ( xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 501.5 501.5" )
+               g
+                  path ( fill="#DEB3AA" d="M199.33 410.622l-55.77-55.508L247.425 250.75 143.56 146.384l55.77-55.507L358.44 250.75z" )
+         a.modal-action.modal-close.waves-effect.waves-green.btn-flat ( href="javascript:" ) = t('.close')

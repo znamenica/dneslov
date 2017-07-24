@@ -28,20 +28,21 @@ append :linked_files, "config/database.yml", "config/secrets.yml"
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules"
 
 set :tests, []
 
 set(:config_files, %w(
    nginx-dneslov.conf
+   secrets.example.yml
    database.example.yml
 ))
 
 set(:symlinks, [
-   {
-      source: "node_modules/pickmeup/css/pickmeup.scss",
-      link: "app/webpack/css/components/pickmeup.scss"
-   },
+#   {
+#      source: "node_modules/pickmeup/css/pickmeup.scss",
+#      link: "app/webpack/css/components/pickmeup.scss"
+#   },
 #   {
 #      source: "nginx.conf",
 #      link: "/etc/nginx/sites-enabled/#{fetch(:full_app_name)}"
@@ -71,7 +72,7 @@ set :rvm_roles, [:app, :web]
 namespace :deploy do
    #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
    after :finishing, 'deploy:cleanup'
-   #after 'deploy:updating', 'deploy:symlink:custom'
+   after 'deploy:updating', 'deploy:symlink:custom'
    #before 'deploy:setup_config', 'nginx:remove_default_vhost'
    #after 'deploy:setup_config', 'nginx:reload'
    after 'deploy:publishing', 'deploy:restart'
