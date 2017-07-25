@@ -27,7 +27,6 @@ set :repo_url, "git@github.com:znamenica/dneslov.git"
 append :linked_files, "config/database.yml", "config/secrets.yml"
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules"
 
 set :tests, []
@@ -39,10 +38,10 @@ set(:config_files, %w(
 ))
 
 set(:symlinks, [
-#   {
-#      source: "node_modules/pickmeup/css/pickmeup.scss",
-#      link: "app/webpack/css/components/pickmeup.scss"
-#   },
+   {
+      source: "config/webpack/production.js",
+      link: "webpack.config.js"
+   },
 #   {
 #      source: "nginx.conf",
 #      link: "/etc/nginx/sites-enabled/#{fetch(:full_app_name)}"

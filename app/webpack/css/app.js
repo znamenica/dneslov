@@ -2,3 +2,5 @@
 function requireAll (r) { r.keys().forEach(r) }
 
 requireAll(require.context('./components/', true, /(\.scss|\.css)$/))
+
+import 'pickmeup/css/pickmeup.scss';

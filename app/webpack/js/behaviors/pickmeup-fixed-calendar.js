@@ -1,3 +1,5 @@
+var pickmeup = require('pickmeup/dist/pickmeup.min.js')
+
 $(document).ready(function(){
    pickmeup.defaults.locales['ру'] = {
       days: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],

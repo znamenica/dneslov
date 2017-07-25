@@ -2,13 +2,28 @@
  * Webpack config with Babel, Sass and PostCSS support.
  */
 
+var path = require('path');
 var webpack = require('webpack')
-var join = require('path').join
+var join = path.join
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var LiveReloadPlugin = require('webpack-livereload-plugin')
 
-var PROD = process.env.NODE_ENV === 'production'
+if (process.env.RAILS_ENV == 'undefined') {
+   global.env = process.env.NODE_ENV
+} else {
+   global.env = process.env.RAILS_ENV
+}
+
+var PROD = global.env === 'production'
 var DEBUG = !PROD
+
+if (__dirname.match(/config/)) {
+   global.rootpath = path.normalize(join(__dirname, '../../'))
+} else {
+   global.rootpath = __dirname
+}
+
+console.log("Rails root:", global.rootpath)
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
@@ -19,7 +34,7 @@ const postcssOpts = {sourceMap: true}
 module.exports = {
   cache: true,
 
-  context: __dirname,
+  context: global.rootpath,
 
   entry: {
     // JavaScript
@@ -30,7 +45,7 @@ module.exports = {
   },
 
   output: {
-    path: join(__dirname, 'vendor/assets'),
+    path: join(global.rootpath, 'vendor/assets'),
     filename: '[name].js',
     pathinfo: DEBUG ? true : false,
     devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
@@ -57,6 +72,7 @@ module.exports = {
          },
          {
             test: /\.(js|jsx)$/,
+            exclude: /node_modules/, // required for properly loading the lory.js
             use: [{
                loader: 'babel-loader',
                options: {
@@ -79,9 +95,12 @@ module.exports = {
       ],
    },
 
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
+   resolve: {
+      extensions: [ '.js', '.jsx', '.coffee' ],
+      alias: {
+         libs: path.join(global.rootpath, 'libs')
+      }
+   },
 
   plugins: [
     // allChunks will preserve source maps
@@ -99,7 +118,7 @@ module.exports = {
       debug: DEBUG ? true : false,
       options: {
         sassLoader: {
-          includePaths: join(__dirname, 'node_modules'),
+          includePaths: join(global.rootpath, 'node_modules'),
           outputStyle: DEBUG ? 'nested' : 'compressed'
         },
       },

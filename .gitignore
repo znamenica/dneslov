@@ -29,5 +29,6 @@
 
 config/secrets.yml
 config/database.yml
+webpack.config.js
 
 *.log

@@ -100,21 +100,6 @@ icon_click = (e) ->
    return
 
 init_js = (context) ->
-   $(context).find('.modal').modal
-      opacity: .5
-      dismissible: true
-      ready: (modal, trigger) ->
-         $('.lory_slider').lory
-            infinite: 5
-            slideSpeed: 750
-            ease: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)'
-         return
-   $(context).find('img.carousel-item').on 'click', ->
-      if $(this).hasClass 'active'
-         index = $(this).attr 'data-index'
-         $('#slider-modal').modal 'open'
-         $('.lory_slider').data().lory.slideTo index - 1;
-      return
    $(context).find('.collapsible').collapsible()
    $(context).find('.carousel.compact').carousel()
    $(context).find('input[type=search]').donetyping(filter_request)
