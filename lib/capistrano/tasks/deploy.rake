@@ -15,8 +15,7 @@ namespace :deploy do
       on release_roles :all do
          within release_path do
             with fetch(:bundle_env_variables, { RAILS_ENV: fetch(:stage) }) do
-               execute "killall ruby"
-               execute "sleep 2"
+               execute "if [ -n \"$(ps aux|grep \\sruby )\" ]; then killall ruby; sleep 2; fi"
                execute :bundle, :exec, "puma -e #{fetch(:stage)}"
             end
          end
