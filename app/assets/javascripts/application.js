@@ -13,6 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require materialize-sprockets
-//= require webpack/app
 //= require_tree .
 //
