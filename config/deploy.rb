@@ -39,6 +39,10 @@ set(:config_files, %w(
 
 set(:symlinks, [
    {
+      source: "app/webpack/manifest.json",
+      link: "public/webpack/manifest.json"
+   },
+   {
       source: "config/webpack/production.js",
       link: "webpack.config.js"
    },
