@@ -27,6 +27,7 @@
     "file-loader": "~0.11.2",
     "coffee-loader": "~0.7.3",
     "ignore-loader": "~0.1.2",
+    "image-webpack-loader": "~3.3.1",
     "webpack": "~2.6.1",
     "webpack-config": "~7.0.0",
     "webpack-merge": "~4.1.0",

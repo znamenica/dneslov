@@ -87,7 +87,14 @@ module.exports = {
             }]
          },
          {
-            test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+            test: /\.(png|jpe?g|gif|svg)$/,
+            loaders: [
+               'file?hash=sha512&digest=hex&name=[hash].[ext]',
+               'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+            ]
+         },
+         {
+            test: /\.(woff|woff2|ttf|eot)$/,
             use: [{
                loader: 'file-loader',
             }]
