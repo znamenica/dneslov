@@ -1,3 +1,10 @@
+- переключатель старый/новый стиль + боковые ссылки на предыдущий/следующий день
+- админка
+- фильтр по календарю: есть есть то по записям в календаре, если нет то по памятям
+- логотип
+- вводный путеводитель по календарю
+
+
 Implement in capistrano
 https://stackoverflow.com/questions/4313323/how-to-change-owner-of-postgresql-database#43704694
 https://stackoverflow.com/questions/143756/postgresql-rename-database

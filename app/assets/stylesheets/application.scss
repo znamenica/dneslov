@@ -126,6 +126,24 @@ a[href] {
    .pmu-selected {
       background-color: #80a8cd
    }
+
+   .pmu-yesterday {
+      @extend .pmu-prev !optional
+   }
+
+   .pmu-tomorrow {
+      @extend .pmu-next !optional
+   }
+
+   .pmu-left {
+      width: 6em;
+      text-align: left;
+   }
+
+   .pmu-right {
+      width: 6em;
+      text-align: right;
+   }
 }
 
 .chip.year-date {
@@ -192,10 +210,6 @@ a[href] {
    }
 }
 
-#slider-modal.open {
-   opacity: 1;
-}
-
 img.icon {
    height: 30em;
 }
@@ -256,7 +270,7 @@ img.icon {
       margin-top: -25px;
       display: block;
       cursor: pointer;
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.3);
 
       svg {
          width: 25px;
@@ -272,7 +286,7 @@ img.icon {
    }
 
    .modal-close {
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       position: absolute;
       bottom: 1em;
       display: block;
@@ -282,6 +296,6 @@ img.icon {
    }
 
    .prev:hover, .next:hover, .modal-close:hover {
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.5);
    }
 }

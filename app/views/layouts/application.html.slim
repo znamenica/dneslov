@@ -9,7 +9,7 @@ html
       header
          nav.terracota
             .nav-wrapper
-               a.brand-logo(href='/') = 'Днесловъ'
+               a.brand-logo(href='/') Днесловъ
 
       main
          .container
@@ -19,6 +19,13 @@ html
                      input( type='hidden' name='with_date' value=@date )
                      input( type='hidden' name='in_calendaries' value=@calendaries&.input_value )
                   .row.calendary
+                     .hidden
+                        nav.next-prev
+                           .pmu-yesterday.pmu-button ◀
+                           .pmu-yesterday.pmu-left.pmu-button Вчера
+                           .pmu-tomorrow.pmu-right.pmu-button Завтра
+                           .pmu-tomorrow.pmu-button ▶
+                        .pmu-days-wrapper
                      #calendar
                   .row
                      - if @calendary_cloud.present?
