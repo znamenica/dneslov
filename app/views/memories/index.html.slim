@@ -13,7 +13,7 @@ form.row#query( action='index' )
          .chip.white = t('.selection')
          - if date.present?
             .chip.date
-               = date
+               = date.to_date
                i.close.remove.material-icons close
          - if calendaries.present?
             - calendaries.each do |calendary|

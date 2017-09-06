@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/znamenica/bukovina.git
-  revision: 68f16a6168f4dcf5e7fec4c1743c20ea9047dde0
+  revision: decbac5eb640625647d997fb7db9efae77f5e37f
   specs:
     bukovina (0.0.3)
       activerecord (>= 4.2)
@@ -141,7 +141,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.2)
     erubi (1.6.0)
-    excon (0.57.1)
+    excon (0.59.0)
     execjs (2.2.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)

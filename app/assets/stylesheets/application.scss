@@ -16,7 +16,9 @@
  *= require_self
  */
 
-//#import '~pickmeup/css/pickmeup'
+$dark: #292929;
+$terracota: #ee6e73;
+$small: 40em;
 
 nav .brand-logo {
    padding-left: 10px;
@@ -68,9 +70,8 @@ a[href] {
 //#####
 
 .terracota {
-   background-color: #ee6e73 !important;
+   background-color: $terracota !important;
 }
-
 
 #query .input-field input[type="search"] {
    width: calc(100% - 3rem);
@@ -87,7 +88,7 @@ a[href] {
 }
 
 .row.calendary {
-   height: 13rem;
+   height: 17rem;
 }
 
 #calendar {
@@ -143,6 +144,64 @@ a[href] {
    .pmu-right {
       width: 6em;
       text-align: right;
+   }
+
+   .pmu-style:checked {
+      background-color: #ee6e73;
+   }
+
+   [type="radio"] + label.pmu-style:after,
+   [type="radio"] + label.pmu-style:before,
+   [type="radio"] + label.pmu-style {
+      content: none;
+      display: inline-block;
+      cursor: pointer;
+      color: $dark;
+      background: $terracota;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.22);
+      transition: 0.3s;
+      user-select: none;
+
+      width: 11em;
+      height: 3em;
+      text-align: center;
+      font-size: 10px;
+      outline: medium none;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      border: medium none;
+      border-radius: 2px;
+      line-height: 3em;
+      padding: 0;
+      text-transform: uppercase;
+
+      &:hover {
+         background: darken($terracota, 10%);
+         color: darken($dark, 10%);
+         box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
+      }
+
+      @media (max-width: $small) {
+         padding: 0em 1em 3px;
+         margin: 0.25em;
+      }
+   }
+
+   [type="radio"] + label.pmu-style:after {
+      margin-left: 3px;
+   }
+
+   [type="radio"] + label.pmu-style:hover {
+      background: darken($terracota, 5%);
+      color: darken($dark, 5%);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
+   }
+
+   [type="radio"]:checked + label.pmu-style {
+      background: darken($terracota, 25%);
+      color: lighten($dark, 5%);
+      transform: translateY(2px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0px -1px 0 rgba(0,0,0,0.22); 
    }
 }
 

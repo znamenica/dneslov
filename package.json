@@ -44,7 +44,7 @@
     "n": "~2.1.8",
     "yarn": "~0.27.5",
     "resolve-url-loader": "~2.1.0",
-    "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git",
+    "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",
     "lory.js": "~2.2.1"
   },
   "license": "UNLICENSED",

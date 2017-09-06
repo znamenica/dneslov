@@ -31,6 +31,12 @@ class MemoriesController < ApplicationController
    def is_html?
       request.formats.first.symbol == :html ;end
 
+   def is_julian_calendar?
+      params[ :calendar_style ].to_i == 0 ;end
+
+   def will_select_date_only?
+      not params[:with_text] ;end
+
    def set_locales
       @locales = %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
@@ -42,8 +48,10 @@ class MemoriesController < ApplicationController
       @calendary_cloud = Calendary.licit ;end
 
    def set_date
-      params[:with_date] ||= (Time.now + 9.hours).strftime("%Y-%m-%d") if not params[:with_text]
-      @date = params[:with_date] ;end
+      # TODO add detection time zone from request
+      @date = will_select_date_only? && Time.now + 9.hours || Time.parse( params[ :with_date ])
+      @date = @date - 13.days if is_julian_calendar? and will_select_date_only? #TODO remove fixed julian gap
+      params[:with_date] = @date.strftime("%Y-%m-%d") ;end
 
    def set_memory
       @memory = Memory.by_slug(params[:slug]).first&.decorate || raise(ActiveRecord::RecordNotFound) ;end;end
