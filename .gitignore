@@ -30,5 +30,6 @@
 config/secrets.yml
 config/database.yml
 webpack.config.js
+public/webpack/manifest.json
 
 *.log
