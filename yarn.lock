@@ -4381,7 +4381,7 @@ performance-now@^0.2.0:
 
 "pickmeup@git+https://git@github.com/majioa/PickMeUp.git#devel":
   version "3.0.8"
-  resolved "git+https://git@github.com/majioa/PickMeUp.git#97cbaf6158ea15099e3bf2acfdcc57bfd365d2eb"
+  resolved "git+https://git@github.com/majioa/PickMeUp.git#eaf13eb9d10a6bc51f0bf77843f0c31568fec74e"
 
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
