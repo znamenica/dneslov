@@ -2,11 +2,14 @@
 var pickmeup = require('pickmeup/js/pickmeup.js')
 var pmu;
 
+var is_julian = function() {
+   return ($('#julian:checked').length == 1);
+}
+
 var get_today = function() {
-   is_julian = $('#julian:checked').length == 1;
    today = new Date;
 
-   if (is_julian) {
+   if (is_julian()) {
       today.setDate(today.getDate() - 13);
    }
    today.setTime(today.getTime() + 8*60*60*1000);
@@ -23,7 +26,7 @@ $(document).ready(function(){
       monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
    }
    selected = get_today();
-   selected.setTime(selected.getTime() + 9*60*60*1000);
+   selected.setTime(selected.getTime() + 1*60*60*1000);
    selected_string = selected.getDate() + "/" + (selected.getMonth() + 1) + "/" + selected.getFullYear();
    calendar_style = $("input[name='calendar-style']:checked").val();
    pmu = pickmeup('#calendar', {
@@ -31,7 +34,10 @@ $(document).ready(function(){
       locale: 'ру',
       first_day: 0,
       current: get_today(),
-      render: function (date, self) {
+      calendar_gap: function () {
+         return (is_julian() && -13 || 0);
+      },
+      render: function (date) {
          return { today : get_today() };
       }
    })

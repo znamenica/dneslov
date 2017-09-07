@@ -19,6 +19,8 @@
 $dark: #292929;
 $terracota: #ee6e73;
 $small: 40em;
+$today_color: #c7d8ed;
+$selected_color: #80a8cd;
 
 nav .brand-logo {
    padding-left: 10px;
@@ -88,7 +90,7 @@ a[href] {
 }
 
 .row.calendary {
-   height: 17rem;
+   height: 20rem;
 }
 
 #calendar {
@@ -110,10 +112,14 @@ a[href] {
 
    .pmu-button {
       color: #717171;
+      padding: 1px;
+      box-sizing: border-box;
+      border: 1px solid transparent;
    }
 
    .pmu_button:hover {
-      background-color: #17384d
+      @extend .pmu-button;
+      background-color: #17384d;
    }
 
    .pmu-not-in-month {
@@ -121,11 +127,16 @@ a[href] {
    }
 
    .pmu-today {
-      background-color: #c7d8ed
+      background-color: $today_color
    }
 
    .pmu-selected {
-      background-color: #80a8cd
+      background-color: $selected_color
+   }
+
+   .pmu-today.pmu-selected {
+      @extend .pmu-today;
+      border: 1px solid $selected_color;
    }
 
    .pmu-yesterday {
@@ -144,10 +155,6 @@ a[href] {
    .pmu-right {
       width: 6em;
       text-align: right;
-   }
-
-   .pmu-style:checked {
-      background-color: #ee6e73;
    }
 
    [type="radio"] + label.pmu-style:after,

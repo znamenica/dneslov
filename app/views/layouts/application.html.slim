@@ -14,9 +14,9 @@ html
       main
          .container
             .row
-               .col.s12.m3.l3.xl3
+               .col.s12.m12.l3.xl3
                   form#common-data( action='index' )
-                     input( type='hidden' name='with_date' value=@date.to_date )
+                     input( type='hidden' name='with_date' value=@date&.to_date )
                      input( type='hidden' name='in_calendaries' value=@calendaries&.input_value )
                      .row.calendary
                         .hidden
@@ -37,5 +37,5 @@ html
                         - @calendary_cloud.decorate.each do |calendary|
                            - action_class = @calendary_cloud.include?(calendary.object) && 'hidden add' || 'add'
                            = calendary.chip_for( @locales, 'add', action_class )
-               .col.s12.m9.l9.xl9
+               .col.s12.m12.l9.xl9
                   #page = yield
