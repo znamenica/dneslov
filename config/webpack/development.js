@@ -3,9 +3,12 @@
 const merge = require('webpack-merge')
 const sharedConfig = require('./base.config.js')
 const { settings, output } = require('./configuration.js')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const LiveReloadPlugin = require('webpack-livereload-plugin')
+const webpack = require('webpack')
 
 module.exports = merge(sharedConfig, {
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   stats: {
     errorDetails: true
@@ -14,6 +17,18 @@ module.exports = merge(sharedConfig, {
   output: {
     pathinfo: true
   },
+
+  plugins: [
+    new UglifyJsPlugin({
+      sourceMap: true
+    }),
+    new LiveReloadPlugin({
+      appendScriptTag: true
+    }),
+    new webpack.ProvidePlugin({
+      util: 'util',
+    }),
+  ],
 
   devServer: {
     clientLogLevel: 'none',

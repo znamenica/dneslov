@@ -1,4 +1,3 @@
 {
-   "app.js": "vendor/assets/javascripts/webpack/app.js",
    "app.scss": "vendor/assets/stylesheet/webpack/app.scss"
 }

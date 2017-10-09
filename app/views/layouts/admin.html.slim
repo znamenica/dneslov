@@ -1,0 +1,18 @@
+html
+   head
+      title Админка Днеслова
+      = stylesheet_link_tag 'application', media: 'all'
+      = stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons'
+      = javascript_include_tag 'application'
+      = csrf_meta_tags
+   body
+      header
+         nav.terracota
+            .nav-wrapper
+               a.brand-logo(href='/') Днесловъ
+
+      main
+         .container
+            .row
+               .col.s12.m12.l12.xl12
+                  #page = yield

@@ -62,8 +62,8 @@ gem 'nokogiri', '~> 1.6.8'
 gem 'rails-html-sanitizer', '~> 1.0.3'
 
 # models
-gem 'bukovina', github: 'znamenica/bukovina'
-#gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
+#gem 'bukovina', github: 'znamenica/bukovina'
+gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'has_scope'
 
@@ -94,7 +94,7 @@ end
 group :development, :test do
    gem 'ruby-prof'
    gem "factory_girl_rails"
-   gem 'pry-rails'
+   # gem 'pry-rails'
    gem 'pry_debug'
    gem 'listen', '>= 3.0.5', '< 3.2'
    gem 'spring'

@@ -6,10 +6,9 @@ var path = require('path');
 var webpack = require('webpack')
 var join = path.join
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var LiveReloadPlugin = require('webpack-livereload-plugin')
 
-if (process.env.RAILS_ENV == 'undefined') {
-   global.env = process.env.NODE_ENV
+if (process.env.RAILS_ENV === undefined) {
+   global.env = process.env.NODE_ENV || 'development'
 } else {
    global.env = process.env.RAILS_ENV
 }
@@ -25,7 +24,6 @@ if (__dirname.match(/config/)) {
 
 console.log("Rails root:", global.rootpath)
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
 const extractSCSS = new ExtractTextPlugin({ filename: '[name].scss', allChunks: true })
 //const postcssOpts = {postcss: {plugins: [autoprefixer(autoprefixerOpts)], sourceMap: true}}
@@ -72,7 +70,6 @@ module.exports = {
          },
          {
             test: /\.(js|jsx)$/,
-            exclude: /node_modules/, // required for properly loading the lory.js
             use: [{
                loader: 'babel-loader',
                options: {
@@ -115,9 +112,6 @@ module.exports = {
     extractSCSS,
     extractCSS,
 
-    new UglifyJsPlugin({
-      sourceMap: true
-    }),
     // Ignore locales because it's around 400kb
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.LoaderOptionsPlugin({
@@ -133,11 +127,11 @@ module.exports = {
         require('autoprefixer')(),
         require('postcss-asset-url-rails')()
       ],
-    })
-  ].concat(DEBUG ? [
-    new LiveReloadPlugin({ appendScriptTag: true }),
-  ] : []),
-
-  // Best trade-off with compatibility and speed
-  devtool: DEBUG ? 'cheap-module-eval-source-map' : undefined,
+    }),
+    new webpack.ProvidePlugin({
+      "React": "react",
+      $: 'jquery',
+      jQuery: 'jquery',
+    }),
+  ],
 }

@@ -1,6 +1,5 @@
-GIT
-  remote: https://github.com/znamenica/bukovina.git
-  revision: decbac5eb640625647d997fb7db9efae77f5e37f
+PATH
+  remote: /usr/local/home/majioa/git/bukovina
   specs:
     bukovina (0.0.3)
       activerecord (>= 4.2)
@@ -215,8 +214,6 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    pry-rails (0.3.2)
-      pry (>= 0.9.10)
     pry_debug (0.0.1)
       pry (~> 0.9.0)
     public_suffix (2.0.5)
@@ -385,7 +382,6 @@ DEPENDENCIES
   npm-pipeline-rails
   pattern_generator
   pg
-  pry-rails
   pry_debug
   puma (~> 3.7)
   rack (~> 2.0)
@@ -412,4 +408,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
