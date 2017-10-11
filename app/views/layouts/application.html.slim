@@ -14,28 +14,10 @@ html
       main
          .container
             .row
-               .col.s12.m12.l3.xl3
-                  form#common-data( action='index' )
-                     input( type='hidden' name='with_date' value=@date&.to_date )
-                     input( type='hidden' name='in_calendaries' value=@calendaries&.input_value )
-                     .row.calendary
-                        .hidden
-                           nav.style-select
-                              input.hidden#julian( type="radio" name="calendar-style" checked value='0')
-                              label.pmu-style( for="julian" ) Юлианский
-                              input.hidden#neojulian( type="radio" name="calendar-style" value='1')
-                              label.pmu-style( for="neojulian" ) Новоюлианский
-                           nav.next-prev
-                              .pmu-yesterday.pmu-button ◀
-                              .pmu-yesterday.pmu-left.pmu-button Вчера
-                              .pmu-tomorrow.pmu-right.pmu-button Завтра
-                              .pmu-tomorrow.pmu-button ▶
-                           .pmu-days-wrapper
-                        #calendar
-                  .row
-                     - if @calendary_cloud.present?
-                        - @calendary_cloud.decorate.each do |calendary|
-                           - action_class = @calendary_cloud.include?(calendary.object) && 'hidden add' || 'add'
-                           = calendary.chip_for( @locales, 'add', action_class )
-               .col.s12.m12.l9.xl9
+               .col.s12.m5.l3.xl2
+                  .hidden#calendary
+                  = react_component 'MemoriesForm', with_date: @date&.to_date,
+                                                    in_calendaries: value=@calendaries&.input_value,
+                                                    cloud: @calendary_cloud.to_json
+               .col.s12.m7.l9.xl10
                   #page = yield

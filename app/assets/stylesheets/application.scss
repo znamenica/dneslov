@@ -48,19 +48,6 @@ body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
    display: block;
 }
 
-.pickmeup .pmu-instance .pmu-days .pmu-button {
-   border-radius: 50%;
-   margin-left: 1px;
-   margin-right: 1px;
-   width: 1.8em !important;
-}
-
-.pickmeup .pmu-instance .pmu-day-of-week div {
-   margin-left: 1px;
-   margin-right: 1px;
-   width: 1.8em !important;
-}
-
 a {
    color: rgba(0, 0, 0, 0.6)
 }
@@ -95,126 +82,147 @@ a[href] {
 
 .row.calendary {
    height: 20rem;
-}
+   text-align: center;
 
-#calendar {
-   background: transparent;
-
-   .pickmeup {
-      background-color: transparent;
-   }
-
-   .pmu-instance > nav {
-      height: auto;
-      background-color: auto;
-      width: auto;
-   }
-
-   .pmu-day-of-week {
-      background-color: #f79eb3;
-   }
-
-   .pmu-button {
-      color: #717171;
-      padding: 1px;
-      box-sizing: border-box;
-      border: 1px solid transparent;
-   }
-
-   .pmu_button:hover {
-      @extend .pmu-button;
-      background-color: #17384d;
-   }
-
-   .pmu-not-in-month {
-      color: #212121;
-   }
-
-   .pmu-today {
-      background-color: $today_color
-   }
-
-   .pmu-selected {
-      background-color: $selected_color
-   }
-
-   .pmu-today.pmu-selected {
-      @extend .pmu-today;
-      border: 1px solid $selected_color;
-   }
-
-   .pmu-yesterday {
-      @extend .pmu-prev !optional
-   }
-
-   .pmu-tomorrow {
-      @extend .pmu-next !optional
-   }
-
-   .pmu-left {
-      width: 6em;
-      text-align: left;
-   }
-
-   .pmu-right {
-      width: 6em;
-      text-align: right;
-   }
-
-   [type="radio"] + label.pmu-style:after,
-   [type="radio"] + label.pmu-style:before,
-   [type="radio"] + label.pmu-style {
-      content: none;
+   #calendar {
+      background: transparent;
       display: inline-block;
-      cursor: pointer;
-      color: $dark;
-      background: $terracota;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.22);
-      transition: 0.3s;
-      user-select: none;
+   
+      .pmu-view-days {
+         background-color: transparent;
+         position: relative;
+      }
 
-      width: 11em;
-      height: 3em;
-      text-align: center;
-      font-size: 10px;
-      outline: medium none;
-      text-decoration: none;
-      letter-spacing: 0.5px;
-      border: medium none;
-      border-radius: 2px;
-      line-height: 3em;
-      padding: 0;
-      text-transform: uppercase;
+      .pmu-instance {
+         .pmu-days {
+            .pmu-button {
+               border-radius: 50%;
+               margin-left: 1px;
+               margin-right: 1px;
+               width: 1.8em !important;
+            }
 
-      &:hover {
-         background: darken($terracota, 10%);
-         color: darken($dark, 10%);
+            .pmu-not-in-month {
+               color: #717171;
+            }
+         
+            .pmu-today {
+               background-color: $today_color
+            }
+         
+            .pmu-selected {
+               background-color: $selected_color
+            }
+         
+            .pmu-today.pmu-selected {
+               @extend .pmu-today;
+               border: 1px solid $selected_color;
+            }
+         }
+
+         .pmu-day-of-week {
+            background-color: #f79eb3;
+
+            div {
+               margin-left: 1px;
+               margin-right: 1px;
+               width: 1.8em !important;
+            }
+         }
+
+         & > nav {
+            height: auto;
+            background-color: auto;
+            width: auto;
+
+            .pmu-yesterday {
+               @extend .pmu-prev !optional
+            }
+         
+            .pmu-tomorrow {
+               @extend .pmu-next !optional
+            }
+         
+            .pmu-left {
+               width: 6em;
+               text-align: left;
+            }
+         
+            .pmu-right {
+               width: 6em;
+               text-align: right;
+            }
+         }
+
+         .pmu-button {
+            color: #212121;
+            padding: 1px;
+            box-sizing: border-box;
+            border: 1px solid transparent;
+
+            &hover {
+               @extend .pmu-button;
+               background-color: #17384d;
+            }
+         }
+      }
+  
+      [type="radio"] + label.pmu-style:after,
+      [type="radio"] + label.pmu-style:before,
+      [type="radio"] + label.pmu-style {
+         content: none;
+         display: inline-block;
+         cursor: pointer;
+         color: $dark;
+         background: $terracota;
+         box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.22);
+         transition: 0.3s;
+         user-select: none;
+   
+         width: 11em;
+         height: 3em;
+         text-align: center;
+         font-size: 10px;
+         outline: medium none;
+         text-decoration: none;
+         letter-spacing: 0.5px;
+         border: medium none;
+         border-radius: 2px;
+         line-height: 3em;
+         padding: 0;
+         text-transform: uppercase;
+   
+         &:hover {
+            background: darken($terracota, 10%);
+            color: darken($dark, 10%);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
+         }
+   
+         @media (max-width: $small) {
+            //padding: 0em 1em 3px;
+            //margin: 0.25em;
+         }
+      }
+   
+      [type="radio"] + label.pmu-style:after {
+         margin-left: 3px;
+      }
+   
+      [type="radio"] + label.pmu-style:hover {
+         background: darken($terracota, 5%);
+         color: darken($dark, 5%);
          box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
       }
-
-      @media (max-width: $small) {
-         padding: 0em 1em 3px;
-         margin: 0.25em;
+   
+      [type="radio"]:checked + label.pmu-style {
+         background: darken($terracota, 25%);
+         color: lighten($dark, 5%);
+         transform: translateY(2px);
+         box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0px -1px 0 rgba(0,0,0,0.22); 
       }
    }
-
-   [type="radio"] + label.pmu-style:after {
-      margin-left: 3px;
-   }
-
-   [type="radio"] + label.pmu-style:hover {
-      background: darken($terracota, 5%);
-      color: darken($dark, 5%);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
-   }
-
-   [type="radio"]:checked + label.pmu-style {
-      background: darken($terracota, 25%);
-      color: lighten($dark, 5%);
-      transform: translateY(2px);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0px -1px 0 rgba(0,0,0,0.22); 
-   }
 }
+
 
 .chip.year-date {
    padding: 0 5px 0 5px;

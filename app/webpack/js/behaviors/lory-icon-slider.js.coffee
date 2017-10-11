@@ -1,7 +1,5 @@
 import {lory} from 'lory.js/dist/jquery.lory.js'
-
 global.lory = lory
-
 'use strict'
 
 $(document).ready ->
