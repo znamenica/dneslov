@@ -1,49 +1,5 @@
-form.row#query( action='index' )
-   .input-field.col.s12
-      i.material-icons.prefix youtube_searched_for
-      input(
-         type="search"
-         name="with_text"
-         placeholder=t( '.what_search' )
-         value=query&.join(" ")&.gsub(/\s+\+/, '+')  )
-
-- if date.present? || query.present? || calendaries.present?
-   .row
-      .col.s12
-         .chip.white = t('.selection')
-         - if date.present?
-            .chip.date
-               = date&.to_date
-               i.close.remove.material-icons close
-         - if calendaries.present?
-            - calendaries.each do |calendary|
-               .chip.calendary( data-slug=calendary.s )
-                  = calendary.name_for( locale ).text
-                  i.close.remove.material-icons close
-         - if query.present?
-            - query.each do |token|
-               .chip.token( data-token=token )
-                  = token
-                  i.close.remove.material-icons close
-
-.row
-   - if @memories.present?
-      ul.collection.collapsible( data-collapsible="expandable" )
-         - @memories.decorate.each do |memory|
-            li.collection-item.avatar.memory
-               .collapsible-header
-                  = link_to( memory.slug.text, target: 'blank' ) do
-                     - if url = memory.default_icon_url
-                        img.circle.z-depth-1( src=url )
-                     - else # TODO detect type of default avatar
-                        i.material-icons.circle.terracota.z-depth-1 perm_identity
-                  = memory.chip
-                  span.title = memory.short_name
-                  span.chip.year-date = memory.date
-               - if description = memory.description_for( locale )
-                  .collapsible-body
-                     span = description.text
-   - else
-      span = t('.not_found')
-
-   = paginate @memories, remote: true
+= react_component 'MemoriesForm', date: date&.to_date,
+                                  memories: MemoriesSerializer.new( @memories, locales: locales ),
+                                  calendaries_cloud: CalendariesSerializer.new( calendary_cloud, locales: locales ),
+                                  calendaries_used: calendary_slugs,
+                                  query: query

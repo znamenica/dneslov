@@ -75,7 +75,8 @@ gem 'npm-pipeline-rails'
 ## pagination
 gem 'kaminari'
 
-## decoration
+## decoration/serialization
+gem 'active_model_serializers'
 gem 'draper'
 
 group :development do
