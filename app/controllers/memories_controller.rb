@@ -12,14 +12,21 @@ class MemoriesController < ApplicationController
    # GET /memories.js,/index.js
    def index
       @memories = apply_scopes(Memory).page(params[:page])
-      binding.pry
+      # binding.pry
 
-      render :index, locals: {
-         locales: locales,
-         date: date,
-         query: query,
-         calendary_cloud: calendary_cloud,
-         calendary_slugs: calendary_slugs } ;end
+      respond_to do |format|
+         format.json { render json: @memories,
+                              serializer: MemoriesSerializer,
+                              total: @memories.total_count,
+                              page: params[:page] || 1,
+                              locales: locales }
+         format.html { render :index, locals: {
+            locales: locales,
+            date: date,
+            tokens: tokens,
+            page: params[:page] || 1,
+            calendary_cloud: calendary_cloud,
+            calendary_slugs: calendary_slugs } } end;end
 
    # GET /memories/1
    # GET /memories/1.json
@@ -28,8 +35,8 @@ class MemoriesController < ApplicationController
 
    protected
 
-   def query
-      ( params[:with_tokens] || [] ).join( ' ' ).gsub( /\+\s*/, ' +' ).split(/\s+/) ;end
+   def tokens
+      params[:with_tokens] || [] ;end
 
    def is_html?
       request.formats.first.symbol == :html ;end
@@ -59,7 +66,7 @@ class MemoriesController < ApplicationController
 
    def default_with_date
       if is_html?
-         params[:with_date] = date.strftime("%Y-%m-%d") ;end;end
+         params[:with_date] = date.strftime("%d-%m-%Y") ;end;end
 
    def calendary_slugs
       @calendary_slugs ||= Slug.for_calendary.where( text: params[:in_calendaries] ).pluck( :text ) ;end

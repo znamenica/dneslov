@@ -15,8 +15,8 @@ class MemorySerializer < ApplicationSerializer
 
    def year
       # TODO if no proper event, just skip, remove then
-      year = ( object.filtered_events.first.try( :happened_at ) || "" ).split( "." ).last
-      year&.strip ;end
+      year = ( object.filtered_events.first.try( :happened_at ) ||
+               object.events.first.try( :happened_at ) || "" ).split( "." ).last || '-' ;end
 
    def order
       {
