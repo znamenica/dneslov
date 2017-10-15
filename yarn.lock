@@ -5152,8 +5152,9 @@ react-dom@*, react-dom@^15.4.2, react-dom@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-"react-materialize@file:../react-materialize":
+"react-materialize@git+https://git@github.com/majioa/react-materialize.git#devel":
   version "1.0.14"
+  resolved "git+https://git@github.com/majioa/react-materialize.git#703e737ac14ce2e1dcd495fd142e04202b780847"
   dependencies:
     classnames "^2.2.5"
     react "^15.4.2"
@@ -5166,9 +5167,9 @@ react-rails-ujs@^1.1.0:
     react "*"
     react-dom "*"
 
-react-scroll-pagination@^0.1.10:
+"react-scroll-pagination@git+https://git@github.com/majioa/react-scroll-pagination.git#devel":
   version "0.1.10"
-  resolved "https://registry.yarnpkg.com/react-scroll-pagination/-/react-scroll-pagination-0.1.10.tgz#1d076341576103b406e3519b0c981e6c93f41568"
+  resolved "git+https://git@github.com/majioa/react-scroll-pagination.git#f38cf10597554fefc9459a56d1c34898cd952802"
   dependencies:
     create-react-class "^15.6.2"
     jquery "^1.0.0"
