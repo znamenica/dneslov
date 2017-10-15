@@ -64,7 +64,7 @@ server "46.173.213.110", user: "ubuntu", roles: %w{app db web}, primary: true
 
 
 set :stage, :production
-set :branch, "master"
+set :branch, ENV['BRANCH'] || "master"
 
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
