@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   root 'memories#index'
 
   get '/index' => 'memories#index'
-  get '/:slug' => 'memories#show', as: 'slug', constraints: { slug: /[ёа-я0-9]{1,6}/ }
+  get '/:slug' => 'memories#show', as: 'slug'#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
 
   resources :calendaries
   # Example of regular route:

@@ -1,10 +1,9 @@
 ru:
-   memories:
-      index:
+   serialization:
+      memory:
          what_search: Что ищем?
          not_found: Ничегошеньки не обнаружено
          selection: 'Выборка: '
-      show:
          title: Карточка памяти
          description: Описание
          being: Бытие
@@ -16,10 +15,3 @@ ru:
          kontakion_with_tone: Кондак, глас %{tone}
          kontakion: Кондак
          close: Закрыть
-   views:
-      pagination:
-         first: "&laquo;В начало"
-         previous: "&lsaquo; Ранее"
-         next: "Далее &rsaquo;"
-         last: "В конец &raquo;"
-         truncate: "&hellip;"

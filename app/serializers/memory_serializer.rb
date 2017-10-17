@@ -1,40 +1,55 @@
-class MemorySerializer < ApplicationSerializer
-   attributes :short_name, :color, :slug, :description, :icon_url, :year, :order, :url, :councils
+class MemorySerializer < CommonMemorySerializer
+   attributes  :beings, :wikies,:paterics, :calendaries, :icons, :troparion, :kontakion
 
-   def short_name
-      object.short_name ;end
+   def link_text link
+      /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
+      domains.split(".").sort_by { |d| d.size }.last ;end
 
-   def color
-      self.color_by_slug( slug ) ;end
-
-   def description
-      object.description_for( locales )&.text ;end
-
-   def icon_url
-      object.valid_icon_links.first&.url ;end
-
-   def year
-      # TODO if no proper event, just skip, remove then
-      year = ( object.filtered_events.first.try( :happened_at ) ||
-               object.events.first.try( :happened_at ) || "" ).split( "." ).last || '-' ;end
-
-   def order
-      {
-         slug: object.order,
-         color: self.color_by_slug( object.order ),
-      } ;end
-
-   def councils
-      council = object.council || ''
-      council.split(',').map do | council |
-         /(?<pure_council>[^?]*)\??\z/ =~ council # NOTE crop ? mark
-         memory = Memory.by_slug( pure_council ).first
-
+   def links_json links
+      ( links || [] ).map.with_index do | link, index |
          {
-            slug: pure_council,
-            color: self.color_by_slug( pure_council ),
-            url: memory && slug_path( pure_council ) || nil
+            id: index,
+            text: link_text( link.url ),
+            url: link.url,
          } ;end;end
 
-   def url
-      slug_path( slug ) ;end;end
+   def memos_present?
+      object.memos.includes(:calendary).any? { | memo | memo.calendary } ;end
+
+   def beings
+      links_json( object.beings_for( locales )) ;end
+
+   def wikies
+      links_json( object.wikies_for( locales )) ;end
+
+   def paterics
+      links_json( object.paterics_for( locales )) ;end
+
+   def calendaries
+      MemoedCalendariesSerializer.new(object.memos, locales: locales) ;end
+
+   def icons
+      object.valid_icon_links.map.with_index do | icon, index |
+         {
+            id: index,
+            description: icon.description_for( locales )&.text,
+            url: icon.url,
+         } ;end;end
+
+   def troparion
+      if troparion = object.troparions_for( locales ).first
+         title =
+         if troparion.tone.present?
+            t 'troparion_with_tone', tone: troparion.tone
+         else
+            t 'troparion' ;end
+         { title: title, text: troparion.text } ;end;end
+
+   def kontakion
+      if kontakion = object.kontakions_for( locales ).first
+         title =
+         if kontakion.tone.present?
+            t 'kontakion_with_tone', tone: kontakion.tone
+         else
+            t 'kontakion' ;end
+         { title: title, text: kontakion.text } ;end;end;end

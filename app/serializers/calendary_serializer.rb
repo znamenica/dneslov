@@ -1,11 +1,6 @@
-class CalendarySerializer < ApplicationSerializer
-   attributes :name, :url, :color, :slug
+class CalendarySerializer < CommonCalendarySerializer
+   attributes :dates
 
-   def name
-      object.name_for( locales )&.text ;end
-
-   def url
-      object.links.first&.url ;end
-
-   def color
-      color_by_slug( slug ) ;end;end
+   def dates
+      memos = @instance_options[ :memos ] || object.memos
+      MemosSerializer.new( memos, locales: locales ) ;end;end

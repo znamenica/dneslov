@@ -2149,6 +2149,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+custom-event@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
+
 d@^0.1.1, d@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/d/-/d-0.1.1.tgz#da184c535d18d8ee7ba2aa229b914009fae11309"
@@ -3901,9 +3905,9 @@ loose-envify@^1.1.0, loose-envify@^1.3.1:
   dependencies:
     js-tokens "^3.0.0"
 
-lory.js@~2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/lory.js/-/lory.js-2.2.1.tgz#e45ff82f1e403ee9df5e9c01b31636a09f45a743"
+"lory.js@git+https://github.com/majioa/lory.git#devel":
+  version "0.0.0-semantic-release"
+  resolved "git+https://github.com/majioa/lory.git#755b8431869391debcb2448311cf489bf834088c"
 
 loud-rejection@^1.0.0:
   version "1.6.0"

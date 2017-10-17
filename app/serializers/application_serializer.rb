@@ -3,6 +3,12 @@ class ApplicationSerializer < ActiveModel::Serializer
 
    POSES = [ ( '0'..'9' ).to_a, ( 'а'..'е' ).to_a, 'ё', ( 'ж'..'я' ).to_a ].flatten.reverse
 
+   def t link, options = {}
+      model_name = self.object.model_name.i18n_key
+      full_link = [ 'serialization', model_name, link.split('.') ].flatten.reject { |x| x.blank? }.join('.')
+      I18n.t(full_link, options)
+   end
+
    def locales
       @instance_options[:locales] ;end
 
