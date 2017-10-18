@@ -1,9 +1,9 @@
 class MemoriesController < ApplicationController
-   before_action :default_with_date, only: %i(index)
-   before_action :default_in_calendaries, only: %i(index)
-   before_action :set_memory, only: %i(show)
    before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
    before_action :set_locales, :set_date, :set_calendary_cloud
+   before_action :set_memory, only: %i(show)
+   before_action :default_with_date, only: %i(index)
+   before_action :default_in_calendaries, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false
    has_scope :with_tokens, only: %i(index), type: :array
@@ -13,7 +13,6 @@ class MemoriesController < ApplicationController
    # GET /memories.js,/index.js
    def index
       @memories = apply_scopes(Memory).page(params[:page])
-      # binding.pry
 
       respond_to do |format|
          format.json { render json: @memories,
@@ -58,7 +57,7 @@ class MemoriesController < ApplicationController
 
    def default_with_date
       if is_html?
-         params[:with_date] = date.strftime("%d-%m-%Y") ;end;end
+         params[:with_date] = @date.strftime("%d-%m-%Y") ;end;end
 
    def set_page
       @tokens ||= params[:page] || 1 ;end
@@ -70,7 +69,9 @@ class MemoriesController < ApplicationController
       @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
    def set_calendary_slugs
-      @calendary_slugs ||= Slug.for_calendary.where( text: params[:in_calendaries] ).pluck( :text ) ;end
+      slugs = params[:in_calendaries].present? && params[:in_calendaries] ||
+              is_html? && [ default_calendary_slug ]
+      @calendary_slugs ||= Slug.for_calendary.where( text: slugs ).pluck( :text ) ;end
 
    def set_calendary_cloud
       @calendary_cloud ||= Calendary.licit ;end

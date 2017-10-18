@@ -3,9 +3,13 @@
 - логотип
 - вводный путеводитель по календарю напр из https://codility.com/ (introjs)
 - шрифты материалайза сделать локальными
+- выпилить materialize.js
+  - https://www.npmjs.com/package/velocity-react
 - службы на ряду
-
+- выпилить jquery
 
 Implement in capistrano
 https://stackoverflow.com/questions/4313323/how-to-change-owner-of-postgresql-database#43704694
 https://stackoverflow.com/questions/143756/postgresql-rename-database
+
+

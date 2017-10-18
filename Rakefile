@@ -4,3 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
+
+task :clean do
+   `git clean -fd`
+   `rm -rf $(find -name "*~")` ;end

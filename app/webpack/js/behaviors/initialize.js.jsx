@@ -1,5 +1,15 @@
 import { mountComponents } from 'react-rails-ujs'
 
+// TODO blow out all the requires in fawour of imports
+require('materialize-css/js/jquery.easing.1.3')
+require('materialize-css/js/velocity.min')
+require('materialize-css/js/global')
+require('materialize-css/js/collapsible')
+require('materialize-css/js/forms')
+require('materialize-css/js/dropdown')
+require('materialize-css/js/modal')
+require('materialize-css/js/carousel')
+
 //import $ from 'jquery'
 import Calendaries from 'Calendaries'
 import MemoriesForm from 'MemoriesForm'
