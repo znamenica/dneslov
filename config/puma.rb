@@ -1,29 +1,36 @@
 require "rails"
 require "active_record"
 
-workers Integer(ENV['WEB_CONCURRENCY'] || 2)
-threads_count = Integer(ENV['MAX_THREADS'] || 5)
-threads threads_count, threads_count
-
-preload_app!
-
-# rackup      DefaultRackup
-# port        ENV['PORT']     || 3000
 rails_env = Rails.env.to_s
 environment rails_env
 
 if Rails.env.production?
    app_dir = File.expand_path("../..", __FILE__)
    shared_dir = File.expand_path("#{app_dir}/../../shared")
+   threads_count = Integer(ENV['MAX_THREADS'] || 5)
+
+   workers Integer(ENV['WEB_CONCURRENCY'] || 2)
    bind "unix://#{shared_dir}/tmp/sockets/puma.sock"
    stdout_redirect "#{shared_dir}/log/stdout.log", "#{shared_dir}/log/stderr.log"
    pidfile "#{shared_dir}/tmp/pids/puma.pid"
    state_path "#{shared_dir}/tmp/pids/puma.state"
    activate_control_app
    daemonize true
-else
+elsif Rails.env.development?
    shared_dir = '.'
+   threads_count = Integer(ENV['MAX_THREADS'] || 1)
+   port = ENV['PORT'] || 33333
+   host = ENV['HOST'] || '0.0.0.0'
+
+   worker_timeout 3600
+   workers Integer(ENV['WEB_CONCURRENCY'] || 1)
+   bind "tcp://#{host}:#{port}"
+   rackup DefaultRackup
 end
+
+threads threads_count, threads_count
+
+preload_app!
 
 on_worker_boot do
    # Worker specific setup for Rails 4.1+
