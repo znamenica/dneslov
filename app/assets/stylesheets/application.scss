@@ -343,23 +343,23 @@ img.icon {
    height: 100%; // about 1020px;
 
    @media (max-height: $large_height) {
-      height: 40em;
+      height: 55em; // about 825px
    }
 
    @media (max-height: $medium_height) {
-      height: 25em;
+      height: 40em; // about 600px
    }
 
    @media (max-height: $small_height) {
-      height: 15em;
+      height: 25em; // about 375
    }
 }
 
 .lory_slider {
-    margin: 0 auto 0;
-    width: auto;
-    position: relative;
-    -moz-user-select: none;
+   margin: 0 auto 0;
+   width: auto;
+   position: relative;
+   -moz-user-select: none;
 
    .frame {
       font-size: 0;
@@ -415,6 +415,10 @@ img.icon {
 
       svg {
          width: 25px;
+      }
+
+      &.disabled {
+         display: none;
       }
    }
 

@@ -1730,6 +1730,10 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
+classlist-polyfill@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/classlist-polyfill/-/classlist-polyfill-1.2.0.tgz#935bc2dfd9458a876b279617514638bcaa964a2e"
+
 classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
@@ -2149,9 +2153,9 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-custom-event@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
+custom-event-polyfill@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/custom-event-polyfill/-/custom-event-polyfill-0.3.0.tgz#99807839be62edb446b645832e0d80ead6fa1888"
 
 d@^0.1.1, d@~0.1.1:
   version "0.1.1"
@@ -3912,7 +3916,7 @@ loose-envify@^1.1.0, loose-envify@^1.3.1:
 
 "lory.js@git+https://github.com/majioa/lory.git#devel":
   version "0.0.0-semantic-release"
-  resolved "git+https://github.com/majioa/lory.git#755b8431869391debcb2448311cf489bf834088c"
+  resolved "git+https://github.com/majioa/lory.git#e64d7b9bd785884200a268c6896f238b3c58ae85"
 
 loud-rejection@^1.0.0:
   version "1.6.0"

@@ -1,6 +1,8 @@
-import { mountComponents } from 'react-rails-ujs'
-
 // TODO blow out all the requires in fawour of imports
+require('classlist-polyfill')
+require('custom-event-polyfill')
+global.jQuery = require('./jquery.1')
+global.$ = require('./jquery.1')
 require('materialize-css/js/jquery.easing.1.3')
 require('materialize-css/js/velocity.min')
 require('materialize-css/js/global')
@@ -10,7 +12,7 @@ require('materialize-css/js/dropdown')
 require('materialize-css/js/modal')
 require('materialize-css/js/carousel')
 
-//import $ from 'jquery'
+import { mountComponents } from 'react-rails-ujs'
 import Calendaries from 'Calendaries'
 import MemoriesForm from 'MemoriesForm'
 
