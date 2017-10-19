@@ -27,30 +27,15 @@ $large_width: 80em;
 $today_color: #c7d8ed;
 $selected_color: #80a8cd;
 
-nav .brand-logo {
-   padding-left: 10px;
-}
+//#####
 
 span {
    margin-left: 3px;
    margin-right: 3px;
 }
 
-main > .container {
-   margin-top: 20px;
-   width: 85%;
-}
-
 p#notice {
    margin: 0;
-}
-
-body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
-   display: none !important;
-}
-
-.pickmeup.pmu-hidden {
-   display: block;
 }
 
 a {
@@ -65,14 +50,16 @@ a[href] {
    padding: inherit;
 }
 
-.title {
-   font-weight: bold;
+body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
+   display: none !important;
 }
-
-//#####
 
 .terracota {
    background-color: $terracota !important;
+}
+
+.title {
+   font-weight: bold;
 }
 
 .centering {
@@ -80,6 +67,38 @@ a[href] {
 }
 
 //#####
+
+nav .brand-logo {
+   padding-left: 10px;
+
+   @media only screen and (max-width: $large_width) {
+      left: 0;
+      transform: none;
+   }
+
+   @media only screen and (max-width: $small_width) {
+      left: 50%;
+      transform: translate(-50%);
+   }
+}
+
+main > .container {
+   margin-top: 20px;
+
+   @media only screen and (max-width: $large_width) {
+      width: 92%;
+      padding-right: 6%;
+   }
+
+   @media only screen and (max-width: $medium_width) {
+      width: 95%;
+      padding-right: 5%;
+   }
+
+   @media only screen and (max-width: $small_width) {
+      width: 90%;
+   }
+}
 
 .chip {
    white-space: nowrap;
@@ -96,6 +115,10 @@ a[href] {
    &.calendary {
       background-color: #f0f8ff !important;
    }
+}
+
+.pickmeup.pmu-hidden {
+   display: block;
 }
 
 .row.calendary {
@@ -319,16 +342,16 @@ a[href] {
 img.icon {
    height: 100%; // about 1020px;
 
-   @media (max-height: $small_height) {
-      height: 15em;
+   @media (max-height: $large_height) {
+      height: 40em;
    }
 
    @media (max-height: $medium_height) {
       height: 25em;
    }
 
-   @media (max-height: $large_height) {
-      height: 40em;
+   @media (max-height: $small_height) {
+      height: 15em;
    }
 }
 
