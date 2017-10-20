@@ -60,7 +60,7 @@ class MemoriesController < ApplicationController
          params[:with_date] = @date.strftime("%d-%m-%Y") ;end;end
 
    def set_page
-      @tokens ||= params[:page] || 1 ;end
+      @page ||= params[:page] || 1 ;end
 
    def set_tokens
       @tokens ||= params[:with_tokens] || [] ;end
