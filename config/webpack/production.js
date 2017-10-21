@@ -10,9 +10,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = merge(sharedConfig, {
-   output: { filename: '[name]-[chunkhash].js' },
+   //output: { filename: '[name]-[chunkhash].js' },
    devtool: 'cheap-source-map',
    stats: 'normal',
+
+   output: {
+      pathinfo: false
+   },
 
    plugins: [
       new webpack.DefinePlugin({
@@ -54,7 +58,7 @@ module.exports = merge(sharedConfig, {
          exclude: [/\.min\.js$/gi]
       }),
 
-      new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+      //new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
       new CompressionPlugin({
          asset: '[path].gz[query]',
          algorithm: 'gzip',

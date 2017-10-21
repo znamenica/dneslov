@@ -46,7 +46,6 @@ module.exports = {
    output: {
       path: join(global.rootpath, 'vendor/assets'),
       filename: '[name].js',
-      pathinfo: DEBUG ? true : false,
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
 

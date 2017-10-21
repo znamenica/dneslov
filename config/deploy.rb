@@ -46,18 +46,6 @@ set(:symlinks, [
       source: "config/webpack/production.js",
       link: "webpack.config.js"
    },
-   {
-      source: '$(ls vendor/assets/javascripts/app-*.js.gz)',
-      link: "vendor/assets/javascripts/app.js.gz"
-   },
-   {
-      source: '$(ls vendor/assets/javascripts/app-*.js)',
-      link: "vendor/assets/javascripts/app.js"
-   },
-   {
-      source: '$(ls vendor/assets/javascripts/app-*.js.map)',
-      link: "vendor/assets/javascripts/app.js.map"
-   },
 #   {
 #      source: "nginx.conf",
 #      link: "/etc/nginx/sites-enabled/#{fetch(:full_app_name)}"
