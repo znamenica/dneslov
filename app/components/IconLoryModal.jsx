@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { lory } from 'lory.js/src/lory'
+import { lory } from 'lory.js'
 
 export default class IconLoryModal extends Component {
    static defaultProps = {
@@ -18,8 +18,8 @@ export default class IconLoryModal extends Component {
    }
 
    loryResize = () => {
-      this.items_width = [...this.$modal.querySelectorAll('li')].reduce((width, img) => {
-         return width + img.clientWidth + parseInt(getComputedStyle(img).marginRight)
+      this.items_width = [...this.$modal.querySelectorAll('li')].reduce((width, li) => {
+         return width + li.clientWidth + parseInt(getComputedStyle(li).marginRight)
       }, 0)
 
       this.lory_scroll = this.items_width > this.$modal.clientWidth
@@ -51,6 +51,7 @@ export default class IconLoryModal extends Component {
    openModal = (index) => {
       if (this.lory_scroll) {
          document.body.style.overflowY = 'hidden' // required to fix width of modal in proper value
+         // TODO fix scroll to last (it is buggy)
          this.lory.slideTo(index, 0)
       }
 

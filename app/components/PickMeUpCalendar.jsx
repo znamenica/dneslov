@@ -150,6 +150,7 @@ export default class PickMeUpCalendar extends Component {
                   <div
                      className='pmu-tomorrow pmu-button'>▶</div></nav></div>
             <div id='calendar'
+               key='calendar'
                ref={el => this.el = el} /></div>)
    }
 

@@ -24,8 +24,8 @@
 /node_modules
 
 /node_modules
-/vendor/assets/stylesheets/webpack
-/vendor/assets/javascripts/webpack
+/vendor/assets/stylesheets/
+/vendor/assets/javascripts/
 
 config/secrets.yml
 config/database.yml

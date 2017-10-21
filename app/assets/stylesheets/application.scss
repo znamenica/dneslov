@@ -66,6 +66,10 @@ body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
    text-align: center;
 }
 
+.flow-text {
+   margin-top: 0;
+}
+
 //#####
 
 nav .brand-logo {
@@ -320,10 +324,10 @@ main > .container {
 #slider-modal {
    width: 90%;
    overflow: hidden;
-   background: rgba(0, 0, 0, 0);
+   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
    filter: alpha(opacity=0);
    display: block !important;
-   opacity: 0;
+   opacity: 1 !important;
    box-shadow: none;
    max-height: none;
    top: 0 !important;

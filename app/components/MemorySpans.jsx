@@ -1,7 +1,6 @@
 import { Component } from 'react'
-import MemorySpan from 'MemorySpan'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
-import Collapsible from 'react-materialize/src/Collapsible'
+import MemorySpan from 'MemorySpan'
 
 export default class MemorySpans extends Component {
    static defaultProps = {
@@ -18,8 +17,13 @@ export default class MemorySpans extends Component {
       }
    }
 
+   componentDidMount = () => {
+      $(this.$collapsible).collapsible()
+   }
+
    componentDidUpdate = (nextProps) => {
       let slugs = this.props.memories.map((m) => { return m.slug } )
+      $(this.$collapsible).collapsible()
 
       console.log("memories", this.props.memories.length)
       console.log("memories total", this.props.total_memories)
@@ -32,11 +36,13 @@ export default class MemorySpans extends Component {
 
       if (this.props.memories.length > 0) {
          rendered = (
-            <Collapsible
-               className='collection'>
+            <ul
+               ref={$collapsible => this.$collapsible = $collapsible}
+               className='collapsible collection'
+               data-collapsible='expandable'>
                {this.props.memories.map((memory) => <MemorySpan key={memory.slug} memory={memory} />)}
             <ReactScrollPagination
-               fetchFunc={this.fetchNext} /></Collapsible>)
+               fetchFunc={this.fetchNext} /></ul>)
       } else {
          rendered = (
             <div className='card-panel'>

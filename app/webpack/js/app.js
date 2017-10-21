@@ -1,8 +1,6 @@
 // TODO blow out all the requires in fawour of imports
 require('classlist-polyfill')
 require('custom-event-polyfill')
-//global.jQuery = require('./jquery.1')
-//global.$ = require('./jquery.1')
 global.jQuery = require('./behaviors/jquery.1')
 global.$ = require('./behaviors/jquery.1')
 require('materialize-css/js/jquery.easing.1.3')
@@ -19,7 +17,7 @@ function requireAll (r) { r.keys().forEach(r) }
 
 requireAll(require.context('./behaviors/', true, /(\.js|\.js.jsx|\.js.coffee)$/))
 
-import { mountComponents } from 'react-rails-ujs'
+import { mountComponents } from 'react-rails-ujs/src/react-rails-ujs'
 
 //import Calendaries from 'Calendaries'
 import MemoriesForm from 'MemoriesForm'

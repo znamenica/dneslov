@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
 const sharedConfig = require('./base.config.js')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = merge(sharedConfig, {
    output: { filename: '[name]-[chunkhash].js' },
@@ -22,7 +23,6 @@ module.exports = merge(sharedConfig, {
 
       new webpack.optimize.AggressiveMergingPlugin(),
       new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin({
          minimize: true,
          sourceMap: true,
@@ -41,7 +41,7 @@ module.exports = merge(sharedConfig, {
             dead_code: true,
             evaluate: true,
             if_return: true,
-            join_vars: true
+            join_vars: true,
             drop_debugger: true,
             drop_console: true, // strips console statements
             booleans: true,
@@ -60,7 +60,54 @@ module.exports = merge(sharedConfig, {
          algorithm: 'gzip',
          test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
          threshold: 10240,
-         minRatio: 0
-      })
-   ]
+         minRatio: 0.4
+      }),
+      new BundleAnalyzerPlugin({
+         analyzerMode: process.env.LOCAL ? 'static' : 'disabled',
+      }),
+   ],
+   /*module: {
+      loaders: [
+         {
+            test: /\.(js|jsx)$/,
+            use: [{
+               loader: 'babel-loader',
+               options: {
+                  cacheDirectory: true,
+                  ignore: /cjs/,
+                  presets: [
+                     [
+                        "env",
+                        {
+                           "modules": false,
+                           "targets": {
+                              "browsers": "> 1%",
+                              "uglify": true
+                           },
+                           "useBuiltIns": true
+                        },
+                     ],
+                     "es2015",
+                     "stage-0",
+                     "react",
+                  ],
+                  plugins: [
+                     //"transform-runtime",//automatically polyfilling but +30K
+                     "syntax-dynamic-import",
+                     [
+                        "transform-class-properties", // +0.1K
+                        {
+                           "spec": true
+                        }
+                     ],
+                     "transform-react-remove-prop-types",//didnt pillout the import of PropTypes
+                     //"transform-react-constant-elements",//+0.01K
+                     //"transform-react-inline-elements", //+0.5K
+                     "transform-react-pure-class-to-function", //+0
+                  ],
+               },
+            }]
+         },
+      ],
+   },*/
 })

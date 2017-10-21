@@ -12,18 +12,6 @@ export default class MemorySpan extends Component {
       }
    }
 
-   renderDescription = () => {
-      let desc = null
-
-      if (this.props.memory.description) {
-         desc = (
-            <div className='collapsible-body'>
-               <span>{this.props.memory.description}</span></div>)
-      }
-
-      return desc
-   }
-
    renderImage = () => {
       let img
 
@@ -57,4 +45,6 @@ export default class MemorySpan extends Component {
                <Chip
                   className='year-date'
                   text={this.props.memory.year} /></div>
-            {this.renderDescription()}</li>)}}
+            {this.props.memory.description &&
+               <div className='collapsible-body'>
+                  <span>{this.props.memory.description}</span></div>}</li>)}}

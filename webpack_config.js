@@ -2,15 +2,13 @@
  * Webpack config with Babel, Sass and PostCSS support.
  */
 
-var path = require('path');
-var join = path.join
-
 if (process.env.RAILS_ENV === undefined) {
    global.env = process.env.NODE_ENV || 'development'
 } else {
    global.env = process.env.RAILS_ENV
 }
 
+var path = require('path');
 var PROD = global.env === 'production'
 var DEBUG = !PROD
 
@@ -23,13 +21,21 @@ if (__dirname.match(/config/)) {
 console.log("Rails root:", global.rootpath)
 
 var webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+var join = path.join
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
 const extractSCSS = new ExtractTextPlugin({ filename: '[name].scss', allChunks: true })
 //const postcssOpts = {postcss: {plugins: [autoprefixer(autoprefixerOpts)], sourceMap: true}}
 const postcssOpts = {sourceMap: true}
+const CompressionPlugin = require('compression-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
+   output: { filename: '[name]-[chunkhash].js' }, //
+   devtool: 'cheap-source-map',//
+   stats: 'normal',//
+
    cache: true,
 
    context: global.rootpath,
@@ -82,7 +88,7 @@ module.exports = {
                loader: 'babel-loader',
                options: {
                   cacheDirectory: true,
-                  ignore: /cjs/,
+                  ignore: /cjs|materialize/,
                   presets: [
                      [
                         "env",
@@ -142,6 +148,12 @@ module.exports = {
    },
 
    plugins: [
+      new webpack.DefinePlugin({
+         'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+         },
+      }),
+
       // allChunks will preserve source maps
       new ExtractTextPlugin({ filename: '[name].css.erb', allChunks: true }),
       extractSCSS,
@@ -166,5 +178,49 @@ module.exports = {
       new webpack.ProvidePlugin({
          React: 'react',
       }),
+      new webpack.optimize.AggressiveMergingPlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+         minimize: true,
+         sourceMap: true,
+         mangle: true,
+
+         compress: {
+            warnings: false,
+            pure_getters: true,
+            unsafe: true,
+            unsafe_comps: true,
+            screw_ie8: true,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            if_return: true,
+            join_vars: true,
+            drop_debugger: true,
+            drop_console: true, // strips console statements
+            booleans: true,
+         },
+
+         output: {
+            comments: false
+         },
+
+         exclude: [/\.min\.js$/gi]
+      }),
+
+      //new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+      new CompressionPlugin({
+         asset: '[path].gz[query]',
+         algorithm: 'gzip',
+         test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
+         threshold: 10240,
+         minRatio: 0.4
+      }),
+      //new BundleAnalyzerPlugin({
+      //   analyzerMode: process.env.LOCAL ? 'server' : 'static',
+      //}),
    ],
 }

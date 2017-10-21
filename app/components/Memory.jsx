@@ -43,7 +43,11 @@ export default class Memory extends Component {
    }
 
    onLorySlideFrom = (e) => {
-      this.$carousel.carousel('set', e.detail.nextSlide);
+      let index = parseInt(e.detail.nextSlide)
+
+      if (index >= 0) {
+         this.$carousel.carousel('set', e.detail.nextSlide);
+      }
    }
 
    render = () => {
@@ -161,6 +165,7 @@ export default class Memory extends Component {
                         {this.props.memory.kontakion.text}</div></div></div>}
             {this.props.memory.icons.length > 0 &&
                <IconLoryModal
+                  key='lory'
                   ref={lory => this.lory = lory }
                   onLorySlideFrom={this.onLorySlideFrom}
                   links={this.props.memory.icons} />}</div>)}}
