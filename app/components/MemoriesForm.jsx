@@ -22,12 +22,11 @@ export default class MemoriesForm extends Component {
    }
 
    state = {
-      julian: this.props.julian,
       memories: this.props.memories,
       memory: this.props.memory,
       query: {
          page: this.props.memories.page,
-         with_date: this.props.date,
+         with_date: [ this.props.date, this.props.julian ],
          in_calendaries: this.props.calendaries_used,
          with_tokens: this.props.tokens
       }
@@ -49,7 +48,7 @@ export default class MemoriesForm extends Component {
 
    onSearchAct = (data) => {
       if (data.date) {
-         this.state.query.with_date = undefined
+         this.state.query.with_date = []
       } else if (data.slug) {
          delete this.state.query.in_calendaries[this.state.query.in_calendaries.indexOf(data.slug)]
       } else if (data.token) {
@@ -125,7 +124,7 @@ export default class MemoriesForm extends Component {
                            with_text={this.state.query.with_tokens.join(" ")}
                            onUpdate={this.onSearchUpdate} />
                         <SearchConditions
-                           date={this.state.query.with_date}
+                           date={this.state.query.with_date[0]}
                            calendaries={this.calendariesUsed()}
                            query={this.state.query.with_tokens}
                            onAct={this.onSearchAct} />

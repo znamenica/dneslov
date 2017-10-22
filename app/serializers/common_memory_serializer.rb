@@ -25,7 +25,7 @@ class CommonMemorySerializer < ApplicationSerializer
       council = object.council || ''
       council.split(',').map do | council |
          /(?<pure_council>[^?]*)\??\z/ =~ council # NOTE crop ? mark
-         memory = Memory.by_slug( pure_council ).first
+         memory = Memory.by_slug( pure_council )
 
          {
             slug: pure_council,

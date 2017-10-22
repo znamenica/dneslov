@@ -5,7 +5,8 @@ class MemoriesController < ApplicationController
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
 
-   has_scope :with_date, only: %i(index), allow_blank: false
+   has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
+      scope.with_date(*value) ;end
    has_scope :with_tokens, only: %i(index), type: :array
    has_scope :in_calendaries, only: %i(index), type: :array
 
@@ -57,7 +58,7 @@ class MemoriesController < ApplicationController
 
    def default_with_date
       if is_html?
-         params[:with_date] = @date.strftime("%d-%m-%Y") ;end;end
+         params[:with_date] = [ @date.strftime("%d-%m-%Y"), is_julian_calendar? ] ;end;end
 
    def set_page
       @page ||= params[:page] || 1 ;end
@@ -82,9 +83,9 @@ class MemoriesController < ApplicationController
          if will_select_date_only?
             date = Time.now + church_time_gap
             is_julian_calendar? && date - julian_gap || date
-         elsif params[ :with_date ].present?
-            Time.parse( params[ :with_date ] )
+         elsif params[ :with_date ].is_a?(Array)
+            Time.parse( params[ :with_date ].first )
          end) ;end
 
    def set_memory
-      @memory ||= Memory.by_slug(params[:slug]).first || raise(ActiveRecord::RecordNotFound) ;end;end
+      @memory ||= Memory.by_slug(params[:slug]) || raise(ActiveRecord::RecordNotFound) ;end;end

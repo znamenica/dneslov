@@ -40,4 +40,4 @@ class CalendariesController < ApplicationController
       @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
    def set_calendary
-      @calendary = Calendary.by_slug( params[:slug] ).first || raise( ActiveRecord::RecordNotFound ) ;end;end
+      @calendary = Calendary.by_slug( params[:slug] ) || raise( ActiveRecord::RecordNotFound ) ;end;end

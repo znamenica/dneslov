@@ -30,8 +30,8 @@ export default class PickMeUpCalendar extends Component {
    }
 
    state = {
-      with_date: this.props.with_date,
-      calendar_style: this.props.calendar_style,
+      with_date: [ this.props.with_date, this.props.calendar_style ],
+      calendar_style: this.props.calendar_style
    }
 
    pmu = null
@@ -51,7 +51,7 @@ export default class PickMeUpCalendar extends Component {
       Object.keys(value).forEach((key) => {
          this.state[key] = value[key]
       })
-      this.props.onUpdate(value)
+      this.props.onUpdate({ with_date: this.state.with_date })
       console.log("state", this.state)
    }
 
@@ -159,14 +159,14 @@ export default class PickMeUpCalendar extends Component {
    }
 
    onPickmeupChange = (e) => {
-      this.setState({with_date: e.detail.formatted_date})
+      this.setState({with_date: [ e.detail.formatted_date, this.state.calendar_style ]})
    }
 
    onYesterdayClick = (e) => {
       let date = this.pmu.get_date()
       date.setDate(date.getDate() - 1)
       this.pmu.set_date(date)
-      this.setState({with_date: this.pmu.get_date(true)})
+      this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
 
       e.preventDefault()
       e.stopPropagation()
@@ -176,7 +176,7 @@ export default class PickMeUpCalendar extends Component {
       let date = this.pmu.get_date()
       date.setDate(date.getDate() + 1)
       this.pmu.set_date(date)
-      this.setState({with_date: this.pmu.get_date(true)})
+      this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
 
       e.preventDefault()
       e.stopPropagation()
@@ -195,8 +195,7 @@ export default class PickMeUpCalendar extends Component {
          this.state.calendar_style = new_calendar_style
          this.pmu.set_date(new_date, new_date)
          this.setState({
-            with_date: this.pmu.get_date(true),
-            calendar_style: new_calendar_style})
+            with_date: [ this.pmu.get_date(true), new_calendar_style ]})
       }
    }
 }
