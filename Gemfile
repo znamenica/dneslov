@@ -15,17 +15,17 @@ gem 'pg'
 # gem 'postgres_ext'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 2.7.2'
+# gem 'uglifier', '>= 2.7.2'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.2.2'
+# gem 'coffee-rails', '~> 4.2.2'
 
 # Use jquery as the JavaScript library
 # CVE-2015-1840 - CSRF VULNERABILITY fix
-gem 'jquery-rails', '~> 4.3.1'
+# gem 'jquery-rails', '~> 4.3.1'
 # Widelinks makes following links in your web application faster.
 # gem 'wiselinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+# gem 'jbuilder', '~> 2.7'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
@@ -46,24 +46,24 @@ gem 'materialize-sass'
 # gem 'redis', '~> 3.0'
 
 # Use Simple Forms for forms
-gem "simple_form"
+# gem "simple_form"
 # Use Sass for Rails for CSS
 gem "sass-rails"
-gem "bootstrap-sass"
+# gem "bootstrap-sass"
 # Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
-gem 'rest-client', '~> 1.8.0'
+# gem 'rest-client', '~> 1.8.0'
 
 # Explicitly defined to fix CVE-2015-7499 - HEAP-BASED BUFFER OVERFLOW VULNERABILITY IN LIBXML2 and other in LIBXML2
 # and CVE-2015-8806 - Denial of service or RCE from libxml2 and libxslt
-gem 'nokogiri', '~> 1.6.8'
+gem 'nokogiri', '~> 1.6.8.1'
 
 # Explicitly defined to fix CVE-2015-7579 - XSS VULNERABILITY IN STRIP_TAGS
 # CVE-2015-7578 - POSSIBLE XSS VULNERABILITY
-gem 'rails-html-sanitizer', '~> 1.0.3'
+# gem 'rails-html-sanitizer', '~> 1.0.3'
 
 # models
 gem 'bukovina', github: 'znamenica/bukovina'
-#gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
+# gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'has_scope'
 
@@ -77,7 +77,6 @@ gem 'kaminari'
 
 ## decoration/serialization
 gem 'active_model_serializers'
-gem 'draper'
 
 group :development do
    gem 'capistrano', '~> 3.6'
@@ -89,7 +88,7 @@ group :development do
    gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.3.0'
    gem 'pattern_generator'
-   gem 'bullet'
+   # gem 'bullet' # gives exception
 end
 
 group :development, :test do

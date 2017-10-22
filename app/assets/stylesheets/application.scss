@@ -288,6 +288,9 @@ main > .container {
 
          .collapsible-header {
             padding: 0 1rem 0 4rem;
+            line-height: 3rem;
+            min-height: 3rem;
+            display: block;
          }
 
          .collapsible-body {
@@ -295,7 +298,8 @@ main > .container {
          }
       }
 
-      &.avatar .circle {
+      &.avatar:not(.circle-clipper) > .circle,
+      &.avatar :not(.circle-clipper) > .circle {
          left: 0.5rem;
          top: 1px;
       }
