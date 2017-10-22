@@ -4,6 +4,10 @@ require "active_record"
 rails_env = Rails.env.to_s
 environment rails_env
 
+e = "{puma.rb}: rails_env: #{rails_env}, ENV[RAILS_ENV]: #{ENV['RAILS_ENV']}"
+$stderr.puts e
+$stdout.puts e
+
 if Rails.env.production?
    app_dir = File.expand_path("../..", __FILE__)
    shared_dir = File.expand_path("#{app_dir}/../../shared")
