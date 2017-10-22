@@ -2,11 +2,15 @@ require "rails"
 require "active_record"
 
 rails_env = Rails.env.to_s
-environment rails_env
 
-e = "{puma.rb}: rails_env: #{rails_env}, ENV[RAILS_ENV]: #{ENV['RAILS_ENV']}"
-$stderr.puts e
-$stdout.puts e
+if ! ENV['RAILS_ENV']
+   # required in prod since it is blank
+   ENV['RAILS_ENV'] = Rails.env = rails_env = 'production'
+end
+
+$stdout.puts "{puma.rb}: rails_env: #{rails_env}, ENV[RAILS_ENV]: #{ENV['RAILS_ENV']}"
+
+environment rails_env
 
 if Rails.env.production?
    app_dir = File.expand_path("../..", __FILE__)
