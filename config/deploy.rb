@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.8.1"
+lock "3.9.1"
 
 set :user, 'ubuntu'
 set :application, "dneslov"
@@ -38,10 +38,6 @@ set(:config_files, %w(
 ))
 
 set(:symlinks, [
-   {
-      source: "app/webpack/manifest.json",
-      link: "public/webpack/manifest.json"
-   },
    {
       source: "config/webpack/production.js",
       link: "webpack.config.js"
