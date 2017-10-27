@@ -63,15 +63,17 @@
     "yarn": "^1.2.1"
   },
   "dependencies": {
+    "assign-deep": "^0.4.6",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
     "lory.js": "git+https://github.com/majioa/lory.git#devel",
     "materialize-css": "^0.98.2",
     "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",
     "react": "^16.0.0",
-    "react-materialize": "git+https://git@github.com/majioa/react-materialize.git#devel",
+    "react-dom": "^16.0.0",
     "react-rails-ujs": "^1.1.0",
     "react-scroll-pagination": "git+https://git@github.com/majioa/react-scroll-pagination.git#devel",
+    "react-validation": "^3.0.7",
     "uuid": "^3.1.0"
   },
   "repository": {

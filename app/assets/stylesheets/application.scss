@@ -17,6 +17,10 @@
 
 $dark: #292929;
 $terracota: #ee6e73;
+$lighten_terracota: #f08e93;
+$darken_terracota:  #dd3e43;
+$grayed_terracota: #f8dfe3;
+$soft_blue: #039be5;
 $small_height: 30em;
 $medium_height: 45em;
 $large_height: 60em;
@@ -42,11 +46,31 @@ a {
 }
 
 a[href] {
-   color: #039be5;
+   color: $soft_blue;
 }
 
-.col .row {
+.btn, .btn-large {
+   background-color: $darken_terracota;
+
+   &:hover, .btn-large:hover {
+      background-color: $terracota;
+   }
+
+   &:focus, .btn-large:focus {
+      background-color: $lighten_terracota;
+   }
+
+   &.disabled, .btn-large.disabled {
+      background-color: $grayed_terracota !important;
+   }
+}
+
+.col > .row {
    padding: inherit;
+}
+
+body, table {
+   color: #111111;
 }
 
 body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
@@ -100,6 +124,11 @@ main > .container {
 
    @media only screen and (max-width: $small_width) {
       width: 90%;
+   }
+
+   &.admin {
+      width: 95%;
+      padding: 0;
    }
 }
 
@@ -278,6 +307,11 @@ main > .container {
    }
 }
 
+.fake-input-field {
+   position: relative;
+   margin-top: 2rem;
+}
+
 .collection {
    .collection-item {
       &.memory {
@@ -449,5 +483,57 @@ img.icon {
 
    .prev:hover, .next:hover, .modal-action:hover {
       background: rgba(0, 0, 0, 0.5);
+   }
+}
+
+.calendaries {
+   tbody {
+      td.actions {
+         i.material-icons {
+            cursor: pointer;
+            color: $terracota;
+         }
+      }
+   }
+}
+
+#calendary-form-modal {
+   width: 90%;
+   overflow: hidden;
+   background: rgba(255, 255, 255, 0.98) none repeat scroll 0 0;
+   filter: alpha(opacity=0.98);
+   display: block !important;
+   opacity: 0.98 !important;
+   max-height: none;
+   top: -9999 !important;
+   height: 0;
+   border: none;
+
+   .modal-content {
+      padding: 1em;
+      overflow-x: hidden;
+   }
+
+   .modal-footer {
+      padding: 1em;
+      height: 5em;
+   }
+
+   &.open {
+      top: 5% !important;
+      height: 90% !important;
+      border: outset #e7f3ff 1px;
+      border-radius: 3px;
+   }
+
+   form {
+      h5 {
+         line-height: 100%;
+         font-size: 1.25rem;
+      }
+
+      .row {
+         margin-bottom: 0.5em;
+      }
    }
 }

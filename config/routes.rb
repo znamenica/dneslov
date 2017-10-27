@@ -1,16 +1,18 @@
 Rails.application.routes.draw do
-  # ActiveAdmin.routes(self)
-  #mount Bhf::Engine, at: 'admin'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'memories#index'
+   root 'memories#index'
 
-  get '/index' => 'memories#index'
-  get '/:slug' => 'memories#show', as: 'slug'#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
+   resources :calendaries
 
-  resources :calendaries
+   get '/index' => 'memories#index'
+
+   slug_options = { '/:slug' => 'memories#show', as: 'slug' }
+   slug_options[ :constraints ] = { slug: /[ёа-я0-9]{1,6}/ } if Rails.env.production? 
+   get slug_options
+  #
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

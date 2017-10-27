@@ -8,7 +8,7 @@ const LiveReloadPlugin = require('webpack-livereload-plugin')
 const webpack = require('webpack')
 
 module.exports = merge(sharedConfig, {
-   devtool: 'cheap-module-eval-source-map',
+   devtool: 'cheap-module-source-map',
 
    devServer: {
       clientLogLevel: 'none',

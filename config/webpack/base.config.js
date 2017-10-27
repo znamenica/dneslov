@@ -39,6 +39,7 @@ module.exports = {
       //'react-hot-loader/patch', // hot reloading react components
       // JavaScript
       'javascripts/app': './app/webpack/js/app.js',
+      'javascripts/admin': './app/webpack/js/admin.js',
       // Stylesheets
       //'stylesheets/webpack/app': './app/webpack/css/app.js',
    },

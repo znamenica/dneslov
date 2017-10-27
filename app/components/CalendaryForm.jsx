@@ -1,15 +1,21 @@
-import { Component } from 'react/lib/React'
-import Button from 'react-materialize/src/Button'
-import NamesFormBlock from 'NamesFormBlock'
-import DescriptionsFormBlock from 'DescriptionsFormBlock'
-import CalendaryFormKeyPart from 'CalendaryFormKeyPart'
-import CalendaryFormTextPart from 'CalendaryFormTextPart'
+import { Component } from 'react'
+import PropTypes from 'prop-types'
+import * as assign from 'assign-deep'
+
 import SlugField from 'SlugField'
+import LanguageField from 'LanguageField'
+import AlphabethField from 'AlphabethField'
+import LicitBox from 'LicitBox'
+import NamesCollection from 'NamesCollection'
+import DescriptionsCollection from 'DescriptionsCollection'
+import WikiesCollection from 'WikiesCollection'
+import LinksCollection from 'LinksCollection'
+import TextField from 'TextField'
 
 export default class CalendaryForm extends Component {
    static defaultProps = {
       licit: false,
-      slug: '',
+      slug: null,
       language_code: '',
       alphabeth_code: '',
       author_name: '',
@@ -19,94 +25,137 @@ export default class CalendaryForm extends Component {
       descriptions: [],
       wikies: [],
       links: [],
+      open: false,
    }
 
-   constructor(props) {
-      super(props)
-      this.onSubmit = this.onSubmit.bind(this)
-      this.onChildUpdate = this.onChildUpdate.bind(this)
-
-      this.setDefaultState()
+   static propTypes = {
+      slug: PropTypes.string,
+      licit: PropTypes.boolean,
+      language_code: PropTypes.string,
+      alphabeth_code: PropTypes.object,
    }
 
-   setDefaultState = () => {
-      this.state = {
-         slug: this.props.slug,
-         licit: this.props.licit,
-         language_code: this.props.language_code,
-         alphabeth_code: this.props.alphabeth_code,
-         author_name: this.props.author_name,
-         date: this.props.date,
-         council: this.props.council,
+   query = {}
+
+   componentDidMount() {
+      this.modal = $(this.$modal).modal()
+   }
+
+   componentDidUpdate() {
+      if (this.props.open) {
+         this.modal.modal('open')
       }
    }
 
-   notvalid = () => {
-      false // TODO
+   valid() {
+      return true // TODO
    }
 
-   filteredState = () => {
-      //TODO automatize
-      let state = this.state
-
-      state['slug_attributes'] = state['slug']
-      state['names_attributes'] = state['names']
-      state['descriptions_attributes'] = state['descriptions']
-      delete state['slug']
-      delete state['names']
-      delete state['descriptions']
-
-      console.log(state)
-      return state
+   onSubmitSuccess(data) {
+      this.modal.modal('close')
+      this.setState(this.getDefaultState())
    }
 
-   onSubmit = (e) => {
-      let data = { calendary: this.filteredState() }
-      let _this = this
+   onSubmit(e) {
+      console.log("QUERY", this.query)
+      let data = { calendary: this.query }
 
+      e.stopPropagation()
       e.preventDefault()
-      $.post('', data, (data) => {
-         _this.setDefaultState()
-      }, 'JSON')
+      //$.post('', data, this.onSubmitSuccess.bind(this), 'JSON')
    }
 
-   onChildUpdate = (key, value) => {
-      this.state[key] = value
-      console.log(this.state)
+   onChildUpdate(value) {
+      this.query = assign(this.query, value)
    }
 
-   render = () => {
+   render() {
+      console.log(this.props)
+      console.log(this.query)
+
       return (
-         <div className='row'>
-            <form className='col s12' onSubmit={this.onSubmit}>
-               <CalendaryFormKeyPart
-                  licit={this.props.licit}
-                  language_code={this.props.language_code}
-                  alphabeth_code={this.props.alphabeth_code}
-                  onUpdate={this.onChildUpdate} />
-               <div className='row'>
-                  <div className='col l12 s12'>
-                     <NamesFormBlock
-                        names={this.props.names}
-                        onUpdate={this.onChildUpdate} />
-                  </div>
-               </div>
-               <div className='row'>
-                  <div className='col l12 s12'>
-                     <DescriptionsFormBlock
-                        descriptions={this.props.descriptions}
-                        onUpdate={this.onChildUpdate} />
-                  </div>
-               </div>
-               <CalendaryFormTextPart
-                  author_name={this.props.author_name}
-                  date={this.props.date}
-                  council={this.props.council}
-                  onUpdate={this.onChildUpdate} />
-               <Button
-                  type='submit'
-                  className='btn btn-primary'
-                  disabled={this.notvalid()}
-                  children='Создай календарь' />
-            </form>
-         </div>)}}
+         <div>
+            <div className='row'>
+               <a
+                 className="waves-effect waves-light btn modal-trigger right-align"
+                 href="#calendary-form-modal">
+                    Новый календарь</a></div>
+            <div
+               key='calendary-form-modal'
+               className='modal modal-fixed-footer z-depth-2'
+               id='calendary-form-modal'
+               ref={$modal => this.$modal = $modal} >
+               <form onSubmit={this.onSubmit.bind(this)} noValidate>
+                  <div className='modal-content'>
+                     <div className='row'>
+                        <SlugField
+                           slug={this.props.slug || ''}
+                           postfix='attributes'
+                           wrapperClassName='input-field col xl2 l2 m4 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} />
+                        <LanguageField
+                           language_code={this.props.language_code}
+                           wrapperClassName='input-field col xl4 l4 m8 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} />
+                        <AlphabethField
+                           alphabeth_code={this.props.alphabeth_code}
+                           wrapperClassName='input-field col xl4 l4 m8 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} />
+                        <LicitBox
+                           licit={this.props.licit}
+                           wrapperClassName='fake-input-field col xl2 l2 m4 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} /></div>
+                     <div className='row'>
+                        <div className='col l12 s12'>
+                           <NamesCollection
+                              value={this.props.names}
+                              postfix='attributes'
+                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+                     <div className='row'>
+                        <div className='col l12 s12'>
+                           <DescriptionsCollection
+                              value={this.props.descriptions}
+                              postfix='attributes'
+                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+                     <div className='row'>
+                        <div className='col l12 s12'>
+                           <WikiesCollection
+                              value={this.props.wikies}
+                              postfix='attributes'
+                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+                     <div className='row'>
+                        <div className='col l12 s12'>
+                           <LinksCollection
+                              value={this.props.links}
+                              postfix='attributes'
+                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+                     <div className='row'>
+                        <TextField
+                           name='author_name'
+                           title='Автор'
+                           placeholder='Введи имя автора(ов)'
+                           text={this.props.author_name}
+                           wrapperClassName='input-field col xl6 l6 m4 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} />
+                        <TextField
+                           name='date'
+                           title='Пора'
+                           placeholder='Введи пору написания'
+                           text={this.props.date}
+                           wrapperClassName='input-field col xl3 l3 m4 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} />
+                        <TextField
+                           name='council'
+                           title='Собор'
+                           placeholder='Введи сокращение собора'
+                           text={this.props.council}
+                           wrapperClassName='input-field col xl3 l3 m4 s12'
+                           onUpdate={this.onChildUpdate.bind(this)} /></div>
+</div>
+                  <div className="modal-footer">
+                     <button
+                        type='submit'
+                        className='btn btn-primary'
+                        disabled={! this.valid()} >
+                        <span>
+                           Создай календарь</span></button></div></form></div></div>)}}

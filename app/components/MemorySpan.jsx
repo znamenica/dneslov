@@ -25,6 +25,7 @@ export default class MemorySpan extends Component {
    }
 
    onAvatarClick = (e) => {
+      // TODO fix propagation after 1 sec when clicked on avatar
       e.stopPropagation()
    }
 
