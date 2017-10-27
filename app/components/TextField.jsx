@@ -9,6 +9,8 @@ export default class TextField extends Component {
       wrapperClassName: null,
       title: null,
       placeholder: null,
+      data: {},
+      validations: {},
       onUpdate: null,
       allowChange: null,
    }
@@ -16,43 +18,73 @@ export default class TextField extends Component {
    static propTypes = {
       name: PropTypes.string.isRequired,
       postfix: PropTypes.string,
-      text: PropTypes.string,
+      text: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
+      data: PropTypes.object.isRequired,
+      validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,
       allowChange: PropTypes.func,
    }
 
    state = {
       [this.props.name]: this.props.text || '',
+      error: this.checkError(this.props.text || ''),
+   }
+
+   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
+
+   componentDidMount() {
+      if (this.props.data['length']) {
+         $(this.$input).characterCounter()
+      }
+   }
+
+   checkError(value) {
+      let error = null
+      Object.entries(this.props.validations).forEach(([e, rule]) => {
+         if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
+            error = e
+         } else if (typeof rule === 'func' && rule()) {
+            error = e
+         }
+      })
+
+      return error
    }
 
    onChange(e) {
       let name = this.props.name, value = e.target.value
-      let allowChange = this.props.allowChange || this.allowChange
+      let state = {[name]: value, error: this.checkError(value)}
 
-      if (! allowChange || allowChange(name, value)) {
-         this.setState({[name]: value})
-         let fullname = [name, this.props.postfix].filter((e) => { return e }).join("_")
-         this.props.onUpdate({[fullname]: value})
+      if (! state.error) {
+         this.props.onUpdate({[this.fullname]: value})
       }
+      this.setState(state)
    }
 
    render() {
-      console.log(this.props.name, this.state[this.props.name])
+      //console.log(this.props.name, this.state[this.props.name])
+      //console.log(this.props.data)
 
       return (
          <div
-            className={'validate ' + this.props.wrapperClassName}>
+            className={this.props.wrapperClassName}>
             <input
                type='text'
-               id='text'
-               name='text'
+               className={this.state.error && 'invalid'}
+               key={this.props.name}
+               id={this.props.name}
+               name={this.props.name}
+               ref={c => {this.$input = c}}
                placeholder={this.props.placeholder}
                value={this.state[this.props.name]}
+               data-length={this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label
                className='active'
                htmlFor='text'>
-               {this.props.title}</label></div>)}}
+               {this.props.title}
+               <div className="error">
+                  {this.state.error}</div></label></div>)}}

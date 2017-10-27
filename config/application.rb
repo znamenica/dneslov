@@ -26,7 +26,7 @@ module Dneslov
 
     config.npm.enable_watch = Rails.env.development?
 
-    config.npm.install = ['npm install']
+    config.npm.install = ['yarn']
 
     # Command to build production assets
     config.npm.build = ['npm run build']

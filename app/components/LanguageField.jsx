@@ -9,5 +9,8 @@ export default class LanguageField extends SelectField {
          'цс': 'Церковнославянский',
          'ру': 'Русский'
       },
+      validations: {
+         'Пункт из списка должен быть выбран': /^$/,
+      }
    }
 }

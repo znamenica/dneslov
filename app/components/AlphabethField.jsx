@@ -9,5 +9,8 @@ export default class AlphabethField extends SelectField {
          'цс': 'Церковнославянская кириллица',
          'ру': 'Русская азбука'
       },
+      validations: {
+         'Пункт из списка должен быть выбран': /^$/,
+      }
    }
 }

@@ -62,7 +62,7 @@ export default class CalendaryForm extends Component {
 
       e.stopPropagation()
       e.preventDefault()
-      //$.post('', data, this.onSubmitSuccess.bind(this), 'JSON')
+      $.post('', data, this.onSubmitSuccess.bind(this), 'JSON')
    }
 
    onChildUpdate(value) {
@@ -85,7 +85,7 @@ export default class CalendaryForm extends Component {
                className='modal modal-fixed-footer z-depth-2'
                id='calendary-form-modal'
                ref={$modal => this.$modal = $modal} >
-               <form onSubmit={this.onSubmit.bind(this)} noValidate>
+               <form onSubmit={this.onSubmit.bind(this)}>
                   <div className='modal-content'>
                      <div className='row'>
                         <SlugField

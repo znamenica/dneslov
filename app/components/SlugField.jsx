@@ -5,7 +5,9 @@ export default class SlugField extends TextField {
       name: 'slug',
       postfix: 'attributes',
       title: 'Жетон',
-      placeholder: 'Введи имя жетона'}
-
-   allowChange(_, value) {
-      return value.match(/^[ёа-я0-9]{0,6}$/)}}
+      placeholder: 'Введи имя жетона',
+      data: { length: '6' },
+      validations: {
+         "Слишком большое имя жетона": /^.{7,}$/,
+         "Жетон отсутствует": /^$/,
+         "В имени жетона допустимы только кириллица и цифры": /[^ёа-я0-9]/}}}
