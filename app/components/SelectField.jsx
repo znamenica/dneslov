@@ -23,8 +23,9 @@ export default class SelectField extends Component {
 
    state = {
       [this.props.name]: this.props.text || '',
-      error: this.checkError(this.props.text || ''),
    }
+
+   error = this.checkError(this.props.text || '')
 
    componentDidMount() {
       $(this.$select).material_select()
@@ -33,7 +34,7 @@ export default class SelectField extends Component {
    }
 
    componentDidUpdate() {
-      if (this.state.error) {
+      if (this.error) {
          this.$wrap.classList.add('invalid')
       } else {
          this.$wrap.classList.remove('invalid')
@@ -54,7 +55,7 @@ export default class SelectField extends Component {
       Object.entries(this.props.validations).forEach(([e, rule]) => {
          if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
             error = e
-         } else if (typeof rule === 'func' && rule()) {
+         } else if (typeof rule === 'function' && rule(value)) {
             error = e
          }
       })
@@ -64,12 +65,14 @@ export default class SelectField extends Component {
 
    onChange(e) {
       let name = this.props.name, value = e.target.value
-      let state = {[name]: value, error: this.checkError(value)}
+      this.error = this.checkError(value)
 
-      if (! state.error) {
-         this.props.onUpdate({[name]: value})
-      }
-      this.setState(state)
+      this.setState({[name]: value})
+      this.props.onUpdate({[name]: value})
+   }
+
+   isValid() {
+      return !this.error
    }
 
    render() {
@@ -79,12 +82,11 @@ export default class SelectField extends Component {
             className={this.props.wrapperClassName}>
             <select
                ref={e => this.$select = e}
-               className={this.state.error && 'invalid'}
+               className={this.error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
                value={this.state[this.props.name]}
-               data-error={'Пункт из списка должен быть выбран'}
                required='required'>
                {Object.keys(this.props.codeNames).map((option) =>
                   <option
@@ -96,4 +98,4 @@ export default class SelectField extends Component {
                htmlFor={this.props.name}>
                {this.props.title}
                <div className="error">
-                  {this.state.error}</div></label></div>)}}
+                  {this.error}</div></label></div>)}}

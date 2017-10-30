@@ -31,6 +31,8 @@ class CalendariesController < ApplicationController
    def permitted_params
       params.require( :calendary ).permit( :licit, :language_code, :alphabeth_code, :author_name, :date, :council,
                                             slug_attributes: [:text], names_attributes: [:id, :text, :language_code, :alphabeth_code],
+                                            wikies_attributes: [:id, :url, :language_code, :alphabeth_code],
+                                            links_attributes: [:id, :url, :language_code, :alphabeth_code],
                                             descriptions_attributes: [:id, :text, :language_code, :alphabeth_code] ) ;end
 
    def unprocessable_entity

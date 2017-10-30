@@ -292,6 +292,16 @@ main > .container {
    }
 }
 
+// this should be fixed in various cases
+.error {
+   color: #F44336;
+   opacity: 1;
+   transition: .2s opacity ease-out, .2s color ease-out;
+   box-sizing: inherit;
+   white-space: nowrap;
+   font-size: 1rem;
+}
+
 .input-field {
    & > .material-icons {
       padding-top: 10px;
@@ -360,15 +370,11 @@ main > .container {
    }
 
    .error {
-      color: #F44336;
-      opacity: 1;
+      @extend .error;
       transform: translateY(9px);
       position: absolute;
       top: 100%;
       left: 0;
-      transition: .2s opacity ease-out, .2s color ease-out;
-      box-sizing: inherit;
-      white-space: nowrap;
 
       &:empty {
          display: none;

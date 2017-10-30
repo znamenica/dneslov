@@ -30,8 +30,9 @@ export default class TextField extends Component {
 
    state = {
       [this.props.name]: this.props.text || '',
-      error: this.checkError(this.props.text || ''),
    }
+
+   error = this.checkError(this.props.text || '')
 
    fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
 
@@ -56,12 +57,14 @@ export default class TextField extends Component {
 
    onChange(e) {
       let name = this.props.name, value = e.target.value
-      let state = {[name]: value, error: this.checkError(value)}
+      this.error = this.checkError(value)
 
-      if (! state.error) {
-         this.props.onUpdate({[this.fullname]: value})
-      }
-      this.setState(state)
+      this.setState({[name]: value})
+      this.props.onUpdate({[this.fullname]: value})
+   }
+
+   isValid() {
+      return !this.error
    }
 
    render() {
@@ -73,7 +76,7 @@ export default class TextField extends Component {
             className={this.props.wrapperClassName}>
             <input
                type='text'
-               className={this.state.error && 'invalid'}
+               className={this.error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
@@ -87,4 +90,4 @@ export default class TextField extends Component {
                htmlFor='text'>
                {this.props.title}
                <div className="error">
-                  {this.state.error}</div></label></div>)}}
+                  {this.error}</div></label></div>)}}

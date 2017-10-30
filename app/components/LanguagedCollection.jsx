@@ -21,27 +21,63 @@ export default class LanguagedCollection extends Component {
       value: this.props.value.map((element, index) => {return {key: uuid()}}),
    }
 
+   error = this.checkError(this.props.value)
+
+   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
+
    static propTypes = {
       name: PropTypes.string.isRequired,
       postfix: PropTypes.string,
       value: PropTypes.array.isRequired,
       title: PropTypes.title.isRequired,
       action: PropTypes.action.isRequired,
+      validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }
 
+   // callbacks
+   componentDidUpdate() {
+      //console.log(this.refs, this.state.value)
+      this.props.onUpdate({[this.fullname]: undefined})
+   }
+
+   // events
    onAddName() {
       this.state.value.push({key: uuid()})
+      this.error = this.checkError(this.state.value)
       this.forceUpdate()
    }
 
    onChildUpdate(property) {
-      let fullname = [name, this.props.postfix].filter((e) => { return e }).join("_")
-      this.props.onUpdate({[fullname]: property})
+      let error = this.checkError(this.state.value)
+
+      if (error !== this.error) {
+         this.error = error
+         this.forceUpdate()
+      }
+      this.props.onUpdate({[this.fullname]: property})
    }
 
+   // proprties
    getElementWith(element, index) {
-      return assign({_id: element.key}, element, this.props.value[index] || {})
+      return assign({_id: element.key, ref: element.key}, element, this.props.value[index] || {})
+   }
+
+   checkError(value) {
+      let error = null
+
+      if (this.props.validations) {
+         Object.entries(this.props.validations).forEach(([e, rule]) => {
+            if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
+               error = e
+            } else if (typeof rule === 'function' && rule(value)) {
+               error = e }})}
+
+      return error
+   }
+
+   isValid() {
+      return !this.error
    }
 
    render() {
@@ -55,6 +91,8 @@ export default class LanguagedCollection extends Component {
                      placeholder={this.props.placeholder}
                      {...this.getElementWith(element, index)}
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
+            <div className="error">
+               {this.error}</div>
             <button
                className='btn btn-primary'
                onClick={this.onAddName.bind(this)}

@@ -11,6 +11,7 @@ import DescriptionsCollection from 'DescriptionsCollection'
 import WikiesCollection from 'WikiesCollection'
 import LinksCollection from 'LinksCollection'
 import TextField from 'TextField'
+import SubmitButton from 'SubmitButton'
 
 export default class CalendaryForm extends Component {
    static defaultProps = {
@@ -47,10 +48,6 @@ export default class CalendaryForm extends Component {
       }
    }
 
-   valid() {
-      return true // TODO
-   }
-
    onSubmitSuccess(data) {
       this.modal.modal('close')
       this.setState(this.getDefaultState())
@@ -67,10 +64,59 @@ export default class CalendaryForm extends Component {
 
    onChildUpdate(value) {
       this.query = assign(this.query, value)
+      this.validate()
+   }
+
+   _traverse_map(node, state){
+      if (!state) {
+         state = {level: 0, parent: null}
+      }
+
+      let result = [node]
+
+      if (node.refs) {
+         Object.values(node.refs).forEach((child) => {
+            let child_result = this._traverse_map(child, {
+               level: state.level + 1, parent: node})
+            result = result.concat(child_result)
+         })
+      }
+
+      return result
+   }
+
+   /*
+   _traverse_map1(node, state){
+      if (!state) {
+         state = {level: 0, parent: null}
+      }
+
+      let result = []
+
+      result.push(node)
+      if (node.props) {
+         let children = React.Children.toArray(node.props.children)
+
+         console.log(node.props.children)
+         children.forEach((child) => {
+            let child_result = this._traverse_map(child, {
+               level: state.level + 1, parent: node})
+            result.concat(child_result)
+         })
+      }
+
+      console.log(node, result, result.length)
+      return result
+   }*/
+
+   validate() {
+      let valid = this._traverse_map(this).reduce((v, c) => { return v && (! c.isValid || c.isValid()) }, true)
+      this.$submit.setState({valid: valid})
    }
 
    render() {
       console.log(this.props)
+      console.log(this.props.children)
       console.log(this.query)
 
       return (
@@ -84,53 +130,71 @@ export default class CalendaryForm extends Component {
                key='calendary-form-modal'
                className='modal modal-fixed-footer z-depth-2'
                id='calendary-form-modal'
-               ref={$modal => this.$modal = $modal} >
+               ref={e => this.$modal = e} >
                <form onSubmit={this.onSubmit.bind(this)}>
                   <div className='modal-content'>
                      <div className='row'>
                         <SlugField
+                           ref={'slug'}
+                           key={'slug'}
                            slug={this.props.slug || ''}
                            postfix='attributes'
                            wrapperClassName='input-field col xl2 l2 m4 s12'
                            onUpdate={this.onChildUpdate.bind(this)} />
                         <LanguageField
+                           ref={'languageField'}
+                           key={'languageField'}
                            language_code={this.props.language_code}
                            wrapperClassName='input-field col xl4 l4 m8 s12'
                            onUpdate={this.onChildUpdate.bind(this)} />
                         <AlphabethField
+                           ref={'alphabethField'}
+                           key={'alphabethField'}
                            alphabeth_code={this.props.alphabeth_code}
                            wrapperClassName='input-field col xl4 l4 m8 s12'
                            onUpdate={this.onChildUpdate.bind(this)} />
                         <LicitBox
+                           ref={'licitBox'}
+                           key={'licitBox'}
                            licit={this.props.licit}
                            wrapperClassName='fake-input-field col xl2 l2 m4 s12'
                            onUpdate={this.onChildUpdate.bind(this)} /></div>
                      <div className='row'>
                         <div className='col l12 s12'>
                            <NamesCollection
+                              ref={'names'}
+                              key={'names'}
                               value={this.props.names}
                               postfix='attributes'
                               onUpdate={this.onChildUpdate.bind(this)} /></div></div>
                      <div className='row'>
                         <div className='col l12 s12'>
                            <DescriptionsCollection
+                              ref={'descriptions'}
+                              key={'descriptions'}
                               value={this.props.descriptions}
                               postfix='attributes'
                               onUpdate={this.onChildUpdate.bind(this)} /></div></div>
                      <div className='row'>
                         <div className='col l12 s12'>
                            <WikiesCollection
+                              ref={'wikies'}
+                              key={'wikies'}
                               value={this.props.wikies}
                               postfix='attributes'
                               onUpdate={this.onChildUpdate.bind(this)} /></div></div>
                      <div className='row'>
                         <div className='col l12 s12'>
                            <LinksCollection
+                              ref={'links'}
+                              key={'links'}
                               value={this.props.links}
                               postfix='attributes'
                               onUpdate={this.onChildUpdate.bind(this)} /></div></div>
                      <div className='row'>
                         <TextField
+                           ref={'authorName'}
+                           key={'authorName'}
                            name='author_name'
                            title='Автор'
                            placeholder='Введи имя автора(ов)'
@@ -138,6 +202,8 @@ export default class CalendaryForm extends Component {
                            wrapperClassName='input-field col xl6 l6 m4 s12'
                            onUpdate={this.onChildUpdate.bind(this)} />
                         <TextField
+                           ref={'date'}
+                           key={'date'}
                            name='date'
                            title='Пора'
                            placeholder='Введи пору написания'
@@ -145,6 +211,8 @@ export default class CalendaryForm extends Component {
                            wrapperClassName='input-field col xl3 l3 m4 s12'
                            onUpdate={this.onChildUpdate.bind(this)} />
                         <TextField
+                           ref={'council'}
+                           key={'council'}
                            name='council'
                            title='Собор'
                            placeholder='Введи сокращение собора'
@@ -153,9 +221,7 @@ export default class CalendaryForm extends Component {
                            onUpdate={this.onChildUpdate.bind(this)} /></div>
 </div>
                   <div className="modal-footer">
-                     <button
-                        type='submit'
-                        className='btn btn-primary'
-                        disabled={! this.valid()} >
-                        <span>
-                           Создай календарь</span></button></div></form></div></div>)}}
+                     <SubmitButton
+                        ref={e => this.$submit = e}
+                        title='Создай календарь'
+                        valid={false} /></div></form></div></div>)}}

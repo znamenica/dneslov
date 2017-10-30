@@ -31,16 +31,23 @@ export default class LanguagedTextField extends Component {
       return (
          <div className='row'>
             <TextField
+               ref={'text'}
+               key={'text'}
                title={this.props.title}
                placeholder={this.props.placeholder}
                text={this.props.text}
+               validations={{[this.props.title + " отсутствует"]: /^$/}}
                wrapperClassName='input-field col xl6 l6 m12 s12'
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
+               ref={'language_code'}
+               key={'language_code'}
                language_code={this.props.language_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} />
             <AlphabethField
+               ref={'alphabeth_code'}
+               key={'alphabeth_code'}
                alphabeth_code={this.props.alphabeth_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} /></div>)}}
