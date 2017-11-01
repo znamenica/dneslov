@@ -97,6 +97,7 @@ module.exports = {
                      ],
                      //"es2015",
                      "stage-0",
+                     "stage-2",
                      "react",
                   ],
                   plugins: [
@@ -120,6 +121,7 @@ module.exports = {
                      'transform-object-rest-spread',
                      'transform-async-to-generator',
                      'transform-es3-modules-literals',
+                     'transform-decorators-legacy',
                   ],
                },
             }]

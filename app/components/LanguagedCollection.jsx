@@ -2,9 +2,12 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as assign from 'assign-deep'
 import * as uuid from 'uuid/v1'
+import { mixin } from 'lodash-decorators'
 
 import LanguagedTextField from 'LanguagedTextField'
+import Validation from 'Validation'
 
+@mixin(Validation)
 export default class LanguagedCollection extends Component {
    static defaultProps = {
       name: null,
@@ -15,13 +18,16 @@ export default class LanguagedCollection extends Component {
       single: null,
       placeholder: null,
       onUpdate: null,
+      child_text_validations: {},
+      child_validations: {},
+      validations: {},
    }
 
    state = {
       value: this.props.value.map((element, index) => {return {key: uuid()}}),
    }
 
-   error = this.checkError(this.props.value)
+   error = this.updateError(this.props.value)
 
    fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
 
@@ -31,6 +37,7 @@ export default class LanguagedCollection extends Component {
       value: PropTypes.array.isRequired,
       title: PropTypes.title.isRequired,
       action: PropTypes.action.isRequired,
+      child_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }
@@ -44,12 +51,12 @@ export default class LanguagedCollection extends Component {
    // events
    onAddName() {
       this.state.value.push({key: uuid()})
-      this.error = this.checkError(this.state.value)
+      this.updateError(this.state.value)
       this.forceUpdate()
    }
 
    onChildUpdate(property) {
-      let error = this.checkError(this.state.value)
+      let error = this.updateError(this.state.value)
 
       if (error !== this.error) {
          this.error = error
@@ -63,23 +70,6 @@ export default class LanguagedCollection extends Component {
       return assign({_id: element.key, ref: element.key}, element, this.props.value[index] || {})
    }
 
-   checkError(value) {
-      let error = null
-
-      if (this.props.validations) {
-         Object.entries(this.props.validations).forEach(([e, rule]) => {
-            if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
-               error = e
-            } else if (typeof rule === 'function' && rule(value)) {
-               error = e }})}
-
-      return error
-   }
-
-   isValid() {
-      return !this.error
-   }
-
    render() {
       return (
          <div className='row'>
@@ -89,6 +79,8 @@ export default class LanguagedCollection extends Component {
                   <LanguagedTextField
                      title={this.props.single}
                      placeholder={this.props.placeholder}
+                     text_validations={this.props.child_text_validations}
+                     validations={this.props.child_validations}
                      {...this.getElementWith(element, index)}
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
             <div className="error">

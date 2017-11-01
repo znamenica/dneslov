@@ -1,4 +1,5 @@
 import LanguagedCollection from 'LanguagedCollection'
+import { matchLanguages, matchAlphabeths, matchLetters } from 'matchers'
 
 export default class NamesCollection extends LanguagedCollection {
    static defaultProps = {
@@ -8,17 +9,15 @@ export default class NamesCollection extends LanguagedCollection {
       single: 'Имя',
       placeholder: 'Введи имя',
       validations: {
-         "Имена не могут отсутствовать": (a) => { return a.length === 0 },
-         "Языки в именах не могут совпадать": (array) => {
-            let languages = array.map(c => {return c.language_code}).filter(c => { return c })
-            languages.forEach((l, i) => {if (languages.indexOf(l, i + 1)) { return true }})
-            return false
-         },
-         "Азбуки в именах не могут совпадать": (array) => {
-            let alphabeths = array.map(c => {return c.alphabeth_code}).filter(c => { return c })
-            alphabeths.forEach((a, i) => {if (alphabeths.indexOf(a, i + 1)) { return true }})
-            return false
-         },
-      }
+         "Должно быть задано минимун одно имя": (a) => { return a.length === 0 },
+         "Языки в именах не могут совпадать": matchLanguages,
+         "Азбуки в именах не могут совпадать": matchAlphabeths,
+      },
+      child_validations: {
+         'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
+      },
+      child_text_validations: {
+         "Имя отсутствует": /^$/
+      },
    }
 }

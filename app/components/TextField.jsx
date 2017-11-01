@@ -1,6 +1,10 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
+import { mixin } from 'lodash-decorators'
 
+import Validation from 'Validation'
+
+@mixin(Validation)
 export default class TextField extends Component {
    static defaultProps = {
       name: 'text',
@@ -32,7 +36,7 @@ export default class TextField extends Component {
       [this.props.name]: this.props.text || '',
    }
 
-   error = this.checkError(this.props.text || '')
+   error = this.updateError(this.props.text || '')
 
    fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
 
@@ -42,29 +46,15 @@ export default class TextField extends Component {
       }
    }
 
-   checkError(value) {
-      let error = null
-      Object.entries(this.props.validations).forEach(([e, rule]) => {
-         if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
-            error = e
-         } else if (typeof rule === 'func' && rule()) {
-            error = e
-         }
-      })
-
-      return error
-   }
-
    onChange(e) {
-      let name = this.props.name, value = e.target.value
-      this.error = this.checkError(value)
+      let name = this.props.name, value = e.target.value, real = value
+      this.updateError(value)
 
       this.setState({[name]: value})
-      this.props.onUpdate({[this.fullname]: value})
-   }
-
-   isValid() {
-      return !this.error
+      if (this.props.postfix) {
+         real = {text: value}
+      }
+      this.props.onUpdate({[this.fullname]: real})
    }
 
    render() {

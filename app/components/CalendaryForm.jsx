@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as assign from 'assign-deep'
+import { mixin } from 'lodash-decorators'
 
 import SlugField from 'SlugField'
 import LanguageField from 'LanguageField'
@@ -12,7 +13,11 @@ import WikiesCollection from 'WikiesCollection'
 import LinksCollection from 'LinksCollection'
 import TextField from 'TextField'
 import SubmitButton from 'SubmitButton'
+import ErrorSpan from 'ErrorSpan'
+import { matchCodes } from 'matchers'
+import Validation from 'Validation'
 
+@mixin(Validation)
 export default class CalendaryForm extends Component {
    static defaultProps = {
       licit: false,
@@ -34,6 +39,10 @@ export default class CalendaryForm extends Component {
       licit: PropTypes.boolean,
       language_code: PropTypes.string,
       alphabeth_code: PropTypes.object,
+   }
+
+   static validations = {
+      'Избранный язык не соотвествует избранной азбуке': matchCodes,
    }
 
    query = {}
@@ -64,10 +73,12 @@ export default class CalendaryForm extends Component {
 
    onChildUpdate(value) {
       this.query = assign(this.query, value)
+      this.updateError(this.query)
+      this.$error.setState({text: this.error})
       this.validate()
    }
 
-   _traverse_map(node, state){
+   _traverse_map(node, state) {
       if (!state) {
          state = {level: 0, parent: null}
       }
@@ -159,6 +170,10 @@ export default class CalendaryForm extends Component {
                            licit={this.props.licit}
                            wrapperClassName='fake-input-field col xl2 l2 m4 s12'
                            onUpdate={this.onChildUpdate.bind(this)} /></div>
+                     <ErrorSpan
+                        ref={e => this.$error = e}
+                        key={'error'}
+                        text={this.error} />
                      <div className='row'>
                         <div className='col l12 s12'>
                            <NamesCollection
@@ -218,8 +233,7 @@ export default class CalendaryForm extends Component {
                            placeholder='Введи сокращение собора'
                            text={this.props.council}
                            wrapperClassName='input-field col xl3 l3 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} /></div>
-</div>
+                           onUpdate={this.onChildUpdate.bind(this)} /></div></div>
                   <div className="modal-footer">
                      <SubmitButton
                         ref={e => this.$submit = e}

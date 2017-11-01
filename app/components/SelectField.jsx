@@ -1,6 +1,10 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
+import { mixin } from 'lodash-decorators'
 
+import Validation from 'Validation'
+
+@mixin(Validation)
 export default class SelectField extends Component {
    static defaultProps = {
       name: null,
@@ -25,7 +29,7 @@ export default class SelectField extends Component {
       [this.props.name]: this.props.text || '',
    }
 
-   error = this.checkError(this.props.text || '')
+   error = this.updateError(this.props.text || '')
 
    componentDidMount() {
       $(this.$select).material_select()
@@ -50,29 +54,12 @@ export default class SelectField extends Component {
       this.setState({[this.props.name]: nextProps.value})
    }
 
-   checkError(value) {
-      let error = null
-      Object.entries(this.props.validations).forEach(([e, rule]) => {
-         if (typeof rule === 'object' && (rule instanceof RegExp) && value.match(rule)) {
-            error = e
-         } else if (typeof rule === 'function' && rule(value)) {
-            error = e
-         }
-      })
-
-      return error
-   }
-
    onChange(e) {
       let name = this.props.name, value = e.target.value
-      this.error = this.checkError(value)
+      this.updateError(value)
 
       this.setState({[name]: value})
       this.props.onUpdate({[name]: value})
-   }
-
-   isValid() {
-      return !this.error
    }
 
    render() {
