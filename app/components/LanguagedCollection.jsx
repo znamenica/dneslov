@@ -42,14 +42,8 @@ export default class LanguagedCollection extends Component {
       onUpdate: PropTypes.func.isRequired,
    }
 
-   // callbacks
-   componentDidUpdate() {
-      //console.log(this.refs, this.state.value)
-      this.props.onUpdate({[this.fullname]: undefined})
-   }
-
    // events
-   onAddName() {
+   onAddItem() {
       this.state.value.push({key: uuid()})
       this.updateError(this.state.value)
       this.forceUpdate()
@@ -87,7 +81,7 @@ export default class LanguagedCollection extends Component {
                {this.error}</div>
             <button
                className='btn btn-primary'
-               onClick={this.onAddName.bind(this)}
+               onClick={this.onAddItem.bind(this)}
                type='button'>
                <i className='small material-icons'>add_to_photos</i>
                {this.props.action}</button></div>)}}

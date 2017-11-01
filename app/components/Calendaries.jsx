@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import CalendaryForm from 'CalendaryForm'
+import CalendaryModal from 'CalendaryModal'
 import Calendary from 'Calendary'
 
 export default class Calendaries extends Component {
@@ -38,7 +38,7 @@ export default class Calendaries extends Component {
                      className='title'>
                      Календари</h4></div>
                <div className="col m4 s6">
-                  <CalendaryForm
+                  <CalendaryModal
                      open={this.state.current.length !== 0}
                      {...this.state.current}
                      ref={$form => this.$form = $form} /></div></div>

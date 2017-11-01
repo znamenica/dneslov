@@ -12,7 +12,6 @@ import DescriptionsCollection from 'DescriptionsCollection'
 import WikiesCollection from 'WikiesCollection'
 import LinksCollection from 'LinksCollection'
 import TextField from 'TextField'
-import SubmitButton from 'SubmitButton'
 import ErrorSpan from 'ErrorSpan'
 import { matchCodes } from 'matchers'
 import Validation from 'Validation'
@@ -31,7 +30,6 @@ export default class CalendaryForm extends Component {
       descriptions: [],
       wikies: [],
       links: [],
-      open: false,
    }
 
    static propTypes = {
@@ -47,35 +45,30 @@ export default class CalendaryForm extends Component {
 
    query = {}
 
-   componentDidMount() {
-      this.modal = $(this.$modal).modal()
-   }
+   processedHash(hash) {
+      let result = {}
 
-   componentDidUpdate() {
-      if (this.props.open) {
-         this.modal.modal('open')
-      }
-   }
+      Object.entries(hash).forEach(([key, value]) => {
+         if (value instanceof Object) {
+            if (Object.keys(value)[0].match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
+               result[key] = Object.values(value)
+            } else {
+               result[key] = this.processedHash(value)
+            }
+         } else {
+            result[key] = value
+         }
+      })
 
-   onSubmitSuccess(data) {
-      this.modal.modal('close')
-      this.setState(this.getDefaultState())
-   }
-
-   onSubmit(e) {
-      console.log("QUERY", this.query)
-      let data = { calendary: this.query }
-
-      e.stopPropagation()
-      e.preventDefault()
-      $.post('', data, this.onSubmitSuccess.bind(this), 'JSON')
+      return result
    }
 
    onChildUpdate(value) {
+      console.log(value)
       this.query = assign(this.query, value)
       this.updateError(this.query)
-      this.$error.setState({text: this.error})
       this.validate()
+      this.props.onUpdate()
    }
 
    _traverse_map(node, state) {
@@ -121,121 +114,101 @@ export default class CalendaryForm extends Component {
    }*/
 
    validate() {
-      let valid = this._traverse_map(this).reduce((v, c) => { return v && (! c.isValid || c.isValid()) }, true)
-      this.$submit.setState({valid: valid})
+      this.valid = this._traverse_map(this).reduce((v, c) => { return v && (! c.isValid || c.isValid()) }, true)
    }
 
    render() {
-      console.log(this.props)
-      console.log(this.props.children)
       console.log(this.query)
 
       return (
          <div>
             <div className='row'>
-               <a
-                 className="waves-effect waves-light btn modal-trigger right-align"
-                 href="#calendary-form-modal">
-                    Новый календарь</a></div>
-            <div
-               key='calendary-form-modal'
-               className='modal modal-fixed-footer z-depth-2'
-               id='calendary-form-modal'
-               ref={e => this.$modal = e} >
-               <form onSubmit={this.onSubmit.bind(this)}>
-                  <div className='modal-content'>
-                     <div className='row'>
-                        <SlugField
-                           ref={'slug'}
-                           key={'slug'}
-                           slug={this.props.slug || ''}
-                           postfix='attributes'
-                           wrapperClassName='input-field col xl2 l2 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} />
-                        <LanguageField
-                           ref={'languageField'}
-                           key={'languageField'}
-                           language_code={this.props.language_code}
-                           wrapperClassName='input-field col xl4 l4 m8 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} />
-                        <AlphabethField
-                           ref={'alphabethField'}
-                           key={'alphabethField'}
-                           alphabeth_code={this.props.alphabeth_code}
-                           wrapperClassName='input-field col xl4 l4 m8 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} />
-                        <LicitBox
-                           ref={'licitBox'}
-                           key={'licitBox'}
-                           licit={this.props.licit}
-                           wrapperClassName='fake-input-field col xl2 l2 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} /></div>
-                     <ErrorSpan
-                        ref={e => this.$error = e}
-                        key={'error'}
-                        text={this.error} />
-                     <div className='row'>
-                        <div className='col l12 s12'>
-                           <NamesCollection
-                              ref={'names'}
-                              key={'names'}
-                              value={this.props.names}
-                              postfix='attributes'
-                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
-                     <div className='row'>
-                        <div className='col l12 s12'>
-                           <DescriptionsCollection
-                              ref={'descriptions'}
-                              key={'descriptions'}
-                              value={this.props.descriptions}
-                              postfix='attributes'
-                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
-                     <div className='row'>
-                        <div className='col l12 s12'>
-                           <WikiesCollection
-                              ref={'wikies'}
-                              key={'wikies'}
-                              value={this.props.wikies}
-                              postfix='attributes'
-                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
-                     <div className='row'>
-                        <div className='col l12 s12'>
-                           <LinksCollection
-                              ref={'links'}
-                              key={'links'}
-                              value={this.props.links}
-                              postfix='attributes'
-                              onUpdate={this.onChildUpdate.bind(this)} /></div></div>
-                     <div className='row'>
-                        <TextField
-                           ref={'authorName'}
-                           key={'authorName'}
-                           name='author_name'
-                           title='Автор'
-                           placeholder='Введи имя автора(ов)'
-                           text={this.props.author_name}
-                           wrapperClassName='input-field col xl6 l6 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} />
-                        <TextField
-                           ref={'date'}
-                           key={'date'}
-                           name='date'
-                           title='Пора'
-                           placeholder='Введи пору написания'
-                           text={this.props.date}
-                           wrapperClassName='input-field col xl3 l3 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} />
-                        <TextField
-                           ref={'council'}
-                           key={'council'}
-                           name='council'
-                           title='Собор'
-                           placeholder='Введи сокращение собора'
-                           text={this.props.council}
-                           wrapperClassName='input-field col xl3 l3 m4 s12'
-                           onUpdate={this.onChildUpdate.bind(this)} /></div></div>
-                  <div className="modal-footer">
-                     <SubmitButton
-                        ref={e => this.$submit = e}
-                        title='Создай календарь'
-                        valid={false} /></div></form></div></div>)}}
+               <SlugField
+                  ref={'slug'}
+                  key={'slug'}
+                  slug={this.props.slug || ''}
+                  postfix='attributes'
+                  wrapperClassName='input-field col xl2 l2 m4 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <LanguageField
+                  ref={'languageField'}
+                  key={'languageField'}
+                  language_code={this.props.language_code}
+                  wrapperClassName='input-field col xl4 l4 m8 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <AlphabethField
+                  ref={'alphabethField'}
+                  key={'alphabethField'}
+                  alphabeth_code={this.props.alphabeth_code}
+                  wrapperClassName='input-field col xl4 l4 m8 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <LicitBox
+                  ref={'licitBox'}
+                  key={'licitBox'}
+                  licit={this.props.licit}
+                  wrapperClassName='fake-input-field col xl2 l2 m4 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} /></div>
+            <ErrorSpan
+               ref={e => this.$error = e}
+               key={'error'}
+               text={this.error} />
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <NamesCollection
+                     ref={'names'}
+                     key={'names'}
+                     value={this.props.names}
+                     postfix='attributes'
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <DescriptionsCollection
+                     ref={'descriptions'}
+                     key={'descriptions'}
+                     value={this.props.descriptions}
+                     postfix='attributes'
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <WikiesCollection
+                     ref={'wikies'}
+                     key={'wikies'}
+                     value={this.props.wikies}
+                     postfix='attributes'
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <LinksCollection
+                     ref={'links'}
+                     key={'links'}
+                     value={this.props.links}
+                     postfix='attributes'
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <TextField
+                  ref={'authorName'}
+                  key={'authorName'}
+                  name='author_name'
+                  title='Автор'
+                  placeholder='Введи имя автора(ов)'
+                  text={this.props.author_name}
+                  wrapperClassName='input-field col xl6 l6 m4 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <TextField
+                  ref={'date'}
+                  key={'date'}
+                  name='date'
+                  title='Пора'
+                  placeholder='Введи пору написания'
+                  text={this.props.date}
+                  wrapperClassName='input-field col xl3 l3 m4 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <TextField
+                  ref={'council'}
+                  key={'council'}
+                  name='council'
+                  title='Собор'
+                  placeholder='Введи сокращение собора'
+                  text={this.props.council}
+                  wrapperClassName='input-field col xl3 l3 m4 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} /></div></div>)}}
