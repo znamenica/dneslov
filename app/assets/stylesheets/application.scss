@@ -50,6 +50,16 @@ a[href] {
    color: $soft_blue;
 }
 
+.flex {
+   display: flex;
+   height: 4.5rem;
+}
+
+.enrighten {
+   margin: auto !important;
+   margin-right: 0 !important;
+}
+
 .btn, .btn-large {
    background-color: $darken_terracota;
 

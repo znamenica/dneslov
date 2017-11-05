@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
+import * as uuid from 'uuid/v1'
 import * as assign from 'assign-deep'
 import { mixin } from 'lodash-decorators'
 
@@ -20,7 +21,7 @@ import Validation from 'Validation'
 export default class CalendaryForm extends Component {
    static defaultProps = {
       licit: false,
-      slug: null,
+      slug: {},
       language_code: '',
       alphabeth_code: '',
       author_name: '',
@@ -33,7 +34,7 @@ export default class CalendaryForm extends Component {
    }
 
    static propTypes = {
-      slug: PropTypes.string,
+      slug: PropTypes.object,
       licit: PropTypes.boolean,
       language_code: PropTypes.string,
       alphabeth_code: PropTypes.object,
@@ -43,9 +44,17 @@ export default class CalendaryForm extends Component {
       'Избранный язык не соотвествует избранной азбуке': matchCodes,
    }
 
-   query = {}
+   query = this.deserializedHash(this.props)
 
-   processedHash(hash) {
+   componentWillReceiveProps(nextProps) {
+      this.query = this.deserializedHash(nextProps)
+   }
+
+   shouldComponentUpdate(nextProps, nextState) {
+      return true
+   }
+
+   serializedHash(hash) {
       let result = {}
 
       Object.entries(hash).forEach(([key, value]) => {
@@ -53,7 +62,7 @@ export default class CalendaryForm extends Component {
             if (Object.keys(value)[0].match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
                result[key] = Object.values(value)
             } else {
-               result[key] = this.processedHash(value)
+               result[key] = this.serializedHash(value)
             }
          } else {
             result[key] = value
@@ -63,9 +72,40 @@ export default class CalendaryForm extends Component {
       return result
    }
 
+   deserializedHash(hash) {
+      let result = {}
+
+      Object.entries(hash).forEach(([key, value]) => {
+         if (typeof value !== 'object' || value === null) {
+            result[key] = value
+         } else {
+            switch(value.constructor.name) {
+            case 'Array':
+/*               result[key + '_attributes'] = value.reduce((s, v) => {
+                  if (value instanceof Object) {
+                     s[uuid()] = this.deserializedHash(v)
+                  } else {
+                     s[uuid()] = v }
+                  return s }, {})*/
+               result[key + '_attributes'] = value.map((v) => {
+                  return assign({key: uuid()}, this.deserializedHash(v)) })
+               break
+            case 'Object':
+               result[key + '_attributes'] = this.deserializedHash(value)
+               break
+            default:
+               result[key] = value
+            }
+         }
+      })
+
+      console.log(result)
+      return result
+   }
+
    onChildUpdate(value) {
       console.log(value)
-      this.query = assign(this.query, value)
+      this.query = assign({}, this.query, value)
       this.updateError(this.query)
       this.validate()
       this.props.onUpdate()
@@ -126,26 +166,26 @@ export default class CalendaryForm extends Component {
                <SlugField
                   ref={'slug'}
                   key={'slug'}
-                  slug={this.props.slug || ''}
+                  slug={this.query.slug_attributes}
                   postfix='attributes'
                   wrapperClassName='input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LanguageField
                   ref={'languageField'}
                   key={'languageField'}
-                  language_code={this.props.language_code}
+                  language_code={this.query.language_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <AlphabethField
                   ref={'alphabethField'}
                   key={'alphabethField'}
-                  alphabeth_code={this.props.alphabeth_code}
+                  alphabeth_code={this.query.alphabeth_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LicitBox
                   ref={'licitBox'}
                   key={'licitBox'}
-                  licit={this.props.licit}
+                  licit={this.query.licit}
                   wrapperClassName='fake-input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
             <ErrorSpan
@@ -157,7 +197,7 @@ export default class CalendaryForm extends Component {
                   <NamesCollection
                      ref={'names'}
                      key={'names'}
-                     value={this.props.names}
+                     value={this.query.names_attributes}
                      postfix='attributes'
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -165,7 +205,7 @@ export default class CalendaryForm extends Component {
                   <DescriptionsCollection
                      ref={'descriptions'}
                      key={'descriptions'}
-                     value={this.props.descriptions}
+                     value={this.query.descriptions_attributes}
                      postfix='attributes'
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -173,7 +213,7 @@ export default class CalendaryForm extends Component {
                   <WikiesCollection
                      ref={'wikies'}
                      key={'wikies'}
-                     value={this.props.wikies}
+                     value={this.query.wikies_attributes}
                      postfix='attributes'
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -181,7 +221,7 @@ export default class CalendaryForm extends Component {
                   <LinksCollection
                      ref={'links'}
                      key={'links'}
-                     value={this.props.links}
+                     value={this.query.links_attributes}
                      postfix='attributes'
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -191,7 +231,7 @@ export default class CalendaryForm extends Component {
                   name='author_name'
                   title='Автор'
                   placeholder='Введи имя автора(ов)'
-                  text={this.props.author_name}
+                  text={this.query.author_name}
                   wrapperClassName='input-field col xl6 l6 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
@@ -200,7 +240,7 @@ export default class CalendaryForm extends Component {
                   name='date'
                   title='Пора'
                   placeholder='Введи пору написания'
-                  text={this.props.date}
+                  text={this.query.date}
                   wrapperClassName='input-field col xl3 l3 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
@@ -209,6 +249,6 @@ export default class CalendaryForm extends Component {
                   name='council'
                   title='Собор'
                   placeholder='Введи сокращение собора'
-                  text={this.props.council}
+                  text={this.query.council}
                   wrapperClassName='input-field col xl3 l3 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div></div>)}}

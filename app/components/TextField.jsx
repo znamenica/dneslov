@@ -40,6 +40,13 @@ export default class TextField extends Component {
 
    fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
 
+   componentWillReceiveProps(nextProps) {
+      if (this.state[this.props.name] != nextProps.text) {
+         this.setState({[this.props.name]: nextProps.text || ''})
+         this.updateError(nextProps.text || '')
+      }
+   }
+
    componentDidMount() {
       if (this.props.data['length']) {
          $(this.$input).characterCounter()
@@ -52,14 +59,13 @@ export default class TextField extends Component {
 
       this.setState({[name]: value})
       if (this.props.postfix) {
-         real = {text: value}
+         real = {text: value} // TODO add text as variable subkey
       }
       this.props.onUpdate({[this.fullname]: real})
    }
 
    render() {
-      //console.log(this.props.name, this.state[this.props.name])
-      //console.log(this.props.data)
+      console.log(this.props.name, this.state[this.props.name])
 
       return (
          <div
@@ -72,7 +78,7 @@ export default class TextField extends Component {
                name={this.props.name}
                ref={c => {this.$input = c}}
                placeholder={this.props.placeholder}
-               value={this.state[this.props.name]}
+               value={this.state[this.props.name] || ''}
                data-length={this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label

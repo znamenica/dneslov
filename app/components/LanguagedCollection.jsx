@@ -23,14 +23,6 @@ export default class LanguagedCollection extends Component {
       validations: {},
    }
 
-   state = {
-      value: this.props.value.map((element, index) => {return {key: uuid()}}),
-   }
-
-   error = this.updateError(this.props.value)
-
-   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
-
    static propTypes = {
       name: PropTypes.string.isRequired,
       postfix: PropTypes.string,
@@ -40,6 +32,22 @@ export default class LanguagedCollection extends Component {
       child_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,
+   }
+
+   state = {
+      value: this.newStateValue(this.props.value),
+   }
+
+   error = this.updateError(this.props.value)
+
+   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
+
+   // system
+   componentWillReceiveProps(nextProps) {
+      if (this.props != nextProps) {
+         this.state.value = this.newStateValue(nextProps.value)
+         this.updateError(nextProps.value)
+       }
    }
 
    // events
@@ -60,11 +68,17 @@ export default class LanguagedCollection extends Component {
    }
 
    // proprties
+   newStateValue(value) {
+      return value.map((element, index) => {return {key: uuid()}})
+   }
+
    getElementWith(element, index) {
       return assign({_id: element.key, ref: element.key}, element, this.props.value[index] || {})
    }
 
    render() {
+      console.log(this.state)
+      
       return (
          <div className='row'>
             <h5>{this.props.title}</h5>

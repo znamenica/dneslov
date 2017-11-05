@@ -44,6 +44,16 @@ export default class LanguagedTextField extends Component {
       alphabeth_code: this.props.alphabeth_code,
    }
 
+   // system
+   componentWillReceiveProps(nextProps) {
+      if (this.props.value != nextProps.value) {
+         this.setState({[this.props.name]: nextProps.value})
+         this.updateError(nextProps.value || '')
+      }
+   }
+
+   // events
+
    onChange(property) {
       this.properties = assign(this.properties, property)
       this.updateError(this.properties)
@@ -52,6 +62,8 @@ export default class LanguagedTextField extends Component {
    }
 
    render() {
+      console.log(this.props)
+
       return (
          <div className='row'>
             <TextField

@@ -17,14 +17,7 @@ export default class SearchField extends Component {
       changed: false,
    }
 
-   constructor(props) {
-      super(props)
-
-      this.onChange = this.onChange.bind(this)
-      this.onBlur = this.onBlur.bind(this)
-   }
-
-   fireUpdate = () => {
+   fireUpdate() {
       let tokens = this.state.with_text.replace(/\++/g, " +").split(/\s+/)
       let filtered = tokens.filter((t) => { return ! t.match(/^[\s+]*$/) })
 
@@ -36,13 +29,13 @@ export default class SearchField extends Component {
       this.props.onUpdate(filtered)
    }
 
-   onBlur = () => {
+   onBlur() {
       if (this.state.changed) {
          this.fireUpdate()
       }
    }
 
-   onChange = (e) => {
+   onChange(e) {
       let state = { with_text: e.target.value, changed: true }
 
       if (this.timeout) {
@@ -53,11 +46,11 @@ export default class SearchField extends Component {
       this.setState(state)
    }
 
-   componentWillReceiveProps = (nextProps) => {
+   componentWillReceiveProps(nextProps) {
       this.setState({with_text: nextProps.with_text, changed: false})
    }
 
-   onKeyPress = (e) => {
+   onKeyPress(e) {
       if (e.key === "Enter") {
          e.preventDefault()
          this.fireUpdate()
@@ -78,8 +71,8 @@ export default class SearchField extends Component {
                   name='with_text'
                   placeholder='Что ищем?'
                   value={this.state.with_text}
-                  onBlur={this.onBlur}
-                  onChange={this.onChange}
+                  onBlur={this.onBlur.bind(this)}
+                  onChange={this.onChange.bind(this)}
                   onKeyPress={this.onKeyPress} />
             </div>
          </div>)}}

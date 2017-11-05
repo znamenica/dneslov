@@ -18,6 +18,8 @@ export default class CalendaryModal extends Component {
       wikies: [],
       links: [],
       open: false,
+      onUpdateCalendary: null,
+      onCloseCalendary: null,
    }
 
    static propTypes = {
@@ -25,6 +27,31 @@ export default class CalendaryModal extends Component {
       licit: PropTypes.boolean,
       language_code: PropTypes.string,
       alphabeth_code: PropTypes.object,
+      onUpdateCalendary: PropTypes.func.isRequired,
+      onCloseCalendary: PropTypes.func.isRequired,
+   }
+
+   state = this.getDefaultState()
+
+   componentWillReceiveProps(nextProps) {
+      this.setState(this.getDefaultState(nextProps))
+   }
+
+   getDefaultState(props = this.props) {
+      return {
+         id: props.id,
+         licit: props.licit,
+         slug: props.slug,
+         language_code: props.language_code,
+         alphabeth_code: props.alphabeth_code,
+         author_name: props.author_name,
+         date: props.date,
+         council: props.council,
+         names: props.names,
+         descriptions: props.descriptions,
+         wikies: props.wikies,
+         links: props.links,
+      }
    }
 
    getCleanState() {
@@ -45,7 +72,9 @@ export default class CalendaryModal extends Component {
    }
 
    componentDidMount() {
-      this.modal = $(this.$modal).modal()
+      this.modal = $(this.$modal).modal({
+         complete: this.props.onCloseCalendary.bind(this)
+      })
    }
 
    componentDidUpdate() {
@@ -54,35 +83,42 @@ export default class CalendaryModal extends Component {
       }
    }
 
+   newCalendary() {
+      this.setState(this.getCleanState())
+   }
+
    onSubmitSuccess(data) {
-      this.state = this.getCleanState()
+      console.log("SUCCESS", data)
+      this.props.onUpdateCalendary(data)
       this.modal.modal('close')
    }
 
+   onSubmitError(data) {
+      console.log(data)
+      // add error//
+   }
+
    onSubmit(e) {
-      let data = { calendary: this.processedHash(this.$form.query) }
+      let settings = {
+         data: { calendary: this.$form.query,
+                 slug: this.$form.query.slug_attributes.text },
+         dataType: 'JSON',
+         error: this.onSubmitError.bind(this),
+         success: this.onSubmitSuccess.bind(this) }
+
+      if (settings.data.calendary.id) {
+         settings.method = 'PUT'
+         settings.url = '/calendaries/' + settings.data.calendary.id + '.json'
+      } else {
+         settings.method = 'POST'
+         settings.url = '/calendaries/create.json'
+      }
 
       e.stopPropagation()
       e.preventDefault()
-      $.post('', data, this.onSubmitSuccess.bind(this), 'JSON')
-   }
 
-   processedHash(hash) {
-      let result = {}
-
-      Object.entries(hash).forEach(([key, value]) => {
-         if (value instanceof Object) {
-            if (Object.keys(value)[0].match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
-               result[key] = Object.values(value)
-            } else {
-               result[key] = this.processedHash(value)
-            }
-         } else {
-            result[key] = value
-         }
-      })
-
-      return result
+      console.log(settings)
+      $.ajax(settings)
    }
 
    onFormUpdate() {
@@ -94,12 +130,13 @@ export default class CalendaryModal extends Component {
       console.log(this.state)
 
       return (
-         <div>
+         <div className='enrighten'>
             <div className='row'>
                <a
-                 className="waves-effect waves-light btn modal-trigger right-align"
-                 href="#calendary-form-modal">
-                    Новый календарь</a></div>
+                  className="waves-effect waves-light btn modal-trigger"
+                  href="#calendary-form-modal"
+                  onClick={this.newCalendary.bind(this)} >
+                     Новый календарь</a></div>
             <div
                key='calendary-form-modal'
                className='modal modal-fixed-footer z-depth-2'
@@ -115,5 +152,5 @@ export default class CalendaryModal extends Component {
                   <div className="modal-footer">
                      <SubmitButton
                         ref={e => this.$submit = e}
-                        title='Создай календарь'
+                        title={this.props.slug && 'Обнови календарь' || 'Создай календарь'}
                         valid={false} /></div></form></div></div>)}}

@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
+
 import MemorySpan from 'MemorySpan'
 
 export default class MemorySpans extends Component {
@@ -9,7 +10,7 @@ export default class MemorySpans extends Component {
       onFetchNext: null
    }
 
-   fetchNext = () => {
+   fetchNext() {
       if (this.props.total_memories > this.props.memories.length && ! this.isRequesting) {
          console.log("SPANS", this.props)
          this.isRequesting = true
@@ -17,11 +18,11 @@ export default class MemorySpans extends Component {
       }
    }
 
-   componentDidMount = () => {
+   componentDidMount() {
       $(this.$collapsible).collapsible()
    }
 
-   componentDidUpdate = (nextProps) => {
+   componentDidUpdate(nextProps) {
       let slugs = this.props.memories.map((m) => { return m.slug } )
       $(this.$collapsible).collapsible()
 
@@ -31,7 +32,7 @@ export default class MemorySpans extends Component {
       this.isRequesting = false
    }
 
-   render = () => {
+   render() {
       let rendered
 
       if (this.props.memories.length > 0) {
@@ -40,9 +41,10 @@ export default class MemorySpans extends Component {
                ref={$collapsible => this.$collapsible = $collapsible}
                className='collapsible collection'
                data-collapsible='expandable'>
-               {this.props.memories.map((memory) => <MemorySpan key={memory.slug} memory={memory} />)}
-            <ReactScrollPagination
-               fetchFunc={this.fetchNext} /></ul>)
+               {this.props.memories.map((memory) =>
+                  <MemorySpan key={memory.slug} memory={memory} />)}
+               <ReactScrollPagination
+                  fetchFunc={this.fetchNext} /></ul>)
       } else {
          rendered = (
             <div className='card-panel'>

@@ -1,2 +1,1 @@
-class CalendariesSerializer < ActiveModel::Serializer::CollectionSerializer
-end
+class CalendariesSerializer < PagedCollectionSerializer ;end

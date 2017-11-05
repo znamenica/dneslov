@@ -1,21 +1,53 @@
 import { Component } from 'react'
+import ReactScrollPagination from 'react-scroll-pagination/src/index'
+
 import CalendaryModal from 'CalendaryModal'
 import Calendary from 'Calendary'
 
 export default class Calendaries extends Component {
    static defaultProps = {
-      data: []
+      calendaries: {
+         list: [],
+         page: 1,
+         total: 0,
+      },
+      locales: [],
    }
 
    state = {
-      calendaries: this.props.data,
-      current: {}
+      calendaries: this.props.calendaries.list,
+      page: this.props.calendaries.page,
+      total: this.props.calendaries.total,
+      query: { page: this.props.calendaries.page },
+      current: null
    }
 
-   addCalendary(calendary) {
-      calendaries = this.state.calendaries.slice()
-      calendaries.push(calendary)
-      this.setState({ calendaries: calendaries })}
+   componentDidUpdate(nextProps) {
+      this.isRequesting = false
+   }
+
+   fetchNext() {
+      console.log("STATE", this.state)
+      if (this.state.total > this.state.calendaries.length && ! this.isRequesting) {
+         this.isRequesting = true
+         this.submit(this.state.page + 1)
+      }
+   }
+
+   onCalendaryUpdate(calendary) {
+      let index = this.state.calendaries.findIndex((c) => { return c.slug.text == calendary.slug.text })
+      let calendaries = this.state.calendaries.slice()
+      let total = this.state.total
+
+      if (index < 0) {
+         calendaries.push(calendary)
+         total += 1
+      } else {
+         calendaries[index] = calendary
+      }
+
+      this.setState({ calendaries: calendaries, total: total, current: null})
+   }
 
    onCalendaryEdit(id) {
       let calendary = this.state.calendaries.find((c) => { return c.id === id })
@@ -27,7 +59,32 @@ export default class Calendaries extends Component {
       delete calendaries[index]
    }
 
+   onCalendaryClose() {
+      this.setState({current: null})
+   }
+
+   onSuccessLoad(calendaries) {
+      console.log("SUCCESS", calendaries)
+      if (calendaries.page > 1) {
+         let new_calendaries = this.state.calendaries
+         new_calendaries = new_calendaries.concat(calendaries.list)
+         this.setState({calendaries: new_calendaries, page: parseInt(calendaries.page)})
+      } else {
+         this.setState({calendaries: calendaries.list, page: parseInt(calendaries.page)})
+      }
+      console.log("state", this.state)
+   }
+
+   submit(page = 1) {
+      this.state.query.page = page
+
+      console.log("Sending...", this.state.query)
+
+      $.get('/calendaries.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+   }
+
    render() {
+      console.log(this.props)
       console.log(this.state)
 
       return (
@@ -37,11 +94,13 @@ export default class Calendaries extends Component {
                   <h4
                      className='title'>
                      Календари</h4></div>
-               <div className="col m4 s6">
+               <div className="col m4 s6 flex">
                   <CalendaryModal
-                     open={this.state.current.length !== 0}
+                     open={this.state.current}
                      {...this.state.current}
-                     ref={$form => this.$form = $form} /></div></div>
+                     ref={$form => this.$form = $form}
+                     onCloseCalendary={this.onCalendaryClose.bind(this)}
+                     onUpdateCalendary={this.onCalendaryUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>
@@ -58,6 +117,9 @@ export default class Calendaries extends Component {
                   {this.state.calendaries.map((calendary) =>
                      <Calendary
                         key={calendary.id}
+                        locales={this.props.locales}
                         {...calendary}
                         onEdit={this.onCalendaryEdit.bind(this)}
-                        onRemove={this.onCalendaryRemove.bind(this)} />)}</tbody></table></div>)}}
+                        onRemove={this.onCalendaryRemove.bind(this)} />)}</tbody></table>
+            <ReactScrollPagination
+               fetchFunc={this.fetchNext.bind(this)} /></div>)}}

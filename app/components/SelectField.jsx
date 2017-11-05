@@ -8,7 +8,6 @@ import Validation from 'Validation'
 export default class SelectField extends Component {
    static defaultProps = {
       name: null,
-      value: null,
       wrapperClassName: null,
       codeNames: null,
       validations: {},
@@ -18,7 +17,6 @@ export default class SelectField extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       codeNames: PropTypes.object.isRequired,
       title: PropTypes.string.isRequired,
@@ -26,15 +24,21 @@ export default class SelectField extends Component {
    }
 
    state = {
-      [this.props.name]: this.props.text || '',
+      [this.props.name]: this.props[this.props.name] || '',
    }
 
-   error = this.updateError(this.props.text || '')
+   error = this.updateError(this.props[this.props.name] || '')
 
+   // system
    componentDidMount() {
       $(this.$select).material_select()
       $(this.$select).on('change', this.onChange.bind(this))
       this.$wrap = this.$parent.querySelector('.select-wrapper')
+   }
+
+   componentWillUnmount() {
+      $(this.$select).off('change', this.onChange.bind(this))
+      $(this.$select).material_select('destroy')
    }
 
    componentDidUpdate() {
@@ -45,15 +49,19 @@ export default class SelectField extends Component {
       }
    }
 
-   componentWillUnmount() {
-      $(this.$select).off('change', this.onChange.bind(this))
-      $(this.$select).material_select('destroy')
-   }
-
    componentWillReceiveProps(nextProps) {
-      this.setState({[this.props.name]: nextProps.value})
+      if (this.props[this.props.name] != nextProps[this.props.name]) {
+         let value = nextProps[this.props.name] || ''
+         $(this.$select).material_select('destroy')
+         this.setState({[this.props.name]: value})
+         this.updateError(value)
+         this.$select.value = value
+         $(this.$select).material_select()
+         this.$wrap = this.$parent.querySelector('.select-wrapper')
+      }
    }
 
+   // events
    onChange(e) {
       let name = this.props.name, value = e.target.value
       this.updateError(value)
@@ -63,6 +71,8 @@ export default class SelectField extends Component {
    }
 
    render() {
+      console.log(this.state[this.props.name])
+
       return (
          <div
             ref={e => this.$parent = e}
@@ -74,7 +84,8 @@ export default class SelectField extends Component {
                id={this.props.name}
                name={this.props.name}
                value={this.state[this.props.name]}
-               required='required'>
+               required='required'
+               onChange={this.onChange.bind(this)} >
                {Object.keys(this.props.codeNames).map((option) =>
                   <option
                      {...{[option.length == 0 && 'disabled']: 'disabled'}}

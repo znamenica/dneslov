@@ -32,7 +32,7 @@ export default class MemoriesForm extends Component {
       }
    }
 
-   calendariesUsed = () => {
+   calendariesUsed() {
       return this.state.query.in_calendaries.map((slug) => {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
             return c || calendary.slug == slug && calendary || null
@@ -40,13 +40,13 @@ export default class MemoriesForm extends Component {
       })
    }
 
-   onCloudAct = (data) => {
+   onCloudAct(data) {
       this.state.query.in_calendaries.push(data.slug)
 
       this.submit()
    }
 
-   onSearchAct = (data) => {
+   onSearchAct(data) {
       if (data.date) {
          this.state.query.with_date = []
       } else if (data.slug) {
@@ -58,13 +58,13 @@ export default class MemoriesForm extends Component {
       this.submit()
    }
 
-   onSearchUpdate = (tokens) => {
+   onSearchUpdate(tokens) {
       this.state.query.with_tokens = tokens
 
       this.submit()
    }
 
-   onCalendarUpdate = (value) => {
+   onCalendarUpdate(value) {
       Object.keys(value).forEach((key) => {
          this.state.query[key] = value[key]
       })
@@ -72,32 +72,33 @@ export default class MemoriesForm extends Component {
       this.submit()
    }
 
-   onFetchNext = () => {
+   onFetchNext() {
       this.submit(this.state.query.page + 1)
    }
 
-   submit = (page = 1) => {
-      let _this = this
+   onSuccessLoad(memories) {
+      let slugs = memories.list.map((m) => { return m.slug })
+      console.log("AJAX SUCCESS", slugs)
+      if (memories.page > 1) {
+         let new_memories = this.state.memories
+         new_memories.list = new_memories.list.concat(memories.list)
+         this.setState({memories: new_memories, memory: null})
+      } else {
+         this.setState({memories: memories, memory: null})
+      }
+      console.log("state", this.state)
+      history.pushState({ 'json': memories }, '', '/')
+   }
+
+   submit(page = 1) {
       this.state.query.page = page
 
       console.log("Sending...", this.state)
 
-      $.get('/index.json', this.state.query, (memories) => {
-         let slugs = memories.list.map((m) => { return m.slug })
-         console.log("AJAX SUCCESS", slugs)
-         if (memories.page > 1) {
-            let new_memories = this.state.memories
-            new_memories.list = new_memories.list.concat(memories.list)
-            _this.setState({memories: new_memories, memory: null})
-         } else {
-            _this.setState({memories: memories, memory: null})
-         }
-         console.log("state", this.state)
-         history.pushState({ 'json': memories }, '', '/')
-      }, 'JSON')
+      $.get('/index.json', this.state.query, this.onSuccessLoad, 'JSON')
    }
 
-   render = () => {
+   render() {
       console.log("props", this.props)
       console.log("length", this.state.memories.list.length)
       console.log("total", this.state.memories.total)

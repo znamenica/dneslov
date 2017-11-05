@@ -9,7 +9,7 @@ export default class NamesCollection extends LanguagedCollection {
       single: 'Имя',
       placeholder: 'Введи имя',
       validations: {
-         "Должно быть задано минимун одно имя": (a) => { return a.length === 0 },
+         "Должно быть задано как минимум одно имя": (a) => { return a.length === 0 },
          "Языки в именах не могут совпадать": matchLanguages,
          "Азбуки в именах не могут совпадать": matchAlphabeths,
       },
