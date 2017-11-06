@@ -104,6 +104,10 @@ body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
    margin-top: 0;
 }
 
+.material-icons + .toast-wrapper {
+   display: none;
+}
+
 //#####
 
 nav .brand-logo {

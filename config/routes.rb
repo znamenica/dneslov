@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
    root 'memories#index'
 
-   resources :calendaries
+   resources :calendaries, param: :slug, except: :edit
 
    get '/index' => 'memories#index'
 

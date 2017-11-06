@@ -61,7 +61,7 @@ class CalendariesController < ApplicationController
       render json: @calendary.errors, status: :unprocessable_entity ;end
 
    def set_page
-      @page ||= params[:page] || 1 ;end
+      @page ||= params[:page].to_i || 1 ;end
 
    def set_locales
       @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)

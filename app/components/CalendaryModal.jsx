@@ -108,7 +108,7 @@ export default class CalendaryModal extends Component {
 
       if (settings.data.calendary.id) {
          settings.method = 'PUT'
-         settings.url = '/calendaries/' + settings.data.calendary.id + '.json'
+         settings.url = '/calendaries/' + settings.data.slug + '.json'
       } else {
          settings.method = 'POST'
          settings.url = '/calendaries/create.json'

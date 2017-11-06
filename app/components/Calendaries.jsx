@@ -49,18 +49,35 @@ export default class Calendaries extends Component {
       this.setState({ calendaries: calendaries, total: total, current: null})
    }
 
-   onCalendaryEdit(id) {
-      let calendary = this.state.calendaries.find((c) => { return c.id === id })
+   onCalendaryEdit(slug) {
+      let calendary = this.state.calendaries.find((c) => { return c.slug.text == slug })
       this.setState({current: calendary})
-   }
-
-   onCalendaryRemove(id) {
-      let index = this.state.calendaries.findIndex((c) => { return c.id === id })
-      delete calendaries[index]
    }
 
    onCalendaryClose() {
       this.setState({current: null})
+   }
+
+   onCalendaryRemove(slug) {
+      let calendary = this.state.calendaries.find((c) => { return c.slug.text == slug })
+
+      $.ajax({
+         method: 'DELETE',
+         dataType: 'JSON',
+         url: '/calendaries/' + calendary.slug.text + '.json',
+         success: this.onSuccessRemove.bind(this)
+      })
+   }
+
+   onSuccessRemove(calendary) {
+      let calendaries = this.state.calendaries.slice()
+      let index = calendaries.findIndex((c) => { return c.slug.text == calendary.slug.text })
+
+      delete calendaries[index]
+      this.setState({
+         calendaries: calendaries.filter((c) => {return c}),
+         total: this.state.total - 1
+      })
    }
 
    onSuccessLoad(calendaries) {
@@ -68,9 +85,9 @@ export default class Calendaries extends Component {
       if (calendaries.page > 1) {
          let new_calendaries = this.state.calendaries
          new_calendaries = new_calendaries.concat(calendaries.list)
-         this.setState({calendaries: new_calendaries, page: parseInt(calendaries.page)})
+         this.setState({calendaries: new_calendaries, page: calendaries.page})
       } else {
-         this.setState({calendaries: calendaries.list, page: parseInt(calendaries.page)})
+         this.setState({calendaries: calendaries.list, page: calendaries.page})
       }
       console.log("state", this.state)
    }
@@ -119,6 +136,7 @@ export default class Calendaries extends Component {
                         key={calendary.id}
                         locales={this.props.locales}
                         {...calendary}
+                        slug={calendary.slug.text}
                         onEdit={this.onCalendaryEdit.bind(this)}
                         onRemove={this.onCalendaryRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination

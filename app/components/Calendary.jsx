@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 export default class Calendary extends Component {
    static defaultProps = {
       locales: [],
-      id: null,
+      slug: null,
       licit: null,
       language_code: null,
       alphabeth_code: null,
@@ -12,12 +12,13 @@ export default class Calendary extends Component {
       date: '',
       council: '',
       onEdit: null,
-      onRemove: null }
+      onRemove: null
+   }
 
    static propTypes = {
       locales: PropTypes.array.isRequired,
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      slug: PropTypes.string.isRequired,
+      names: PropTypes.array.isRequired,
       licit: PropTypes.boolean.isRequired,
       language_code: PropTypes.string.isRequired,
       alphabeth_code: PropTypes.string.isRequired,
@@ -28,14 +29,32 @@ export default class Calendary extends Component {
       onRemove: PropTypes.func.isRequired,
    }
 
+   componentWillMount() {
+      this.name = this.makeName()
+   }
+
+   componentWillReceiveProps(nextProps) {
+      if (this.props.names != nextProps.names) {
+         this.name = this.makeName()
+      }
+   }
+
    edit() {
-      this.props.onEdit(this.props.id) }
+      this.props.onEdit(this.props.slug)
+   }
 
    remove() {
-      this.props.onRemove(this.props.id) }
+      let toast = document.querySelector('.toast-wrapper.' + this.props.slug).parentElement
 
-   getName() {
-      console.log(this.props)
+      toast.remove()
+      this.props.onRemove(this.props.slug)
+   }
+
+   removeQuery() {
+      Materialize.toast(this.$toast, 15000, 'rounded')
+   }
+
+   makeName() {
       let names = this.props.locales.map((locale) => {
          return this.props.names.reduce((res, name) => {
             return res || locale === name.language_code && name.text }, null)
@@ -47,7 +66,7 @@ export default class Calendary extends Component {
    render() {
       return (
          <tr>
-            <td>{this.getName()}</td>
+            <td>{this.name}</td>
             <td>
                {this.props.licit &&
                   <i className='tiny material-icons'>check</i>}</td>
@@ -63,5 +82,15 @@ export default class Calendary extends Component {
                   edit</i>
                <i
                   className='small material-icons'
-                  onClick={this.remove.bind(this)}>
-                  delete</i></td></tr>)}}
+                  onClick={this.removeQuery.bind(this)}>
+                  delete</i>
+               <div
+                  className={'toast-wrapper ' + this.props.slug}
+                  key='toast'
+                  ref={e => this.$toast = e} >
+                  <span>Точно ли удалить календарь "{this.name}"?</span>
+                  <button
+                     className="btn-flat toast-action"
+                     onClick={this.remove.bind(this)}>
+                     Да</button></div>
+                  </td></tr>)}}
