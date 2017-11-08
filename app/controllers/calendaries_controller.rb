@@ -4,7 +4,8 @@ class CalendariesController < ApplicationController
    before_action :set_calendary, only: %i(show update destroy)
    layout 'admin'
 
-   rescue_from ActiveRecord::RecordInvalid,
+   rescue_from ActiveRecord::RecordNotUnique,
+               ActiveRecord::RecordInvalid,
                ActiveRecord::RecordNotSaved,
                ActiveRecord::RecordNotFound, with: :unprocessable_entity
 
@@ -57,8 +58,9 @@ class CalendariesController < ApplicationController
                                             links_attributes: [:id, :url, :language_code, :alphabeth_code],
                                             descriptions_attributes: [:id, :text, :language_code, :alphabeth_code] ) ;end
 
-   def unprocessable_entity
-      render json: @calendary.errors, status: :unprocessable_entity ;end
+   def unprocessable_entity e
+      errors = @calendary.errors.any? && @calendary.errors || e.to_s
+      render json: errors, status: :unprocessable_entity ;end
 
    def set_page
       @page ||= params[:page].to_i || 1 ;end

@@ -50,15 +50,19 @@ export default class TextField extends Component {
       }
    }
 
-   onChange(e) {
-      let name = this.props.name, value = e.target.value, real = value
-      this.updateError(value)
+   componentWillUpdate(nextProps, nextState) {
+      let value = nextState[nextProps.name], real = value
 
-      this.setState({[name]: value})
-      if (this.props.subname) {
-         real = {[this.props.subname]: value} // TODO add text as variable subkey
+      this.updateError(value)
+      console.log(this.error)
+      if (nextProps.subname) {
+         real = {[nextProps.subname]: value} // TODO add text as variable subkey
       }
-      this.props.onUpdate({[name]: real})
+      this.props.onUpdate({[nextProps.name]: real})
+   }
+
+   onChange(e) {
+      this.setState({[this.props.name]: e.target.value})
    }
 
    render() {

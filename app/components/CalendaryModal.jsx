@@ -95,14 +95,23 @@ export default class CalendaryModal extends Component {
    }
 
    onSubmitError(response) {
+      let error
+
       console.log("ERROR", response, this.state, this.$form.query)
 
-      let errors = []
-      Object.entries(response.responseJSON).forEach(([key, value]) => {
-         errors.push(value.map((e) => { return key + " " + e }))
-      })
+      if (response.responseJSON) {
+         let errors = []
 
-      this.$error.setState({error: errors.join(", ")})
+         Object.entries(response.responseJSON).forEach(([key, value]) => {
+            errors.push(value.map((e) => { return key + " " + e }))
+         })
+
+         error = errors.join(", ")
+      } else {
+         error = response.responseText
+      }
+
+      this.$error.setState({error: error})
    }
 
    onSubmit(e) {

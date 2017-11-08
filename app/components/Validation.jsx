@@ -37,15 +37,15 @@ const Validation = {
    },
 
    updateError(value) {
-      let error = this.getError(value)
+      this.error = this.getError(value)
 
       if (this.$error) {
-         this.$error.setState({error: error})
+         this.$error.setState({error: this.error})
       }
    },
 
    isValid() {
-      return !(this.$error && this.$error.state.error)
+      return !this.error
    }
 }
 
