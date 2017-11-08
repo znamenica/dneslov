@@ -3,7 +3,7 @@ import TextField from 'TextField'
 export default class SlugField extends TextField {
    static defaultProps = {
       name: 'slug',
-      postfix: 'attributes',
+      subname: 'text',
       slug: {text: ''},
       title: 'Жетон',
       placeholder: 'Введи имя жетона',

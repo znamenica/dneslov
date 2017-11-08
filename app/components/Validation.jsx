@@ -9,7 +9,7 @@ const Validation = {
       return this.validations
    },
 
-   updateError(value) {
+   getError(value) {
       let error = null
 
       Object.entries(this.getValidations()).forEach(([e, rule]) => {
@@ -33,12 +33,19 @@ const Validation = {
          }
       })
 
-      this.error = error
-      return this.error
+      return error
+   },
+
+   updateError(value) {
+      let error = this.getError(value)
+
+      if (this.$error) {
+         this.$error.setState({error: error})
+      }
    },
 
    isValid() {
-      return !this.error
+      return !(this.$error && this.$error.state.error)
    }
 }
 

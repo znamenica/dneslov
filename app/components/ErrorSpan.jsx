@@ -3,19 +3,18 @@ import PropTypes from 'prop-types'
 
 export default class ErrorSpan extends Component {
    static defaultProps = {
-      text: '',
+      error: '',
    }
 
    static propTypes = {
-      text: PropTypes.string,
+      error: PropTypes.string,
    }
 
    state = {
-      text: this.props.text || ''
+      error: this.props.error || ''
    }
 
    render() {
       return (
-         <div className='row'>
-            <div className="col error">
-               {this.state.text}</div></div>)}}
+         <div className="error">
+            {this.state.error}</div>)}}

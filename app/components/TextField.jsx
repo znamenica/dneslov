@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
 
 import Validation from 'Validation'
+import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
 export default class TextField extends Component {
    static defaultProps = {
       name: 'text',
-      postfix: null,
+      subname: null,
       text: '',
       wrapperClassName: null,
       title: null,
@@ -21,7 +22,6 @@ export default class TextField extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      postfix: PropTypes.string,
       text: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
@@ -36,10 +36,7 @@ export default class TextField extends Component {
       [this.props.name]: this.props.text || '',
    }
 
-   error = this.updateError(this.props.text || '')
-
-   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
-
+   // system
    componentWillReceiveProps(nextProps) {
       if (this.state[this.props.name] != nextProps.text) {
          this.setState({[this.props.name]: nextProps.text || ''})
@@ -58,21 +55,22 @@ export default class TextField extends Component {
       this.updateError(value)
 
       this.setState({[name]: value})
-      if (this.props.postfix) {
-         real = {text: value} // TODO add text as variable subkey
+      if (this.props.subname) {
+         real = {[this.props.subname]: value} // TODO add text as variable subkey
       }
-      this.props.onUpdate({[this.fullname]: real})
+      this.props.onUpdate({[name]: real})
    }
 
    render() {
-      console.log(this.props.name, this.state[this.props.name])
+      console.log(this.props.name, this.state)
+      let error = this.getError(this.state[this.props.name])
 
       return (
          <div
             className={this.props.wrapperClassName}>
             <input
                type='text'
-               className={this.error && 'invalid'}
+               className={error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
@@ -85,5 +83,7 @@ export default class TextField extends Component {
                className='active'
                htmlFor='text'>
                {this.props.title}
-               <div className="error">
-                  {this.error}</div></label></div>)}}
+               <ErrorSpan
+                  key={'error'}
+                  error={error}
+                  ref={e => this.$error = e} /></label></div>)}}

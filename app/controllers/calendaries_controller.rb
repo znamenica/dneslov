@@ -26,7 +26,7 @@ class CalendariesController < ApplicationController
 
       @calendary.save!
 
-      render json: @calendary ;end
+      render json: @calendary, serializer: Admin::CalendarySerializer ;end
 
    # GET /calendaries/update
    def update

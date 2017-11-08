@@ -5,6 +5,7 @@ import { matchLanguages, matchAlphabeths } from 'matchers'
 export default class WikiesCollection extends LanguagedCollection {
    static defaultProps = {
       name: 'wikies',
+      key_name: 'url',
       title: 'Вики-ссылки',
       action: 'Добавь вики-ссылку',
       single: 'Вики-ссылка',
@@ -13,7 +14,7 @@ export default class WikiesCollection extends LanguagedCollection {
          "Языки в вики-ссылках не могут совпадать": matchLanguages,
          "Азбуки в вики-ссылках не могут совпадать": matchAlphabeths,
       },
-      child_text_validations: {
+      child_value_validations: {
          "Вики-ссылка отсутствует": /^$/,
          "Неверный формат вики-ссылки": [ "!", UrlRegexp ],
       }

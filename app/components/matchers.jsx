@@ -27,14 +27,28 @@ export function matchCodes(e) {
           alphabeth_codes.indexOf(e.alphabeth_code) < 0
 }
 
-export function matchLanguages(array) {
-   let languages = array.map(c => {return c.language_code}).filter(c => { return c })
+export function matchLanguages(hash) {
+   let languages = []
+
+   Object.entries(hash).forEach(([key, value]) => {
+      languages.push(value.language_code)
+   })
+
    languages.forEach((l, i) => {if (languages.indexOf(l, i + 1)) { return true }})
    return false
 }
 
-export function matchAlphabeths(array) {
-   let alphabeths = array.map(c => {return c.alphabeth_code}).filter(c => { return c })
+export function matchAlphabeths(hash) {
+   let alphabeths = []
+
+   Object.entries(hash).forEach(([key, value]) => {
+      alphabeths.push(value.alphabeth_code)
+   })
+
    alphabeths.forEach((a, i) => {if (alphabeths.indexOf(a, i + 1)) { return true }})
    return false
+}
+
+export function matchEmptyObject(e) {
+   return Object.values(e).length == 0
 }

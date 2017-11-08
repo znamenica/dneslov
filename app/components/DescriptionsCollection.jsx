@@ -4,6 +4,7 @@ import { matchLanguages, matchAlphabeths, matchLetters } from 'matchers'
 export default class DescriptionsCollection extends LanguagedCollection {
    static defaultProps = {
       name: 'descriptions',
+      key_name: 'text',
       title: 'Описания',
       action: 'Добавь описание',
       single: 'Описание',
@@ -15,7 +16,7 @@ export default class DescriptionsCollection extends LanguagedCollection {
       child_validations: {
          'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
       },
-      child_text_validations: {
+      child_value_validations: {
          "Описание отсутствует": /^$/
       },
    }

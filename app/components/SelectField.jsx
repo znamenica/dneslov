@@ -2,6 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
 
+import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
 
 @mixin(Validation)
@@ -27,8 +28,6 @@ export default class SelectField extends Component {
       [this.props.name]: this.props[this.props.name] || '',
    }
 
-   error = this.updateError(this.props[this.props.name] || '')
-
    // system
    componentDidMount() {
       $(this.$select).material_select()
@@ -42,7 +41,7 @@ export default class SelectField extends Component {
    }
 
    componentDidUpdate() {
-      if (this.error) {
+      if (this.$error.state.error) {
          this.$wrap.classList.add('invalid')
       } else {
          this.$wrap.classList.remove('invalid')
@@ -72,6 +71,7 @@ export default class SelectField extends Component {
 
    render() {
       console.log(this.state[this.props.name])
+      let error = this.getError(this.state[this.props.name])
 
       return (
          <div
@@ -79,7 +79,7 @@ export default class SelectField extends Component {
             className={this.props.wrapperClassName}>
             <select
                ref={e => this.$select = e}
-               className={this.error && 'invalid'}
+               className={error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
@@ -95,5 +95,7 @@ export default class SelectField extends Component {
             <label
                htmlFor={this.props.name}>
                {this.props.title}
-               <div className="error">
-                  {this.error}</div></label></div>)}}
+               <ErrorSpan
+                  key={'error'}
+                  error={error}
+                  ref={e => this.$error = e} /></label></div>)}}

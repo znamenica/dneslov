@@ -18,6 +18,7 @@ export default class Calendaries extends Component {
       calendaries: this.props.calendaries.list,
       page: this.props.calendaries.page,
       total: this.props.calendaries.total,
+      appended: 0,
       query: { page: this.props.calendaries.page },
       current: null
    }
@@ -27,8 +28,8 @@ export default class Calendaries extends Component {
    }
 
    fetchNext() {
-      console.log("STATE", this.state)
       if (this.state.total > this.state.calendaries.length && ! this.isRequesting) {
+         console.log("FETCH NEXT FOR", this.state)
          this.isRequesting = true
          this.submit(this.state.page + 1)
       }
@@ -38,15 +39,18 @@ export default class Calendaries extends Component {
       let index = this.state.calendaries.findIndex((c) => { return c.slug.text == calendary.slug.text })
       let calendaries = this.state.calendaries.slice()
       let total = this.state.total
+      let appended = this.state.appended
 
+      console.log(index)
       if (index < 0) {
-         calendaries.push(calendary)
+         calendaries.unshift(calendary)
          total += 1
+         appended += 1
       } else {
          calendaries[index] = calendary
       }
 
-      this.setState({ calendaries: calendaries, total: total, current: null})
+      this.setState({ calendaries: calendaries, total: total, current: null, appended: appended})
    }
 
    onCalendaryEdit(slug) {
@@ -81,14 +85,26 @@ export default class Calendaries extends Component {
    }
 
    onSuccessLoad(calendaries) {
+      let new_calendaries
+
       console.log("SUCCESS", calendaries)
       if (calendaries.page > 1) {
-         let new_calendaries = this.state.calendaries
-         new_calendaries = new_calendaries.concat(calendaries.list)
-         this.setState({calendaries: new_calendaries, page: calendaries.page})
+         new_calendaries = this.state.calendaries.slice()
+         if (this.state.appended) {
+            let slugs = new_calendaries.map((c) => { return c.slug.text })
+            calendaries.list.forEach((c) => {
+               if (slugs.indexOf(c.slug.text) < 0) {
+                  new_calendaries.push(c)
+               }
+            })
+         } else {
+            new_calendaries = new_calendaries.concat(calendaries.list)
+         }
       } else {
-         this.setState({calendaries: calendaries.list, page: calendaries.page})
+         new_calendaries = calendaries.list
       }
+
+      this.setState({calendaries: new_calendaries, page: calendaries.page})
       console.log("state", this.state)
    }
 
@@ -133,7 +149,7 @@ export default class Calendaries extends Component {
                <tbody>
                   {this.state.calendaries.map((calendary) =>
                      <Calendary
-                        key={calendary.id}
+                        key={calendary.slug.text}
                         locales={this.props.locales}
                         {...calendary}
                         slug={calendary.slug.text}

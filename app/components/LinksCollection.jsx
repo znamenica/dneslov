@@ -5,6 +5,7 @@ import { matchLanguages, matchAlphabeths } from 'matchers'
 export default class LinksCollection extends LanguagedCollection {
    static defaultProps = {
       name: 'links',
+      key_name: 'url',
       title: 'Ссылки',
       action: 'Добавь ссылку',
       single: 'Ссылка',
@@ -13,7 +14,7 @@ export default class LinksCollection extends LanguagedCollection {
          "Языки в ссылках не могут совпадать": matchLanguages,
          "Азбуки в ссылках не могут совпадать": matchAlphabeths,
       },
-      child_text_validations: {
+      child_value_validations: {
          "Ссылка отсутствует": /^$/,
          "Неверный формат вики-ссылки": [ "!", UrlRegexp ],
       }

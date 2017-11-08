@@ -6,6 +6,7 @@ import { mixin } from 'lodash-decorators'
 import TextField from 'TextField'
 import LanguageField from 'LanguageField'
 import AlphabethField from 'AlphabethField'
+import ErrorSpan from 'ErrorSpan'
 import { matchCodes } from 'matchers'
 import Validation from 'Validation'
 
@@ -13,24 +14,24 @@ import Validation from 'Validation'
 export default class LanguagedTextField extends Component {
    static defaultProps = {
       _id: null,
-      text: '',
+      key_name: null,
       language_code: '',
       alphabeth_code: '',
       title: 'Текст',
       placeholder: 'Введи текст',
       onUpdate: null,
-      text_validations: {
+      value_validations: {
          "Текст отсутствует": /^$/
       },
    }
 
    static propTypes = {
       _id: PropTypes.string.isRequired,
-      text: PropTypes.string,
+      key_name: PropTypes.string.isRequired,
       language_code: PropTypes.string,
       alphabeth_code: PropTypes.string,
       onUpdate: PropTypes.func.isRequired,
-      text_validations: PropTypes.object.isRequired,
+      value_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
    }
 
@@ -39,26 +40,24 @@ export default class LanguagedTextField extends Component {
    }
 
    properties = {
-      text: this.props.text,
+      value: this.props[this.props.key_name],
       language_code: this.props.language_code,
       alphabeth_code: this.props.alphabeth_code,
    }
 
    // system
    componentWillReceiveProps(nextProps) {
-      if (this.props.value != nextProps.value) {
-         this.setState({[this.props.name]: nextProps.value})
-         this.updateError(nextProps.value || '')
+      if (this.props[this.props.key_name] != nextProps[nextProps.key_name]) {
+         this.setState({[this.props.key_name]: nextProps[nextProps.key_name]})
+         this.updateError(nextProps[nextProps.key_name] || '')
       }
    }
 
    // events
-
    onChange(property) {
       this.properties = assign(this.properties, property)
       this.updateError(this.properties)
       this.props.onUpdate({[this.props._id]: property})
-      this.forceUpdate()
    }
 
    render() {
@@ -67,12 +66,13 @@ export default class LanguagedTextField extends Component {
       return (
          <div className='row'>
             <TextField
-               ref={'text'}
-               key={'text'}
+               ref={'value'}
+               key={'value'}
                title={this.props.title}
                placeholder={this.props.placeholder}
-               text={this.props.text}
-               validations={this.props.text_validations}
+               name={this.props.key_name}
+               text={this.props[this.props.key_name]}
+               validations={this.props.value_validations}
                wrapperClassName='input-field col xl6 l6 m12 s12'
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
@@ -87,5 +87,8 @@ export default class LanguagedTextField extends Component {
                alphabeth_code={this.props.alphabeth_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} />
-            <div className="col error">
-               {this.error}</div></div>)}}
+            <div className="col">
+               <ErrorSpan
+                  key={'error'}
+                  error={this.getError(this.properties)}
+                  ref={e => this.$error = e} /></div></div>)}}

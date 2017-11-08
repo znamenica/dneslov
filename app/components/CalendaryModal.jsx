@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 
 import CalendaryForm from 'CalendaryForm'
 import SubmitButton from 'SubmitButton'
+import ErrorSpan from 'ErrorSpan'
 
 export default class CalendaryModal extends Component {
    static defaultProps = {
       licit: false,
-      slug: null,
+      slug: {text: ''},
       language_code: '',
       alphabeth_code: '',
       author_name: '',
@@ -57,7 +58,7 @@ export default class CalendaryModal extends Component {
    getCleanState() {
       return {
          licit: false,
-         slug: null,
+         slug: {text: ''},
          language_code: '',
          alphabeth_code: '',
          author_name: '',
@@ -67,7 +68,7 @@ export default class CalendaryModal extends Component {
          descriptions: [],
          wikies: [],
          links: [],
-         open: false
+         open: false,
       }
    }
 
@@ -93,30 +94,38 @@ export default class CalendaryModal extends Component {
       this.modal.modal('close')
    }
 
-   onSubmitError(data) {
-      console.log(data)
-      // add error//
+   onSubmitError(response) {
+      console.log("ERROR", response, this.state, this.$form.query)
+
+      let errors = []
+      Object.entries(response.responseJSON).forEach(([key, value]) => {
+         errors.push(value.map((e) => { return key + " " + e }))
+      })
+
+      this.$error.setState({error: errors.join(", ")})
    }
 
    onSubmit(e) {
+      e.stopPropagation()
+      e.preventDefault()
+
       let settings = {
-         data: { calendary: this.$form.query,
-                 slug: this.$form.query.slug_attributes.text },
+         data: { calendary: this.$form.serializedQuery() },
          dataType: 'JSON',
          error: this.onSubmitError.bind(this),
-         success: this.onSubmitSuccess.bind(this) }
+         success: this.onSubmitSuccess.bind(this),
+      }
 
       if (settings.data.calendary.id) {
+         settings.data.slug = settings.data.calendary.slug_attributes.text
          settings.method = 'PUT'
          settings.url = '/calendaries/' + settings.data.slug + '.json'
       } else {
          settings.method = 'POST'
-         settings.url = '/calendaries/create.json'
+         settings.url = '/calendaries.json'
       }
 
-      e.stopPropagation()
-      e.preventDefault()
-
+      console.log("STATE",this.state)
       console.log(settings)
       $.ajax(settings)
    }
@@ -148,9 +157,15 @@ export default class CalendaryModal extends Component {
                         ref={e => this.$form = e}
                         key={'form'}
                         {...this.state}
-                        onUpdate={this.onFormUpdate.bind(this)}/></div>
+                        onUpdate={this.onFormUpdate.bind(this)} /></div>
                   <div className="modal-footer">
-                     <SubmitButton
-                        ref={e => this.$submit = e}
-                        title={this.props.slug && 'Обнови календарь' || 'Создай календарь'}
-                        valid={false} /></div></form></div></div>)}}
+                     <div className="row">
+                        <div className="col xl9 l8 m7 s6">
+                           <ErrorSpan
+                              ref={e => this.$error = e}
+                              key={'error'} /></div>
+                        <div className="col xl3 l4 m5 s6">
+                           <SubmitButton
+                              ref={e => this.$submit = e}
+                              title={this.props.id && 'Обнови календарь' || 'Создай календарь'}
+                              valid={false} /></div></div></div></form></div></div>)}}

@@ -21,7 +21,7 @@ import Validation from 'Validation'
 export default class CalendaryForm extends Component {
    static defaultProps = {
       licit: false,
-      slug: {},
+      slug: {text: ''},
       language_code: '',
       alphabeth_code: '',
       author_name: '',
@@ -44,6 +44,7 @@ export default class CalendaryForm extends Component {
       'Избранный язык не соотвествует избранной азбуке': matchCodes,
    }
 
+   // query has non-serialized form without '*_attributes' and with uuided hashes
    query = this.deserializedHash(this.props)
 
    componentWillReceiveProps(nextProps) {
@@ -54,48 +55,58 @@ export default class CalendaryForm extends Component {
       return true
    }
 
-   serializedHash(hash) {
-      let result = {}
-
-      Object.entries(hash).forEach(([key, value]) => {
-         if (value instanceof Object) {
-            if (Object.keys(value)[0].match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
-               result[key] = Object.values(value)
-            } else {
-               result[key] = this.serializedHash(value)
-            }
-         } else {
-            result[key] = value
-         }
-      })
-
-      return result
+   serializedQuery() {
+      return this.serializedHash(this.query)
    }
 
    deserializedHash(hash) {
       let result = {}
 
       Object.entries(hash).forEach(([key, value]) => {
-         if (typeof value !== 'object' || value === null) {
-            result[key] = value
-         } else {
-            switch(value.constructor.name) {
-            case 'Array':
-/*               result[key + '_attributes'] = value.reduce((s, v) => {
-                  if (value instanceof Object) {
-                     s[uuid()] = this.deserializedHash(v)
-                  } else {
-                     s[uuid()] = v }
-                  return s }, {})*/
-               result[key + '_attributes'] = value.map((v) => {
-                  return assign({key: uuid()}, this.deserializedHash(v)) })
-               break
-            case 'Object':
-               result[key + '_attributes'] = this.deserializedHash(value)
-               break
-            default:
+         console.log(key, value, (value && value.constructor.name))
+         switch(value && value.constructor.name) {
+         case 'Array':
+            console.log(value[0], value[0] && value[0].constructor.name)
+            if (value[0] instanceof Object) {
+               result[key] = value.reduce((s, v) => {
+                  s[uuid()] = this.deserializedHash(v)
+                  return s
+               }, {})
+            } else {
                result[key] = value
             }
+            break
+         case 'Object':
+            result[key] = this.deserializedHash(value)
+            break
+         default:
+            result[key] = value
+         }
+      })
+
+      console.log(result)
+      return result
+   }
+
+   serializedHash(hash) {
+      let result = {}, subkey
+
+      Object.entries(hash).forEach(([key, value]) => {
+         console.log(key, value, value && value.constructor.name)
+         switch(value && value.constructor.name) {
+         case 'Array':
+            subkey = Object.keys(value)[0]
+            if (subkey && subkey.match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
+               result[key + '_attributes'] = Object.values(value)
+            } else {
+               result[key + '_attributes'] = value
+            }
+            break
+         case 'Object':
+            result[key + '_attributes'] = this.serializedHash(value)
+            break
+         default:
+            result[key] = value
          }
       })
 
@@ -158,6 +169,7 @@ export default class CalendaryForm extends Component {
    }
 
    render() {
+      console.log(this.props)
       console.log(this.query)
 
       return (
@@ -166,8 +178,7 @@ export default class CalendaryForm extends Component {
                <SlugField
                   ref={'slug'}
                   key={'slug'}
-                  slug={this.query.slug_attributes}
-                  postfix='attributes'
+                  slug={this.query.slug}
                   wrapperClassName='input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LanguageField
@@ -188,41 +199,38 @@ export default class CalendaryForm extends Component {
                   licit={this.query.licit}
                   wrapperClassName='fake-input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
-            <ErrorSpan
-               ref={e => this.$error = e}
-               key={'error'}
-               text={this.error} />
+            <div className='row'>
+               <div className='col'>
+                  <ErrorSpan
+                     ref={e => this.$error = e}
+                     key={'error'} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <NamesCollection
                      ref={'names'}
                      key={'names'}
-                     value={this.query.names_attributes}
-                     postfix='attributes'
+                     value={this.query.names}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <DescriptionsCollection
                      ref={'descriptions'}
                      key={'descriptions'}
-                     value={this.query.descriptions_attributes}
-                     postfix='attributes'
+                     value={this.query.descriptions}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <WikiesCollection
                      ref={'wikies'}
                      key={'wikies'}
-                     value={this.query.wikies_attributes}
-                     postfix='attributes'
+                     value={this.query.wikies}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <LinksCollection
                      ref={'links'}
                      key={'links'}
-                     value={this.query.links_attributes}
-                     postfix='attributes'
+                     value={this.query.links}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <TextField

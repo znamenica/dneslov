@@ -6,27 +6,28 @@ import { mixin } from 'lodash-decorators'
 
 import LanguagedTextField from 'LanguagedTextField'
 import Validation from 'Validation'
+import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
 export default class LanguagedCollection extends Component {
    static defaultProps = {
       name: null,
-      postfix: null,
-      value: [],
+      key_name: null,
+      value: {},
       title: null,
       action: null,
       single: null,
       placeholder: null,
       onUpdate: null,
-      child_text_validations: {},
+      child_value_validations: {},
       child_validations: {},
       validations: {},
    }
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      postfix: PropTypes.string,
-      value: PropTypes.array.isRequired,
+      key_name: PropTypes.string.isRequired,
+      value: PropTypes.object.isRequired,
       title: PropTypes.title.isRequired,
       action: PropTypes.action.isRequired,
       child_validations: PropTypes.object.isRequired,
@@ -35,64 +36,67 @@ export default class LanguagedCollection extends Component {
    }
 
    state = {
-      value: this.newStateValue(this.props.value),
+      value: this.props.value
    }
-
-   error = this.updateError(this.props.value)
-
-   fullname = [this.props.name, this.props.postfix].filter((e) => { return e }).join("_")
 
    // system
    componentWillReceiveProps(nextProps) {
-      if (this.props != nextProps) {
-         this.state.value = this.newStateValue(nextProps.value)
+      console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
+      if (this.props.value != nextProps.value) {
+         this.state.value = nextProps.value
          this.updateError(nextProps.value)
        }
    }
 
    // events
    onAddItem() {
-      this.state.value.push({key: uuid()})
+      this.state.value[uuid()] = {}
       this.updateError(this.state.value)
       this.forceUpdate()
    }
 
    onChildUpdate(property) {
-      let error = this.updateError(this.state.value)
-
-      if (error !== this.error) {
-         this.error = error
-         this.forceUpdate()
-      }
-      this.props.onUpdate({[this.fullname]: property})
+      this.updateError(this.state.value)
+      this.props.onUpdate({[this.props.name]: property})
    }
 
    // proprties
-   newStateValue(value) {
-      return value.map((element, index) => {return {key: uuid()}})
+   getElementWith(key, element) {
+      return assign({_id: key, key: key, ref: key}, element, this.props.value[key] || {})
    }
 
-   getElementWith(element, index) {
-      return assign({_id: element.key, ref: element.key}, element, this.props.value[index] || {})
+   as_array() {
+      let a = []
+      Object.entries(this.state.value).forEach(([key, element]) => {
+         a.push(this.getElementWith(key, element))
+      })
+
+      return a
    }
+
 
    render() {
-      console.log(this.state)
-      
+      console.log(this.state,this.as_array())
+
       return (
          <div className='row'>
             <h5>{this.props.title}</h5>
             <div id={this.props.name}>
-               {this.state.value.map((element, index) =>
+               {this.as_array().map((element) =>
                   <LanguagedTextField
                      title={this.props.single}
                      placeholder={this.props.placeholder}
-                     text_validations={this.props.child_text_validations}
+                     value_validations={this.props.child_value_validations}
                      validations={this.props.child_validations}
-                     {...this.getElementWith(element, index)}
+                     key_name={this.props.key_name}
+                     {...element}
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
-            <div className="error">
-               {this.error}</div>
+            <div className='row'>
+               <div className='col'>
+                  <ErrorSpan
+                     error={this.getError(this.state.value)}
+                     key={'error'}
+                     ref={e => this.$error = e} /></div></div>
             <button
                className='btn btn-primary'
                onClick={this.onAddItem.bind(this)}
