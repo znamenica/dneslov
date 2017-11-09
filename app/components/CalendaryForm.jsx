@@ -47,8 +47,6 @@ export default class CalendaryForm extends Component {
    // query has non-serialized form without '*_attributes' and with uuided hashes
    query = this.deserializedHash(this.props)
 
-   r = []
-
    componentWillReceiveProps(nextProps) {
       this.query = this.deserializedHash(nextProps)
    }
@@ -175,6 +173,8 @@ export default class CalendaryForm extends Component {
    }
 
    render() {
+      this.r = []
+
       console.log(this.props)
       console.log(this.query)
 

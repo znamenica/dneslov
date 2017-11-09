@@ -45,8 +45,6 @@ export default class LanguagedTextField extends Component {
       alphabeth_code: this.props.alphabeth_code,
    }
 
-   r = []
-
    // system
    componentWillReceiveProps(nextProps) {
       if (this.props[this.props.key_name] != nextProps[nextProps.key_name]) {
@@ -63,6 +61,8 @@ export default class LanguagedTextField extends Component {
    }
 
    render() {
+      this.r = []
+
       console.log(this.props)
 
       return (

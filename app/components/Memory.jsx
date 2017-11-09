@@ -26,18 +26,22 @@ export default class Memory extends Component {
    }
 
    componentDidMount() {
-      this.$$carousel = $(this.$carousel)
-      window.addEventListener('load', this.componentLoaded.bind(this))
-      Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
-         img.addEventListener('click', this.onIconClick.bind(this))
-      })
+      if (this.$carousel) {
+         this.$$carousel = $(this.$carousel)
+         window.addEventListener('load', this.componentLoaded.bind(this))
+         Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
+            img.addEventListener('click', this.onIconClick.bind(this))
+         })
+      }
    }
 
    componentWillUnmount() {
-      document.removeEventListener('load', this.componentLoaded.bind(this))
-      Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
-         img.removeEventListener('click', this.onIconClick.bind(this))
-      })
+      if (this.$carousel) {
+         document.removeEventListener('load', this.componentLoaded.bind(this))
+         Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
+            img.removeEventListener('click', this.onIconClick.bind(this))
+         })
+      }
    }
 
    onIconClick(e) {
