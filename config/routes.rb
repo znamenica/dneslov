@@ -10,7 +10,7 @@ Rails.application.routes.draw do
    get '/index' => 'memories#index'
 
    slug_options = { '/:slug' => 'memories#show', as: 'slug' }
-   slug_options[ :constraints ] = { slug: /[ёа-я0-9]{1,6}/ } if Rails.env.production? 
+   #slug_options[ :constraints ] = { slug: /[ёа-я0-9]{1,6}/ } if Rails.env.production? 
    get slug_options
   #
   # Example of regular route:
