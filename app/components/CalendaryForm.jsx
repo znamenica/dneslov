@@ -47,6 +47,8 @@ export default class CalendaryForm extends Component {
    // query has non-serialized form without '*_attributes' and with uuided hashes
    query = this.deserializedHash(this.props)
 
+   r = []
+
    componentWillReceiveProps(nextProps) {
       this.query = this.deserializedHash(nextProps)
    }
@@ -127,14 +129,18 @@ export default class CalendaryForm extends Component {
          state = {level: 0, parent: null}
       }
 
-      let result = [node]
+      let result = []
 
-      if (node.refs) {
-         Object.values(node.refs).forEach((child) => {
-            let child_result = this._traverse_map(child, {
-               level: state.level + 1, parent: node})
-            result = result.concat(child_result)
-         })
+      if (node) {
+         result.push(node)
+
+         if (node.r) {
+            node.r.forEach((child) => {
+               let child_result = this._traverse_map(child, {
+                  level: state.level + 1, parent: node})
+               result = result.concat(child_result)
+            })
+         }
       }
 
       return result
@@ -176,25 +182,25 @@ export default class CalendaryForm extends Component {
          <div>
             <div className='row'>
                <SlugField
-                  ref={'slug'}
+                  ref={e => this.r.push(e)}
                   key={'slug'}
                   slug={this.query.slug}
                   wrapperClassName='input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LanguageField
-                  ref={'languageField'}
+                  ref={e => this.r.push(e)}
                   key={'languageField'}
                   language_code={this.query.language_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <AlphabethField
-                  ref={'alphabethField'}
+                  ref={e => this.r.push(e)}
                   key={'alphabethField'}
                   alphabeth_code={this.query.alphabeth_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LicitBox
-                  ref={'licitBox'}
+                  ref={e => this.r.push(e)}
                   key={'licitBox'}
                   licit={this.query.licit}
                   wrapperClassName='fake-input-field col xl2 l2 m4 s12'
@@ -207,34 +213,34 @@ export default class CalendaryForm extends Component {
             <div className='row'>
                <div className='col l12 s12'>
                   <NamesCollection
-                     ref={'names'}
+                     ref={e => this.r.push(e)}
                      key={'names'}
                      value={this.query.names}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <DescriptionsCollection
-                     ref={'descriptions'}
+                     ref={e => this.r.push(e)}
                      key={'descriptions'}
                      value={this.query.descriptions}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <WikiesCollection
-                     ref={'wikies'}
+                     ref={e => this.r.push(e)}
                      key={'wikies'}
                      value={this.query.wikies}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <LinksCollection
-                     ref={'links'}
+                     ref={e => this.r.push(e)}
                      key={'links'}
                      value={this.query.links}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <TextField
-                  ref={'authorName'}
+                  ref={e => this.r.push(e)}
                   key={'authorName'}
                   name='author_name'
                   title='Автор'
@@ -243,7 +249,7 @@ export default class CalendaryForm extends Component {
                   wrapperClassName='input-field col xl6 l6 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
-                  ref={'date'}
+                  ref={e => this.r.push(e)}
                   key={'date'}
                   name='date'
                   title='Пора'
@@ -252,7 +258,7 @@ export default class CalendaryForm extends Component {
                   wrapperClassName='input-field col xl3 l3 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
-                  ref={'council'}
+                  ref={e => this.r.push(e)}
                   key={'council'}
                   name='council'
                   title='Собор'

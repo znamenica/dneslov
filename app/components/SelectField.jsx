@@ -49,7 +49,7 @@ export default class SelectField extends Component {
    }
 
    componentWillReceiveProps(nextProps) {
-      if (this.props[this.props.name] != nextProps[this.props.name]) {
+      if (this.state[this.props.name] != nextProps[this.props.name]) {
          let value = nextProps[this.props.name] || ''
          $(this.$select).material_select('destroy')
          this.setState({[this.props.name]: value})

@@ -45,6 +45,8 @@ export default class LanguagedTextField extends Component {
       alphabeth_code: this.props.alphabeth_code,
    }
 
+   r = []
+
    // system
    componentWillReceiveProps(nextProps) {
       if (this.props[this.props.key_name] != nextProps[nextProps.key_name]) {
@@ -66,7 +68,7 @@ export default class LanguagedTextField extends Component {
       return (
          <div className='row'>
             <TextField
-               ref={'value'}
+               ref={e => this.r.push(e)}
                key={'value'}
                title={this.props.title}
                placeholder={this.props.placeholder}
@@ -76,13 +78,13 @@ export default class LanguagedTextField extends Component {
                wrapperClassName='input-field col xl6 l6 m12 s12'
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
-               ref={'language_code'}
+               ref={e => this.r.push(e)}
                key={'language_code'}
                language_code={this.props.language_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} />
             <AlphabethField
-               ref={'alphabeth_code'}
+               ref={e => this.r.push(e)}
                key={'alphabeth_code'}
                alphabeth_code={this.props.alphabeth_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
