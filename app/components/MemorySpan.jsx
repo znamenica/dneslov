@@ -12,7 +12,7 @@ export default class MemorySpan extends Component {
       }
    }
 
-   renderImage = () => {
+   renderImage() {
       let img
 
       if (this.props.memory.icon_url) {
@@ -24,19 +24,20 @@ export default class MemorySpan extends Component {
       return img
    }
 
-   onAvatarClick = (e) => {
+   onAvatarClick(e) {
       // TODO fix propagation after 1 sec when clicked on avatar
       e.stopPropagation()
+      e.preventDefault()
    }
 
-   render = () => {
+   render() {
       return (
          <li className='collection-item avatar memory View_child'>
             <div className='collapsible-header'>
                <a
                   href={this.props.memory.url}
                   target='_blank'
-                  onClick={this.onAvatarClick} >
+                  onClick={this.onAvatarClick.bind(this)} >
                   {this.renderImage()}</a>
                <Chip
                   color={this.props.memory.order.color}

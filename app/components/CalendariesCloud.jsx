@@ -1,4 +1,5 @@
 import { Component } from 'react'
+
 import Chip from 'Chip'
 
 export default class CalendariesCloud extends Component {
@@ -8,21 +9,21 @@ export default class CalendariesCloud extends Component {
       onAct: null,
    }
 
-   onChipAct = (data) => {
+   onChipAct(data) {
       this.props.onAct(data)
    }
 
-   isCalendaryUsed = (calendary) => {
+   isCalendaryUsed(calendary) {
       return this.props.calendaries_used.reduce((used, slug) => {
          return used || (slug == calendary.slug)
       }, false)
    }
 
-   actionFor = (calendary) => {
+   actionFor(calendary) {
       return this.isCalendaryUsed(calendary) ? null : 'add'
    }
 
-   render = () => {
+   render() {
       console.log(this.props)
 
       return (
@@ -36,5 +37,4 @@ export default class CalendariesCloud extends Component {
                   color={calendary.color}
                   url={calendary.url}
                   action={this.actionFor(calendary)}
-                  onAct={this.onChipAct} />)}
-         </div>)}}
+                  onAct={this.onChipAct.bind(this)} />)}</div>)}}

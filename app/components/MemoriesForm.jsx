@@ -1,4 +1,5 @@
 import { Component } from 'react'
+
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
 import SearchField from 'SearchField'
@@ -95,7 +96,7 @@ export default class MemoriesForm extends Component {
 
       console.log("Sending...", this.state)
 
-      $.get('/index.json', this.state.query, this.onSuccessLoad, 'JSON')
+      $.get('/index.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
    }
 
    render() {
@@ -110,11 +111,11 @@ export default class MemoriesForm extends Component {
                   <div className='hidden' id='calendary' />
                   <div className='row'>
                      <PickMeUpCalendar
-                        onUpdate={this.onCalendarUpdate} />
+                        onUpdate={this.onCalendarUpdate.bind(this)} />
                      <CalendariesCloud
                         calendaries={this.props.calendaries_cloud}
                         calendaries_used={this.props.calendaries_used}
-                        onAct={this.onCloudAct} /></div></div>
+                        onAct={this.onCloudAct.bind(this)} /></div></div>
                <div className='col s12 m7 l8 xl9'>
                   {this.state.memory &&
                      <Memory
@@ -123,13 +124,13 @@ export default class MemoriesForm extends Component {
                      <div>
                         <SearchField
                            with_text={this.state.query.with_tokens.join(" ")}
-                           onUpdate={this.onSearchUpdate} />
+                           onUpdate={this.onSearchUpdate.bind(this)} />
                         <SearchConditions
                            date={this.state.query.with_date[0]}
                            calendaries={this.calendariesUsed()}
                            query={this.state.query.with_tokens}
-                           onAct={this.onSearchAct} />
+                           onAct={this.onSearchAct.bind(this)} />
                         <MemorySpans
                            memories={this.state.memories.list}
                            total_memories={this.state.memories.total}
-                           onFetchNext={this.onFetchNext}/></div>}</div></form></div>)}}
+                           onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div>)}}

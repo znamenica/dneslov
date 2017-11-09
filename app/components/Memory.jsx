@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import IconLoryModal from 'IconLoryModal'
 import Chip from 'Chip'
 
@@ -20,39 +21,42 @@ export default class Memory extends Component {
       }
    }
 
-   componentLoaded = () => {
-      // TODO probably make dynamic image loading with adding them to carousel
-      this.$carousel.carousel()
+   componentLoaded() {
+      this.$$carousel.carousel()
    }
 
-   componentDidMount = () => {
-      this.$carousel = $(this.carousel)
-      window.addEventListener('load', this.componentLoaded)
+   componentDidMount() {
+      this.$$carousel = $(this.$carousel)
+      window.addEventListener('load', this.componentLoaded.bind(this))
+      Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
+         img.addEventListener('click', this.onIconClick.bind(this))
+      })
    }
 
-   componentWillUnmount = () => {
-      document.removeEventListener('load', this.componentLoaded)
+   componentWillUnmount() {
+      document.removeEventListener('load', this.componentLoaded.bind(this))
+      Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
+         img.removeEventListener('click', this.onIconClick.bind(this))
+      })
    }
 
-   onIconClick = (e) => {
+   onIconClick(e) {
       if (e.target.className.match(/\bactive\b/)) {
-         e.nativeEvent.stopPropagation()
+         e.stopPropagation()
          let index = e.target.getAttribute('data-index')
          this.lory.openModal(index)
       }
    }
 
-   onLorySlideFrom = (e) => {
+   onLorySlideFrom(e) {
       let index = parseInt(e.detail.nextSlide)
 
       if (index >= 0) {
-         this.$carousel.carousel('set', e.detail.nextSlide);
+         this.$$carousel.carousel('set', e.detail.nextSlide);
       }
    }
 
-   render = () => {
-      console.log("Memory", this.props)
-
+   render() {
       return (
          <div className='row'>
             <div className='col s12'>
@@ -140,11 +144,10 @@ export default class Memory extends Component {
                      <div className='col s12'>
                         <div
                            className='carousel compact'
-                           ref={carousel => this.carousel = carousel} >
+                           ref={e => this.$carousel = e} >
                            {this.props.memory.icons.map((icon) =>
                               <img
                                  key={icon.id}
-                                 onClick={this.onIconClick.bind(this)}
                                  className='carousel-item'
                                  alt={icon.description}
                                  src={icon.url}
@@ -166,6 +169,6 @@ export default class Memory extends Component {
             {this.props.memory.icons.length > 0 &&
                <IconLoryModal
                   key='lory'
-                  ref={lory => this.lory = lory }
-                  onLorySlideFrom={this.onLorySlideFrom}
+                  ref={e => this.lory = e}
+                  onLorySlideFrom={this.onLorySlideFrom.bind(this)}
                   links={this.props.memory.icons} />}</div>)}}

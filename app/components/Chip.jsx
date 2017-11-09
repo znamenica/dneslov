@@ -26,47 +26,41 @@ export default class Chip extends Component {
       action: this.props.action
    }
 
-   constructor(props) {
-      super(props)
-
-      this.onAct = this.onAct.bind(this)
-   }
-
-   componentWillReceiveProps = (nextProps) => {
+   componentWillReceiveProps(nextProps) {
       if (nextProps.action !== this.props.action) {
          this.state.action = nextProps.action
       }
    }
 
-   onAct = (e) => {
+   onAct(e) {
       e.stopPropagation()
       this.setState({ action: null })
       this.props.onAct(this.props.data)
    }
 
-   className = () => {
+   className() {
       return 'chip ' + (this.props.className || '')
    }
 
-   closeClassName = () => {
+   closeClassName() {
       return 'material-icons close ' + (this.state.action || '')
    }
 
-   actionIcon = () => {
+   actionIcon() {
       return this.state.action == 'remove' && 'close' || this.state.action
    }
 
-   actionRender = () => {
+   actionRender() {
       let action = null
 
       if (this.state.action) {
-         action = <i className={this.closeClassName()} onClick={this.onAct} >{this.actionIcon()}</i>
+         action = <i className={this.closeClassName()} onClick={this.onAct.bind(this)} >{this.actionIcon()}</i>
       }
 
       return action
    }
 
-   textRender = () => {
+   textRender() {
       let text
 
       if (this.props.children) {
@@ -80,11 +74,10 @@ export default class Chip extends Component {
       return text
    }
 
-   render = () => {
+   render() {
       return (
          <div
             className={this.className()}
             style={{ backgroundColor: '#' + this.props.color }} >
             {this.textRender()}
-            {this.actionRender()}
-         </div>)}}
+            {this.actionRender()}</div>)}}

@@ -44,7 +44,7 @@ export default class MemorySpans extends Component {
                {this.props.memories.map((memory) =>
                   <MemorySpan key={memory.slug} memory={memory} />)}
                <ReactScrollPagination
-                  fetchFunc={this.fetchNext} /></ul>)
+                  fetchFunc={this.fetchNext.bind(this)} /></ul>)
       } else {
          rendered = (
             <div className='card-panel'>

@@ -108,6 +108,10 @@ body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
    display: none;
 }
 
+.fit {
+   width: fit-content !important;
+}
+
 //#####
 
 nav .brand-logo {

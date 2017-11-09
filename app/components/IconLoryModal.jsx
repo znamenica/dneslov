@@ -7,7 +7,7 @@ export default class IconLoryModal extends Component {
       onLorySlideFrom: null,
    }
 
-   componentLoaded = () => {
+   componentLoaded() {
       this.modal = $(this.$modal).modal()
       this.lory = lory(this.$lory, {
          slideSpeed: 750,
@@ -17,7 +17,7 @@ export default class IconLoryModal extends Component {
       })
    }
 
-   loryResize = () => {
+   loryResize() {
       this.items_width = [...this.$modal.querySelectorAll('li')].reduce((width, li) => {
          return width + li.clientWidth + parseInt(getComputedStyle(li).marginRight)
       }, 0)
@@ -26,13 +26,15 @@ export default class IconLoryModal extends Component {
       if (this.lory_scroll) {
          this.$lory.querySelector('.prev').classList.remove('hidden')
          this.$lory.querySelector('.next').classList.remove('hidden')
+         this.$lory.classList.remove('fit')
       } else {
          this.$lory.querySelector('.prev').classList.add('hidden')
          this.$lory.querySelector('.next').classList.add('hidden')
+         this.$lory.classList.add('fit')
       }
    }
 
-   componentDidMount = () => {
+   componentDidMount() {
       this.$lory.addEventListener('after.lory.init', this.loryResize.bind(this))
       this.$lory.addEventListener('on.lory.resize', this.loryResize.bind(this))
       this.$lory.addEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
@@ -40,7 +42,7 @@ export default class IconLoryModal extends Component {
       document.addEventListener('click', this.onDocumentClick.bind(this))
    }
 
-   componentWillUnmount = () => {
+   componentWillUnmount() {
       this.$lory.removeEventListener('before.lory.init', this.loryResize.bind(this))
       this.$lory.removeEventListener('on.lory.resize', this.loryResize.bind(this))
       this.$lory.removeEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
@@ -48,7 +50,7 @@ export default class IconLoryModal extends Component {
       document.removeEventListener('click', this.onDocumentClick.bind(this))
    }
 
-   openModal = (index) => {
+   openModal(index) {
       if (this.lory_scroll) {
          document.body.style.overflowY = 'hidden' // required to fix width of modal in proper value
          // TODO fix scroll to last (it is buggy)
@@ -58,7 +60,7 @@ export default class IconLoryModal extends Component {
       $(this.modal).modal('open')
    }
 
-   onDocumentClick = (e) => {
+   onDocumentClick(e) {
       // TODO click to transparent area of the modal, get fired to the modal, not the 
       // page. Fix it then.
       if (! e.cancelBubble && this.isOpen() && ! e.target.closest('.modal')) {
@@ -66,24 +68,25 @@ export default class IconLoryModal extends Component {
       }
    }
 
-   isOpen = () => {
+   isOpen() {
       return this.$modal.classList.contains('open')
    }
 
-   render = () => {
+   render() {
       return (
          <div
             className='modal'
             id='slider-modal'
-            ref={$modal => this.$modal = $modal} >
-            <div className='modal-content'>
+            ref={e => this.$modal = e} >
+            <div className='modal-content'
+                  ref={e => this.$co = e} >
                <div
                   className='lory_slider js_lory_slider'
-                  ref={$lory => this.$lory = $lory} >
+                  ref={e => this.$lory = e} >
                   <div
-                     onClick={this.onClick}
                      className='frame js_frame'>
-                     <ul className='slides js_slides'>
+                     <ul
+                        className='slides js_slides'>
                         {this.props.links.map((link) =>
                            <li
                               key={link.id} >

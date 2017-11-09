@@ -3732,7 +3732,7 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1:
 
 "lory.js@git+https://github.com/majioa/lory.git#devel":
   version "0.0.0-semantic-release"
-  resolved "git+https://github.com/majioa/lory.git#43cdfe4cf2d6ec8104cdf3fdff809b4664de72bc"
+  resolved "git+https://github.com/majioa/lory.git#85a98ea743f676851e69efda344e7782f1045f8a"
 
 loud-rejection@^1.0.0:
   version "1.6.0"

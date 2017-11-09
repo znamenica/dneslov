@@ -17,11 +17,11 @@ export default class SearchConditions extends Component {
       onAct: PropTypes.func.isRequired,
    }
 
-   onChipAct = (data) => {
+   onChipAct(data) {
       this.props.onAct(data)
    }
 
-   renderDate = () => {
+   renderDate() {
       let date
 
       if (this.props.date) {
@@ -30,12 +30,13 @@ export default class SearchConditions extends Component {
                   data={{date: this.props.date}}
                   text={this.props.date}
                   action='remove'
-                  onAct={this.onChipAct} />
+                  onAct={this.onChipAct.bind(this)} />
       }
 
       return date
    }
-   render = () => {
+
+   render() {
       console.log(this.props)
 
       return (
@@ -52,7 +53,7 @@ export default class SearchConditions extends Component {
                      className='calendary'
                      text={calendary.name}
                      action='remove'
-                     onAct={this.onChipAct} />)}
+                     onAct={this.onChipAct.bind(this)} />)}
                {this.props.query.map((token, index) =>
                   <Chip
                      key={index}
@@ -60,6 +61,4 @@ export default class SearchConditions extends Component {
                      className='token'
                      text={token}
                      action='remove'
-                     onAct={this.onChipAct} />)}
-            </div>
-         </div>)}}
+                     onAct={this.onChipAct.bind(this)} />)}</div></div>)}}
