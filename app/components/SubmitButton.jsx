@@ -16,7 +16,13 @@ export default class SubmitButton extends Component {
       valid: this.props.valid
    }
 
+   componentWillReceiveProps(nextProps) {
+      this.state.valid = nextProps.valid
+   }
+
    render() {
+      console.log(this.state)
+
       return (
          <button
             type='submit'

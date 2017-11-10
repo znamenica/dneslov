@@ -40,6 +40,11 @@ export default class LanguagedCollection extends Component {
    }
 
    // system
+   componentWillMount() {
+      this.r = new Array
+      this.updateError(this.state.value)
+   }
+
    componentWillReceiveProps(nextProps) {
       console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
       if (this.props.value != nextProps.value) {
@@ -62,7 +67,7 @@ export default class LanguagedCollection extends Component {
 
    // proprties
    getElementWith(key, element) {
-      return assign({_id: key, key: key, ref: key}, element, this.props.value[key] || {})
+      return assign({_id: key, key: key}, element, this.props.value[key] || {})
    }
 
    as_array() {
@@ -84,6 +89,7 @@ export default class LanguagedCollection extends Component {
             <div id={this.props.name}>
                {this.as_array().map((element) =>
                   <LanguagedTextField
+                     ref={e => this.r.push(e)}
                      title={this.props.single}
                      placeholder={this.props.placeholder}
                      value_validations={this.props.child_value_validations}
@@ -94,7 +100,7 @@ export default class LanguagedCollection extends Component {
             <div className='row'>
                <div className='col'>
                   <ErrorSpan
-                     error={this.getError(this.state.value)}
+                     error={this.error}
                      key={'error'}
                      ref={e => this.$error = e} /></div></div>
             <button

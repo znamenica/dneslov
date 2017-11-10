@@ -47,12 +47,18 @@ export default class CalendaryForm extends Component {
    // query has non-serialized form without '*_attributes' and with uuided hashes
    query = this.deserializedHash(this.props)
 
+   valid = false
+
    componentWillReceiveProps(nextProps) {
       this.query = this.deserializedHash(nextProps)
    }
 
    shouldComponentUpdate(nextProps, nextState) {
       return true
+   }
+
+   componentDidUpdate() {
+      this.validate()
    }
 
    serializedQuery() {
@@ -132,7 +138,7 @@ export default class CalendaryForm extends Component {
       if (node) {
          result.push(node)
 
-         if (node.r) {
+         if (node.r && node.r.length) {
             node.r.forEach((child) => {
                let child_result = this._traverse_map(child, {
                   level: state.level + 1, parent: node})
@@ -169,7 +175,12 @@ export default class CalendaryForm extends Component {
    }*/
 
    validate() {
-      this.valid = this._traverse_map(this).reduce((v, c) => { return v && (! c.isValid || c.isValid()) }, true)
+      if (this.r && this.r.length) {
+         console.log(this._traverse_map(this))
+         this.valid = this._traverse_map(this).reduce((v, c) => { 
+            return v && (! c.isValid || c.isValid()) }, true)
+         console.log(this.valid)
+      }
    }
 
    render() {

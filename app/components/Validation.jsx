@@ -42,6 +42,8 @@ const Validation = {
       if (this.$error) {
          this.$error.setState({error: this.error})
       }
+
+      return this.error
    },
 
    isValid() {

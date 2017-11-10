@@ -29,6 +29,10 @@ export default class SelectField extends Component {
    }
 
    // system
+   componentWillMount() {
+      this.updateError(this.state[this.props.name])
+   }
+
    componentDidMount() {
       $(this.$select).material_select()
       $(this.$select).on('change', this.onChange.bind(this))
@@ -41,7 +45,7 @@ export default class SelectField extends Component {
    }
 
    componentDidUpdate() {
-      if (this.$error.state.error) {
+      if (this.error) {
          this.$wrap.classList.add('invalid')
       } else {
          this.$wrap.classList.remove('invalid')
@@ -70,16 +74,13 @@ export default class SelectField extends Component {
    }
 
    render() {
-      console.log(this.state[this.props.name])
-      let error = this.getError(this.state[this.props.name])
-
       return (
          <div
             ref={e => this.$parent = e}
             className={this.props.wrapperClassName}>
             <select
                ref={e => this.$select = e}
-               className={error && 'invalid'}
+               className={this.error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
@@ -97,5 +98,5 @@ export default class SelectField extends Component {
                {this.props.title}
                <ErrorSpan
                   key={'error'}
-                  error={error}
+                  error={this.error}
                   ref={e => this.$error = e} /></label></div>)}}

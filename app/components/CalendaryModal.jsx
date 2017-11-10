@@ -140,6 +140,7 @@ export default class CalendaryModal extends Component {
    }
 
    onFormUpdate() {
+      console.log(this.$form.valid)
       this.$submit.setState({valid: this.$form.valid})
    }
 
@@ -176,5 +177,4 @@ export default class CalendaryModal extends Component {
                         <div className="col xl3 l4 m5 s6">
                            <SubmitButton
                               ref={e => this.$submit = e}
-                              title={this.props.id && 'Обнови календарь' || 'Создай календарь'}
-                              valid={false} /></div></div></div></form></div></div>)}}
+                              title={this.props.id && 'Обнови календарь' || 'Создай календарь'} /></div></div></div></form></div></div>)}}

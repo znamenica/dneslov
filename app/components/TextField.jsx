@@ -44,6 +44,10 @@ export default class TextField extends Component {
       }
    }
 
+   componentWillMount() {
+      this.updateError(this.state[this.props.name])
+   }
+
    componentDidMount() {
       if (this.props.data['length']) {
          $(this.$input).characterCounter()
@@ -66,15 +70,12 @@ export default class TextField extends Component {
    }
 
    render() {
-      console.log(this.props.name, this.state)
-      let error = this.getError(this.state[this.props.name])
-
       return (
          <div
             className={this.props.wrapperClassName}>
             <input
                type='text'
-               className={error && 'invalid'}
+               className={this.error && 'invalid'}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}
@@ -89,5 +90,5 @@ export default class TextField extends Component {
                {this.props.title}
                <ErrorSpan
                   key={'error'}
-                  error={error}
+                  error={this.error}
                   ref={e => this.$error = e} /></label></div>)}}

@@ -92,5 +92,5 @@ export default class LanguagedTextField extends Component {
             <div className="col">
                <ErrorSpan
                   key={'error'}
-                  error={this.getError(this.properties)}
+                  error={this.updateError(this.properties)}
                   ref={e => this.$error = e} /></div></div>)}}
