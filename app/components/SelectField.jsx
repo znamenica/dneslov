@@ -94,6 +94,7 @@ export default class SelectField extends Component {
                      value={option} >
                      {this.props.codeNames[option]}</option>)}</select>
             <label
+               className='active'
                htmlFor={this.props.name}>
                {this.props.title}
                <ErrorSpan

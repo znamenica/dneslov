@@ -310,6 +310,24 @@ main > .container {
    }
 }
 
+.input-field label:not(.label-icon).active {
+   height: 4.5rem;
+}
+
+.select-wrapper + label {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 4.5rem;
+   font-size: 1rem;
+   cursor: text;
+   transition: transform .2s ease-out;
+   transform-origin: 0% 100%;
+   text-align: initial;
+   transform: translateY(12px);
+   pointer-events: none;
+}
+
 // this should be fixed in various cases
 .error {
    color: #F44336;
@@ -317,6 +335,10 @@ main > .container {
    transition: .2s opacity ease-out, .2s color ease-out;
    box-sizing: inherit;
    white-space: nowrap;
+   font-size: 0.8rem;
+}
+
+label.active .error {
    font-size: 1rem;
 }
 
