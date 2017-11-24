@@ -58,7 +58,7 @@ export default class TextField extends Component {
       let value = nextState[nextProps.name], real = value
 
       this.updateError(value)
-      console.log(this.error)
+
       if (nextProps.subname) {
          real = {[nextProps.subname]: value} // TODO add text as variable subkey
       }

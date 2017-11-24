@@ -5,43 +5,40 @@ import * as assign from 'assign-deep'
 import { mixin } from 'lodash-decorators'
 
 import SlugField from 'SlugField'
-import LanguageField from 'LanguageField'
-import AlphabethField from 'AlphabethField'
-import LicitBox from 'LicitBox'
-import NamesAsDescriptionsCollection from 'NamesAsDescriptionsCollection'
 import DescriptionsCollection from 'DescriptionsCollection'
+import BeingsCollection from 'BeingsCollection'
 import WikiesCollection from 'WikiesCollection'
-import LinksCollection from 'LinksCollection'
+import PatericsCollection from 'PatericsCollection'
+import MemoryNamesCollection from 'MemoryNamesCollection'
+import EventsCollection from 'EventsCollection'
+import OrderField from 'OrderField'
 import TextField from 'TextField'
+import PlaceField from 'PlaceField'
+import DynamicField from 'DynamicField'
 import ErrorSpan from 'ErrorSpan'
 import { matchCodes } from 'matchers'
 import Validation from 'Validation'
 
 @mixin(Validation)
-export default class CalendaryForm extends Component {
+export default class MemoryForm extends Component {
    static defaultProps = {
-      licit: false,
       slug: {text: ''},
-      language_code: '',
-      alphabeth_code: '',
-      author_name: '',
-      date: '',
+      order: null,
       council: '',
-      names: [],
+      quantity: '',
+      sight_id: '',
+      covers_to_id: '',
       descriptions: [],
       wikies: [],
-      links: [],
+      beings: [],
+      paterics: [],
+      memory_names: [],
+      events: [],
    }
 
    static propTypes = {
       slug: PropTypes.object,
-      licit: PropTypes.boolean,
-      language_code: PropTypes.string,
-      alphabeth_code: PropTypes.object,
-   }
-
-   static validations = {
-      'Избранный язык не соотвествует избранной азбуке': matchCodes,
+      order: PropTypes.string.isRequired,
    }
 
    // query has non-serialized form without '*_attributes' and with uuided hashes
@@ -51,10 +48,15 @@ export default class CalendaryForm extends Component {
 
    componentWillReceiveProps(nextProps) {
       this.query = this.deserializedHash(nextProps)
+      console.log(this.query, nextProps)
    }
 
    shouldComponentUpdate(nextProps, nextState) {
       return true
+   }
+
+   componentWillMount() {
+      this.r = new Array
    }
 
    componentDidUpdate() {
@@ -182,10 +184,16 @@ export default class CalendaryForm extends Component {
          console.log(this.valid)
       }
    }
+/*
+   isCouncil() {
+      this.state.order == 'сбр'
+   }
 
+   isIcon() {
+      this.state.order == 'обр'
+   }
+*/
    render() {
-      this.r = []
-
       console.log(this.props)
       console.log(this.query)
 
@@ -194,86 +202,100 @@ export default class CalendaryForm extends Component {
             <div className='row'>
                <SlugField
                   ref={e => this.r.push(e)}
-                  key={'slug'}
+                  key='slug'
                   slug={this.query.slug}
-                  wrapperClassName='input-field col xl2 l2 m4 s12'
+                  wrapperClassName='input-field col xl2 l2 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
-               <LanguageField
+               <OrderField
                   ref={e => this.r.push(e)}
-                  key={'languageField'}
-                  language_code={this.query.language_code}
-                  wrapperClassName='input-field col xl4 l4 m8 s12'
+                  key='order'
+                  order={this.query.order}
+                  wrapperClassName='input-field col xl5 l5 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
-               <AlphabethField
+               <TextField
                   ref={e => this.r.push(e)}
-                  key={'alphabethField'}
-                  alphabeth_code={this.query.alphabeth_code}
-                  wrapperClassName='input-field col xl4 l4 m8 s12'
+                  key='council'
+                  name='council'
+                  title='Собор'
+                  placeholder='Введи сокращение собора'
+                  text={this.query.council}
+                  wrapperClassName='input-field col xl5 l5 m6 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} /></div>
+            <div className='row'>
+               <PlaceField
+                  ref={e => this.r.push(this.$covers_to = e)}
+                  key='covers_to'
+                  name='covers_to_id'
+                  title='Покровительство'
+                  placeholder='Введи место покровительства'
+                  text={this.query.covers_to}
+                  wrapperClassName='input-field col xl4 l4 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
-               <LicitBox
+               <TextField
                   ref={e => this.r.push(e)}
-                  key={'licitBox'}
-                  licit={this.query.licit}
-                  wrapperClassName='fake-input-field col xl2 l2 m4 s12'
+                  key='quantity'
+                  name='quantity'
+                  title='Количество'
+                  placeholder='Введи количество'
+                  text={this.query.quantity}
+                  wrapperClassName='input-field col xl4 l4 m6 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <DynamicField
+                  ref={e => this.r.push(this.$sight = e)}
+                  key='sight'
+                  pathname='icons'
+                  key_name='short_name'
+                  value_name='id'
+                  name='sight'
+                  title='Вид'
+                  placeholder='Введи вид образа'
+                  text={this.query.sight}
+                  wrapperClassName='input-field col xl4 l4 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
             <div className='row'>
                <div className='col'>
                   <ErrorSpan
                      ref={e => this.$error = e}
-                     key={'error'} /></div></div>
-            <div className='row'>
-               <div className='col l12 s12'>
-                  <NamesAsDescriptionssCollection
-                     ref={e => this.r.push(e)}
-                     key={'names'}
-                     value={this.query.names}
-                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+                     key='error' /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <DescriptionsCollection
                      ref={e => this.r.push(e)}
-                     key={'descriptions'}
+                     key='descriptions'
                      value={this.query.descriptions}
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <BeingsCollection
+                     ref={e => this.r.push(e)}
+                     key='beings'
+                     value={this.query.beings}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <WikiesCollection
                      ref={e => this.r.push(e)}
-                     key={'wikies'}
+                     key='wikies'
                      value={this.query.wikies}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
-                  <LinksCollection
+                  <PatericsCollection
                      ref={e => this.r.push(e)}
-                     key={'links'}
-                     value={this.query.links}
+                     key='paterics'
+                     value={this.query.paterics}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
-               <TextField
-                  ref={e => this.r.push(e)}
-                  key={'authorName'}
-                  name='author_name'
-                  title='Автор'
-                  placeholder='Введи имя автора(ов)'
-                  text={this.query.author_name}
-                  wrapperClassName='input-field col xl6 l6 m4 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} />
-               <TextField
-                  ref={e => this.r.push(e)}
-                  key={'date'}
-                  name='date'
-                  title='Пора'
-                  placeholder='Введи пору написания'
-                  text={this.query.date}
-                  wrapperClassName='input-field col xl3 l3 m4 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} />
-               <TextField
-                  ref={e => this.r.push(e)}
-                  key={'council'}
-                  name='council'
-                  title='Собор'
-                  placeholder='Введи сокращение собора'
-                  text={this.query.council}
-                  wrapperClassName='input-field col xl3 l3 m4 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} /></div></div>)}}
+               <div className='col l12 s12'>
+                  <MemoryNamesCollection
+                     ref={e => this.r.push(e)}
+                     key='memory_names'
+                     value={this.query.memory_names}
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <EventsCollection
+                     ref={e => this.r.push(e)}
+                     key='events'
+                     value={this.query.events}
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div></div>)}}

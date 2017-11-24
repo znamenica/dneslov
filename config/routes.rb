@@ -6,12 +6,18 @@ Rails.application.routes.draw do
    root 'memories#index'
 
    resources :calendaries, param: :slug, except: :edit
+   scope module: 'admin' do
+      resources :memories, param: :slug, except: :edit
+      get '/names' => 'names#all'
+      get '/places' => 'places#all'
+      get '/items' => 'items#all'
+      get '/icons' => 'memories#icons'
+   end
 
    get '/index' => 'memories#index'
 
-   slug_options = { '/:slug' => 'memories#show', as: 'slug' }
    #slug_options[ :constraints ] = { slug: /[ёа-я0-9]{1,6}/ } if Rails.env.production? 
-   get slug_options
+   get '/:slug' => 'memories#show', as: 'slug', slug: /.{1,6}/
   #
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

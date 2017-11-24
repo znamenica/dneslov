@@ -121,7 +121,7 @@ export default class Calendaries extends Component {
       console.log(this.state)
 
       return (
-         <div className='calendaries'>
+         <div className='calendaries list'>
             <div className="row">
                <div className="col m8 s6">
                   <h4

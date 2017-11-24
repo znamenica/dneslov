@@ -69,7 +69,7 @@ export default class LanguagedTextField extends Component {
          <div className='row'>
             <TextField
                ref={e => this.r.push(e)}
-               key={'value'}
+               key='value'
                title={this.props.title}
                placeholder={this.props.placeholder}
                name={this.props.key_name}
@@ -79,13 +79,13 @@ export default class LanguagedTextField extends Component {
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
                ref={e => this.r.push(e)}
-               key={'language_code'}
+               key='language_code'
                language_code={this.props.language_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} />
             <AlphabethField
                ref={e => this.r.push(e)}
-               key={'alphabeth_code'}
+               key='alphabeth_code'
                alphabeth_code={this.props.alphabeth_code}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChange.bind(this)} />

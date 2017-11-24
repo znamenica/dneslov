@@ -4,20 +4,17 @@ import * as assign from 'assign-deep'
 import * as uuid from 'uuid/v1'
 import { mixin } from 'lodash-decorators'
 
-import LanguagedTextField from 'LanguagedTextField'
+import EventBlock from 'EventBlock'
 import Validation from 'Validation'
 import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
-export default class LanguagedCollection extends Component {
+export default class EventsCollection extends Component {
    static defaultProps = {
       name: null,
-      key_name: null,
       value: {},
       title: null,
       action: null,
-      single: null,
-      placeholder: null,
       onUpdate: null,
       child_value_validations: {},
       child_validations: {},
@@ -26,7 +23,6 @@ export default class LanguagedCollection extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      key_name: PropTypes.string.isRequired,
       value: PropTypes.object.isRequired,
       title: PropTypes.title.isRequired,
       action: PropTypes.action.isRequired,
@@ -50,7 +46,7 @@ export default class LanguagedCollection extends Component {
       if (this.props.value != nextProps.value) {
          this.state.value = nextProps.value
          this.updateError(nextProps.value)
-       }
+      }
    }
 
    // events
@@ -85,17 +81,13 @@ export default class LanguagedCollection extends Component {
 
       return (
          <div className='row'>
-            <h5>{this.props.title}</h5>
+            <h5>События</h5>
             <div id={this.props.name}>
                {this.asArray().map((element) =>
-                  <LanguagedTextField
+                  <EventBlock
                      ref={e => this.r.push(e)}
-                     title={this.props.single}
-                     placeholder={this.props.placeholder}
-                     value_validations={this.props.child_value_validations}
-                     validations={this.props.child_validations}
-                     key_name={this.props.key_name}
                      {...element}
+                     wrapperClassName='input-field col xl3 l3 m4 s12'
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
             <div className='row'>
                <div className='col'>
@@ -108,4 +100,4 @@ export default class LanguagedCollection extends Component {
                onClick={this.onAddItem.bind(this)}
                type='button'>
                <i className='small material-icons'>add_to_photos</i>
-               {this.props.action}</button></div>)}}
+               Добавь событие</button></div>)}}

@@ -4,12 +4,12 @@ import * as assign from 'assign-deep'
 import * as uuid from 'uuid/v1'
 import { mixin } from 'lodash-decorators'
 
-import LanguagedTextField from 'LanguagedTextField'
+import MemoryNameBlock from 'MemoryNameBlock'
 import Validation from 'Validation'
 import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
-export default class LanguagedCollection extends Component {
+export default class MemoryNamesCollection extends Component {
    static defaultProps = {
       name: null,
       key_name: null,
@@ -50,7 +50,7 @@ export default class LanguagedCollection extends Component {
       if (this.props.value != nextProps.value) {
          this.state.value = nextProps.value
          this.updateError(nextProps.value)
-       }
+      }
    }
 
    // events
@@ -79,22 +79,16 @@ export default class LanguagedCollection extends Component {
       return a
    }
 
-
    render() {
       console.log(this.state,this.asArray())
 
       return (
          <div className='row'>
-            <h5>{this.props.title}</h5>
+            <h5>Имена</h5>
             <div id={this.props.name}>
                {this.asArray().map((element) =>
-                  <LanguagedTextField
+                  <MemoryNameBlock
                      ref={e => this.r.push(e)}
-                     title={this.props.single}
-                     placeholder={this.props.placeholder}
-                     value_validations={this.props.child_value_validations}
-                     validations={this.props.child_validations}
-                     key_name={this.props.key_name}
                      {...element}
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
             <div className='row'>
@@ -108,4 +102,4 @@ export default class LanguagedCollection extends Component {
                onClick={this.onAddItem.bind(this)}
                type='button'>
                <i className='small material-icons'>add_to_photos</i>
-               {this.props.action}</button></div>)}}
+               Добавь имя</button></div>)}}
