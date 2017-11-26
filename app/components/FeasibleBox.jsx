@@ -23,11 +23,16 @@ export default class FeasibleBox extends Component {
    }
 
    onCheck(e) {
-      this.setState({feasibly: e.target.checked})
-      this.props.onUpdate('feasibly', e.target.checked)
+      console.log(11111)
+      let value = e.target.checked
+
+      this.setState({feasibly: value})
+      this.props.onUpdate('feasibly', value)
    }
 
    render() {
+      console.log(22222, this.state.feasibly)
+
       return (
          <div
             className={this.props.wrapperClassName}>

@@ -41,6 +41,10 @@ export default class MemoryNameBlock extends Component {
       this.props.onUpdate({[this.props.name]: property})
    }
 
+   isFeasible() {
+      return this.props.feasibly == 'feasible'
+   }
+
    render() {
       console.log(this.props)
 
@@ -50,13 +54,14 @@ export default class MemoryNameBlock extends Component {
                ref={e => this.r.push(e)}
                key='feasibly'
                name='feasibly'
-               feasibly={this.props.feasibly}
+               feasibly={this.isFeasible()}
                wrapperClassName='input-field col xl3 l3 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <MemoryNameField
                ref={e => this.r.push(e)}
                key='name_id'
                name_id={this.props.name_id}
+               text={this.props.name}
                wrapperClassName='input-field col xl3 l3 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <NameStateField

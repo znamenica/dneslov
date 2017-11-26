@@ -38,7 +38,7 @@ export default class DynamicField extends Component {
    }
 
    state = {
-      [this.props.name]: this.props.text || '',
+      [this.props.name]: this.props[this.props.name] || '',
       fixed: false,
    }
 
@@ -49,7 +49,7 @@ export default class DynamicField extends Component {
 
    // system
    componentWillReceiveProps(nextProps) {
-      console.log(nextProps)
+      console.log(nextProps, this.props)
       if (this.value() != nextProps[nextProps.name]) {
          this.setState({[this.props.name]: nextProps[nextProps.name] || ''})
          this.updateError(nextProps[nextProps.name] || '')
@@ -118,6 +118,14 @@ export default class DynamicField extends Component {
       this.$input.dispatchEvent(new KeyboardEvent('keyup',{'key':'Shift'})); //triggers popup
    }
 
+   valueText() {
+      if (this.value() == this.props[this.props.name]) {
+         return this.props.text
+      } else {
+         return this.data.list[this.value()]
+      }
+   }
+
    value() {
       return this.state[this.props.name] || ''
    }
@@ -140,12 +148,14 @@ export default class DynamicField extends Component {
       this.triggered = undefined
    }
 
+   onSuccessLoadText(dynamic_data) {
+      this.storeDynamicData(dynamic_data)
+
+      this.forceUpdate()
+   }
+
    onSuccessLoad(dynamic_data) {
-      this.data.total = dynamic_data.total
-      this.data.list = dynamic_data.list.reduce((h, x) => {
-         h[x[this.props.key_name]] = x[this.props.value_name]
-         return h
-      }, {})
+      this.storeDynamicData(dynamic_data)
 
       console.log("SUCCESS", dynamic_data)
 
@@ -163,6 +173,14 @@ export default class DynamicField extends Component {
       }
    }
 
+   storeDynamicData(dynamic_data) {
+      this.data.total = dynamic_data.total
+      this.data.list = dynamic_data.list.reduce((h, x) => {
+         h[x[this.props.key_name]] = x[this.props.value_name]
+         return h
+      }, {})
+   }
+
    render() {
       return (
          <div
@@ -176,13 +194,13 @@ export default class DynamicField extends Component {
                   id={this.props.name}
                   name={this.props.name}
                   placeholder={this.props.placeholder}
-                  value={this.value()}
+                  value={this.valueText()}
                   onChange={this.onChange.bind(this)} />}
             {this.hasValue() &&
                <Chip
                   key={this.props.name}
                   color='eee'
-                  text={this.value()}
+                  text={this.valueText()}
                   onAct={this.onChipAct.bind(this)} />}
             <label
                className='active'

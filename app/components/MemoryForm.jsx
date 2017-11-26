@@ -226,6 +226,7 @@ export default class MemoryForm extends Component {
                   ref={e => this.r.push(this.$covers_to = e)}
                   key='covers_to'
                   name='covers_to_id'
+                  pure_name='covers_to'
                   title='Покровительство'
                   placeholder='Введи место покровительства'
                   text={this.query.covers_to}
@@ -246,7 +247,8 @@ export default class MemoryForm extends Component {
                   pathname='icons'
                   key_name='short_name'
                   value_name='id'
-                  name='sight'
+                  name='sight_id'
+                  pure_name='sight'
                   title='Вид'
                   placeholder='Введи вид образа'
                   text={this.query.sight}

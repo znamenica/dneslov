@@ -6,19 +6,19 @@ class Admin::MemorySerializer < ApplicationSerializer
       SlugSerializer.new(object.slug) ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions, locales: @instance_options[:locales]) ;end
 
    def wikies
-      ActiveModel::Serializer::CollectionSerializer.new(object.wikies) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.wikies, locales: @instance_options[:locales]) ;end
 
    def beings
-      ActiveModel::Serializer::CollectionSerializer.new(object.beings) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.beings, locales: @instance_options[:locales]) ;end
 
    def events
-      ActiveModel::Serializer::CollectionSerializer.new(object.events) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.events, locales: @instance_options[:locales]) ;end
 
    def memory_names
-      ActiveModel::Serializer::CollectionSerializer.new(object.memory_names) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.memory_names, locales: @instance_options[:locales]) ;end
 
    def paterics
-      ActiveModel::Serializer::CollectionSerializer.new(object.paterics) ;end;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.paterics, locales: @instance_options[:locales]) ;end;end

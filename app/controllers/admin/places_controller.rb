@@ -1,7 +1,7 @@
 class Admin::PlacesController < Admin::CommonController
-   def all
-      @places = model.with_token(params[:with_token])
+   before_action :set_places, only: %i(all)
 
+   def all
       respond_to do |format|
          format.json { render :index, json: @places.limit(500),
                                       locales: @locales,
@@ -11,6 +11,15 @@ class Admin::PlacesController < Admin::CommonController
       end;end
 
    protected
+
+   def set_places
+      @places =
+      if params[:with_token]
+         model.with_token(params[:with_token])
+      elsif params[:with_value] && params[:value_name]
+         model.where(params[:value_name] => params[:with_value])
+      else
+         model.none ;end;end
 
    def model
       Place ;end
