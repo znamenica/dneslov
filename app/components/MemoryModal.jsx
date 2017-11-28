@@ -9,6 +9,8 @@ export default class MemoryModal extends Component {
    static defaultProps = {
       id: null,
       slug: {text: ''},
+      short_name: '',
+      base_year: 0,
       order: '',
       council: '',
       quantity: '',
@@ -39,6 +41,7 @@ export default class MemoryModal extends Component {
    }
 
    getDefaultState(props = this.props) {
+      console.log(props)
       return {
          id: props.id,
          slug: props.slug,
@@ -47,7 +50,6 @@ export default class MemoryModal extends Component {
          quantity: props.quantity,
          sight_id: props.sight_id,
          covers_to_id: props.covers_to_id,
-         names: props.names,
          descriptions: props.descriptions,
          wikies: props.wikies,
          beings: props.beings,
@@ -62,11 +64,12 @@ export default class MemoryModal extends Component {
          id: null,
          slug: {text: ''},
          order: '',
+         short_name: '',
+         base_year: 0,
          council: '',
          quantity: '',
          sight_id: 0,
          covers_to_id: 0,
-         names: [],
          descriptions: [],
          wikies: [],
          beings: [],
@@ -84,6 +87,8 @@ export default class MemoryModal extends Component {
    }
 
    componentDidUpdate() {
+      this.$submit.setState({valid: this.$form.valid})
+
       if (this.props.open) {
          this.modal.modal('open')
       }
@@ -150,7 +155,6 @@ export default class MemoryModal extends Component {
    }
 
    render() {
-      console.log(this.props)
       console.log(this.state)
 
       return (
@@ -182,4 +186,4 @@ export default class MemoryModal extends Component {
                         <div className="col xl3 l4 m5 s6">
                            <SubmitButton
                               ref={e => this.$submit = e}
-                              title={this.props.id && 'Обнови календарь' || 'Создай календарь'} /></div></div></div></form></div></div>)}}
+                              title={this.props.id && 'Обнови память' || 'Создай память'} /></div></div></div></form></div></div>)}}

@@ -13,6 +13,8 @@ import MemoryNamesCollection from 'MemoryNamesCollection'
 import EventsCollection from 'EventsCollection'
 import OrderField from 'OrderField'
 import TextField from 'TextField'
+import BaseYearField from 'BaseYearField'
+import ShortNameField from 'ShortNameField'
 import PlaceField from 'PlaceField'
 import DynamicField from 'DynamicField'
 import ErrorSpan from 'ErrorSpan'
@@ -23,6 +25,8 @@ import Validation from 'Validation'
 export default class MemoryForm extends Component {
    static defaultProps = {
       slug: {text: ''},
+      base_year: 0,
+      short_name: '',
       order: null,
       council: '',
       quantity: '',
@@ -111,7 +115,12 @@ export default class MemoryForm extends Component {
             }
             break
          case 'Object':
-            result[key + '_attributes'] = this.serializedHash(value)
+            subkey = Object.keys(value)[0]
+            if (subkey && subkey.match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
+               result[key + '_attributes'] = Object.values(value)
+            } else {
+               result[key + '_attributes'] = this.serializedHash(value)
+            }
             break
          default:
             result[key] = value
@@ -123,8 +132,8 @@ export default class MemoryForm extends Component {
    }
 
    onChildUpdate(value) {
-      console.log(value)
       this.query = assign({}, this.query, value)
+      console.log(value, this.query)
       this.updateError(this.query)
       this.validate()
       this.props.onUpdate()
@@ -206,20 +215,23 @@ export default class MemoryForm extends Component {
                   slug={this.query.slug}
                   wrapperClassName='input-field col xl2 l2 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
+               <ShortNameField
+                  ref={e => this.r.push(e)}
+                  key='shortName'
+                  text={this.query.short_name}
+                  wrapperClassName='input-field col xl3 l3 m6 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
                <OrderField
                   ref={e => this.r.push(e)}
                   key='order'
                   order={this.query.order}
                   wrapperClassName='input-field col xl5 l5 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
-               <TextField
+               <BaseYearField
                   ref={e => this.r.push(e)}
-                  key='council'
-                  name='council'
-                  title='Собор'
-                  placeholder='Введи сокращение собора'
-                  text={this.query.council}
-                  wrapperClassName='input-field col xl5 l5 m6 s12'
+                  key='baseYear'
+                  text={this.query.base_year}
+                  wrapperClassName='input-field col xl2 l2 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
             <div className='row'>
                <PlaceField
@@ -234,12 +246,21 @@ export default class MemoryForm extends Component {
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
                   ref={e => this.r.push(e)}
+                  key='council'
+                  name='council'
+                  title='Собор'
+                  placeholder='Введи сокращение собора'
+                  text={this.query.council}
+                  wrapperClassName='input-field col xl2 l2 m6 s12'
+                  onUpdate={this.onChildUpdate.bind(this)} />
+               <TextField
+                  ref={e => this.r.push(e)}
                   key='quantity'
                   name='quantity'
                   title='Количество'
                   placeholder='Введи количество'
                   text={this.query.quantity}
-                  wrapperClassName='input-field col xl4 l4 m6 s12'
+                  wrapperClassName='input-field col xl2 l2 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <DynamicField
                   ref={e => this.r.push(this.$sight = e)}
@@ -264,6 +285,7 @@ export default class MemoryForm extends Component {
                   <DescriptionsCollection
                      ref={e => this.r.push(e)}
                      key='descriptions'
+                     name='descriptions'
                      value={this.query.descriptions}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -271,6 +293,7 @@ export default class MemoryForm extends Component {
                   <BeingsCollection
                      ref={e => this.r.push(e)}
                      key='beings'
+                     name='beings'
                      value={this.query.beings}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -278,6 +301,7 @@ export default class MemoryForm extends Component {
                   <WikiesCollection
                      ref={e => this.r.push(e)}
                      key='wikies'
+                     name='wikies'
                      value={this.query.wikies}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -285,6 +309,7 @@ export default class MemoryForm extends Component {
                   <PatericsCollection
                      ref={e => this.r.push(e)}
                      key='paterics'
+                     name='paterics'
                      value={this.query.paterics}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -292,6 +317,7 @@ export default class MemoryForm extends Component {
                   <MemoryNamesCollection
                      ref={e => this.r.push(e)}
                      key='memory_names'
+                     name='memory_names'
                      value={this.query.memory_names}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -299,5 +325,6 @@ export default class MemoryForm extends Component {
                   <EventsCollection
                      ref={e => this.r.push(e)}
                      key='events'
+                     name='events'
                      value={this.query.events}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div></div>)}}

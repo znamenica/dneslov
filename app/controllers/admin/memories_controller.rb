@@ -26,7 +26,7 @@ class Admin::MemoriesController < Admin::CommonController
       params.require( :memory ).permit(
          :view_string, :covers_to_id, :sight_id, :short_name, :order, :council, :quantity,
          slug_attributes: [:id, :text],
-         memory_names_attributes: [:id, :name_id, :state, :feasibly, :ored],
+         memory_names_attributes: [:id, :name_id, :state, :feasible, :ored],
          events_attributes: [
             :id, :happened_at, :type, :person_name, :type_number,
             :about_string, :tezo_string, :order, :council], #place_id, #item_id

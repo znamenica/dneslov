@@ -17,6 +17,7 @@ export default class LanguagedCollection extends Component {
       title: null,
       action: null,
       single: null,
+      textField: false,
       placeholder: null,
       onUpdate: null,
       child_value_validations: {},
@@ -95,6 +96,7 @@ export default class LanguagedCollection extends Component {
                      value_validations={this.props.child_value_validations}
                      validations={this.props.child_validations}
                      key_name={this.props.key_name}
+                     textField={this.props.textField}
                      {...element}
                      onUpdate={this.onChildUpdate.bind(this)} />)}</div>
             <div className='row'>

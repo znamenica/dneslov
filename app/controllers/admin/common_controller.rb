@@ -1,7 +1,7 @@
 class Admin::CommonController < ApplicationController
    before_action :set_page, only: %i(index)
    before_action :set_locales
-   before_action :set_memory, only: %i(show update destroy)
+   before_action :set_object, only: %i(show update destroy)
    layout 'admin'
 
    rescue_from ActiveRecord::RecordNotUnique,
@@ -27,13 +27,13 @@ class Admin::CommonController < ApplicationController
 
       @object.save!
 
-      render json: @object, serializer: object_serializer ;end
+      render json: @object, serializer: object_serializer, locales: @locales ;end
 
    # PUT /<objects>/1
    def update
       @object.update!( permitted_params )
 
-      render json: @object, serializer: object_serializer ;end
+      render json: @object, serializer: object_serializer, locales: @locales ;end
 
    # GET /<objects>/1
    def show

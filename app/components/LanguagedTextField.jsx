@@ -15,6 +15,7 @@ export default class LanguagedTextField extends Component {
    static defaultProps = {
       _id: null,
       key_name: null,
+      textField: false,
       language_code: '',
       alphabeth_code: '',
       title: 'Текст',
@@ -53,6 +54,10 @@ export default class LanguagedTextField extends Component {
       }
    }
 
+   componentWillMount() {
+      this.r = new Array
+   }
+
    // events
    onChange(property) {
       this.properties = assign(this.properties, property)
@@ -60,9 +65,23 @@ export default class LanguagedTextField extends Component {
       this.props.onUpdate({[this.props._id]: property})
    }
 
-   render() {
-      this.r = []
+   getTextClass() {
+      if (this.props.textField) {
+         return 'input-field col xl12 l12 m12 s12'
+      } else {
+         return 'input-field col xl6 l6 m12 s12'
+      }
+   }
 
+   getSelectClass() {
+      if (this.props.textField) {
+         return 'input-field col xl6 l6 m12 s12'
+      } else {
+         return 'input-field col xl3 l3 m6 s12'
+      }
+   }
+
+   render() {
       console.log(this.props)
 
       return (
@@ -74,20 +93,21 @@ export default class LanguagedTextField extends Component {
                placeholder={this.props.placeholder}
                name={this.props.key_name}
                text={this.props[this.props.key_name]}
+               textArea={this.props.textField}
                validations={this.props.value_validations}
-               wrapperClassName='input-field col xl6 l6 m12 s12'
+               wrapperClassName={this.getTextClass()}
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
                ref={e => this.r.push(e)}
                key='language_code'
                language_code={this.props.language_code}
-               wrapperClassName='input-field col xl3 l3 m6 s12'
+               wrapperClassName={this.getSelectClass()}
                onUpdate={this.onChange.bind(this)} />
             <AlphabethField
                ref={e => this.r.push(e)}
                key='alphabeth_code'
                alphabeth_code={this.props.alphabeth_code}
-               wrapperClassName='input-field col xl3 l3 m6 s12'
+               wrapperClassName={this.getSelectClass()}
                onUpdate={this.onChange.bind(this)} />
             <div className="col">
                <ErrorSpan

@@ -1,5 +1,5 @@
 class Admin::MemorySerializer < ApplicationSerializer
-   attributes :short_name, :slug, :order, :council, :quantity, :view_string,
+   attributes :id, :short_name, :slug, :order, :council, :quantity, :view_string, :base_year,
               :beings, :wikies, :paterics, :descriptions, :memory_names, :events
 
    def slug

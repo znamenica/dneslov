@@ -17,8 +17,9 @@ export default class MemoryNameBlock extends Component {
    static defaultProps = {
       _id: null,
       name_id: null,
+      name: null,
       state: null,
-      feasibly: null,
+      feasible: null,
       mode: null,
       onUpdate: null,
    }
@@ -26,8 +27,9 @@ export default class MemoryNameBlock extends Component {
    static propTypes = {
       _id: PropTypes.string.isRequired,
       name_id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
       state: PropTypes.string.isRequired,
-      feasibly: PropTypes.boolean.isRequired,
+      feasible: PropTypes.boolean.isRequired,
       mode: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }
@@ -38,11 +40,7 @@ export default class MemoryNameBlock extends Component {
    }
 
    onChildUpdate(property) {
-      this.props.onUpdate({[this.props.name]: property})
-   }
-
-   isFeasible() {
-      return this.props.feasibly == 'feasible'
+      this.props.onUpdate({[this.props._id]: property})
    }
 
    render() {
@@ -50,16 +48,9 @@ export default class MemoryNameBlock extends Component {
 
       return (
          <div className='row'>
-            <FeasibleBox
-               ref={e => this.r.push(e)}
-               key='feasibly'
-               name='feasibly'
-               feasibly={this.isFeasible()}
-               wrapperClassName='input-field col xl3 l3 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
             <MemoryNameField
                ref={e => this.r.push(e)}
-               key='name_id'
+               key='nameId'
                name_id={this.props.name_id}
                text={this.props.name}
                wrapperClassName='input-field col xl3 l3 m4 s12'
@@ -77,4 +68,11 @@ export default class MemoryNameBlock extends Component {
                name='mode'
                mode={this.props.mode}
                wrapperClassName='input-field col xl3 l3 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} /></div>)}}
+               onUpdate={this.onChildUpdate.bind(this)} />
+            <FeasibleBox
+               ref={e => this.r.push(e)}
+               key='feasibleBox'
+               feasible={this.props.feasible}
+               wrapperClassName='fake-input-field col xl2 l2 m4 s12'
+               onUpdate={this.onChildUpdate.bind(this)} />
+         </div>)}}

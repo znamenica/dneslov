@@ -40,7 +40,7 @@ export default class EventBlock extends Component {
    }
 
    onChildUpdate(property) {
-      this.props.onUpdate({[this.props.name]: property})
+      this.props.onUpdate({[this.props._id]: property})
    }
 
    render() {
@@ -50,13 +50,13 @@ export default class EventBlock extends Component {
          <div className='row'>
             <TextField
                ref={e => this.r.push(e)}
-               key='happened_at'
+               key='happenedAt'
                name='happened_at'
                title='Случилось в...'
                placeholder='Введи пору'
                text={this.props.happened_at}
                validations={this.props.value_validations}
-               wrapperClassName='input-field col xl3 l3 m6 s12'
+               wrapperClassName='input-field col xl5 l5 m6 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <EventTypeField
                ref={e => this.r.push(e)}
@@ -67,14 +67,14 @@ export default class EventBlock extends Component {
                onUpdate={this.onChildUpdate.bind(this)} />
             <ItemField
                ref={e => this.r.push(e)}
-               key='item_id'
+               key='itemId'
                item_id={this.props.item_id}
                text={this.props.item}
-               wrapperClassName='input-field col xl5 l5 m4 s12'
+               wrapperClassName='input-field col xl3 l3 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <PlaceField
                ref={e => this.r.push(e)}
-               key='place_id'
+               key='placeId'
                title='Место происшествия'
                place_id={this.props.place_id}
                text={this.props.place}
@@ -82,7 +82,7 @@ export default class EventBlock extends Component {
                onUpdate={this.onChildUpdate.bind(this)} />
             <TextField
                ref={e => this.r.push(e)}
-               key='person_name'
+               key='personName'
                name='person_name'
                title='Имя связанной личности...'
                placeholder='Введи имя'

@@ -79,6 +79,8 @@ export default class CalendaryModal extends Component {
    }
 
    componentDidUpdate() {
+      this.$submit.setState({valid: this.$form.valid})
+
       if (this.props.open) {
          this.modal.modal('open')
       }

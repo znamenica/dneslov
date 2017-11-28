@@ -1,48 +1,51 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
+// TODO this can't be used in arrays since the only first box is checked at all
 export default class FeasibleBox extends Component {
    static defaultProps = {
-      feasibly: null,
+      feasible: null,
       wrapperClassName: null,
       onUpdate: null,
    }
 
    static propTypes = {
-      feasibly: PropTypes.boolean.isRequired,
+      feasible: PropTypes.boolean.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }
 
    state = {
-      feasibly: this.props.feasibly
+      feasible: this.props.feasible || false
    }
 
    componentWillReceiveProps(nextProps) {
-      this.setState({feasibly: nextProps.feasibly})
+      if (nextProps != this.props) {
+         this.setState({feasible: nextProps.feasible || false})
+      }
    }
 
    onCheck(e) {
-      console.log(11111)
       let value = e.target.checked
 
-      this.setState({feasibly: value})
-      this.props.onUpdate('feasibly', value)
+      this.setState({feasible: value})
+      this.props.onUpdate({feasible: value})
    }
 
    render() {
-      console.log(22222, this.state.feasibly)
+      console.log(this.props)
+      console.log(this.state)
 
       return (
          <div
             className={this.props.wrapperClassName}>
             <input
-               key='feasibly'
+               key='feasible'
                type='checkbox'
-               id='feasibly'
-               name='feasibly'
+               id='feasible'
+               name='feasible'
                onChange={this.onCheck.bind(this)}
-               checked={this.state.feasibly} />
+               checked={this.state.feasible} />
             <label
-               htmlFor='feasibly'>
+               htmlFor='feasible'>
                Вероятное</label></div>)}}

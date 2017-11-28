@@ -14,6 +14,7 @@ export default class TextField extends Component {
       wrapperClassName: null,
       title: null,
       placeholder: null,
+      textArea: false,
       data: {},
       validations: {},
       onUpdate: null,
@@ -49,7 +50,7 @@ export default class TextField extends Component {
    }
 
    componentDidMount() {
-      if (this.props.data['length']) {
+      if (this.props.data && this.props.data['length']) {
          $(this.$input).characterCounter()
       }
    }
@@ -65,6 +66,13 @@ export default class TextField extends Component {
       this.props.onUpdate({[nextProps.name]: real})
    }
 
+   componentDidUpdate() {
+      if (this.props.textArea) {
+         $(this.$input).trigger('autoresize') //TODO don't work
+      }
+   }
+
+   // events
    onChange(e) {
       this.setState({[this.props.name]: e.target.value})
    }
@@ -73,17 +81,30 @@ export default class TextField extends Component {
       return (
          <div
             className={this.props.wrapperClassName}>
-            <input
-               type='text'
-               className={this.error && 'invalid'}
-               key={this.props.name}
-               id={this.props.name}
-               name={this.props.name}
-               ref={c => {this.$input = c}}
-               placeholder={this.props.placeholder}
-               value={this.state[this.props.name] || ''}
-               data-length={this.props.data['length']}
-               onChange={this.onChange.bind(this)} />
+            {this.props.textArea &&
+               <textarea
+                  type='text'
+                  className={'materialize-textarea ' + (this.error && 'invalid' || '')}
+                  key={this.props.name}
+                  id={this.props.name}
+                  name={this.props.name}
+                  ref={c => {this.$input = c}}
+                  placeholder={this.props.placeholder}
+                  value={this.state[this.props.name] || ''}
+                  data-length={this.props.data && this.props.data['length']}
+                  onChange={this.onChange.bind(this)} />}
+            {!this.props.textArea &&
+               <input
+                  type='text'
+                  className={this.error && 'invalid'}
+                  key={this.props.name}
+                  id={this.props.name}
+                  name={this.props.name}
+                  ref={c => {this.$input = c}}
+                  placeholder={this.props.placeholder}
+                  value={this.state[this.props.name] || ''}
+                  data-length={this.props.data && this.props.data['length']}
+                  onChange={this.onChange.bind(this)} />}
             <label
                className='active'
                htmlFor='text'>

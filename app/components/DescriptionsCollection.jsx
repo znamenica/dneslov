@@ -9,6 +9,7 @@ export default class DescriptionsCollection extends LanguagedCollection {
       action: 'Добавь описание',
       single: 'Описание',
       placeholder: 'Введи описание',
+      textField: true,
       validations: {
          "Языки в описаниях не могут совпадать": matchLanguages,
          "Азбуки в описаниях не могут совпадать": matchAlphabeths,
