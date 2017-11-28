@@ -25,7 +25,7 @@ import Validation from 'Validation'
 export default class MemoryForm extends Component {
    static defaultProps = {
       slug: {text: ''},
-      base_year: 0,
+      base_year: '',
       short_name: '',
       order: null,
       council: '',
@@ -230,7 +230,7 @@ export default class MemoryForm extends Component {
                <BaseYearField
                   ref={e => this.r.push(e)}
                   key='baseYear'
-                  text={this.query.base_year}
+                  text={this.query.base_year.toString()}
                   wrapperClassName='input-field col xl2 l2 m6 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
             <div className='row'>
