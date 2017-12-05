@@ -1,6 +1,4 @@
-class Admin::NamesController < Admin::CommonController
-   has_scope :with_token, only: %i(index)
-
+class Admin::MemoryNamesController < Admin::CommonController
    def all
       @names = model.with_token(params[:with_token])
 

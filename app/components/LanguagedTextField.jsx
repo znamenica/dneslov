@@ -62,7 +62,11 @@ export default class LanguagedTextField extends Component {
    onChange(property) {
       this.properties = assign(this.properties, property)
       this.updateError(this.properties)
-      this.props.onUpdate({[this.props._id]: property})
+      if (this.props._id) {
+         this.props.onUpdate({[this.props._id]: property})
+      } else {
+         this.props.onUpdate(property)
+      }
    }
 
    getTextClass() {
@@ -99,18 +103,18 @@ export default class LanguagedTextField extends Component {
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
                ref={e => this.r.push(e)}
-               key='language_code'
+               key='languageCode'
                language_code={this.props.language_code}
                wrapperClassName={this.getSelectClass()}
                onUpdate={this.onChange.bind(this)} />
             <AlphabethField
                ref={e => this.r.push(e)}
-               key='alphabeth_code'
+               key='alphabethCode'
                alphabeth_code={this.props.alphabeth_code}
                wrapperClassName={this.getSelectClass()}
                onUpdate={this.onChange.bind(this)} />
             <div className="col">
                <ErrorSpan
-                  key={'error'}
-                  error={this.updateError(this.properties)}
+                  key='error'
+                  error={this.getError(this.properties)}
                   ref={e => this.$error = e} /></div></div>)}}

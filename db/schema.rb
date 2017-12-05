@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128133800) do
+ActiveRecord::Schema.define(version: 20171129142100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,13 +156,16 @@ ActiveRecord::Schema.define(version: 20171128133800) do
 
   create_table "names", id: :serial, force: :cascade do |t|
     t.string "text", null: false
-    t.string "type", default: "", null: false
     t.string "language_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "similar_to_id"
+    t.integer "bond_to_id"
     t.string "alphabeth_code", null: false
-    t.index ["text", "type", "alphabeth_code"], name: "index_names_on_text_and_type_and_alphabeth_code", unique: true
+    t.integer "root_id"
+    t.string "bind_kind", null: false
+    t.index ["bond_to_id", "bind_kind"], name: "index_names_on_bond_to_id_and_bind_kind"
+    t.index ["root_id"], name: "index_names_on_root_id"
+    t.index ["text", "alphabeth_code"], name: "index_names_on_text_and_alphabeth_code", unique: true
   end
 
   create_table "places", id: :serial, force: :cascade do |t|

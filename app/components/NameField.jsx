@@ -1,12 +1,12 @@
 import DynamicField from 'DynamicField'
 
-export default class MemoryNameField extends DynamicField {
+export default class NameField extends DynamicField {
    static defaultProps = {
-      pathname: 'memory_names',
+      pathname: 'short_names',
       name: 'name_id',
       key_name: 'name',
       value_name: 'id',
       title: 'Имя',
-      placeholder: 'Избери имя...',
+      placeholder: 'Начни ввод имени...',
    }
 }

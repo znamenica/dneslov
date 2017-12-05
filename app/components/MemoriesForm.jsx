@@ -122,9 +122,11 @@ export default class MemoriesForm extends Component {
                         memory={this.props.memory} />}
                   {! this.state.memory &&
                      <div>
-                        <SearchField
-                           with_text={this.state.query.with_tokens.join(" ")}
-                           onUpdate={this.onSearchUpdate.bind(this)} />
+                        <div className='row'>
+                           <SearchField
+                              wrapperNameClass='col s12'
+                              with_text={this.state.query.with_tokens.join(" ")}
+                              onUpdate={this.onSearchUpdate.bind(this)} /></div>
                         <SearchConditions
                            date={this.state.query.with_date[0]}
                            calendaries={this.calendariesUsed()}

@@ -12,9 +12,9 @@ export default class DynamicField extends Component {
       pathname: null,
       key_name: null,
       value_name: null,
+      field_name: 'text_id',
       name: 'text',
       subname: null,
-      text: '',
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -28,7 +28,7 @@ export default class DynamicField extends Component {
       key_name: PropTypes.string.isRequired,
       value_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      field_name: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -39,6 +39,7 @@ export default class DynamicField extends Component {
 
    state = {
       [this.props.name]: this.props[this.props.name] || '',
+      [this.props.field_name]: this.props[this.props.field_name] || 0,
       fixed: false,
    }
 
@@ -51,7 +52,8 @@ export default class DynamicField extends Component {
    componentWillReceiveProps(nextProps) {
       console.log(nextProps, this.props)
       if (this.value() != nextProps[nextProps.name]) {
-         this.setState({[this.props.name]: nextProps[nextProps.name] || ''})
+         this.setState({[this.props.name]: nextProps[nextProps.name] || '',
+                        [this.props.field_name]: nextProps[nextProps.field_name] || 0})
          this.updateError(nextProps[nextProps.name] || '')
       }
    }
@@ -71,37 +73,45 @@ export default class DynamicField extends Component {
       }
 
       this.updateError(value)
+   }
 
-      if (nextProps.subname) {
-         real = {[nextProps.subname]: value} // TODO add text as variable subkey
-      } else {
-         real = value
-      }
-      this.props.onUpdate({[nextProps.name]: real})
+   componentDidMount() {
+      window.addEventListener('keypress', this.onKeyPress.bind(this))
+   }
+
+   componentWillUnmount() {
+      window.removeEventListener('keypress', this.onKeyPress)
    }
 
    //events
    onChange(e) {
       let value = e.target.value
-      this.setState({[this.props.name]: value})
+      console.log("UPDATE", value)
+      this.setState({[this.props.name]: value, fixed: false})
       this.triggerListBy(value)
    }
 
+   onSelectFromList(value) {
+      this.fixValue(value)
+   }
+
    onKeyPress(e) {
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && e.target == this.$input) {
+         console.log("FIX")
          e.preventDefault()
-         this.setState({fixed: true})
+         this.fixValue(this.$input.value)
       }
    }
 
    onChipAct() {
+      console.log("UNFIX")
       this.setState({fixed: false})
    }
 
    //checkers
    hasValue() {
       // has fixed value which is presented on the server side
-      return this.state.fixed && !!this.state[this.props.name]
+      return this.state.fixed && !!this.state[this.props.field_name]
    }
 
    setAutocomplete() {
@@ -112,22 +122,39 @@ export default class DynamicField extends Component {
          data: list,
          limit: 20,
          minLength: 1,
+         onAutocomplete: this.onSelectFromList.bind(this)
       })
 
-      this.$input.dispatchEvent(new KeyboardEvent('keydown',{'key':'Shift'})); //triggers popup
-      this.$input.dispatchEvent(new KeyboardEvent('keyup',{'key':'Shift'})); //triggers popup
-   }
-
-   valueText() {
-      if (this.value() == this.props[this.props.name]) {
-         return this.props.text
-      } else {
-         return this.data.list[this.value()]
-      }
+      //triggering popup
+      console.log("TRIGGER")
+      this.$input.dispatchEvent(new KeyboardEvent('keydown',{'key':'Shift'}))
+      this.$input.dispatchEvent(new KeyboardEvent('keyup',{'key':'Shift'}))
    }
 
    value() {
-      return this.state[this.props.name] || ''
+      return this.state[this.props.name]
+   }
+
+   fixValue(value) {
+      let real, real_text
+
+      this.setState({[this.props.name]: value,
+                     [this.props.field_name]: this.data.list[value],
+                     fixed: true})
+
+      if (this.props.subname) {
+         // TODO add text as variable subkey
+         real = {[this.props.subname]: this.data.list[value]}
+         real_text = {[this.props.subname]: value}
+      } else {
+         real = this.data.list[value]
+         real_text = value
+      }
+
+      this.props.onUpdate({
+         [this.props.field_name]: real,
+         [this.props.name]: real_text,
+      })
    }
 
    triggerListBy(text) {
@@ -182,6 +209,9 @@ export default class DynamicField extends Component {
    }
 
    render() {
+      console.log("props: DynamicField", this.props)
+      console.log("state: DynamicField", this.state)
+      
       return (
          <div
             className={this.props.wrapperClassName}>
@@ -190,17 +220,18 @@ export default class DynamicField extends Component {
                   type='text'
                   className={this.error && 'invalid'}
                   ref={e => this.$input = e}
-                  key={this.props.name}
+                  key={'input-' + this.props.name}
                   id={this.props.name}
                   name={this.props.name}
                   placeholder={this.props.placeholder}
-                  value={this.valueText()}
+                  value={this.value()}
                   onChange={this.onChange.bind(this)} />}
             {this.hasValue() &&
                <Chip
-                  key={this.props.name}
+                  key={'chip-' + this.props.name}
                   color='eee'
-                  text={this.valueText()}
+                  text={this.value()}
+                  action='remove'
                   onAct={this.onChipAct.bind(this)} />}
             <label
                className='active'

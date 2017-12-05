@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 export default class SearchField extends Component {
    static defaultProps = {
       with_text: '',
+      wrapperClassName: 'col xl6 l6 m6 s6',
       onUpdate: null,
    }
 
@@ -62,15 +63,14 @@ export default class SearchField extends Component {
       console.log(this.state)
 
       return (
-         <div className='row'>
-            <div className='input-field col s12'>
-               <i className='material-icons prefix'>youtube_searched_for</i>
-               <input
-                  type='search'
-                  id='with_text'
-                  name='with_text'
-                  placeholder='Что ищем?'
-                  value={this.state.with_text}
-                  onBlur={this.onBlur.bind(this)}
-                  onChange={this.onChange.bind(this)}
-                  onKeyPress={this.onKeyPress.bind(this)} /></div></div>)}}
+         <div className={'input-field ' + this.props.wrapperClassName}>
+            <i className='material-icons prefix'>youtube_searched_for</i>
+            <input
+               type='search'
+               id='with_text'
+               name='with_text'
+               placeholder='Что ищем?'
+               value={this.state.with_text}
+               onBlur={this.onBlur.bind(this)}
+               onChange={this.onChange.bind(this)}
+               onKeyPress={this.onKeyPress.bind(this)} /></div>)}}

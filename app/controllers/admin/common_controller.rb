@@ -1,4 +1,5 @@
 class Admin::CommonController < ApplicationController
+   before_action :set_tokens, only: %i(index)
    before_action :set_page, only: %i(index)
    before_action :set_locales
    before_action :set_object, only: %i(show update destroy)
@@ -9,9 +10,11 @@ class Admin::CommonController < ApplicationController
                ActiveRecord::RecordNotSaved,
                ActiveRecord::RecordNotFound, with: :unprocessable_entity
 
+   has_scope :with_tokens, only: %i(index), type: :array
+
    # GET /<objects>/
    def index
-      @objects = model.page( params[:page] )
+      @objects = apply_scopes( model ).page( params[:page] )
 
       respond_to do |format|
          format.json { render :index, json: @objects, locales: @locales,
@@ -56,11 +59,18 @@ class Admin::CommonController < ApplicationController
       render json: errors, status: :unprocessable_entity ;end
 
    def set_page
-      @page ||= params[:page].to_i || 1 ;end
+      @page ||= (params[:page] || 1).to_i ;end
 
    def set_locales
       #TODO unfix of the ru only (will depend on the locale)
       @locales ||= %i(ру цс) ;end
 
+   def set_tokens
+      @tokens ||= params[:with_tokens] || [] ;end
+
    def set_object
-      @object ||= model.by_slug(params[:slug]) || raise(ActiveRecord::RecordNotFound) ;end;end
+      if params[:slug]
+         @object ||= model.by_slug(params[:slug])
+      else
+         @object ||= model.find(params[:id]) ;end ||
+            raise(ActiveRecord::RecordNotFound) ;end;end

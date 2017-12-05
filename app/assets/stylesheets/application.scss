@@ -347,6 +347,10 @@ label.active .error {
       padding-top: 10px;
    }
 
+   & > .chip {
+      margin-top: 10px;
+   }
+
    // defaunlt color of form labels
    /* label color */
    label {

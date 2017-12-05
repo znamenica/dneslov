@@ -8,7 +8,9 @@ Rails.application.routes.draw do
    resources :calendaries, param: :slug, except: :edit
    scope module: 'admin' do
       resources :memories, param: :slug, except: :edit
-      get '/names' => 'names#all'
+      resources :names, param: :id, except: :edit
+
+      get '/short_names' => 'names#all'
       get '/places' => 'places#all'
       get '/items' => 'items#all'
       get '/icons' => 'memories#icons'
