@@ -10,7 +10,6 @@ export default class TextField extends Component {
    static defaultProps = {
       name: 'text',
       subname: null,
-      text: '',
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -23,7 +22,6 @@ export default class TextField extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -34,19 +32,18 @@ export default class TextField extends Component {
    }
 
    state = {
-      [this.props.name]: this.props.text || '',
+      [this.props.name]: this.props[this.props.name] || '',
    }
 
    // system
    componentWillReceiveProps(nextProps) {
-      if (this.state[this.props.name] != nextProps.text) {
-         this.setState({[this.props.name]: nextProps.text || ''})
-         this.updateError(nextProps.text || '')
+      if (this.state[this.props.name] != nextProps[this.props.name]) {
+         this.setState({[this.props.name]: nextProps[this.props.name] || ''})
       }
    }
 
-   componentWillMount() {
-      this.updateError(this.state[this.props.name])
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.state != nextState
    }
 
    componentDidMount() {
@@ -55,18 +52,22 @@ export default class TextField extends Component {
       }
    }
 
-   componentWillUpdate(nextProps, nextState) {
-      let value = nextState[nextProps.name], real = value
+   componentWillMount() {
+      this.updateError(this.value())
+   }
 
-      this.updateError(value)
-
-      if (nextProps.subname) {
-         real = {[nextProps.subname]: value} // TODO add text as variable subkey
-      }
-      this.props.onUpdate({[nextProps.name]: real})
+   componentWillUpdate(_, nextState) {
+      this.updateError(this.value(nextState))
    }
 
    componentDidUpdate() {
+      let real = this.value()
+
+      if (this.props.subname) {
+         real = {[this.props.subname]: real} // TODO add text as variable subkey
+      }
+      this.props.onUpdate({[this.props.name]: real})
+
       if (this.props.textArea) {
          $(this.$input).trigger('autoresize') //TODO don't work
       }
@@ -75,6 +76,11 @@ export default class TextField extends Component {
    // events
    onChange(e) {
       this.setState({[this.props.name]: e.target.value})
+   }
+
+   // support
+   value(state = this.state) {
+      return state[this.props.name]
    }
 
    render() {
@@ -110,6 +116,6 @@ export default class TextField extends Component {
                htmlFor='text'>
                {this.props.title}
                <ErrorSpan
-                  key={'error'}
+                  key='error'
                   error={this.error}
                   ref={e => this.$error = e} /></label></div>)}}

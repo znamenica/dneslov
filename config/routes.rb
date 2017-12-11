@@ -6,10 +6,16 @@ Rails.application.routes.draw do
    root 'memories#index'
 
    resources :calendaries, param: :slug, except: :edit
+   get '/short_calendaries' => 'calendaries#all'
+
    scope module: 'admin' do
       resources :memories, param: :slug, except: :edit
       resources :names, param: :id, except: :edit
+      resources :memoes, param: :id, except: :edit
 
+      get '/short_memoes' => 'memoes#all'
+      get '/short_events' => 'events#all'
+      get '/short_memories' => 'memories#all'
       get '/short_names' => 'names#all'
       get '/places' => 'places#all'
       get '/items' => 'items#all'

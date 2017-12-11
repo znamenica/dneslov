@@ -7,12 +7,15 @@ import Validation from 'Validation'
 import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
-export default class DynamicField extends Component {
+export default class FilteredDynamicField extends Component {
    static defaultProps = {
       pathname: null,
       key_name: null,
       value_name: null,
       field_name: 'text_id',
+      filter: {},
+      filter_key: '',
+      filter_value: null,
       name: 'text',
       subname: null,
       wrapperClassName: null,
@@ -29,6 +32,7 @@ export default class DynamicField extends Component {
       value_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       field_name: PropTypes.string.isRequired,
+      filter: PropTypes.object,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -99,13 +103,12 @@ export default class DynamicField extends Component {
    }
 
    onSelectFromList(value) {
-      console.log("FIX1")
       this.fixValue(value)
    }
 
    onKeyPress(e) {
       if (e.key === "Enter" && e.target == this.$input) {
-         console.log("FIX2")
+         console.log("FIX")
          e.preventDefault()
          if (this.data.list[this.$input.value]) {
             this.fixValue(this.$input.value)
@@ -128,7 +131,7 @@ export default class DynamicField extends Component {
    setAutocomplete() {
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
       
-      console.log("data", this.data.list, list)
+      console.log("data", this.data.list)
       $(this.$input).autocomplete({
          data: list,
          limit: 20,
@@ -170,11 +173,25 @@ export default class DynamicField extends Component {
 
    triggerListBy(text) {
       if (!this.triggered) {
+         let data = { with_token: text }
+
+         Object.keys(this.props.filter || {}).forEach((key) => {
+            console.log(data, this.props.filter)
+            if (this.props.filter[key]) {
+               data[key] = this.props.filter[key]
+            }
+         })
+
+         if (this.props.filter_key && this.props.filter_value) {
+            data[this.props.filter_key] = this.props.filter_value
+         }
+
+         console.log("Sending...",data, 'to /' + this.props.pathname + '.json')
          this.triggered = text
          $.ajax({
             method: 'GET',
             dataType: 'JSON',
-            data: { with_token: text },
+            data: data,
             url: '/' + this.props.pathname + '.json',
             success: this.onSuccessLoad.bind(this),
             error: this.onErrorRequest.bind(this),
@@ -231,7 +248,7 @@ export default class DynamicField extends Component {
                   type='text'
                   className={this.error && 'invalid'}
                   ref={e => this.$input = e}
-                  key={'input-' + this.props.name}
+                  key={'filter-input-' + this.props.name}
                   id={this.props.name}
                   name={this.props.name}
                   placeholder={this.props.placeholder}
@@ -239,7 +256,7 @@ export default class DynamicField extends Component {
                   onChange={this.onChange.bind(this)} />}
             {this.hasValue() &&
                <Chip
-                  key={'chip-' + this.props.name}
+                  key={'filter-chip-' + this.props.name}
                   color='eee'
                   text={this.value()}
                   action='remove'

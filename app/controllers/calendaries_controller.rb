@@ -21,6 +21,17 @@ class CalendariesController < ApplicationController
                                       each_serializer: Admin::CalendarySerializer }
          format.html { render :index } end;end
 
+   def all
+      @calendaries = Calendary.with_token(params[:with_token])
+
+      respond_to do |format|
+         format.json { render :index, json: @calendaries.limit(500),
+                                      locales: @locales,
+                                      serializer: Admin::AutocompleteSerializer,
+                                      total: @calendaries.count,
+                                      each_serializer: Admin::ShortCalendarySerializer }
+      end;end
+
    # GET /calendaries/create
    def create
       @calendary = Calendary.new( permitted_params )

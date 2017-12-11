@@ -14,6 +14,10 @@ export default class ErrorSpan extends Component {
       error: this.props.error || ''
    }
 
+   componentWillReceiveProps(nextProps) {
+      this.setState({error: nextProps.error || ''})
+   }
+
    render() {
       return (
          <div className="error">

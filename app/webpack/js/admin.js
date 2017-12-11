@@ -18,8 +18,8 @@ requireAll(require.context('./behaviors/', true, /(\.js|\.js.jsx|\.js.coffee)$/)
 
 import { mountComponents } from 'react-rails-ujs/src/react-rails-ujs'
 
-import Names from 'Names'
+import Memoes from 'Memoes'
 
 document.addEventListener('DOMContentLoaded', () => {
-   mountComponents({ Names })
+   mountComponents({ Memoes })
 })

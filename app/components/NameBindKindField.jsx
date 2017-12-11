@@ -1,6 +1,6 @@
 import SelectField from 'SelectField'
 
-export default class BindKindField extends SelectField {
+export default class NameBindKindField extends SelectField {
    static defaultProps = {
       name: 'bind_kind',
       title: 'Вид связки',

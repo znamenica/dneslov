@@ -10,6 +10,7 @@ class Admin::CommonController < ApplicationController
                ActiveRecord::RecordNotSaved,
                ActiveRecord::RecordNotFound, with: :unprocessable_entity
 
+   has_scope :with_token, only: %i(index all)
    has_scope :with_tokens, only: %i(index), type: :array
 
    # GET /<objects>/

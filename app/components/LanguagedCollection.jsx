@@ -56,8 +56,11 @@ export default class LanguagedCollection extends Component {
 
    // events
    onAddItem() {
-      this.state.value[uuid()] = {}
+      let key = uuid()
+
+      this.state.value[key] = {}
       this.updateError(this.state.value)
+      this.props.onUpdate({[this.props.name]: {[key]: {}}})
       this.forceUpdate()
    }
 
@@ -79,7 +82,6 @@ export default class LanguagedCollection extends Component {
 
       return a
    }
-
 
    render() {
       console.log(this.state,this.asArray())

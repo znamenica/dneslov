@@ -6,6 +6,17 @@ class Admin::MemoriesController < Admin::CommonController
    has_scope :with_tokens, only: %i(index), type: :array
    has_scope :in_calendaries, only: %i(index), type: :array
 
+   def all
+      @memories = model.with_token(params[:with_token])
+
+      respond_to do |format|
+         format.json { render :index, json: @memories.limit(500),
+                                      locales: @locales,
+                                      serializer: Admin::AutocompleteSerializer,
+                                      total: @memories.count,
+                                      each_serializer: Admin::ShortMemorySerializer }
+      end;end
+
    def icons
       @icons = model.icons.with_token(params[:with_token])
 
@@ -14,7 +25,7 @@ class Admin::MemoriesController < Admin::CommonController
                                       locales: @locales,
                                       serializer: Admin::AutocompleteSerializer,
                                       total: @icons.count,
-                                      each_serializer: Admin::IconMemorySerializer }
+                                      each_serializer: Admin::ShortMemorySerializer }
       end;end
 
    protected

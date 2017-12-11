@@ -17,11 +17,11 @@ const Validation = {
          case 'object':
             switch(rule.constructor.name) {
             case 'RegExp':
-               if (value.match(rule)) {
+               if ((value || "").match(rule)) {
                   error = e
                }
             case 'Array':
-               if (rule[0] === '!' && !value.match(rule[1])) {
+               if (rule[0] === '!' && !(value || "").match(rule[1])) {
                   error = e
                }
             }
