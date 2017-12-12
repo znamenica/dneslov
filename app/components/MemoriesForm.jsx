@@ -124,7 +124,7 @@ export default class MemoriesForm extends Component {
                      <div>
                         <div className='row'>
                            <SearchField
-                              wrapperNameClass='col s12'
+                              wrapperClassName='col xl12 l12 l12 s12'
                               with_text={this.state.query.with_tokens.join(" ")}
                               onUpdate={this.onSearchUpdate.bind(this)} /></div>
                         <SearchConditions

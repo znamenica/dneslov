@@ -142,7 +142,7 @@ export default class Memoes extends Component {
                         className='title'>
                         Помины</h4></div>
                   <SearchField
-                     wrapperClassMemo='col xl7 l6 m9 s8'
+                     wrapperClassName='col xl7 l6 m9 s8'
                      with_text={this.state.query.with_tokens.join(" ")}
                      onUpdate={this.onSearchUpdate.bind(this)} /></form>
                   <div className="col xl2 l3 m3 s4 flex">

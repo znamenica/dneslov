@@ -19,7 +19,7 @@ class MemoSerializer < ApplicationSerializer
       year = (Time.zone.now - julian_gap).year
 
       @humanized_date ||=
-      case object.date
+      case object.year_date
       when /([^%]+)%(\d+)/ # день недели от даты
          day = $2.to_i
          base_date = Date.parse("#{$1}.#{year}")
@@ -31,4 +31,4 @@ class MemoSerializer < ApplicationSerializer
          julian_easter = easter - julian_gap
          ( julian_easter + day.days ).strftime("%1d.%m")
       else
-         object.date ;end;end;end
+         object.year_date ;end;end;end
