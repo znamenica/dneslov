@@ -63,7 +63,9 @@ export default class SearchField extends Component {
       console.log(this.state)
 
       return (
-         <div className={'input-field ' + this.props.wrapperClassName}>
+         <div
+            className={'input-field ' + this.props.wrapperClassName}
+            id='search-field' >
             <i className='material-icons prefix'>youtube_searched_for</i>
             <input
                type='search'

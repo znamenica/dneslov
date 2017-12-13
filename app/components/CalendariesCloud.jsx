@@ -27,7 +27,8 @@ export default class CalendariesCloud extends Component {
       console.log(this.props)
 
       return (
-         <div className='row centering'>
+         <div className='row centering'
+            id='calendaries-cloud'>
             {this.props.calendaries.map((calendary) =>
                <Chip
                   key={calendary.slug}

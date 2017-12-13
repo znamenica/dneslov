@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require materialize
+ *= require introjs
  *= require_tree .
  *= require_self
  */
@@ -84,7 +85,7 @@ body, table {
    color: #111111;
 }
 
-body > .pickmeup, div:empty, .chip:empty, .hidden, ul.indicators {
+body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    display: none !important;
 }
 
@@ -342,6 +343,15 @@ label.active .error {
    font-size: 1rem;
 }
 
+// intro
+
+.run-intro {
+   bottom: 45px;
+   right: 24px;
+   position: fixed;
+   z-index: 997;
+}
+
 .input-field {
    & > .material-icons {
       padding-top: 10px;
@@ -406,6 +416,7 @@ label.active .error {
    input[type="search"] {
       width: calc(100% - 2.5rem);
       padding-left: 0;
+      margin-bottom: 0;
 
       &:focus {
          border-style: none none dotted;

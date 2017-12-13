@@ -48,9 +48,10 @@ export default class MemorySpans extends Component {
       } else {
          rendered = (
             <div className='card-panel'>
-               <p className='flow-text'>Не было ничто найденым</p></div>)
+               <p className='flow-text'>Ничегошеньки не нашлось</p></div>)
       }
 
       return (
-         <div className='row'>
+         <div className='row'
+            id='memories-list'>
             {rendered}</div>)}}

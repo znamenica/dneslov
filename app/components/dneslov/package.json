@@ -65,14 +65,18 @@
     "yarn": "^1.2.1"
   },
   "dependencies": {
+    "//": "git+https://git@github.com/usablica/intro.js.git",
     "assign-deep": "^0.4.6",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
+    "intro.js": "^2.8.0-alpha.1",
+    "intro.js-react": "^0.1.5",
     "lodash-decorators": "^4.4.1",
     "lory.js": "git+https://github.com/majioa/lory.git#devel",
     "materialize-css": "^0.98.2",
     "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",
     "react": "^16.0.0",
+    "react-cookie": "^2.1.2",
     "react-dom": "^16.0.0",
     "react-rails-ujs": "^1.1.0",
     "react-scroll-pagination": "git+https://git@github.com/majioa/react-scroll-pagination.git#devel",

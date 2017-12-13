@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { CookiesProvider } from 'react-cookie'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -6,6 +7,7 @@ import SearchField from 'SearchField'
 import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
+import Intro from 'Intro'
 
 export default class MemoriesForm extends Component {
    static defaultProps = {
@@ -23,6 +25,7 @@ export default class MemoriesForm extends Component {
    }
 
    state = {
+      mounted: false,
       memories: this.props.memories,
       memory: this.props.memory,
       query: {
@@ -33,6 +36,12 @@ export default class MemoriesForm extends Component {
       }
    }
 
+   // system
+   componentDidMount() {
+      this.setState({mounted: true})
+   }
+
+   // custom
    calendariesUsed() {
       return this.state.query.in_calendaries.map((slug) => {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
@@ -99,6 +108,9 @@ export default class MemoriesForm extends Component {
       $.get('/index.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
    }
 
+   onExitIntro() {
+   }
+
    render() {
       console.log("props", this.props)
       console.log("length", this.state.memories.list.length)
@@ -106,6 +118,10 @@ export default class MemoriesForm extends Component {
 
       return (
          <div className='row'>
+            <CookiesProvider>
+               <Intro
+                  enabled={this.state.mounted} />
+            </CookiesProvider>
             <form>
                <div className='col s12 m5 l4 xl3'>
                   <div className='hidden' id='calendary' />

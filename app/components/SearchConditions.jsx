@@ -41,7 +41,9 @@ export default class SearchConditions extends Component {
 
       return (
          <div className='row'>
-            <div className='input-field col s12'>
+            <div
+               className='col xl12 l12 m12 s12'
+               id='search-conditions' >
                <Chip
                   className='white'
                   text='Выборка:' />

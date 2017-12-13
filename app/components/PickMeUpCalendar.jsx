@@ -154,7 +154,9 @@ export default class PickMeUpCalendar extends Component {
       return (
          <div className='row calendary'>
             <div className='hidden'>
-               <nav className='style-select'>
+               <nav
+                  className='style-select'
+                  id='calendar-styles'>
                   <input
                      className='hidden'
                      id='julian'
@@ -183,6 +185,7 @@ export default class PickMeUpCalendar extends Component {
                      className='pmu-tomorrow pmu-right pmu-button'>Завтра</div>
                   <div
                      className='pmu-tomorrow pmu-button'>▶</div></nav></div>
-            <div id='calendar'
+            <div
+               id='calendar'
                key='calendar'
                ref={el => this.el = el} /></div>)}}
