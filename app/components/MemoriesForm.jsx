@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
+import * as assign from 'assign-deep'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -25,20 +26,15 @@ export default class MemoriesForm extends Component {
    }
 
    state = {
-      mounted: false,
-      memories: this.props.memories,
+      memories: this.props.memories.list,
+      memoriesTotal: this.props.memories.total,
       memory: this.props.memory,
       query: {
          page: this.props.memories.page,
          with_date: [ this.props.date, this.props.julian ],
-         in_calendaries: this.props.calendaries_used,
+         in_calendaries: this.props.calendaries_used.slice(),
          with_tokens: this.props.tokens
       }
-   }
-
-   // system
-   componentDidMount() {
-      this.setState({mounted: true})
    }
 
    // custom
@@ -57,12 +53,16 @@ export default class MemoriesForm extends Component {
    }
 
    onSearchAct(data) {
+      let index
+
       if (data.date) {
          this.state.query.with_date = []
       } else if (data.slug) {
-         delete this.state.query.in_calendaries[this.state.query.in_calendaries.indexOf(data.slug)]
+         index = this.state.query.in_calendaries.indexOf(data.slug)
+         this.state.query.in_calendaries.splice(index, 1)
       } else if (data.token) {
-         delete this.state.query.with_tokens[this.state.query.with_tokens.indexOf(data.token)]
+         index = this.state.query.with_tokens.indexOf(data.token)
+         this.state.query.with_tokens.splice(index, 1)
       }
 
       this.submit()
@@ -86,41 +86,71 @@ export default class MemoriesForm extends Component {
       this.submit(this.state.query.page + 1)
    }
 
-   onSuccessLoad(memories) {
-      let slugs = memories.list.map((m) => { return m.slug })
-      console.log("AJAX SUCCESS", slugs)
-      if (memories.page > 1) {
-         let new_memories = this.state.memories
-         new_memories.list = new_memories.list.concat(memories.list)
-         this.setState({memories: new_memories, memory: null})
-      } else {
-         this.setState({memories: memories, memory: null})
-      }
-      console.log("state", this.state)
-      history.pushState({ 'json': memories }, '', '/')
-   }
-
    submit(page = 1) {
       this.state.query.page = page
 
       console.log("Sending...", this.state)
 
-      $.get('/index.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+      let request = {
+         dataType: 'JSON',
+         data: this.state.query,
+         url: '/index.json',
+         success: this.onMemoriesLoadSuccess.bind(this),
+         error: this.onMemoriesLoadFailure.bind(this),
+      }
+
+      $.ajax(request)
    }
 
-   onExitIntro() {
+   onMemoriesLoadSuccess(memories) {
+      //let slugs = memories.list.map((m) => { return m.slug })
+      //console.log("AJAX SUCCESS", slugs)
+      console.log("LOADED", memories)
+      if (memories.page > 1) {
+         let newMemories = this.state.memories.concat(memories.list)
+         this.setState({memories: newMemories,
+                        memoriesTotal: memories.total,
+                        memory: null})
+      } else {
+         this.setState({memories: memories.list,
+                        memoriesTotal: memories.total,
+                        memory: null})
+      }
+      history.pushState({ 'json': memories }, '', '/')
+   }
+
+   onMemoriesLoadFailure() {
+      let query = assign(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
+      this.setState({query: query})
+   }
+
+   onLoadRequest(slug) {
+      let request = {
+         dataType: 'JSON',
+         success: this.onMemoryLoadSuccess.bind(this),
+         method: 'GET',
+         url: '/' + slug + '.json',
+      }
+
+      $.ajax(request)
+   }
+
+   onMemoryLoadSuccess(memory) {
+      console.log("Loaded memory", memory)
+
+      history.pushState({ memory: memory, slug: memory.slug }, '', '/' + memory.slug)
+      this.setState({memory: memory})
    }
 
    render() {
       console.log("props", this.props)
-      console.log("length", this.state.memories.list.length)
-      console.log("total", this.state.memories.total)
+      console.log("state", this.state)
+      console.log("length", this.state.memories.length, "of total", this.state.memoriesTotal)
 
       return (
          <div className='row'>
             <CookiesProvider>
-               <Intro
-                  enabled={this.state.mounted} />
+               <Intro />
             </CookiesProvider>
             <form>
                <div className='col s12 m5 l4 xl3'>
@@ -130,17 +160,18 @@ export default class MemoriesForm extends Component {
                         onUpdate={this.onCalendarUpdate.bind(this)} />
                      <CalendariesCloud
                         calendaries={this.props.calendaries_cloud}
-                        calendaries_used={this.props.calendaries_used}
+                        calendaries_used={this.state.query.in_calendaries}
                         onAct={this.onCloudAct.bind(this)} /></div></div>
                <div className='col s12 m7 l8 xl9'>
                   {this.state.memory &&
                      <Memory
-                        memory={this.props.memory} />}
+                        key='memory'
+                        {...this.state.memory} />}
                   {! this.state.memory &&
                      <div>
                         <div className='row'>
                            <SearchField
-                              wrapperClassName='col xl12 l12 l12 s12'
+                              wrapperClassName='col xl12 l12 m12 s12'
                               with_text={this.state.query.with_tokens.join(" ")}
                               onUpdate={this.onSearchUpdate.bind(this)} /></div>
                         <SearchConditions
@@ -149,6 +180,7 @@ export default class MemoriesForm extends Component {
                            query={this.state.query.with_tokens}
                            onAct={this.onSearchAct.bind(this)} />
                         <MemorySpans
-                           memories={this.state.memories.list}
-                           total_memories={this.state.memories.total}
+                           memories={this.state.memories}
+                           total_memories={this.state.memoriesTotal}
+                           onLoadRequest={this.onLoadRequest.bind(this)}
                            onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div>)}}

@@ -27,7 +27,7 @@ export default class Chip extends Component {
    }
 
    componentWillReceiveProps(nextProps) {
-      if (nextProps.action !== this.props.action) {
+      if (nextProps.action !== this.state.action) {
          this.state.action = nextProps.action
       }
    }

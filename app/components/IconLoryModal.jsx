@@ -7,7 +7,40 @@ export default class IconLoryModal extends Component {
       onLorySlideFrom: null,
    }
 
-   componentLoaded() {
+   state = { loadCounter: 0 }
+
+   // system
+   componentWillReceiveProps(nextProps) {
+      this.setState({ loadCounter: 0 })
+   }
+
+   shouldComponentUpdate(nextProps, nextState) {
+      return nextState.loadCounter == 0
+   }
+
+   componentDidMount() {
+      this.$lory.addEventListener('after.lory.init', this.loryResize.bind(this))
+      this.$lory.addEventListener('on.lory.resize', this.loryResize.bind(this))
+      this.$lory.addEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
+      document.addEventListener('click', this.onDocumentClick.bind(this))
+   }
+
+   componentWillUnmount() {
+      this.$lory.removeEventListener('before.lory.init', this.loryResize.bind(this))
+      this.$lory.removeEventListener('on.lory.resize', this.loryResize.bind(this))
+      this.$lory.removeEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
+      document.removeEventListener('click', this.onDocumentClick.bind(this))
+   }
+
+   // events
+   stateChanged() {
+      if (this.state.loadCounter == this.props.links.length) {
+         console.log("LORY COMPLETED")
+         this.componentReady()
+      }
+   }
+
+   componentReady() {
       this.modal = $(this.$modal).modal()
       this.lory = lory(this.$lory, {
          slideSpeed: 750,
@@ -34,23 +67,8 @@ export default class IconLoryModal extends Component {
       }
    }
 
-   componentDidMount() {
-      this.$lory.addEventListener('after.lory.init', this.loryResize.bind(this))
-      this.$lory.addEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.addEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
-      window.addEventListener('load', this.componentLoaded.bind(this))
-      document.addEventListener('click', this.onDocumentClick.bind(this))
-   }
-
-   componentWillUnmount() {
-      this.$lory.removeEventListener('before.lory.init', this.loryResize.bind(this))
-      this.$lory.removeEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.removeEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
-      document.removeEventListener('load', this.componentLoaded.bind(this))
-      document.removeEventListener('click', this.onDocumentClick.bind(this))
-   }
-
    openModal(index) {
+      console.log("OPENING", this.lory_scroll)
       if (this.lory_scroll) {
          document.body.style.overflowY = 'hidden' // required to fix width of modal in proper value
          // TODO fix scroll to last (it is buggy)
@@ -68,8 +86,13 @@ export default class IconLoryModal extends Component {
       }
    }
 
+   onImageCompleted(e) {
+      this.setState((prevState) => { return { loadCounter: prevState.loadCounter + 1 }}, this.stateChanged.bind(this))
+   }
+
+   // props
    isOpen() {
-      return this.$modal.classList.contains('open')
+      return this.$modal && this.$modal.classList.contains('open')
    }
 
    render() {
@@ -93,7 +116,9 @@ export default class IconLoryModal extends Component {
                               <img
                                  className='icon'
                                  src={link.url}
-                                 alt={link.description} /></li>)}</ul></div>
+                                 alt={link.description}
+                                 onLoad={this.onImageCompleted.bind(this)}
+                                 onError={this.onImageCompleted.bind(this)} /></li>)}</ul></div>
                   <div className='js_prev prev waves-effect'>
                      <svg 
                         xmlns="http://www.w3.org/2000/svg"

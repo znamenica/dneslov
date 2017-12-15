@@ -102,29 +102,29 @@ export class Intro extends Component {
 
    state = { enabled: this.props.enabled }
 
-   componentWillReceiveProps(nextProps) {
+   DOMLoaded() {
       const { cookies } = this.props
- 
-      if (nextProps != this.props) {
-         let introLetterDate = this.calculateLatterStepDateStamp(nextProps)
-         let require_run = introLetterDate > this.getLatterStepDateStamp()
-         this.setState({
-            enabled: nextProps.enabled && require_run,
-            introLetterDate: introLetterDate
-         })
-      }
+
+      let introLetterDate = this.calculateLatterStepDateStamp(this.props)
+      let require_run = introLetterDate > this.getLatterStepDateStamp()
+      this.setState({
+         enabled: this.props.enabled && require_run,
+         introLetterDate: introLetterDate
+      })
    }
 
    componentDidMount() {
-      if (this.state.enabled) {
-         this.setLatterStepDateStamp()
-      }
+      window.addEventListener('load', this.DOMLoaded.bind(this))
    }
 
    componentDidUpdate() {
       if (this.state.enabled) {
          this.setLatterStepDateStamp()
       }
+   }
+
+   componentWillUnmount() {
+      window.removeEventListener('load', this.DOMLoaded.bind(this))
    }
 
    // custom

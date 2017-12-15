@@ -3,50 +3,64 @@ import Chip from 'Chip'
 
 export default class MemorySpan extends Component {
    static defaultProps = {
-      memory: {
-         short_name: null,
-         url: null,
-         icon_url: null,
-         year: null,
-         description: null,
-      }
+      slug: null,
+      short_name: null,
+      url: null,
+      icon_url: null,
+      year: null,
+      order: null,
+      description: null,
+      onLoadRequest: null,
    }
 
-   renderImage() {
-      let img
-
-      if (this.props.memory.icon_url) {
-         img = <img className='circle z-depth-1' src={this.props.memory.icon_url}></img>
-      } else {
-         img = <i className='material-icons circle terracota z-depth-1'>perm_identity</i>
-      }
-
-      return img
+   // system
+   componentDidMount() {
+      this.$avatar.addEventListener('click', this.onAvatarClick.bind(this))
    }
 
+   componentWillUnmount() {
+      this.$avatar.removeEventListener('click', this.onAvatarClick.bind(this))
+   }
+
+   // events
    onAvatarClick(e) {
-      // TODO fix propagation after 1 sec when clicked on avatar
+      this.props.onLoadRequest(this.props.slug)
       e.stopPropagation()
       e.preventDefault()
    }
 
+   onSpanClick(e) {
+      this.props.onLoadRequest(this.props.slug)
+   }
+
+   // props
+   hasImage() {
+      return !!this.props.icon_url
+   }
+
    render() {
+      console.log("PROPS", this.props)
+
       return (
          <li className='collection-item avatar memory View_child'>
             <div className='collapsible-header'>
                <a
-                  href={this.props.memory.url}
-                  target='_blank'
-                  onClick={this.onAvatarClick.bind(this)} >
-                  {this.renderImage()}</a>
+                  ref={e => this.$avatar = e}
+                  key='avatar'
+                  href={this.props.url} >
+                  {this.hasImage() &&
+                     <img className='circle z-depth-1' src={this.props.icon_url}></img>}
+                  {!this.hasImage() &&
+                     <i className='material-icons circle terracota z-depth-1'>perm_identity</i>}</a>
                <Chip
-                  color={this.props.memory.order.color}
-                  text={this.props.memory.order.slug} />
+                  color={this.props.order.color}
+                  text={this.props.order.slug} />
                <span>
-                  {this.props.memory.short_name}</span>
+                  {this.props.short_name}</span>
                <Chip
                   className='year-date'
-                  text={this.props.memory.year} /></div>
-            {this.props.memory.description &&
-               <div className='collapsible-body'>
-                  <span>{this.props.memory.description}</span></div>}</li>)}}
+                  text={this.props.year} /></div>
+            {this.props.description &&
+               <div className='collapsible-body'
+                  onClick={this.onSpanClick.bind(this)} >
+                  <span>{this.props.description}</span></div>}</li>)}}
