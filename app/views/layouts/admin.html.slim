@@ -6,13 +6,4 @@ html
       = javascript_pack_tag 'admin'
       = csrf_meta_tags
    body
-      header
-         nav.terracota
-            .nav-wrapper
-               a.brand-logo(href='/') Днесловъ
-
-      main
-         .container.admin
-            .row
-               .col.s12.m12.l12.xl12
-                  #page = yield
+      = yield

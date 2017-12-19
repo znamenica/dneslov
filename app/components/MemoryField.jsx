@@ -10,7 +10,7 @@ export default class MemoryField extends DynamicField {
       title: 'Память',
       placeholder: 'Начни ввод текста имени или описания памяти...',
       validations: {
-         "Память должна быть задана": /^$/
+         "Память должна быть избрана": /^$/
       }
    }
 }

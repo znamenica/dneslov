@@ -1,6 +1,4 @@
 class Admin::MemoriesController < Admin::CommonController
-   before_action :set_memory, only: %i(show)
-
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end
    has_scope :with_tokens, only: %i(index), type: :array
@@ -35,12 +33,12 @@ class Admin::MemoriesController < Admin::CommonController
 
    def permitted_params
       params.require( :memory ).permit(
-         :view_string, :covers_to_id, :sight_id, :short_name, :order, :council, :quantity,
+         :covers_to_id, :bond_to_id, :short_name, :order, :council, :quantity,
          slug_attributes: [:id, :text],
          memory_names_attributes: [:id, :name_id, :state, :feasible, :ored],
          events_attributes: [
             :id, :happened_at, :type, :person_name, :type_number,
-            :about_string, :tezo_string, :order, :council], #place_id, #item_id
+            :about_string, :tezo_string, :order, :council, :place_id, :item_id ],
          wikies_attributes: [:id, :url, :language_code, :alphabeth_code],
          beings_attributes: [:id, :url, :language_code, :alphabeth_code],
          paterics_attributes: [:id, :url, :language_code, :alphabeth_code],

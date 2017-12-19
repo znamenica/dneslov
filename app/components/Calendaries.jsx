@@ -1,8 +1,9 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
 
+import SearchField from 'SearchField'
 import CalendaryModal from 'CalendaryModal'
-import Calendary from 'Calendary'
+import CalendaryRow from 'CalendaryRow'
 
 export default class Calendaries extends Component {
    static defaultProps = {
@@ -12,6 +13,7 @@ export default class Calendaries extends Component {
          total: 0,
       },
       locales: [],
+      tokens: [],
    }
 
    state = {
@@ -19,24 +21,35 @@ export default class Calendaries extends Component {
       page: this.props.calendaries.page,
       total: this.props.calendaries.total,
       appended: 0,
-      query: { page: this.props.calendaries.page },
+      query: {
+         page: this.props.calendaries.page,
+         with_tokens: this.props.tokens,
+      },
       current: null
+   }
+
+   // system
+   componentWillMount() {
+      console.log("MOUNT", this.props.calendaries.list)
+      if (this.props.calendaries.list.length == 0) {
+         this.submit()
+      }
    }
 
    componentDidUpdate(nextProps) {
       this.isRequesting = false
    }
 
+   // custom
    fetchNext() {
       if (this.state.total > this.state.calendaries.length && ! this.isRequesting) {
          console.log("FETCH NEXT FOR", this.state)
-         this.isRequesting = true
          this.submit(this.state.page + 1)
       }
    }
 
    onCalendaryUpdate(calendary) {
-      let index = this.state.calendaries.findIndex((c) => { return c.slug.text == calendary.slug.text })
+      let index = this.state.calendaries.findIndex((c) => { return c.id == calendary.id })
       let calendaries = this.state.calendaries.slice()
       let total = this.state.total
       let appended = this.state.appended
@@ -50,32 +63,36 @@ export default class Calendaries extends Component {
          calendaries[index] = calendary
       }
 
-      this.setState({ calendaries: calendaries, total: total, current: null, appended: appended})
+      this.setState({
+         calendaries: calendaries,
+         total: total,
+         current: null,
+         appended: appended})
    }
 
-   onCalendaryEdit(slug) {
-      let calendary = this.state.calendaries.find((c) => { return c.slug.text == slug })
+   onCalendaryEdit(id) {
+      let calendary = this.state.calendaries.find((c) => { return c.id == id })
       this.setState({current: calendary})
+   }
+
+   onCalendaryRemove(id) {
+      let calendary = this.state.calendaries.find((c) => { return c.id == id })
+
+      $.ajax({
+         method: 'DELETE',
+         dataType: 'JSON',
+         url: '/calendaries/' + calendary.id + '.json',
+         success: this.onSuccessRemove.bind(this)
+      })
    }
 
    onCalendaryClose() {
       this.setState({current: null})
    }
 
-   onCalendaryRemove(slug) {
-      let calendary = this.state.calendaries.find((c) => { return c.slug.text == slug })
-
-      $.ajax({
-         method: 'DELETE',
-         dataType: 'JSON',
-         url: '/calendaries/' + calendary.slug.text + '.json',
-         success: this.onSuccessRemove.bind(this)
-      })
-   }
-
    onSuccessRemove(calendary) {
       let calendaries = this.state.calendaries.slice()
-      let index = calendaries.findIndex((c) => { return c.slug.text == calendary.slug.text })
+      let index = calendaries.findIndex((c) => { return c.id == calendary.id })
 
       delete calendaries[index]
       this.setState({
@@ -91,9 +108,9 @@ export default class Calendaries extends Component {
       if (calendaries.page > 1) {
          new_calendaries = this.state.calendaries.slice()
          if (this.state.appended) {
-            let slugs = new_calendaries.map((c) => { return c.slug.text })
+            let ids = new_calendaries.map((c) => { return c.id })
             calendaries.list.forEach((c) => {
-               if (slugs.indexOf(c.slug.text) < 0) {
+               if (ids.indexOf(c.id) < 0) {
                   new_calendaries.push(c)
                }
             })
@@ -104,16 +121,25 @@ export default class Calendaries extends Component {
          new_calendaries = calendaries.list
       }
 
-      this.setState({calendaries: new_calendaries, page: calendaries.page})
+      this.setState({calendaries: new_calendaries,
+                     page: calendaries.page,
+                     total: calendaries.total})
       console.log("state", this.state)
    }
 
    submit(page = 1) {
+      this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
       $.get('/calendaries.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+   }
+
+   onSearchUpdate(tokens) {
+      this.state.query.with_tokens = tokens
+
+      this.submit(1)
    }
 
    render() {
@@ -123,17 +149,22 @@ export default class Calendaries extends Component {
       return (
          <div className='calendaries list'>
             <div className="row">
-               <div className="col m8 s6">
-                  <h4
-                     className='title'>
-                     Календари</h4></div>
-               <div className="col m4 s6 flex">
-                  <CalendaryModal
-                     open={this.state.current}
-                     {...this.state.current}
-                     ref={$form => this.$form = $form}
-                     onCloseCalendary={this.onCalendaryClose.bind(this)}
-                     onUpdateCalendary={this.onCalendaryUpdate.bind(this)} /></div></div>
+               <form>
+                  <div className="col xl3 l3 m8 s12">
+                     <h4
+                        className='title'>
+                        Календари</h4></div>
+                  <SearchField
+                     wrapperClassName='col xl7 l6 m9 s8'
+                     with_text={this.state.query.with_tokens.join(" ")}
+                     onUpdate={this.onSearchUpdate.bind(this)} /></form>
+                  <div className="col xl2 l3 m3 s4 flex">
+                     <CalendaryModal
+                        open={this.state.current}
+                        {...this.state.current}
+                        ref={$form => this.$form = $form}
+                        onCloseCalendary={this.onCalendaryClose.bind(this)}
+                        onUpdateCalendary={this.onCalendaryUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>
@@ -148,8 +179,8 @@ export default class Calendaries extends Component {
                      <th><i className='tiny material-icons'>near_me</i></th></tr></thead>
                <tbody>
                   {this.state.calendaries.map((calendary) =>
-                     <Calendary
-                        key={calendary.slug.text}
+                     <CalendaryRow
+                        key={"calendary-" + calendary.id}
                         locales={this.props.locales}
                         {...calendary}
                         slug={calendary.slug.text}

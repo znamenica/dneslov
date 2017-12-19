@@ -1,7 +1,7 @@
 import LanguagedCollection from 'LanguagedCollection'
 import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject } from 'matchers'
 
-export default class NamesCollection extends LanguagedCollection {
+export default class NamesAsDescriptionsCollection extends LanguagedCollection {
    static defaultProps = {
       name: 'names',
       key_name: 'text',

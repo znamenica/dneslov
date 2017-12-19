@@ -1,5 +1,5 @@
 class Admin::ShortItemSerializer < CommonCalendarySerializer
-   attributes :id, :name
-   
-   def name
+   attributes :id, :item
+
+   def item
       object.description_for(@instance_options[:locales]).text ;end;end

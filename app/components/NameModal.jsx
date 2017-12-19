@@ -29,7 +29,11 @@ export default class NameModal extends Component {
    state = this.getDefaultState()
 
    componentWillReceiveProps(nextProps) {
-      this.setState(this.getDefaultState(nextProps))
+      if (this.props != nextProps) {
+         this.setState(this.getDefaultState(nextProps))
+         // clear old error
+         this.$error.setState({error: null})
+      }
    }
 
    getDefaultState(props = this.props) {
@@ -58,7 +62,6 @@ export default class NameModal extends Component {
          bind_kind: '',
          bond_to_id: 0,
          bond_to: '',
-         open: false,
       }
    }
 
@@ -83,6 +86,7 @@ export default class NameModal extends Component {
    onSubmitSuccess(data) {
       console.log("SUCCESS", data)
       this.props.onUpdateName(data)
+      this.$error.setState({error: null})
       this.modal.modal('close')
    }
 
@@ -131,8 +135,10 @@ export default class NameModal extends Component {
    }
 
    onFormUpdate() {
-      console.log(this.$form.valid)
-      this.$submit.setState({valid: this.$form.valid})
+      if (this.$form) {
+         console.log(this.$form.valid)
+         this.$submit.setState({valid: this.$form.valid})
+      }
    }
 
    render() {
@@ -155,7 +161,7 @@ export default class NameModal extends Component {
                   <div className='modal-content'>
                      <NameForm
                         ref={e => this.$form = e}
-                        key={'form'}
+                        key='form'
                         {...this.state}
                         onUpdate={this.onFormUpdate.bind(this)} /></div>
                   <div className="modal-footer">

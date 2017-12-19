@@ -4,7 +4,7 @@ import * as assign from 'assign-deep'
 import * as uuid from 'uuid/v1'
 import { mixin } from 'lodash-decorators'
 
-import MemoryNameField from 'MemoryNameField'
+import NameField from 'NameField'
 import NameStateField from 'NameStateField'
 import FeasibleBox from 'FeasibleBox'
 import NameModeField from 'NameModeField'
@@ -48,11 +48,11 @@ export default class MemoryNameBlock extends Component {
 
       return (
          <div className='row'>
-            <MemoryNameField
+            <NameField
                ref={e => this.r.push(e)}
                key='nameId'
                name_id={this.props.name_id}
-               text={this.props.name}
+               name_text={this.props.name}
                wrapperClassName='input-field col xl3 l3 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <NameStateField

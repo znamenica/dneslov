@@ -53,6 +53,9 @@ class Admin::CommonController < ApplicationController
          format.json { render :show, json: @object, locales: @locales,
                                      serializer: object_serializer } ;end;end
 
+   def dashboard
+   end
+
    protected
 
    def unprocessable_entity e

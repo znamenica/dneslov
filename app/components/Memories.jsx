@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
 
+import SearchField from 'SearchField'
 import MemoryModal from 'MemoryModal'
 import MemoryRow from 'MemoryRow'
 
@@ -12,6 +13,7 @@ export default class Memories extends Component {
          total: 0,
       },
       locales: [],
+      tokens: [],
    }
 
    state = {
@@ -19,24 +21,35 @@ export default class Memories extends Component {
       page: this.props.memories.page,
       total: this.props.memories.total,
       appended: 0,
-      query: { page: this.props.memories.page },
+      query: {
+         page: this.props.memories.page,
+         with_tokens: this.props.tokens,
+      },
       current: null
+   }
+
+   // system
+   componentWillMount() {
+      console.log("MOUNT", this.props.memories.list)
+      if (this.props.memories.list.length == 0) {
+         this.submit()
+      }
    }
 
    componentDidUpdate(nextProps) {
       this.isRequesting = false
    }
 
+   // custom
    fetchNext() {
-      if (this.state.total > this.state.memories.length && ! this.isRequesting) {
+      if ((this.state.total > this.state.memories.length) && ! this.isRequesting) {
          console.log("FETCH NEXT FOR", this.state)
-         this.isRequesting = true
          this.submit(this.state.page + 1)
       }
    }
 
    onMemoryUpdate(memory) {
-      let index = this.state.memories.findIndex((c) => { return c.slug.text == memory.slug.text })
+      let index = this.state.memories.findIndex((c) => { return c.id == memory.id })
       let memories = this.state.memories.slice()
       let total = this.state.total
       let appended = this.state.appended
@@ -50,12 +63,15 @@ export default class Memories extends Component {
          memories[index] = memory
       }
 
-      this.setState({ memories: memories, total: total, current: null, appended: appended})
+      this.setState({
+         memories: memories,
+         total: total,
+         current: null,
+         appended: appended})
    }
 
-   onMemoryEdit(slug) {
-      let memory = this.state.memories.find((m) => { return m.slug.text == slug.text })
-      console.log("M", slug, memory)
+   onMemoryEdit(id) {
+      let memory = this.state.memories.find((m) => { return m.id == id })
       this.setState({current: memory})
    }
 
@@ -63,20 +79,20 @@ export default class Memories extends Component {
       this.setState({current: null})
    }
 
-   onMemoryRemove(slug) {
-      let memory = this.state.memories.find((c) => { return c.slug.text == slug.text })
+   onMemoryRemove(id) {
+      let memory = this.state.memories.find((c) => { return c.id == id })
 
       $.ajax({
          method: 'DELETE',
          dataType: 'JSON',
-         url: '/memories/' + memory.slug.text + '.json',
+         url: '/memories/' + memory.id + '.json',
          success: this.onSuccessRemove.bind(this)
       })
    }
 
    onSuccessRemove(memory) {
       let memories = this.state.memories.slice()
-      let index = memories.findIndex((c) => { return c.slug.text == memory.slug.text })
+      let index = memories.findIndex((c) => { return c.id == memory.id })
 
       delete memories[index]
       this.setState({
@@ -92,9 +108,9 @@ export default class Memories extends Component {
       if (memories.page > 1) {
          new_memories = this.state.memories.slice()
          if (this.state.appended) {
-            let slugs = new_memories.map((c) => { return c.slug.text })
+            let ids = new_memories.map((c) => { return c.id })
             memories.list.forEach((c) => {
-               if (slugs.indexOf(c.slug.text) < 0) {
+               if (ids.indexOf(c.id) < 0) {
                   new_memories.push(c)
                }
             })
@@ -105,16 +121,25 @@ export default class Memories extends Component {
          new_memories = memories.list
       }
 
-      this.setState({memories: new_memories, page: memories.page})
+      this.setState({memories: new_memories,
+                     page: memories.page,
+                     total: memories.total})
       console.log("state", this.state)
    }
 
    submit(page = 1) {
+      this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
       $.get('/memories.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+   }
+
+   onSearchUpdate(tokens) {
+      this.state.query.with_tokens = tokens
+
+      this.submit(1)
    }
 
    render() {
@@ -124,17 +149,22 @@ export default class Memories extends Component {
       return (
          <div className='memories list'>
             <div className="row">
-               <div className="col m8 s6">
-                  <h4
-                     className='title'>
-                     Памяти</h4></div>
-               <div className="col m4 s6 flex">
-                  <MemoryModal
-                     open={this.state.current}
-                     {...this.state.current}
-                     ref={$form => this.$form = $form}
-                     onCloseMemory={this.onMemoryClose.bind(this)}
-                     onUpdateMemory={this.onMemoryUpdate.bind(this)} /></div></div>
+               <form>
+                  <div className="col xl3 l3 m8 s12">
+                     <h4
+                        className='title'>
+                        Памяти</h4></div>
+                  <SearchField
+                     wrapperClassName='col xl7 l6 m9 s8'
+                     with_text={this.state.query.with_tokens.join(" ")}
+                     onUpdate={this.onSearchUpdate.bind(this)} /></form>
+                  <div className="col xl2 l3 m3 s4 flex">
+                     <MemoryModal
+                        open={this.state.current}
+                        {...this.state.current}
+                        ref={$form => this.$form = $form}
+                        onCloseMemory={this.onMemoryClose.bind(this)}
+                        onUpdateMemory={this.onMemoryUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>
@@ -149,7 +179,7 @@ export default class Memories extends Component {
                <tbody>
                   {this.state.memories.map((memory) =>
                      <MemoryRow
-                        key={memory.slug.text}
+                        key={"memory-" + memory.id}
                         locales={this.props.locales}
                         {...memory}
                         onEdit={this.onMemoryEdit.bind(this)}

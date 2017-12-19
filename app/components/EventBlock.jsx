@@ -48,16 +48,6 @@ export default class EventBlock extends Component {
 
       return (
          <div className='row'>
-            <TextField
-               ref={e => this.r.push(e)}
-               key='happenedAt'
-               name='happened_at'
-               title='Случилось в...'
-               placeholder='Введи пору'
-               text={this.props.happened_at}
-               validations={this.props.value_validations}
-               wrapperClassName='input-field col xl5 l5 m6 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
             <EventTypeField
                ref={e => this.r.push(e)}
                key='type'
@@ -65,19 +55,30 @@ export default class EventBlock extends Component {
                type={this.props.type}
                wrapperClassName='input-field col xl4 l4 m6 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
-            <ItemField
+            <TextField
                ref={e => this.r.push(e)}
-               key='itemId'
-               item_id={this.props.item_id}
-               text={this.props.item}
-               wrapperClassName='input-field col xl3 l3 m4 s12'
+               key='happenedAt'
+               name='happened_at'
+               title='Случилось в...'
+               placeholder='Введи пору'
+               name='happened_at'
+               happened_at={this.props.happened_at}
+               validations={this.props.value_validations}
+               wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <PlaceField
                ref={e => this.r.push(e)}
                key='placeId'
                title='Место происшествия'
                place_id={this.props.place_id}
-               text={this.props.place}
+               place={this.props.place}
+               wrapperClassName='input-field col xl5 l5 m4 s12'
+               onUpdate={this.onChildUpdate.bind(this)} />
+            <ItemField
+               ref={e => this.r.push(e)}
+               key='itemId'
+               item_id={this.props.item_id}
+               item={this.props.item}
                wrapperClassName='input-field col xl6 l6 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <TextField
@@ -86,6 +87,6 @@ export default class EventBlock extends Component {
                name='person_name'
                title='Имя связанной личности...'
                placeholder='Введи имя'
-               text={this.props.person_name}
+               person_name={this.props.person_name}
                wrapperClassName='input-field col xl6 l6 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} /></div>)}}

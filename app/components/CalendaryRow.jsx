@@ -1,9 +1,10 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
-export default class Calendary extends Component {
+export default class CalendaryRow extends Component {
    static defaultProps = {
       locales: [],
+      id: null,
       slug: null,
       licit: null,
       language_code: null,
@@ -17,6 +18,7 @@ export default class Calendary extends Component {
 
    static propTypes = {
       locales: PropTypes.array.isRequired,
+      id: PropTypes.integer.isRequired,
       slug: PropTypes.string.isRequired,
       names: PropTypes.array.isRequired,
       licit: PropTypes.boolean.isRequired,
@@ -40,14 +42,14 @@ export default class Calendary extends Component {
    }
 
    edit() {
-      this.props.onEdit(this.props.slug)
+      this.props.onEdit(this.props.id)
    }
 
    remove() {
       let toast = document.querySelector('.toast-wrapper.' + this.props.slug).parentElement
 
       toast.remove()
-      this.props.onRemove(this.props.slug)
+      this.props.onRemove(this.props.id)
    }
 
    removeQuery() {
@@ -59,7 +61,8 @@ export default class Calendary extends Component {
          return this.props.names.reduce((res, name) => {
             return res || locale === name.language_code && name.text }, null)
       }).filter((e) => { return e })
-
+      
+      console.log("NAMES", names, this.props.names, this.props.locales)
       return names[0] || ''
    }
 

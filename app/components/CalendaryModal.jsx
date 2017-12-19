@@ -7,6 +7,7 @@ import ErrorSpan from 'ErrorSpan'
 
 export default class CalendaryModal extends Component {
    static defaultProps = {
+      id: null,
       licit: false,
       slug: {text: ''},
       language_code: '',
@@ -35,7 +36,11 @@ export default class CalendaryModal extends Component {
    state = this.getDefaultState()
 
    componentWillReceiveProps(nextProps) {
-      this.setState(this.getDefaultState(nextProps))
+      if (this.props != nextProps) {
+         this.setState(this.getDefaultState(nextProps))
+         // clear old error
+         this.$error.setState({error: null})
+      }
    }
 
    getDefaultState(props = this.props) {
@@ -57,6 +62,7 @@ export default class CalendaryModal extends Component {
 
    getCleanState() {
       return {
+         id: null,
          licit: false,
          slug: {text: ''},
          language_code: '',
@@ -68,7 +74,6 @@ export default class CalendaryModal extends Component {
          descriptions: [],
          wikies: [],
          links: [],
-         open: false,
       }
    }
 
@@ -93,6 +98,7 @@ export default class CalendaryModal extends Component {
    onSubmitSuccess(data) {
       console.log("SUCCESS", data)
       this.props.onUpdateCalendary(data)
+      this.$error.setState({error: null})
       this.modal.modal('close')
    }
 
@@ -128,9 +134,8 @@ export default class CalendaryModal extends Component {
       }
 
       if (settings.data.calendary.id) {
-         settings.data.slug = settings.data.calendary.slug_attributes.text
          settings.method = 'PUT'
-         settings.url = '/calendaries/' + settings.data.slug + '.json'
+         settings.url = '/calendaries/' + settings.data.calendary.id + '.json'
       } else {
          settings.method = 'POST'
          settings.url = '/calendaries.json'
@@ -142,12 +147,13 @@ export default class CalendaryModal extends Component {
    }
 
    onFormUpdate() {
-      console.log(this.$form.valid)
-      this.$submit.setState({valid: this.$form.valid})
+      if (this.$form) {
+         console.log(this.$form.valid)
+         this.$submit.setState({valid: this.$form.valid})
+      }
    }
 
    render() {
-      console.log(this.props)
       console.log(this.state)
 
       return (
@@ -160,14 +166,14 @@ export default class CalendaryModal extends Component {
                      Новый календарь</a></div>
             <div
                key='calendary-form-modal'
-               className='modal modal-fixed-footer z-depth-2'
+               className='form-modal modal modal-fixed-footer z-depth-2'
                id='calendary-form-modal'
                ref={e => this.$modal = e} >
                <form onSubmit={this.onSubmit.bind(this)}>
                   <div className='modal-content'>
                      <CalendaryForm
                         ref={e => this.$form = e}
-                        key={'form'}
+                        key='form'
                         {...this.state}
                         onUpdate={this.onFormUpdate.bind(this)} /></div>
                   <div className="modal-footer">

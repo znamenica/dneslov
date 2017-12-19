@@ -6,12 +6,14 @@ const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Transla
 export default class MemoryRow extends Component {
    static defaultProps = {
       locales: [],
+      id: null,
       slug: null,
       short_name: null,
-      view_string: null,
       quantity: null,
       covers_to_id: null,
-      sight_id: null,
+      covers_to: null,
+      bond_to_id: null,
+      bond_to: null,
       order: null,
       council: '',
       memory_names: [],
@@ -27,12 +29,14 @@ export default class MemoryRow extends Component {
 
    static propTypes = {
       locales: PropTypes.array.isRequired,
+      id: PropTypes.integer.isRequired,
       slug: PropTypes.string.isRequired,
       short_name: PropTypes.string.isRequired,
-      view_string: PropTypes.string,
       quantity: PropTypes.integer,
-      covers_to_id: PropTypes.string,
-      sight_id: PropTypes.string,
+      covers_to: PropTypes.string,
+      covers_to_id: PropTypes.integer,
+      bond_to: PropTypes.string,
+      bond_to_id: PropTypes.integer,
       order: PropTypes.object.isRequired,
       council: PropTypes.string,
       memory_names: PropTypes.array.isRequired,
@@ -49,6 +53,7 @@ export default class MemoryRow extends Component {
    componentWillMount() {
       this.date = this.makeDate()
       this.description = this.makeDescription()
+      this.council = this.makeCouncil()
    }
 
    componentWillReceiveProps(nextProps) {
@@ -59,17 +64,21 @@ export default class MemoryRow extends Component {
       if (this.props.descriptions != nextProps.descriptions) {
          this.description = this.makeDescription()
       }
+
+      if (this.props.council != nextProps.council) {
+         this.council = this.makeCouncil()
+      }
    }
 
    edit() {
-      this.props.onEdit(this.props.slug)
+      this.props.onEdit(this.props.id)
    }
 
    remove() {
       let toast = document.querySelector('.toast-wrapper.' + this.props.slug).parentElement
 
       toast.remove()
-      this.props.onRemove(this.props.slug)
+      this.props.onRemove(this.props.id)
    }
 
    removeQuery() {
@@ -84,13 +93,25 @@ export default class MemoryRow extends Component {
       return dates[0] || ''
    }
 
+   makeCouncil() {
+      if (this.props.council && this.props.council.length > 17) {
+         return this.props.council.slice(0, 17) + '...'
+      } else {
+         return this.props.council || ''
+      }
+   }
+
    makeDescription() {
       let descriptions = this.props.locales.map((locale) => {
          return this.props.descriptions.reduce((res, description) => {
             return res || locale === description.language_code && description.text }, null)
       }).filter((e) => { return e })
 
-      return descriptions[0] || ''
+      if (descriptions[0] && descriptions[0].length > 27) {
+         return descriptions[0].slice(0, 27) + '...'
+      } else {
+         return descriptions[0] || ''
+      }
    }
 
    render() {
@@ -98,7 +119,7 @@ export default class MemoryRow extends Component {
          <tr>
             <td>{this.props.short_name}</td>
             <td>{this.props.order}</td>
-            <td>{this.props.council}</td>
+            <td>{this.council}</td>
             <td>{this.props.quantity}</td>
             <td>{this.date}</td>
             <td>{this.description}</td>

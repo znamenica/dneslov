@@ -18,9 +18,12 @@
 
 $dark: #292929;
 $terracota: #ee6e73;
+$gold: #d4af37;
 $lighten_terracota: #f08e93;
 $darken_terracota:  #dd3e43;
 $grayed_terracota: #f8dfe3;
+$lighten_gold: #fcc200;
+$darken_gold:  #cfb53b;
 $soft_blue: #039be5;
 $small_height: 30em;
 $medium_height: 45em;
@@ -61,6 +64,11 @@ a[href] {
    margin-right: 0 !important;
 }
 
+// buttons
+.col.bar {
+   float: right;
+}
+
 .btn, .btn-large {
    background-color: $darken_terracota;
 
@@ -74,6 +82,10 @@ a[href] {
 
    &.disabled, .btn-large.disabled {
       background-color: $grayed_terracota !important;
+   }
+
+   &.close {
+      background-color: $grayed_terracota;
    }
 }
 
@@ -168,6 +180,13 @@ main > .container {
 
    &.calendary {
       background-color: #f0f8ff !important;
+   }
+
+   span {
+      display: inline;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
    }
 }
 
@@ -361,6 +380,7 @@ label.active .error {
 
    & > .chip {
       margin-top: 10px;
+      width: -webkit-fill-available;
    }
 
    // defaunlt color of form labels

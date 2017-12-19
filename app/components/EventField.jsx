@@ -11,7 +11,7 @@ export default class EventField extends FilteredDynamicField {
       title: 'Событие',
       placeholder: 'Начни ввод имени события...',
       validations: {
-         "Событие должно быть задано": /^$/
+         "Событие должно быть избрано": /^$/
       }
    }
 }

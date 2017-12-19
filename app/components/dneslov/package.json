@@ -75,9 +75,9 @@
     "lory.js": "git+https://github.com/majioa/lory.git#devel",
     "materialize-css": "^0.98.2",
     "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",
-    "react": "^16.0.0",
+    "react": "^16.2.0",
     "react-cookie": "^2.1.2",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.2.0",
     "react-rails-ujs": "^1.1.0",
     "react-scroll-pagination": "git+https://git@github.com/majioa/react-scroll-pagination.git#devel",
     "uuid": "^3.1.0"

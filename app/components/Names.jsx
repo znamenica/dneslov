@@ -28,14 +28,22 @@ export default class Names extends Component {
       current: null
    }
 
+   // system
+   componentWillMount() {
+      console.log("MOUNT", this.props.names.list)
+      if (this.props.names.list.length == 0) {
+         this.submit()
+      }
+   }
+
    componentDidUpdate(nextProps) {
       this.isRequesting = false
    }
 
+   // custom
    fetchNext() {
-      if (this.state.total > this.state.names.length && ! this.isRequesting) {
+      if ((this.state.total > this.state.names.length) && ! this.isRequesting) {
          console.log("FETCH NEXT FOR", this.state)
-         this.isRequesting = true
          this.submit(this.state.page + 1)
       }
    }
@@ -55,12 +63,15 @@ export default class Names extends Component {
          names[index] = name
       }
 
-      this.setState({ names: names, total: total, current: null, appended: appended})
+      this.setState({
+         names: names,
+         total: total,
+         current: null,
+         appended: appended})
    }
 
    onNameEdit(id) {
       let name = this.state.names.find((m) => { return m.id == id })
-      console.log("M", id, name)
       this.setState({current: name})
    }
 
@@ -68,7 +79,7 @@ export default class Names extends Component {
       this.setState({current: null})
    }
 
-   onNameRemove() {
+   onNameRemove(id) {
       let name = this.state.names.find((c) => { return c.id == id })
 
       $.ajax({
@@ -110,11 +121,14 @@ export default class Names extends Component {
          new_names = names.list
       }
 
-      this.setState({names: new_names, page: names.page})
+      this.setState({names: new_names,
+                     page: names.page,
+                     total: names.total})
       console.log("state", this.state)
    }
 
    submit(page = 1) {
+      this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
@@ -144,7 +158,7 @@ export default class Names extends Component {
                      wrapperClassName='col xl7 l7 m7 s8'
                      with_text={this.state.query.with_tokens.join(" ")}
                      onUpdate={this.onSearchUpdate.bind(this)} /></form>
-                  <div className="col xl2 xl2 m2 s4 flex">
+                  <div className="col xl2 l2 m2 s4 flex">
                      <NameModal
                         open={this.state.current}
                         {...this.state.current}

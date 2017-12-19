@@ -88,6 +88,8 @@ export default class LanguagedTextField extends Component {
    render() {
       console.log(this.props)
 
+      let embed = { [this.props.key_name]: this.props[this.props.key_name] }
+
       return (
          <div className='row'>
             <TextField
@@ -96,10 +98,10 @@ export default class LanguagedTextField extends Component {
                title={this.props.title}
                placeholder={this.props.placeholder}
                name={this.props.key_name}
-               text={this.props[this.props.key_name]}
                textArea={this.props.textField}
                validations={this.props.value_validations}
                wrapperClassName={this.getTextClass()}
+               {...embed}
                onUpdate={this.onChange.bind(this)} />
             <LanguageField
                ref={e => this.r.push(e)}

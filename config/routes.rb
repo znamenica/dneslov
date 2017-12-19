@@ -5,20 +5,21 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
    root 'memories#index'
 
-   resources :calendaries, param: :slug, except: :edit
-   get '/short_calendaries' => 'calendaries#all'
-
    scope module: 'admin' do
-      resources :memories, param: :slug, except: :edit
-      resources :names, param: :id, except: :edit
-      resources :memoes, param: :id, except: :edit
+      get '/dashboard' => 'common#dashboard'
 
+      resources :memories, param: :id, except: :edit
+      resources :calendaries, param: :id, except: :edit
+      resources :memoes, param: :id, except: :edit
+      resources :names, param: :id, except: :edit
+
+      get '/short_calendaries' => 'calendaries#all'
       get '/short_memoes' => 'memoes#all'
       get '/short_events' => 'events#all'
       get '/short_memories' => 'memories#all'
       get '/short_names' => 'names#all'
-      get '/places' => 'places#all'
-      get '/items' => 'items#all'
+      get '/short_places' => 'places#all'
+      get '/short_items' => 'items#all'
       get '/icons' => 'memories#icons'
    end
 

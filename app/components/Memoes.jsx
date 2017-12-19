@@ -28,14 +28,22 @@ export default class Memoes extends Component {
       current: null
    }
 
+   // system
+   componentWillMount() {
+      console.log("MOUNT", this.props.memoes.list)
+      if (this.props.memoes.list.length == 0) {
+         this.submit()
+      }
+   }
+
    componentDidUpdate(nextProps) {
       this.isRequesting = false
    }
 
+   // custom
    fetchNext() {
       if ((this.state.total > this.state.memoes.length) && ! this.isRequesting) {
          console.log("FETCH NEXT FOR", this.state.total, this.state.memoes.length)
-         this.isRequesting = true
          this.submit(this.state.page + 1)
       }
    }
@@ -55,12 +63,15 @@ export default class Memoes extends Component {
          memoes[index] = memo
       }
 
-      this.setState({ memoes: memoes, total: total, current: null, appended: appended})
+      this.setState({
+         memoes: memoes,
+         total: total,
+         current: null,
+         appended: appended})
    }
 
    onMemoEdit(id) {
       let memo = this.state.memoes.find((m) => { return m.id == id })
-      console.log("M", id, memo)
       this.setState({current: memo})
    }
 
@@ -68,7 +79,7 @@ export default class Memoes extends Component {
       this.setState({current: null})
    }
 
-   onMemoRemove() {
+   onMemoRemove(id) {
       let memo = this.state.memoes.find((c) => { return c.id == id })
 
       $.ajax({
@@ -105,17 +116,19 @@ export default class Memoes extends Component {
             })
          } else {
             new_memoes = new_memoes.concat(memoes.list)
-            
          }
       } else {
          new_memoes = memoes.list
       }
 
-      this.setState({memoes: new_memoes, page: memoes.page, total: memoes.total})
+      this.setState({memoes: new_memoes,
+                     page: memoes.page,
+                     total: memoes.total})
       console.log("state", this.state)
    }
 
    submit(page = 1) {
+      this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)

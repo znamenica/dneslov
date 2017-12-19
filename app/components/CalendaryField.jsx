@@ -10,7 +10,7 @@ export default class CalendaryField extends DynamicField {
       title: 'Календарь',
       placeholder: 'Начни ввод наименования календаря...',
       validations: {
-         "Календарь должен быть задан": /^$/
+         "Календарь должен быть избран": /^$/
       }
    }
 }

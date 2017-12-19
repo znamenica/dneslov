@@ -1,1 +1,0 @@
-class CalendariesSerializer < PagedCollectionSerializer ;end

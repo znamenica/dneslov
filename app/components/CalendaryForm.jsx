@@ -194,25 +194,25 @@ export default class CalendaryForm extends Component {
             <div className='row'>
                <SlugField
                   ref={e => this.r.push(e)}
-                  key={'slug'}
+                  key='slug'
                   slug={this.query.slug}
                   wrapperClassName='input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LanguageField
                   ref={e => this.r.push(e)}
-                  key={'languageField'}
+                  key='languageField'
                   language_code={this.query.language_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <AlphabethField
                   ref={e => this.r.push(e)}
-                  key={'alphabethField'}
+                  key='alphabethField'
                   alphabeth_code={this.query.alphabeth_code}
                   wrapperClassName='input-field col xl4 l4 m8 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <LicitBox
                   ref={e => this.r.push(e)}
-                  key={'licitBox'}
+                  key='licitBox'
                   licit={this.query.licit}
                   wrapperClassName='fake-input-field col xl2 l2 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div>
@@ -220,26 +220,26 @@ export default class CalendaryForm extends Component {
                <div className='col'>
                   <ErrorSpan
                      ref={e => this.$error = e}
-                     key={'error'} /></div></div>
+                     key='error' /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
-                  <NamesAsDescriptionssCollection
+                  <NamesAsDescriptionsCollection
                      ref={e => this.r.push(e)}
-                     key={'names'}
+                     key='names'
                      value={this.query.names}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <DescriptionsCollection
                      ref={e => this.r.push(e)}
-                     key={'descriptions'}
+                     key='descriptions'
                      value={this.query.descriptions}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <WikiesCollection
                      ref={e => this.r.push(e)}
-                     key={'wikies'}
+                     key='wikies'
                      value={this.query.wikies}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
@@ -252,28 +252,28 @@ export default class CalendaryForm extends Component {
             <div className='row'>
                <TextField
                   ref={e => this.r.push(e)}
-                  key={'authorName'}
+                  key='authorName'
                   name='author_name'
                   title='Автор'
                   placeholder='Введи имя автора(ов)'
-                  text={this.query.author_name}
+                  author_name={this.query.author_name}
                   wrapperClassName='input-field col xl6 l6 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
                   ref={e => this.r.push(e)}
-                  key={'date'}
+                  key='date'
                   name='date'
                   title='Пора'
                   placeholder='Введи пору написания'
-                  text={this.query.date}
+                  date={this.query.date}
                   wrapperClassName='input-field col xl3 l3 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} />
                <TextField
                   ref={e => this.r.push(e)}
-                  key={'council'}
+                  key='council'
                   name='council'
                   title='Собор'
                   placeholder='Введи сокращение собора'
-                  text={this.query.council}
+                  council={this.query.council}
                   wrapperClassName='input-field col xl3 l3 m4 s12'
                   onUpdate={this.onChildUpdate.bind(this)} /></div></div>)}}

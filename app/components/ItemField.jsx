@@ -2,12 +2,12 @@ import DynamicField from 'DynamicField'
 
 export default class ItemField extends DynamicField {
    static defaultProps = {
-      pathname: 'items',
-      name: 'item_id',
-      pure_name: 'item',
-      key_name: 'name',
+      pathname: 'short_items',
+      name: 'item',
+      field_name: 'item_id',
+      key_name: 'item',
       value_name: 'id',
       title: 'Предмет',
-      placeholder: 'Избери предмет...',
+      placeholder: 'Начни ввод наименования предмета...',
    }
 }
