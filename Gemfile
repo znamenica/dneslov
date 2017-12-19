@@ -55,7 +55,11 @@ gem "sass-rails"
 
 # Explicitly defined to fix CVE-2015-7499 - HEAP-BASED BUFFER OVERFLOW VULNERABILITY IN LIBXML2 and other in LIBXML2
 # and CVE-2015-8806 - Denial of service or RCE from libxml2 and libxslt
-gem 'nokogiri', '~> 1.6.8.1'
+# and 3 security alerts
+# USN-3424-1 - Vulnerabilities in libxml2
+# CVE-2017-5029 - Upstream libxslt vulnerabilities
+# CVE-2016-4658 - libxml2 vulnerabilities
+gem 'nokogiri', '~> 1.8.1'
 
 # Explicitly defined to fix CVE-2015-7579 - XSS VULNERABILITY IN STRIP_TAGS
 # CVE-2015-7578 - POSSIBLE XSS VULNERABILITY
