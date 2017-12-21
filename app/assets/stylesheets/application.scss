@@ -31,6 +31,7 @@ $large_height: 60rem;
 $small_width: 40rem;
 $medium_width: 60rem;
 $large_width: 80rem;
+$xlarge_width: 100rem;
 $today_color: #c7d8ed;
 $selected_color: #80a8cd;
 $error_color: #ff0000;
@@ -131,6 +132,18 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    width: fit-content !important;
 }
 
+//##### mixins
+
+@mixin s-nav {
+   left: 50%;
+   transform: translate(-50%);
+}
+
+@mixin s-nav {
+   left: 50%;
+   transform: translate(-50%);
+}
+
 //#####
 
 nav {
@@ -139,15 +152,14 @@ nav {
 
    .brand-logo {
       padding-left: 10px;
+      left: 0;
+      transform: none;
 
-      @media only screen and (max-width: $large_width) {
-         left: 0;
-         transform: none;
-      }
-
-      @media only screen and (max-width: $small_width) {
-         left: 50%;
-         transform: translate(-50%);
+      @media only screen and (max-width: $small_width),
+             only screen and (max-width: $medium_width) and (min-resolution: 40dpcm),
+             only screen and (max-width: $large_width) and (min-resolution: 60dpcm),
+             only screen and (max-width: $xlarge_width) and (min-resolution: 100dpcm) {
+         @include s-nav
       }
    }
 

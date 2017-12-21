@@ -1,3 +1,6 @@
+env:
+   global:
+    - SECRET_KEY_BASE=c068c0175cf596dc06cf0346aff3253a041cd14c1b50e1b2041590a4f83c2e72d46352510969be147098aeb3cf39b4b411f8ede9d5c61dc09cfae317b2d57e31
 language: ruby
 rvm:
  - 2.3.4
@@ -6,3 +9,6 @@ os:
 env:
    global:
     - BUNDLE_JOBS=4
+before_script:
+ - psql -c "CREATE ROLE dneslov WITH SUPERUSER CREATEDB LOGIN PASSWORD '';" -U postgres
+ - bundle exec rake db:create db:migrate
