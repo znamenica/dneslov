@@ -82,6 +82,10 @@ gem 'kaminari'
 ## decoration/serialization
 gem 'active_model_serializers'
 
+## authentication
+gem 'excon', '~> 0.60.0'
+gem 'jwt'
+
 group :development do
    gem 'capistrano', '~> 3.6'
    gem 'capistrano-rails', '~> 1.3'
@@ -98,12 +102,14 @@ end
 group :development, :test do
    gem 'ruby-prof'
    gem "factory_girl_rails"
-   # gem 'pry-rails'
-   gem 'pry_debug'
+   gem 'pry', '~> 0.10.4'
+   gem 'pry-rails', '~> 0.3.6'
    gem 'listen', '>= 3.0.5', '< 3.2'
    gem 'spring'
    gem 'spring-commands-cucumber'
    gem 'spring-watcher-listen', '~> 2.0.0'
+   gem 'dotenv-rails'
+   gem 'faker'
 end
 
 group :test do

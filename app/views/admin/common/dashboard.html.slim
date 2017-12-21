@@ -1,1 +1,9 @@
-= react_component 'Dashboard', locales: @locales
+= react_component 'Dashboard', locales: @locales,
+                               client_id: ENV['CLIENT_ID'],
+                               redirect_url: ENV['REDIRECT_URL'],
+                               login: session['login'],
+                               name: session['name'],
+                               avatar_url: session['avatar_url'],
+                               location: session['location'],
+                               email: session['email'],
+                               info: session['info']

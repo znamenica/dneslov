@@ -5002,6 +5002,10 @@ react-dom@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+"react-github-login@git+https://git@github.com/majioa/react-github-login.git#devel":
+  version "1.0.3"
+  resolved "git+https://git@github.com/majioa/react-github-login.git#a791e9f475b72c8df777599ba67de54f0798657e"
+
 react-rails-ujs@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-rails-ujs/-/react-rails-ujs-1.1.0.tgz#9b3cfe5d7e27ac56ed3be45f8a7b48b118c56ba5"

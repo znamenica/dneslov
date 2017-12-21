@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+   # The priority is based upon order of creation: first created -> highest priority.
+   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
+   # auth routes
+   get '/auth/github', to: 'auth#github', format: false
+
+   # You can have the root of your site routed with "root"
    root 'memories#index'
 
    scope module: 'admin' do

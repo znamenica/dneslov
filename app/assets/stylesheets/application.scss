@@ -25,12 +25,12 @@ $grayed_terracota: #f8dfe3;
 $lighten_gold: #fcc200;
 $darken_gold:  #cfb53b;
 $soft_blue: #039be5;
-$small_height: 30em;
-$medium_height: 45em;
-$large_height: 60em;
-$small_width: 40em;
-$medium_width: 60em;
-$large_width: 80em;
+$small_height: 30rem;
+$medium_height: 45rem;
+$large_height: 60rem;
+$small_width: 40rem;
+$medium_width: 60rem;
+$large_width: 80rem;
 $today_color: #c7d8ed;
 $selected_color: #80a8cd;
 $error_color: #ff0000;
@@ -105,6 +105,10 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    background-color: $terracota !important;
 }
 
+.gold {
+   background-color: $gold !important;
+}
+
 .title {
    font-weight: bold;
 }
@@ -129,18 +133,52 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
 
 //#####
 
-nav .brand-logo {
-   padding-left: 10px;
+nav {
+   height: 64px;
+   line-height: 64px;
 
-   @media only screen and (max-width: $large_width) {
-      left: 0;
-      transform: none;
+   .brand-logo {
+      padding-left: 10px;
+
+      @media only screen and (max-width: $large_width) {
+         left: 0;
+         transform: none;
+      }
+
+      @media only screen and (max-width: $small_width) {
+         left: 50%;
+         transform: translate(-50%);
+      }
    }
 
-   @media only screen and (max-width: $small_width) {
-      left: 50%;
-      transform: translate(-50%);
+   .sign-in {
+      top: 4px;
+      right: 4px;
+      background-color: $darken_terracota;
+      position: relative;
+
+      img {
+         line-height: 56px;
+         width: 56px;
+         height: 56px;
+      }
+
+      .tap-target-wrapper {
+         &:not(.open) {
+            img {
+               display: none;
+            }
+         }
+
+         .tap-target-content {
+            p {
+               padding-left: 2em;
+               line-height: normal;
+            }
+         }
+      }
    }
+
 }
 
 main > .container {

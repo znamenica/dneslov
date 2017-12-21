@@ -1,4 +1,7 @@
 class Admin::CommonController < ApplicationController
+   include Concerns::Auth
+
+   before_action :authenticate_user!, except: %i(dashboard)
    before_action :set_tokens, only: %i(index)
    before_action :set_page, only: %i(index)
    before_action :set_locales
