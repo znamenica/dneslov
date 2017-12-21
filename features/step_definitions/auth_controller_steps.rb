@@ -15,7 +15,7 @@
    @response = get('/short_names.json', session = { 'jwt': @token }) ;end
 
 Если("сделаем {string} запрос к адресу {string} с параметром {string}") do |proto, address, parms|
-   @response = send(proto.downcase, address, parms) ;end
+   @response = send( proto.downcase, address, parms ) ;end
 
 То("получим вывод:") do |string|
    answer = JSON.parse(@response.body)

@@ -9,3 +9,6 @@ task :clean do
    puts "Cleaning..."
    `git clean -fd`
    `rm -rf $(find  . -name "*~" -o \\( -type d -name '.bundle' -o -type d -name 'node_modules' \\) -prune |grep ~\\$)` ;end
+
+
+task :all => :cucumber
