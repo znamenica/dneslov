@@ -1,11 +1,15 @@
 class Admin::CommonController < ApplicationController
    include Concerns::Auth
+   include Pundit
 
    before_action :authenticate_user!, except: %i(dashboard)
    before_action :set_tokens, only: %i(index)
    before_action :set_page, only: %i(index)
    before_action :set_locales
-   before_action :set_object, only: %i(show update destroy)
+   before_action :new_object, only: %i(create)
+   before_action :fetch_object, only: %i(show update destroy)
+   before_action :fetch_objects, only: %i(index)
+   before_action :authorize!, except: %i(dashboard)
    layout 'admin'
 
    rescue_from ActiveRecord::RecordNotUnique,
@@ -18,8 +22,6 @@ class Admin::CommonController < ApplicationController
 
    # GET /<objects>/
    def index
-      @objects = apply_scopes( model ).page( params[:page] )
-
       respond_to do |format|
          format.json { render :index, json: @objects, locales: @locales,
                                       serializer: objects_serializer,
@@ -30,8 +32,6 @@ class Admin::CommonController < ApplicationController
 
    # POST /<objects>/create
    def create
-      @object = model.new( permitted_params )
-
       @object.save!
 
       render json: @object, serializer: object_serializer, locales: @locales ;end
@@ -61,6 +61,13 @@ class Admin::CommonController < ApplicationController
 
    protected
 
+   def authorize!
+      policy = Object.const_get(model.name + "Policy")
+      if !policy.new(current_user, @object).send(action_name + '?')
+         raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}"
+      end
+   end
+
    def unprocessable_entity e
       errors = @object.errors.any? && @object.errors || e.to_s
       render json: errors, status: :unprocessable_entity ;end
@@ -75,7 +82,13 @@ class Admin::CommonController < ApplicationController
    def set_tokens
       @tokens ||= params[:with_tokens] || [] ;end
 
-   def set_object
+   def new_object
+      @object = model.new( permitted_params ) ;end
+
+   def fetch_objects
+      @objects = apply_scopes( model ).page( params[:page] ) ;end
+
+   def fetch_object
       if params[:slug]
          @object ||= model.by_slug(params[:slug])
       else

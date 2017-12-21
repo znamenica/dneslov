@@ -86,6 +86,9 @@ gem 'active_model_serializers'
 gem 'excon', '~> 0.60.0'
 gem 'jwt'
 
+## authorization
+gem 'pundit'
+
 group :development do
    gem 'capistrano', '~> 3.6'
    gem 'capistrano-rails', '~> 1.3'
