@@ -166,7 +166,8 @@ export default class PickMeUpCalendar extends Component {
                      value='julian' />
                   <label
                      className='pmu-style'
-                     htmlFor='julian'>Юлианский</label>
+                     htmlFor='julian'>
+                        Юлианский</label>
                   <input
                      className='hidden'
                      id='neojulian'
@@ -175,7 +176,8 @@ export default class PickMeUpCalendar extends Component {
                      value='neojulian' />
                   <label
                      className='pmu-style'
-                     htmlFor="neojulian">Новоюлианский</label></nav>
+                     htmlFor="neojulian">
+                        Новоюлианский</label></nav>
                <nav className='next-prev'>
                   <div
                      className='pmu-yesterday pmu-button'>◀</div>
