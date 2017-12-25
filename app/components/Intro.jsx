@@ -8,8 +8,8 @@ export class Intro extends Component {
       enabled: false,
       steps: [
          {
-            element: '.nav-wrapper',
-            intro: 'Добро пожаловать на сайт православного календаря «Днесловъ»',
+            element: '.brand-logo',
+            intro: 'Добро пожаловать на сайт православного календаря «Днесловъ». Пройдитесь по введению пошагово. На любом шаге вы можете его остановить.',
             position: 'bottom',
             datestamp: '20171213185700',
          },
@@ -38,8 +38,14 @@ export class Intro extends Component {
             datestamp: '20171213185700',
          },
          {
-            element: '.calendary .pmu-instance .pmu-today',
-            intro: 'Кружком светлосиреневого цвета выделен нынешний день, тёмносиреневым же избранный день, список памятей которого будет показан. В случае, если показан светлосиревеный кружок с тёмною каймою, нынеший и избранный дни совпадают.',
+            element: '.calendary .pmu-instance .pmu-days .pmu-selected',
+            intro: 'Кружком тёмносиреневым выделен избранный день, памяти которого будет показаны в списке.',
+            position: 'right',
+            datestamp: '20171213185700',
+         },
+         {
+            element: '.calendary .pmu-instance .pmu-days .pmu-today',
+            intro: 'Кружком светлосиреневого цвета выделен нынешний день. В случае, если показан светлосиревеный кружок с тёмною каймою, нынеший и избранный дни совпадают.',
             position: 'right',
             datestamp: '20171213185700',
          },
