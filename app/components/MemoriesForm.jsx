@@ -25,15 +25,29 @@ export default class MemoriesForm extends Component {
       memory: null,
    }
 
-   state = {
-      memories: this.props.memories.list,
-      memoriesTotal: this.props.memories.total,
-      memory: this.props.memory,
-      query: {
-         page: this.props.memories.page,
-         with_date: [ this.props.date, this.props.julian ],
-         in_calendaries: this.props.calendaries_used.slice(),
-         with_tokens: this.props.tokens
+   state = this.getDefaultState()
+
+   // system
+   componentDidMount() {
+      window.onpopstate = this.onPopState.bind(this)
+   }
+
+   componentWillUnmount() {
+      window.onpopstate = null
+   }
+
+   getDefaultState(props = this.props) {
+      console.log(props)
+      return {
+         memories: this.props.memories.list,
+         memoriesTotal: this.props.memories.total,
+         memory: this.props.memory,
+         query: {
+            page: this.props.memories.page,
+            with_date: [ this.props.date, this.props.julian ],
+            in_calendaries: this.props.calendaries_used.slice(),
+            with_tokens: this.props.tokens
+         }
       }
    }
 
@@ -103,20 +117,27 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoriesLoadSuccess(memories) {
+      let state
+
       //let slugs = memories.list.map((m) => { return m.slug })
       //console.log("AJAX SUCCESS", slugs)
       console.log("LOADED", memories)
+
       if (memories.page > 1) {
          let newMemories = this.state.memories.concat(memories.list)
-         this.setState({memories: newMemories,
-                        memoriesTotal: memories.total,
-                        memory: null})
+         state = assign({}, this.state, {
+            memories: newMemories,
+            memoriesTotal: memories.total,
+            memory: null})
       } else {
-         this.setState({memories: memories.list,
-                        memoriesTotal: memories.total,
-                        memory: null})
+         state = assign({}, this.state, {
+            memories: memories.list,
+            memoriesTotal: memories.total,
+            memory: null})
       }
-      history.pushState({ 'json': memories }, '', '/')
+
+      history.pushState(state, 'Днесловъ', '/')
+      this.setState(state)
    }
 
    onMemoriesLoadFailure() {
@@ -136,10 +157,22 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoryLoadSuccess(memory) {
+      let state = assign({}, this.state, { memory: memory })
+
       console.log("Loaded memory", memory)
 
-      history.pushState({ memory: memory, slug: memory.slug }, '', '/' + memory.slug)
-      this.setState({memory: memory})
+      history.pushState(state, 'Днесловъ – ' + memory.short_name, '/' + memory.slug)
+      this.setState(state)
+   }
+
+   onPopState(state) {
+      console.log("oldstate", state)
+
+      if (state.state && (state.state.memories || state.state.memory)) {
+         this.setState(state.state)
+      } else {
+         this.setState(this.getDefaultState())
+      }
    }
 
    render() {
