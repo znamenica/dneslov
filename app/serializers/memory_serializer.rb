@@ -1,5 +1,5 @@
 class MemorySerializer < CommonMemorySerializer
-   attributes :beings, :wikies,:paterics, :calendaries, :icons, :troparion, :kontakion
+   attributes :beings, :wikies,:paterics, :calendaries, :icons, :events, :troparion, :kontakion
 
    def link_text link
       /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
@@ -35,6 +35,9 @@ class MemorySerializer < CommonMemorySerializer
             description: icon.description_for( locales )&.text,
             url: icon.url,
          } ;end;end
+
+   def events
+      ActiveModel::Serializer::CollectionSerializer.new(object.events.usual, locales: locales) ;end
 
    def troparion
       if troparion = object.troparions_for( locales ).first

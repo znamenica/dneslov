@@ -1903,7 +1903,7 @@ label.active .error {
 
 .collection {
    .collection-item {
-      &.memory {
+      &.memory, &.event {
          min-height: auto;
          padding: 3px 0 0 0;
          line-height: inherit;
@@ -1911,15 +1911,35 @@ label.active .error {
          color: $dark;
 
          .collapsible-header {
-            padding: 0 1rem 0 4rem;
+            padding: 0 1rem 0 1rem;
             line-height: 300%;
             background-color: $book;
             //min-height: 3rem;
             display: block;
+
+            &:only-child {
+               cursor: default;
+            }
          }
 
          .collapsible-body {
             padding: 1rem;
+
+            .row {
+               margin-bottom: 0px;
+            }
+         }
+      }
+
+      &.memory {
+         .collapsible-header {
+            padding-left: 4rem;
+         }
+      }
+
+      &.active {
+         .collapsible-body {
+            display: inline-block;
          }
       }
 

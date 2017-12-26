@@ -16,16 +16,6 @@ export default class MemorySpans extends Component {
       $(this.$collapsible).collapsible()
    }
 
-   componentDidUpdate(nextProps) {
-      let slugs = this.props.memories.map((m) => { return m.slug } )
-      $(this.$collapsible).collapsible()
-
-      console.log("memories", this.props.memories.length)
-      console.log("memories total", this.props.total_memories)
-      console.log("slugs", slugs)
-      this.isRequesting = false
-   }
-
    // props
    fetchNext() {
       if (this.props.total_memories > this.props.memories.length && ! this.isRequesting) {

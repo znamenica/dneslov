@@ -2,6 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Carousel from 'Carousel'
+import EventSpans from 'EventSpans'
 import Chip from 'Chip'
 
 export default class Memory extends Component {
@@ -15,6 +16,7 @@ export default class Memory extends Component {
       paterics: [],
       calendaries: [],
       icons: [],
+      events: [],
       troparion: null,
       kontakion: null,
    }
@@ -119,4 +121,12 @@ export default class Memory extends Component {
                      <div className='col s12 title'>
                         {this.props.kontakion.title}</div>
                      <div className='col s12'>
-                        {this.props.kontakion.text}</div></div></div>}</div>)}}
+                        {this.props.kontakion.text}</div></div></div>}
+            {this.props.events.length > 0 &&
+               <div className='col s12'>
+                  <div className='row'>
+                     <div className='col s12 title'>
+                        События</div>
+                     <div className='col s12'>
+                        <EventSpans
+                           events={this.props.events} /></div></div></div>}</div>)}}
