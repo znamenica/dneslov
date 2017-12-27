@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import Chip from 'Chip'
+import Name from 'Name'
 
 export default class MemorySpan extends Component {
    static defaultProps = {
@@ -10,6 +11,7 @@ export default class MemorySpan extends Component {
       year: null,
       order: null,
       description: null,
+      names: [],
       onLoadRequest: null,
    }
 
@@ -55,8 +57,9 @@ export default class MemorySpan extends Component {
                <Chip
                   color={this.props.order.color}
                   text={this.props.order.slug} />
-               <span>
-                  {this.props.short_name}</span>
+               <Name
+                  short_name={this.props.short_name}
+                  names={this.props.names} />
                <Chip
                   className='year-date'
                   text={this.props.year} /></div>

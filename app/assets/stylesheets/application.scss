@@ -1493,6 +1493,64 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    width: fit-content !important;
 }
 
+.name {
+   margin: 0;
+
+   &.short {
+      font-weight: 500;
+   }
+
+   &.first {
+      font-weight: 500;
+   }
+
+   &.nick {
+      font-weight: 500;
+
+      &::before {
+         //content: '«';
+      }
+
+      &::after {
+         //content: '»';
+      }
+   }
+
+   &.last {
+      font-style: italic;
+
+      &::before {
+         content: '(';
+      }
+
+      &::after {
+         content: ')';
+      }
+   }
+
+   &.feat {
+      font-weight: 500;
+   }
+
+   &::after {
+      content: ' ';
+   }
+
+   &:empty {
+      display: none;
+
+      &::before {
+         content: none;
+         display: none;
+      }
+
+      &::after {
+         content: none;
+         display: none;
+      }
+   }
+}
+
 //#####
 
 .introjs-tooltip {

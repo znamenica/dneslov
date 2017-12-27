@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'
 import Carousel from 'Carousel'
 import EventSpans from 'EventSpans'
 import Chip from 'Chip'
+import Name from 'Name'
 
 export default class Memory extends Component {
    static defaultProps = {
       slug: null,
       short_name: null,
       description: null,
+      names: [],
       councils: [],
       beings: [],
       wikies: [],
@@ -32,8 +34,9 @@ export default class Memory extends Component {
                      <Chip
                         color={this.props.order.color}
                         text={this.props.order.slug} />
-                     <span>
-                        <b>{this.props.short_name}</b></span>
+                     <Name
+                        short_name={this.props.short_name}
+                        names={this.props.names} />
                      <Chip
                         className='year-date'
                         text={this.props.year} /></div></div></div>

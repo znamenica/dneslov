@@ -49,6 +49,7 @@ export default class MemorySpans extends Component {
                         year={memory.year}
                         order={memory.order}
                         description={memory.description}
+                        names={memory.names}
                         onLoadRequest={this.props.onLoadRequest} />)}
                   <ReactScrollPagination
                      fetchFunc={this.fetchNext.bind(this)} /></ul>}
