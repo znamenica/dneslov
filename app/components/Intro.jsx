@@ -38,14 +38,14 @@ export class Intro extends Component {
             datestamp: '20171213185700',
          },
          {
-            element: '.calendary .pmu-instance .pmu-days .pmu-selected',
-            intro: 'Кружком тёмносиреневым выделен избранный день, памяти которого будет показаны в списке.',
+            element: '.calendary .pmu-instance .pmu-days .pmu-today',
+            intro: 'Кружком светлосиреневого цвета выделен нынешний день.',
             position: 'right',
             datestamp: '20171213185700',
          },
          {
-            element: '.calendary .pmu-instance .pmu-days .pmu-today',
-            intro: 'Кружком светлосиреневого цвета выделен нынешний день. В случае, если показан светлосиревеный кружок с тёмною каймою, нынеший и избранный дни совпадают.',
+            element: '.calendary .pmu-instance .pmu-days .pmu-selected',
+            intro: 'Кружком тёмносиреневым выделен избранный день, памяти которого будет показаны в списке. В случае, если показан светлосиревеный кружок с тёмною каймою, нынеший и избранный дни совпадают.',
             position: 'right',
             datestamp: '20171213185700',
          },
