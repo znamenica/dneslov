@@ -21,6 +21,7 @@ class MemoriesController < ApplicationController
                               each_serializer: MemorySpanSerializer,
                               total: @memories.total_count,
                               page: @page,
+                              calendaries: params[:in_calendaries],
                               locales: @locales }
          format.html { render :index } end;end
 

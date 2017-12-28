@@ -44,6 +44,7 @@ export default class MemorySpans extends Component {
                         key={memory.slug}
                         slug={memory.slug}
                         short_name={memory.short_name}
+                        default_calendary_name={memory.default_calendary_name}
                         url={memory.url}
                         icon_url={memory.icon_url}
                         year={memory.year}

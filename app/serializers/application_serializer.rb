@@ -12,6 +12,9 @@ class ApplicationSerializer < ActiveModel::Serializer
    def locales
       @instance_options[:locales] ;end
 
+   def calendaries
+      @instance_options[:calendaries] ;end
+
    def color_by_slug slug
       slug = slug.strip
       coeff = 3.0 / ( POSES.size - 1 )

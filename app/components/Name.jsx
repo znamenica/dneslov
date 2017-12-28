@@ -5,6 +5,7 @@ export default class Name extends Component {
    static defaultProps = {
       names: [],
       short_name: null,
+      default_calendary_name: null,
    }
 
    static propTypes = {
@@ -83,7 +84,11 @@ export default class Name extends Component {
    render() {
       return (
          <span>
-            {this.hasName() &&
+            {this.props.default_calendary_name &&
+               <span
+                  className='name short'>
+               {this.props.default_calendary_name}</span>}
+            {!this.props.default_calendary_name && this.hasName() &&
                [
                   <span
                      className='name first'>
@@ -97,7 +102,7 @@ export default class Name extends Component {
                   <span
                      className='name feat'>
                      {this.getFeatName()}</span>]}
-            {!this.hasName() &&
+            {!this.props.default_calendary_name && !this.hasName() &&
                <span
                   className='name short'>
                   {this.props.short_name}</span>}</span>)}}

@@ -6,6 +6,7 @@ export default class MemorySpan extends Component {
    static defaultProps = {
       slug: null,
       short_name: null,
+      default_calendary_name: null,
       url: null,
       icon_url: null,
       year: null,
@@ -59,6 +60,7 @@ export default class MemorySpan extends Component {
                   text={this.props.order.slug} />
                <Name
                   short_name={this.props.short_name}
+                  default_calendary_name={this.props.default_calendary_name}
                   names={this.props.names} />
                <Chip
                   className='year-date'
