@@ -1070,7 +1070,7 @@ $error_color: #ff0000;
    @include xl
 }
 
-@media only screen and (max-width: 850px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (max-width: 1000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
       line-height: 1.25;
       font-size: 19px;
@@ -1103,7 +1103,7 @@ $error_color: #ff0000;
    @include s
 }
 
-@media only screen and (min-width: 850px) and (max-width: 1300px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
       line-height: 1.25;
       font-size: 22px;
@@ -1136,7 +1136,7 @@ $error_color: #ff0000;
    @include m
 }
 
-@media only screen and (min-width: 1300px) and (max-width: 2200px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
       line-height: 1.25;
       font-size: 25px;
@@ -1231,7 +1231,7 @@ $error_color: #ff0000;
    @include xl
 }
 
-@media only screen and (max-width: 1000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (max-width: 1200px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 30px;
@@ -1264,7 +1264,7 @@ $error_color: #ff0000;
    @include s
 }
 
-@media only screen and (min-width: 1000px) and (max-width: 1800px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (min-width: 1200px) and (max-width: 2000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 33.5px;
@@ -1297,7 +1297,7 @@ $error_color: #ff0000;
    @include m
 }
 
-@media only screen and (min-width: 1800px) and (max-width: 3000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (min-width: 2000px) and (max-width: 3000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 37px;
