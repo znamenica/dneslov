@@ -800,8 +800,8 @@ $error_color: #ff0000;
       line-height: 1.4;
       font-size: 11px;
 
-      main > .container {
-         width: 92%;
+      a[href] {
+         color: DarkGreen;
       }
 
       .collection {
@@ -833,6 +833,10 @@ $error_color: #ff0000;
       line-height: 1.4;
       font-size: 12px;
 
+      a[href] {
+         color: Cyan;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -861,6 +865,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.4;
       font-size: 13px;
+
+      a[href] {
+         color: DarkBlue;
+      }
 
       .collection {
          .collection-item {
@@ -891,6 +899,10 @@ $error_color: #ff0000;
       line-height: 1.25;
       font-size: 14px;
 
+      a[href] {
+         color: CornflowerBlue;
+      }
+
       .chip {
          border-radius: 20px;
          line-height: 230%;
@@ -914,6 +926,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.25;
       font-size: 16px;
+
+      a[href] {
+         color: Chocolate;
+      }
 
       .collection {
          .collection-item {
@@ -948,6 +964,10 @@ $error_color: #ff0000;
       line-height: 1.25;
       font-size: 14px;
 
+      a[href] {
+         color: Chartreuse;
+      }
+
       .chip {
          border-radius: 20px;
          line-height: 230%;
@@ -971,6 +991,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.25;
       font-size: 16px;
+
+      a[href] {
+         color: CadetBlue;
+      }
 
       .collection {
          .collection-item {
@@ -1005,6 +1029,10 @@ $error_color: #ff0000;
       line-height: 1.25;
       font-size: 17.5px;
 
+      a[href] {
+         color: BurlyWood;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1038,6 +1066,10 @@ $error_color: #ff0000;
       line-height: 1.25;
       font-size: 19px;
 
+      a[href] {
+         color: Brown;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1070,6 +1102,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.25;
       font-size: 22px;
+
+      a[href] {
+         color: BlueViolet;
+      }
 
       .collection {
          .collection-item {
@@ -1105,6 +1141,10 @@ $error_color: #ff0000;
       line-height: 1.2;
       font-size: 33.5px;
 
+      a[href] {
+         color: yellow;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1137,6 +1177,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.25;
       font-size: 22px;
+
+      a[href] {
+         color: red;
+      }
 
       .collection {
          .collection-item {
@@ -1171,6 +1215,10 @@ $error_color: #ff0000;
       line-height: 1.25;
       font-size: 25px;
 
+      a[href] {
+         color: AntiqueWhite;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1203,6 +1251,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.2;
       font-size: 30px;
+
+      a[href] {
+         color: aqua;
+      }
 
       .collection {
          .collection-item {
@@ -1237,6 +1289,10 @@ $error_color: #ff0000;
       line-height: 1.2;
       font-size: 33.5px;
 
+      a[href] {
+         color: DarkMagenta;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1269,6 +1325,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.2;
       font-size: 30px;
+
+      a[href] {
+         color: blue;
+      }
 
       .collection {
          .collection-item {
@@ -1303,6 +1363,10 @@ $error_color: #ff0000;
       line-height: 1.2;
       font-size: 33.5px;
 
+      a[href] {
+         color: magenta;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1335,6 +1399,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.2;
       font-size: 37px;
+
+      a[href] {
+         color: DarkOrange;
+      }
 
       .collection {
          .collection-item {
@@ -1369,6 +1437,10 @@ $error_color: #ff0000;
       line-height: 1.2;
       font-size: 41px;
 
+      a[href] {
+         color: Gold;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1402,6 +1474,10 @@ $error_color: #ff0000;
       line-height: 1.2;
       font-size: 46px;
 
+      a[href] {
+         color: GreenYellow;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -1434,6 +1510,10 @@ $error_color: #ff0000;
    html {
       line-height: 1.1;
       font-size: 55px;
+
+      a[href] {
+         color: HotPink;
+      }
 
       .collection {
          .collection-item {
