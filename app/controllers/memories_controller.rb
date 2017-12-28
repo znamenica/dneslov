@@ -1,9 +1,9 @@
 class MemoriesController < ApplicationController
-   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
    before_action :set_locales, :set_date, :set_calendary_cloud
    before_action :set_memory, only: %i(show)
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
+   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end
@@ -21,7 +21,7 @@ class MemoriesController < ApplicationController
                               each_serializer: MemorySpanSerializer,
                               total: @memories.total_count,
                               page: @page,
-                              calendaries: params[:in_calendaries],
+                              calendaries: @calendary_slugs,
                               locales: @locales }
          format.html { render :index } end;end
 

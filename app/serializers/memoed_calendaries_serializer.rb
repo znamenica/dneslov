@@ -19,6 +19,6 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
       object.group_by do |memo|
          #TODO blank calendary. NOTE what is blank?
          memo.calendary
-      end.select { |(calendary, _)| calendary }.map do |(calendary, memos)|
+      end.select { |(calendary, _)| calendary&.licit }.map do |(calendary, memos)|
          if calendary
             yield( CalendarySerializer.new( calendary, memos: memos, locales: locales )) end;end;end;end

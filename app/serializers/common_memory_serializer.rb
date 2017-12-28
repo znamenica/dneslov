@@ -17,8 +17,15 @@ class CommonMemorySerializer < ApplicationSerializer
 
    def order
       {
-         slug: object.order_for( @instance_options[:locales] ).text,
-         color: self.color_by_slug( object.order ) };end
+         slug: object.order_for( locales ).text,
+         color: self.color_by_slug( object.order ) }
+   rescue => e
+      Rails.logger.error(e.to_s)
+      Rails.logger.error(e.backtrace)
+      binding.pry
+      {
+         slug: object.order_for( locales )&.text,
+         color: self.color_by_slug( object.order ) } ;end
 
    def councils
       council = object.council || ''

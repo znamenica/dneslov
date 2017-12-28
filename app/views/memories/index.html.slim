@@ -1,5 +1,10 @@
 = react_component 'MemoriesForm', date: @date&.strftime("%d.%m.%Y"),
-                                  memories: MemoriesSerializer.new( @memories, total: @memories.total_count, page: @page, locales: @locales, serializer: MemorySpanSerializer ),
+                                  memories: MemoriesSerializer.new(@memories,
+                                                  total: @memories.total_count,
+                                                  page: @page,
+                                                  locales: @locales,
+                                                  serializer: MemorySpanSerializer,
+                                                  calendaries: @calendary_slugs),
                                   calendaries_cloud: CalendaryCloudSerializer.new( @calendary_cloud, locales: @locales ),
                                   calendaries_used: @calendary_slugs,
                                   tokens: @tokens
