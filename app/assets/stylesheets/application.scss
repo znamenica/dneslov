@@ -46,8 +46,16 @@ $error_color: #ff0000;
 }
 
 @mixin s {
-   main > .container {
-      width: 99%;
+   main {
+      & > .container {
+         width: 99%;
+      }
+      
+      .pickmeup {
+         .pmu-instance {
+            font-size: 120%;
+         }
+      }
    }
 
   .row .col.s1 {
@@ -237,6 +245,18 @@ $error_color: #ff0000;
       width: 96%;
    }
 
+   main {
+      & > .container {
+         width: 99%;
+      }
+      
+      .pickmeup {
+         .pmu-instance {
+            font-size: 111%;
+         }
+      }
+   }
+
   .row .col.m1 {
     width: 8.3333333333%;
     margin-left: auto;
@@ -420,8 +440,16 @@ $error_color: #ff0000;
 }
 
 @mixin l {
-   main > .container {
-      width: 93%;
+   main {
+      & > .container {
+         width: 93%;
+      }
+      
+      .pickmeup {
+         .pmu-instance {
+            font-size: 105%;
+         }
+      }
    }
 
   .row .col.l1 {
@@ -607,8 +635,16 @@ $error_color: #ff0000;
 }
 
 @mixin xl {
-   main > .container {
-      width: 90%;
+   main {
+      & > .container {
+         width: 90%;
+      }
+      
+      .pickmeup {
+         .pmu-instance {
+            font-size: 95%;
+         }
+      }
    }
 
   .row .col.xl1 {
@@ -922,7 +958,7 @@ $error_color: #ff0000;
    @include xl
 }
 
-@media only screen and (min-width: 1400px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 1500px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.25;
       font-size: 16px;
@@ -1902,7 +1938,7 @@ main > .container {
          transition: 0.3s;
          user-select: none;
 
-         width: 11em;
+         width: fit-content;
          height: 3em;
          padding: 0;
          text-align: center;
@@ -1918,6 +1954,14 @@ main > .container {
 
          span {
             transform: scale(0.75);
+         }
+
+         &.julian {
+            width: 42%;
+         }
+
+         &.neo-julian {
+            width: 58%;
          }
 
          &:hover {

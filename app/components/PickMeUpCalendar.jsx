@@ -165,7 +165,7 @@ export default class PickMeUpCalendar extends Component {
                      defaultChecked
                      value='julian' />
                   <label
-                     className='pmu-style'
+                     className='pmu-style julian'
                      htmlFor='julian'>
                         Юлианский</label>
                   <input
@@ -175,7 +175,7 @@ export default class PickMeUpCalendar extends Component {
                      name='calendar-style'
                      value='neojulian' />
                   <label
-                     className='pmu-style'
+                     className='pmu-style neo-julian'
                      htmlFor="neojulian">
                         Новоюлианский</label></nav>
                <nav className='next-prev'>
