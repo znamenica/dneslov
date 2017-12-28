@@ -779,7 +779,7 @@ $error_color: #ff0000;
 
 //#####
 
-@media only screen and (max-width: 300px) and (max-resolution: 40dpcm) {
+@media only screen and (max-width: 550px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.4;
       font-size: 11px;
@@ -799,14 +799,15 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 128px;
+         height: 64px;
+         line-height: 64px;
       }
    }
 
    @include s
 }
 
-@media only screen and (min-width: 300px) and (max-width: 600px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 550px) and (max-width: 900px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.4;
       font-size: 12px;
@@ -827,13 +828,14 @@ $error_color: #ff0000;
 
       nav {
          height: 64px;
+         line-height: 64px;
       }
    }
 
    @include m
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1000px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 900px) and (max-width: 1200px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.4;
       font-size: 13px;
@@ -854,13 +856,14 @@ $error_color: #ff0000;
 
       nav {
          height: 64px;
+         line-height: 64px;
       }
    }
 
    @include l
 }
 
-@media only screen and (min-width: 1000px) and (max-width: 1400px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 1200px) and (max-width: 1500px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.25;
       font-size: 14px;
@@ -876,6 +879,7 @@ $error_color: #ff0000;
 
       nav {
          height: 64px;
+         line-height: 64px;
       }
    }
 
@@ -907,6 +911,7 @@ $error_color: #ff0000;
 
       nav {
          height: 64px;
+         line-height: 64px;
       }
    }
 
@@ -929,6 +934,7 @@ $error_color: #ff0000;
 
       nav {
          height: 80px;
+         line-height: 80px;
       }
    }
 
@@ -960,6 +966,7 @@ $error_color: #ff0000;
 
       nav {
          height: 80px;
+         line-height: 80px;
       }
    }
 
@@ -991,6 +998,7 @@ $error_color: #ff0000;
 
       nav {
          height: 80px;
+         line-height: 80px;
       }
    }
 
@@ -1022,6 +1030,7 @@ $error_color: #ff0000;
 
       nav {
          height: 80px;
+         line-height: 80px;
       }
    }
 
@@ -1053,6 +1062,7 @@ $error_color: #ff0000;
 
       nav {
          height: 80px;
+         line-height: 80px;
       }
    }
 
@@ -1085,6 +1095,8 @@ $error_color: #ff0000;
 
       nav {
          height: 110px;
+         line-height: 110px;
+         background-color: yellow;
       }
    }
 
@@ -1116,6 +1128,8 @@ $error_color: #ff0000;
 
       nav {
          height: 110px;
+         line-height: 110px;
+         background-color: red;
       }
    }
 
@@ -1147,6 +1161,7 @@ $error_color: #ff0000;
 
       nav {
          height: 110px;
+         line-height: 110px;
       }
    }
 
@@ -1178,6 +1193,7 @@ $error_color: #ff0000;
 
       nav {
          height: 110px;
+         line-height: 110px;
       }
    }
 
@@ -1215,7 +1231,7 @@ $error_color: #ff0000;
    @include xl
 }
 
-@media only screen and (max-width: 825px) and (min-resolution: 80dpcm) and (max-resolution: 110dpcm) {
+@media only screen and (max-width: 825px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 30px;
@@ -1240,13 +1256,15 @@ $error_color: #ff0000;
 
       nav {
          height: 128px;
+         line-height: 128px;
+         background-color: blue;
       }
    }
 
    @include s
 }
 
-@media only screen and (min-width: 825px) and (max-width: 1650px) and (min-resolution: 80dpcm) and (max-resolution: 110dpcm) {
+@media only screen and (min-width: 825px) and (max-width: 1650px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 33.5px;
@@ -1271,13 +1289,15 @@ $error_color: #ff0000;
 
       nav {
          height: 145px;
+         line-height: 145px;
+         background-color: magenta;
       }
    }
 
    @include m
 }
 
-@media only screen and (min-width: 1650px) and (max-width: 2750px) and (min-resolution: 80dpcm) and (max-resolution: 110dpcm) {
+@media only screen and (min-width: 1650px) and (max-width: 2750px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 37px;
@@ -1302,13 +1322,14 @@ $error_color: #ff0000;
 
       nav {
          height: 155px;
+         line-height: 155px;
       }
    }
 
   @include l
 }
 
-@media only screen and (min-width: 2750px) and (max-width: 3850px) and (min-resolution: 80dpcm) and (max-resolution: 110dpcm) {
+@media only screen and (min-width: 2750px) and (max-width: 3850px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 41px;
@@ -1333,13 +1354,14 @@ $error_color: #ff0000;
 
       nav {
          height: 165px;
+         line-height: 165px;
       }
    }
 
    @include xl
 }
 
-@media only screen and (min-width: 3850px) and (min-resolution: 80dpcm) and (max-resolution: 110dpcm) {
+@media only screen and (min-width: 3850px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
    html {
       line-height: 1.2;
       font-size: 46px;
@@ -1364,13 +1386,14 @@ $error_color: #ff0000;
 
       nav {
          height: 180px;
+         line-height: 180px;
       }
    }
 
    @include xl
 }
 
-@media only screen and (min-resolution: 110dpcm) {
+@media only screen and (min-resolution: 120dpcm) {
    html {
       line-height: 1.1;
       font-size: 55px;
@@ -1395,6 +1418,7 @@ $error_color: #ff0000;
 
       nav {
          height: 200px;
+         line-height: 200px;
       }
    }
 

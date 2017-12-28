@@ -1,6 +1,6 @@
 html
    head
-      title = [ 'Днесловъ', @memory&.short_name ].compact.join(' – ')
+      title = [ 'Днеслов', @memory&.short_name ].compact.join(' – ')
       = stylesheet_link_tag 'application', media: 'all'
       = stylesheet_link_tag 'https://fonts.googleapis.com/icon?family=Material+Icons'
       = javascript_pack_tag 'app'
@@ -9,7 +9,7 @@ html
       header
          nav.terracota
             .nav-wrapper
-               a.brand-logo(href='/') Днесловъ
+               a.brand-logo(href='/') Днеслов
 
       main
          .container = yield
