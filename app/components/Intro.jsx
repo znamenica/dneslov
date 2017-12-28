@@ -10,7 +10,7 @@ export class Intro extends Component {
          {
             element: '.brand-logo',
             intro: 'Добро пожаловать на сайт православного календаря «Днесловъ». Пройдитесь по введению пошагово. На любом шаге вы можете его остановить.',
-            position: 'bottom',
+            position: 'auto',
             datestamp: '20171213185700',
          },
          {
