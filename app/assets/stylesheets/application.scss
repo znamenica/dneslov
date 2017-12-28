@@ -1072,25 +1072,25 @@ $error_color: #ff0000;
 
 @media only screen and (max-width: 1000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
-      line-height: 1.25;
-      font-size: 19px;
+      line-height: 1.2;
+      font-size: 30px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(8px, 8px) scale(1.3);
+               transform: translate(17px, 17px) scale(1.7);
             }
          }
       }
 
       .chip {
-         border-radius: 45px;
+         border-radius: 50px;
          line-height: 200%;
       }
 
       .run-intro.btn-large {
-         transform: translate(-13px, -13px) scale(1.45);
+         transform: translate(-14px, -14px) scale(1.5);
       }
 
       nav {
