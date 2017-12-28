@@ -186,7 +186,7 @@ export default class MemoriesForm extends Component {
                <Intro />
             </CookiesProvider>
             <form>
-               <div className='col s12 m5 l4 xl3'>
+               <div className='col s12 m5 l3 xl2'>
                   <div className='hidden' id='calendary' />
                   <div className='row'>
                      <PickMeUpCalendar
@@ -195,7 +195,7 @@ export default class MemoriesForm extends Component {
                         calendaries={this.props.calendaries_cloud}
                         calendaries_used={this.state.query.in_calendaries}
                         onAct={this.onCloudAct.bind(this)} /></div></div>
-               <div className='col s12 m7 l8 xl9'>
+               <div className='col s12 m7 l9 xl10'>
                   {this.state.memory &&
                      <Memory
                         key='memory'

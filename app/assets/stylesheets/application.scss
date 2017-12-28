@@ -46,6 +46,10 @@ $error_color: #ff0000;
 }
 
 @mixin s {
+   main > .container {
+      width: 99%;
+   }
+
   .row .col.s1 {
     width: 8.3333333333%;
     margin-left: auto;
@@ -229,6 +233,10 @@ $error_color: #ff0000;
 }
 
 @mixin m {
+   main > .container {
+      width: 96%;
+   }
+
   .row .col.m1 {
     width: 8.3333333333%;
     margin-left: auto;
@@ -412,6 +420,10 @@ $error_color: #ff0000;
 }
 
 @mixin l {
+   main > .container {
+      width: 93%;
+   }
+
   .row .col.l1 {
     width: 8.3333333333%;
     margin-left: auto;
@@ -595,6 +607,10 @@ $error_color: #ff0000;
 }
 
 @mixin xl {
+   main > .container {
+      width: 90%;
+   }
+
   .row .col.xl1 {
     width: 8.3333333333%;
     margin-left: auto;
@@ -784,6 +800,10 @@ $error_color: #ff0000;
       line-height: 1.4;
       font-size: 11px;
 
+      main > .container {
+         width: 92%;
+      }
+
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -801,6 +821,7 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
+         background-color: DarkGreen;
       }
    }
 
@@ -829,6 +850,7 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
+         background-color: Cyan;
       }
    }
 
@@ -857,6 +879,7 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
+         background-color: DarkBlue;
       }
    }
 
@@ -880,6 +903,7 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
+         background-color: CornflowerBlue;
       }
    }
 
@@ -912,6 +936,7 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
+         background-color: Chocolate;
       }
    }
 
@@ -935,6 +960,7 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
+         background-color: Chartreuse;
       }
    }
 
@@ -967,6 +993,7 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
+         background-color: CadetBlue;
       }
    }
 
@@ -999,6 +1026,7 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
+         background-color: BurlyWood;
       }
    }
 
@@ -1031,6 +1059,7 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
+         background-color: Brown;
       }
    }
 
@@ -1063,6 +1092,7 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
+         background-color: BlueViolet;
       }
    }
 
@@ -1162,6 +1192,7 @@ $error_color: #ff0000;
       nav {
          height: 110px;
          line-height: 110px;
+         background-color: AntiqueWhite;
       }
    }
 
@@ -1194,6 +1225,7 @@ $error_color: #ff0000;
       nav {
          height: 110px;
          line-height: 110px;
+         background-color: aqua;
       }
    }
 
@@ -1226,6 +1258,7 @@ $error_color: #ff0000;
       nav {
          height: 110px;
          line-height: 110px;
+         background-color: DarkMagenta;
       }
    }
 
@@ -1324,6 +1357,7 @@ $error_color: #ff0000;
       nav {
          height: 155px;
          line-height: 155px;
+         background-color: DarkOrange;
       }
    }
 
@@ -1356,6 +1390,7 @@ $error_color: #ff0000;
       nav {
          height: 165px;
          line-height: 165px;
+         background-color: Gold;
       }
    }
 
@@ -1388,6 +1423,7 @@ $error_color: #ff0000;
       nav {
          height: 180px;
          line-height: 180px;
+         background-color: GreenYellow;
       }
    }
 
@@ -1420,6 +1456,7 @@ $error_color: #ff0000;
       nav {
          height: 200px;
          line-height: 200px;
+         background-color: HotPink;
       }
    }
 
@@ -1635,20 +1672,6 @@ nav {
 
 main > .container {
    margin-top: 20px;
-
-   @media only screen and (max-width: $large_width) {
-      width: 92%;
-      //padding-right: 6%;
-   }
-
-   @media only screen and (max-width: $medium_width) {
-      width: 95%;
-      //padding-right: 5%;
-   }
-
-   @media only screen and (max-width: $small_width) {
-      width: 90%;
-   }
 
    &.admin {
       width: 95%;
@@ -2007,6 +2030,8 @@ label.active .error {
 
          .collapsible-body {
             padding: 1rem;
+            height: 0px;
+            max-height: 0px;
 
             .row {
                margin-bottom: 0px;
@@ -2022,6 +2047,8 @@ label.active .error {
 
       &.active {
          .collapsible-body {
+            height: auto;
+            max-height: unset;
             display: inline-block;
          }
       }
