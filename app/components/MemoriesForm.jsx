@@ -113,6 +113,8 @@ export default class MemoriesForm extends Component {
          error: this.onMemoriesLoadFailure.bind(this),
       }
 
+      document.body.classList.add('in-progress')
+
       $.ajax(request)
    }
 
@@ -137,11 +139,13 @@ export default class MemoriesForm extends Component {
       }
 
       history.pushState(state, 'Днесловъ', '/')
+      document.body.classList.remove('in-progress')
       this.setState(state)
    }
 
    onMemoriesLoadFailure() {
       let query = assign(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
+      document.body.classList.remove('in-progress')
       this.setState({query: query})
    }
 
@@ -153,6 +157,8 @@ export default class MemoriesForm extends Component {
          url: '/' + slug + '.json',
       }
 
+      document.body.classList.add('in-progress')
+
       $.ajax(request)
    }
 
@@ -162,6 +168,7 @@ export default class MemoriesForm extends Component {
       console.log("Loaded memory", memory)
 
       history.pushState(state, 'Днесловъ – ' + memory.short_name, '/' + memory.slug)
+      document.body.classList.remove('in-progress')
       this.setState(state)
    }
 
