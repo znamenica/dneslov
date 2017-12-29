@@ -181,39 +181,49 @@ export default class MemoriesForm extends Component {
       console.log("length", this.state.memories.length, "of total", this.state.memoriesTotal)
 
       return (
-         <div className='row'>
-            <CookiesProvider>
-               <Intro />
-            </CookiesProvider>
-            <form>
-               <div className='col s12 m5 l3 xl2'>
-                  <div className='hidden' id='calendary' />
-                  <div className='row'>
-                     <PickMeUpCalendar
-                        onUpdate={this.onCalendarUpdate.bind(this)} />
-                     <CalendariesCloud
-                        calendaries={this.props.calendaries_cloud}
-                        calendaries_used={this.state.query.in_calendaries}
-                        onAct={this.onCloudAct.bind(this)} /></div></div>
-               <div className='col s12 m7 l9 xl10'>
-                  {this.state.memory &&
-                     <Memory
-                        key='memory'
-                        {...this.state.memory} />}
-                  {! this.state.memory &&
-                     <div>
+         [<header>
+            <nav className='terracota'>
+               <div className="nav-wrapper">
+                  <a className='brand-logo'
+                     href='/'>
+                     Днеслов</a>
+                  <div className="right">
+                     <div className='moon' /></div></div></nav></header>,
+         <main>
+            <div className='container'>
+               <div className='row'>
+                  <CookiesProvider>
+                     <Intro />
+                  </CookiesProvider>
+                  <form>
+                     <div className='col s12 m5 l3 xl2'>
+                        <div className='hidden' id='calendary' />
                         <div className='row'>
-                           <SearchField
-                              wrapperClassName='col xl12 l12 m12 s12'
-                              with_text={this.state.query.with_tokens.join(" ")}
-                              onUpdate={this.onSearchUpdate.bind(this)} /></div>
-                        <SearchConditions
-                           date={this.state.query.with_date[0]}
-                           calendaries={this.calendariesUsed()}
-                           query={this.state.query.with_tokens}
-                           onAct={this.onSearchAct.bind(this)} />
-                        <MemorySpans
-                           memories={this.state.memories}
-                           total_memories={this.state.memoriesTotal}
-                           onLoadRequest={this.onLoadRequest.bind(this)}
-                           onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div>)}}
+                           <PickMeUpCalendar
+                              onUpdate={this.onCalendarUpdate.bind(this)} />
+                           <CalendariesCloud
+                              calendaries={this.props.calendaries_cloud}
+                              calendaries_used={this.state.query.in_calendaries}
+                              onAct={this.onCloudAct.bind(this)} /></div></div>
+                     <div className='col s12 m7 l9 xl10'>
+                        {this.state.memory &&
+                           <Memory
+                              key='memory'
+                              {...this.state.memory} />}
+                        {! this.state.memory &&
+                           <div>
+                              <div className='row'>
+                                 <SearchField
+                                    wrapperClassName='col xl12 l12 m12 s12'
+                                    with_text={this.state.query.with_tokens.join(" ")}
+                                    onUpdate={this.onSearchUpdate.bind(this)} /></div>
+                              <SearchConditions
+                                 date={this.state.query.with_date[0]}
+                                 calendaries={this.calendariesUsed()}
+                                 query={this.state.query.with_tokens}
+                                 onAct={this.onSearchAct.bind(this)} />
+                              <MemorySpans
+                                 memories={this.state.memories}
+                                 total_memories={this.state.memoriesTotal}
+                                 onLoadRequest={this.onLoadRequest.bind(this)}
+                                 onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}

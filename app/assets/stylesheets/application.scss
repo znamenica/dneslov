@@ -37,14 +37,9 @@ $xlarge_width: 100rem;
 $today_color: #c7d8ed;
 $selected_color: #80a8cd;
 $error_color: #ff0000;
+$mooncolor: #a8aeb3;
 
 //##### mixins
-
-@mixin s-nav {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
 
 @mixin s {
    main {
@@ -61,7 +56,7 @@ $error_color: #ff0000;
 
    header {
       .nav-wrapper {
-         @include s-nav
+         justify-content: center;
       }
    }
 
@@ -840,10 +835,6 @@ $error_color: #ff0000;
       line-height: 1.4;
       font-size: 11px;
 
-      a[href] {
-         color: DarkGreen;
-      }
-
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
@@ -861,7 +852,10 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
-         background-color: DarkGreen;
+      }
+
+      .moon {
+         border-bottom-color: DarkGreen;
       }
    }
 
@@ -871,11 +865,7 @@ $error_color: #ff0000;
 @media only screen and (min-width: 500px) and (max-width: 900px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.4;
-      font-size: 12px;
-
-      a[href] {
-         color: Cyan;
-      }
+      font-size: 12.5px;
 
       .collection {
          .collection-item {
@@ -887,89 +877,64 @@ $error_color: #ff0000;
       }
 
       .chip {
-         border-radius: 20px;
+         border-radius: 21px;
          line-height: 230%;
       }
 
       nav {
          height: 64px;
          line-height: 64px;
-         background-color: Cyan;
+      }
+
+      .moon {
+         border-bottom-color: Cyan;
+         //border-bottom-color: Cyan;
       }
    }
 
    @include m
 }
 
-@media only screen and (min-width: 900px) and (max-width: 1200px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 900px) and (max-width: 1400px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.4;
-      font-size: 13px;
-
-      a[href] {
-         color: DarkBlue;
-      }
+      font-size: 14px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(-1px, -1px) scale(0.93);
+               transform: translate(0, 0) scale(1);
             }
          }
       }
 
       .chip {
-         border-radius: 20px;
+         border-radius: 25px;
          line-height: 230%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-3px, -3px) scale(1.1);
       }
 
       nav {
          height: 64px;
          line-height: 64px;
-         background-color: DarkBlue;
+      }
+
+      .moon {
+         border-bottom-color: DarkBlue;
       }
    }
 
    @include l
 }
 
-@media only screen and (min-width: 1200px) and (max-width: 1500px) and (max-resolution: 40dpcm) {
-   html {
-      line-height: 1.25;
-      font-size: 14px;
-
-      a[href] {
-         color: CornflowerBlue;
-      }
-
-      .chip {
-         border-radius: 20px;
-         line-height: 230%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-3px, -3px) scale(1.1);
-      }
-
-      nav {
-         height: 64px;
-         line-height: 64px;
-         background-color: CornflowerBlue;
-      }
-   }
-
-   @include xl
-}
-
-@media only screen and (min-width: 1500px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 1400px) and (max-width: 1800px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.25;
       font-size: 16px;
-
-      a[href] {
-         color: Chocolate;
-      }
 
       .collection {
          .collection-item {
@@ -981,8 +946,8 @@ $error_color: #ff0000;
       }
 
       .chip {
-         border-radius: 25px;
-         line-height: 200%;
+         border-radius: 33px;
+         line-height: 230%;
       }
 
       .run-intro.btn-large {
@@ -992,86 +957,20 @@ $error_color: #ff0000;
       nav {
          height: 64px;
          line-height: 64px;
-         background-color: Chocolate;
+      }
+
+      .moon {
+         border-bottom-color: CornflowerBlue;
       }
    }
 
-   @include xl
+   @include l
 }
 
-@media only screen and (max-width: 650px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+@media only screen and (min-width: 1800px) and (max-resolution: 40dpcm) {
    html {
       line-height: 1.25;
-      font-size: 14px;
-
-      a[href] {
-         color: Chartreuse;
-      }
-
-      .chip {
-         border-radius: 20px;
-         line-height: 230%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-3px, -3px) scale(1.1);
-      }
-
-      nav {
-         height: 80px;
-         line-height: 80px;
-         background-color: Chartreuse;
-      }
-   }
-
-   @include s
-}
-
-@media only screen and (min-width: 650px) and (max-width: 1000px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
-   html {
-      line-height: 1.25;
-      font-size: 16px;
-
-      a[href] {
-         color: CadetBlue;
-      }
-
-      .collection {
-         .collection-item {
-            &.avatar:not(.circle-clipper) > .circle,
-            &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(3px, 3px) scale(1.15);
-            }
-         }
-      }
-
-      .chip {
-         border-radius: 25px;
-         line-height: 200%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-3px, -3px) scale(1.1);
-      }
-
-      nav {
-         height: 80px;
-         line-height: 80px;
-         background-color: CadetBlue;
-      }
-   }
-
-   @include m
-}
-
-@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
-   html {
-      line-height: 1.25;
-      font-size: 17.5px;
-
-      a[href] {
-         color: White;
-      }
+      font-size: 18px;
 
       .collection {
          .collection-item {
@@ -1083,7 +982,7 @@ $error_color: #ff0000;
       }
 
       .chip {
-         border-radius: 30px;
+         border-radius: 40px;
          line-height: 200%;
       }
 
@@ -1092,36 +991,36 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 80px;
-         line-height: 80px;
-         background-color: BurlyWood;
+         height: 64px;
+         line-height: 64px;
+      }
+
+      .moon {
+         border-bottom-color: Chocolate;
       }
    }
 
-   @include l
+   @include xl
 }
 
-@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+@media only screen and (max-width: 650px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
    html {
       line-height: 1.25;
-      font-size: 19px;
-
-      a[href] {
-         color: Brown;
-      }
+      font-size: 20px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(8px, 8px) scale(1.3);
+               transform: translate(9px, 9px) scale(1.35);
             }
          }
       }
 
+
       .chip {
-         border-radius: 45px;
-         line-height: 200%;
+         border-radius: 48px;
+         line-height: 230%;
       }
 
       .run-intro.btn-large {
@@ -1131,21 +1030,20 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
-         background-color: Brown;
+      }
+
+      .moon {
+         border-bottom-color: Chartreuse;
       }
    }
 
-   @include xl
+   @include s
 }
 
-@media only screen and (min-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+@media only screen and (min-width: 650px) and (max-width: 1000px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
    html {
       line-height: 1.25;
       font-size: 22px;
-
-      a[href] {
-         color: BlueViolet;
-      }
 
       .collection {
          .collection-item {
@@ -1168,96 +1066,20 @@ $error_color: #ff0000;
       nav {
          height: 80px;
          line-height: 80px;
-         background-color: BlueViolet;
-      }
-   }
-
-
-   @include xl
-}
-
-@media only screen and (max-width: 1000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
-   html {
-      line-height: 1.2;
-      font-size: 33.5px;
-
-      a[href] {
-         color: yellow;
       }
 
-      .collection {
-         .collection-item {
-            &.avatar:not(.circle-clipper) > .circle,
-            &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(30px, 30px) scale(2.2);
-            }
-         }
-      }
-
-      .chip {
-         border-radius: 50px;
-         line-height: 200%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-25px, -25px) scale(2.55);
-      }
-
-      nav {
-         height: 150px;
-         line-height: 150px;
-         background-color: yellow;
-      }
-   }
-
-   @include s
-}
-
-@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
-   html {
-      line-height: 1.25;
-      font-size: 22px;
-
-      a[href] {
-         color: red;
-      }
-
-      .collection {
-         .collection-item {
-            &.avatar:not(.circle-clipper) > .circle,
-            &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(12px, 12px) scale(1.5);
-            }
-         }
-      }
-
-      .chip {
-         border-radius: 40px;
-         line-height: 200%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-12px, -12px) scale(1.4);
-      }
-
-      nav {
-         height: 110px;
-         line-height: 110px;
-         background-color: red;
+      .moon {
+         border-bottom-color: CadetBlue;
       }
    }
 
    @include m
 }
 
-@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
    html {
       line-height: 1.25;
       font-size: 25px;
-
-      a[href] {
-         color: AntiqueWhite;
-      }
 
       .collection {
          .collection-item {
@@ -1278,23 +1100,22 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 110px;
-         line-height: 110px;
-         background-color: AntiqueWhite;
+         height: 80px;
+         line-height: 80px;
+      }
+
+      .moon {
+         border-bottom-color: BurlyWood;
       }
    }
 
    @include l
 }
 
-@media only screen and (min-width: 2200px) and (max-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
    html {
-      line-height: 1.2;
-      font-size: 30px;
-
-      a[href] {
-         color: aqua;
-      }
+      line-height: 1.25;
+      font-size: 29px;
 
       .collection {
          .collection-item {
@@ -1315,23 +1136,22 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 110px;
-         line-height: 110px;
-         background-color: aqua;
+         height: 80px;
+         line-height: 80px;
+      }
+
+      .moon {
+         border-bottom-color: Brown;
       }
    }
 
    @include xl
 }
 
-@media only screen and (min-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+@media only screen and (min-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
    html {
-      line-height: 1.2;
-      font-size: 33.5px;
-
-      a[href] {
-         color: DarkMagenta;
-      }
+      line-height: 1.25;
+      font-size: 35.5px;
 
       .collection {
          .collection-item {
@@ -1352,97 +1172,58 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 110px;
-         line-height: 110px;
-         background-color: DarkMagenta;
+         height: 80px;
+         line-height: 80px;
+      }
+
+      .moon {
+         border-bottom-color: BlueViolet;
       }
    }
 
    @include xl
 }
 
-@media only screen and (max-width: 1200px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (max-width: 1000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
       line-height: 1.2;
-      font-size: 30px;
-
-      a[href] {
-         color: blue;
-      }
+      font-size: 33.5px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(17px, 17px) scale(1.7);
+               transform: translate(30px, 30px) scale(2.2);
             }
          }
       }
 
       .chip {
-         border-radius: 50px;
+         border-radius: 55px;
          line-height: 200%;
       }
 
       .run-intro.btn-large {
-         transform: translate(-15px, -15px) scale(1.55);
+         transform: translate(-25px, -25px) scale(2.55);
       }
 
       nav {
-         height: 128px;
-         line-height: 128px;
-         background-color: blue;
+         height: 150px;
+         line-height: 150px;
+      }
+
+      .moon {
+         border-bottom-color: yellow;
       }
    }
 
    @include s
 }
 
-@media only screen and (min-width: 1200px) and (max-width: 2000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
-      line-height: 1.2;
-      font-size: 33.5px;
-
-      a[href] {
-         color: magenta;
-      }
-
-      .collection {
-         .collection-item {
-            &.avatar:not(.circle-clipper) > .circle,
-            &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(30px, 30px) scale(2.2);
-            }
-         }
-      }
-
-      .chip {
-         border-radius: 55px;
-         line-height: 200%;
-      }
-
-      .run-intro.btn-large {
-         transform: translate(-16px, -16px) scale(1.6);
-      }
-
-      nav {
-         height: 145px;
-         line-height: 145px;
-         background-color: magenta;
-      }
-   }
-
-   @include m
-}
-
-@media only screen and (min-width: 2000px) and (max-width: 3000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
-   html {
-      line-height: 1.2;
-      font-size: 37px;
-
-      a[href] {
-         color: PaleGreen;
-      }
+      line-height: 1.25;
+      font-size: 36px;
 
       .collection {
          .collection-item {
@@ -1463,29 +1244,28 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 155px;
-         line-height: 155px;
-         background-color: DarkOrange;
+         height: 110px;
+         line-height: 110px;
+      }
+
+      .moon {
+         border-bottom-color: red;
       }
    }
 
-  @include l
+   @include m
 }
 
-@media only screen and (min-width: 3000px) and (max-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
-      line-height: 1.2;
-      font-size: 41px;
-
-      a[href] {
-         color: Gold;
-      }
+      line-height: 1.25;
+      font-size: 39px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(41px, 41px) scale(2.7);
+               transform: translate(40px, 40px) scale(2.65);
             }
          }
       }
@@ -1496,33 +1276,32 @@ $error_color: #ff0000;
       }
 
       .run-intro.btn-large {
-         transform: translate(-20px, -20px) scale(1.8);
+         transform: translate(-20px, -13px) scale(1.8);
       }
 
       nav {
-         height: 165px;
-         line-height: 165px;
-         background-color: Gold;
+         height: 110px;
+         line-height: 110px;
+      }
+
+      .moon {
+         border-bottom-color: AntiqueWhite;
       }
    }
 
-   @include xl
+   @include l
 }
 
-@media only screen and (min-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+@media only screen and (min-width: 2200px) and (max-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
       line-height: 1.2;
-      font-size: 46px;
-
-      a[href] {
-         color: GreenYellow;
-      }
+      font-size: 43px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(47px, 47px) scale(3.1);
+               transform: translate(45px, 45px) scale(3);
             }
          }
       }
@@ -1537,29 +1316,64 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 180px;
-         line-height: 180px;
-         background-color: GreenYellow;
+         height: 110px;
+         line-height: 110px;
+      }
+
+      .moon {
+         border-bottom-color: aqua;
       }
    }
 
    @include xl
 }
 
-@media only screen and (min-resolution: 120dpcm) {
+@media only screen and (min-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
    html {
-      line-height: 1.1;
-      font-size: 55px;
-
-      a[href] {
-         color: HotPink;
-      }
+      line-height: 1.2;
+      font-size: 48px;
 
       .collection {
          .collection-item {
             &.avatar:not(.circle-clipper) > .circle,
             &.avatar :not(.circle-clipper) > .circle {
-               transform: translate(60px, 60px) scale(3.6);
+               transform: translate(50px, 50px) scale(3.2);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 68px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-22px, -22px) scale(1.9);
+      }
+
+      nav {
+         height: 110px;
+         line-height: 110px;
+      }
+
+      .moon {
+         border-bottom-color: DarkMagenta;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 1200px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   html {
+      line-height: 1.15;
+      font-size: 50px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(53px, 53px) scale(3.3);
             }
          }
       }
@@ -1574,21 +1388,235 @@ $error_color: #ff0000;
       }
 
       nav {
-         height: 200px;
-         line-height: 200px;
-         background-color: HotPink;
+         height: 128px;
+         line-height: 128px;
+      }
+
+      .moon {
+         border-bottom-color: blue;
       }
    }
 
    @include s
 }
 
-// ------
+@media only screen and (min-width: 1200px) and (max-width: 2000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   html {
+      line-height: 1.15;
+      font-size: 54px;
 
-span {
-   margin-left: 3px;
-   margin-right: 3px;
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(60px, 60px) scale(3.6);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 78px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-33px, -33px) scale(2.5);
+      }
+
+      nav {
+         height: 145px;
+         line-height: 145px;
+      }
+
+      .moon {
+         border-bottom-color: magenta;
+      }
+   }
+
+   @include m
 }
+
+@media only screen and (min-width: 2000px) and (max-width: 3000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   html {
+      line-height: 1.15;
+      font-size: 59px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(65px, 65px) scale(3.8);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 85px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-35px, -35px) scale(2.6);
+      }
+
+      nav {
+         height: 155px;
+         line-height: 155px;
+      }
+
+      .moon {
+         border-bottom-color: DarkOrange;
+      }
+   }
+
+  @include l
+}
+
+@media only screen and (min-width: 3000px) and (max-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   html {
+      line-height: 1.15;
+      font-size: 64px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(70px, 70px) scale(4);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 90px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-36px, -36px) scale(2.7);
+      }
+
+      nav {
+         height: 165px;
+         line-height: 165px;
+      }
+
+      .moon {
+         border-bottom-color: Gold;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (min-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   html {
+      line-height: 1.15;
+      font-size: 70px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(77px, 77px) scale(4.2);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 95px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-38px, -38px) scale(2.9);
+      }
+
+      nav {
+         height: 180px;
+         line-height: 180px;
+      }
+
+      .moon {
+         border-bottom-color: GreenYellow;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 3000px) and (min-resolution: 120dpcm) {
+   html {
+      line-height: 1.1;
+      font-size: 75px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(85px, 85px) scale(4.5);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 100px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-40px, -40px) scale(3);
+      }
+
+      nav {
+         height: 200px;
+         line-height: 200px;
+      }
+
+      .moon {
+         border-bottom-color: HotPink;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 3000px) and (min-resolution: 120dpcm) {
+   html {
+      line-height: 1.1;
+      font-size: 85px;
+
+      .collection {
+         .collection-item {
+            &.avatar:not(.circle-clipper) > .circle,
+            &.avatar :not(.circle-clipper) > .circle {
+               transform: translate(95px, 95px) scale(5);
+            }
+         }
+      }
+
+      .chip {
+         border-radius: 110px;
+         line-height: 200%;
+      }
+
+      .run-intro.btn-large {
+         transform: translate(-45px, -45px) scale(3.5);
+      }
+
+      nav {
+         height: 200px;
+         line-height: 200px;
+      }
+
+      .moon {
+         border-bottom-color: HotPink;
+      }
+   }
+
+   @include l
+}
+
+// ------
 
 p#notice {
    margin: 0;
@@ -1675,6 +1703,24 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    width: fit-content !important;
 }
 
+.moon {
+   position: absolute;
+   top: 0;
+   right: 0;
+   transform: translate(30px, -30px) rotate(0.125turn);
+   width: 0px;
+   height: 0px;
+   border: 30px solid transparent;
+   border-bottom-left-radius: 30px;
+   border-bottom-right-radius: 30px;
+   background: none;
+ 
+   //background: $mooncolor;
+   //background: #a8aeb3;
+   box-shadow: 0 0 20px #24b4ff,
+   inset 0 0 1vw #fff
+}
+
 .name {
    margin: 0;
 
@@ -1743,46 +1789,50 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    }
 }
 
-nav {
-   height: 64px;
-   line-height: inherit;
+header {
+   .nav-wrapper {
+      height: 64px;
+      line-height: inherit;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
 
-   .brand-logo {
-      padding-left: 10px;
-      padding-right: 10px;
-      line-height: initial;
-      transform: none;
-      left: auto;
-   }
-
-   .sign-in {
-      top: 4px;
-      right: 4px;
-      background-color: $darken_terracota;
-      position: relative;
-
-      img {
-         line-height: 56px;
-         width: 56px;
-         height: 56px;
+      .brand-logo {
+         padding-left: 10px;
+         padding-right: 10px;
+         line-height: initial;
+         transform: none;
+         left: auto;
       }
 
-      .tap-target-wrapper {
-         &:not(.open) {
-            img {
-               display: none;
-            }
+      .sign-in {
+         top: 4px;
+         right: 4px;
+         background-color: $darken_terracota;
+         position: relative;
+
+         img {
+            line-height: 56px;
+            width: 56px;
+            height: 56px;
          }
 
-         .tap-target-content {
-            p {
-               padding-left: 2em;
-               line-height: normal;
+         .tap-target-wrapper {
+            &:not(.open) {
+               img {
+                  display: none;
+               }
+            }
+
+            .tap-target-content {
+               p {
+                  padding-left: 2em;
+                  line-height: normal;
+               }
             }
          }
       }
    }
-
 }
 
 main > .container {
@@ -1823,6 +1873,8 @@ main > .container {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin-left: 3px;
+      margin-right: 3px;
    }
 }
 

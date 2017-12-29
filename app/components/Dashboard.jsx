@@ -68,7 +68,7 @@ export default class Dashboard extends Component {
                <div className="nav-wrapper">
                   <a className='brand-logo'
                      href='/'>
-                     Днесловъ</a>
+                     Днеслов</a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li>

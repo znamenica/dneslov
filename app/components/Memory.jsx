@@ -40,7 +40,7 @@ export default class Memory extends Component {
                      <Chip
                         className='year-date'
                         text={this.props.year} /></div></div></div>
-            {this.props.councils.length > 0 &&
+            {false && this.props.councils.length > 0 && //TODO
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12'>
