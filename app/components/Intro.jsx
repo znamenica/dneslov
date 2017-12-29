@@ -92,8 +92,8 @@ export class Intro extends Component {
             datestamp: '20171213185700',
          },
          {
-            element: '#memories-list .collection-item:nth-child(1) img',
-            intro: 'Образок является маленькою иконою святого или события, связанного с памятью. При нажатии на образок будет загружена страница с подробным описанием памяти.',
+            element: '#memories-list .collection-item:nth-child(1) img, #memories-list .collection-item:nth-child(1) i',
+            intro: 'Образок является маленькою иконою святого или события, связанного с памятью. При нажатии на образок будет загружена страница с подробным описанием памяти. В случае отсутствующего образка показывается картинка по-умолчанию.',
             position: 'left',
             datestamp: '20171213185700',
          },
@@ -119,8 +119,9 @@ export class Intro extends Component {
 
       let introLetterDate = this.calculateLatterStepDateStamp(this.props)
       let require_run = introLetterDate > this.getLatterStepDateStamp()
+      console.log('CAL', introLetterDate, this.getLatterStepDateStamp(), require_run)
       this.setState({
-         enabled: this.props.enabled && require_run,
+         enabled: this.props.enabled || require_run,
          introLetterDate: introLetterDate
       })
    }
