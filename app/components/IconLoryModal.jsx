@@ -56,14 +56,15 @@ export default class IconLoryModal extends Component {
       }, 0)
 
       this.lory_scroll = this.items_width > this.$modal.clientWidth
+      console.log("SIZE", this.items_width, this.$modal.clientWidth)
       if (this.lory_scroll) {
          this.$lory.querySelector('.prev').classList.remove('hidden')
          this.$lory.querySelector('.next').classList.remove('hidden')
-         this.$lory.classList.remove('fit')
+         this.$lory.style.width = 'auto'
       } else {
          this.$lory.querySelector('.prev').classList.add('hidden')
          this.$lory.querySelector('.next').classList.add('hidden')
-         this.$lory.classList.add('fit')
+         this.$lory.style.width = this.items_width + 'px'
       }
    }
 
@@ -75,6 +76,7 @@ export default class IconLoryModal extends Component {
          this.lory.slideTo(index, 0)
       }
 
+      console.log("OPEN")
       $(this.modal).modal('open')
    }
 
@@ -96,6 +98,8 @@ export default class IconLoryModal extends Component {
    }
 
    render() {
+      console.log("STATE", this.state)
+
       return (
          <div
             className='modal'

@@ -70,6 +70,61 @@ module.exports = merge(sharedConfig, {
          analyzerMode: process.env.LOCAL ? 'static' : 'disabled',
       }),
    ],
+   module: {
+      loaders: [
+         {
+            test: /\.(js|jsx)$/,
+            use: [{
+               loader: 'babel-loader',
+               options: {
+                  cacheDirectory: true,
+                  ignore: /cjs/,
+                  presets: [
+                     [
+                        "env",
+                        {
+                           "modules": false,
+                           "targets": {
+                              "browsers": "> 1%",
+                              "uglify": true
+                           },
+                           "useBuiltIns": true
+                        },
+                     ],
+                     //"es2015",
+                     "stage-0",
+                     "stage-2",
+                     "react",
+                  ],
+                  plugins: [
+                     [ "transform-runtime", { //automatically polyfilling but +30K
+                        helpers: false,
+                        polyfill: false,
+                        regenerator: true,
+                     }],
+                     "syntax-dynamic-import",
+                     [
+                        "transform-class-properties", // +0.1K
+                        {
+                           "spec": true
+                        }
+                     ],
+                     "transform-react-remove-prop-types",//didnt pillout the import of PropTypes
+                     "transform-react-constant-elements",//+0.01K
+                     "transform-react-inline-elements", //+0.5K
+                     "transform-react-pure-class-to-function", //+0*/
+                     'transform-es2015-destructuring',
+                     'transform-object-rest-spread',
+                     'transform-async-to-generator',
+                     'transform-es3-modules-literals',
+                     'transform-decorators-legacy',
+                  ],
+               },
+            }]
+         },
+      ],
+   },
+
    /*module: {
       loaders: [
          {

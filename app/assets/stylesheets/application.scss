@@ -34,9 +34,10 @@ $small_width: 40rem;
 $medium_width: 60rem;
 $large_width: 80rem;
 $xlarge_width: 100rem;
-$today_color: #c7d8ed;
-$selected_color: #80a8cd;
-$error_color: #ff0000;
+$today_color: PaleTurquoise;
+$selected_color: DeepSkyBlue;
+$lighten_selected_color: SkyBlue;
+$error_color: Red;
 $mooncolor: #a8aeb3;
 
 //##### mixins
@@ -855,7 +856,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: DarkGreen;
+         border-bottom-color: aqua;
       }
    }
 
@@ -887,8 +888,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: Cyan;
-         //border-bottom-color: Cyan;
+         border-bottom-color: CadetBlue;
       }
    }
 
@@ -924,7 +924,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: DarkBlue;
+         border-bottom-color: CornflowerBlue;
       }
    }
 
@@ -960,7 +960,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: CornflowerBlue;
+         border-bottom-color: blue;
       }
    }
 
@@ -996,7 +996,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: Chocolate;
+         border-bottom-color: DarkBlue;
       }
    }
 
@@ -1033,7 +1033,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: Chartreuse;
+         border-bottom-color: LawnGreen;
       }
    }
 
@@ -1069,7 +1069,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: CadetBlue;
+         border-bottom-color: Chartreuse;
       }
    }
 
@@ -1105,7 +1105,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: BurlyWood;
+         border-bottom-color: MediumSeaGreen;
       }
    }
 
@@ -1141,7 +1141,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: Brown;
+         border-bottom-color: ForestGreen;
       }
    }
 
@@ -1177,7 +1177,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: BlueViolet;
+         border-bottom-color: DarkGreen;
       }
    }
 
@@ -1213,7 +1213,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: yellow;
+         border-bottom-color: HotPink;
       }
    }
 
@@ -1249,7 +1249,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: red;
+         border-bottom-color: magenta;
       }
    }
 
@@ -1285,7 +1285,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: AntiqueWhite;
+         border-bottom-color: red;
       }
    }
 
@@ -1321,7 +1321,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: aqua;
+         border-bottom-color: BlueViolet;
       }
    }
 
@@ -1393,7 +1393,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: blue;
+         border-bottom-color: AntiqueWhite;
       }
    }
 
@@ -1429,7 +1429,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: magenta;
+         border-bottom-color: BurlyWood;
       }
    }
 
@@ -1465,7 +1465,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: DarkOrange;
+         border-bottom-color: Gold;
       }
    }
 
@@ -1501,7 +1501,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: Gold;
+         border-bottom-color: Chocolate;
       }
    }
 
@@ -1537,7 +1537,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: GreenYellow;
+         border-bottom-color: Brown;
       }
    }
 
@@ -1573,7 +1573,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: HotPink;
+         border-bottom-color: yellow;
       }
    }
 
@@ -1609,7 +1609,7 @@ $mooncolor: #a8aeb3;
       }
 
       .moon {
-         border-bottom-color: HotPink;
+         border-bottom-color: DarkOrange;
       }
    }
 
@@ -1673,6 +1673,11 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    display: none !important;
 }
 
+.disabled {
+   pointer-events: none;
+   color: #ccc;
+}
+
 .terracota {
    background-color: $terracota !important;
 }
@@ -1691,16 +1696,12 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
 
 .flow-text {
    margin-top: 0;
-   font-family: "Source Sans Pro", sans-serif;
+   font-family: "Source Sans Pro", sans;
    font-size: 100%;
 }
 
 .material-icons + .toast-wrapper {
    display: none;
-}
-
-.fit {
-   width: fit-content !important;
 }
 
 .moon {
@@ -1714,7 +1715,7 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
    border-bottom-left-radius: 30px;
    border-bottom-right-radius: 30px;
    background: none;
- 
+
    //background: $mooncolor;
    //background: #a8aeb3;
    box-shadow: 0 0 20px #24b4ff,
@@ -1753,6 +1754,7 @@ body > .pickmeup, .row:empty, .chip:empty, .hidden, ul.indicators {
 
       &::after {
          content: ')';
+         padding-right: 3px;
       }
    }
 
@@ -1845,7 +1847,7 @@ main > .container {
 }
 
 .chip {
-   white-space: nowrap;
+   //white-space: nowrap;
    font-size: 90%;
    color: $smooth_dark;
    height: auto;
@@ -1880,6 +1882,7 @@ main > .container {
 
 .pickmeup {
    font-size: inherit;
+   background: transparent;
 
    &.pmu-hidden {
       display: block;
@@ -1887,6 +1890,14 @@ main > .container {
 
    .pmu-instance {
       font-size: 111%;
+
+      .pmu-selected {
+         background-color: $selected_color;
+
+         &:hover {
+            background-color: $lighten_selected_color;
+         }
+      }
    }
 }
 
@@ -1942,7 +1953,7 @@ main > .container {
 
          & > nav {
             height: auto;
-            background-color: auto;
+            background-color: $terracota;
             width: auto;
 
             .pmu-yesterday {
@@ -1966,13 +1977,14 @@ main > .container {
 
          .pmu-button {
             color: $dark;
+            //background-color: $terracota;
             padding: 1px;
             box-sizing: border-box;
             border: 1px solid transparent;
 
             &hover {
                @extend .pmu-button;
-               background-color: #17384d;
+               //background-color: $lighten_terracota;
             }
          }
       }
@@ -2299,8 +2311,7 @@ img.icon {
    -moz-user-select: none;
 
    .frame {
-      font-size: 0;
-      line-height: 0;
+      //line-height: 0;
       margin: 0 auto;
       overflow: hidden;
       position: relative;
@@ -2310,17 +2321,15 @@ img.icon {
       border: 0 none;
 
       .slides {
-         font-size: 0;
-         line-height: 0;
+         //line-height: 0;
          white-space: nowrap;
          display: inline-block;
 
          li {
             color: #fff;
             display: inline-block;
-            font-family: "Source Sans Pro", sans-serif;
-            font-size: 100%;
-            line-height: 30px;
+            font-family: "Source Sans Pro", sans;
+            //line-height: 30px;
             position: relative;
             text-align: center;
             margin-right: 12px;
@@ -2370,7 +2379,7 @@ img.icon {
    .modal-action {
       background: rgba(0, 0, 0, 0.3);
       position: absolute;
-      bottom: 1em;
+      bottom: 2em;
       display: block;
       cursor: pointer;
       right: 1em;
