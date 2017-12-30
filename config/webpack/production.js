@@ -99,7 +99,7 @@ module.exports = merge(sharedConfig, {
                   plugins: [
                      [ "transform-runtime", { //automatically polyfilling but +30K
                         helpers: false,
-                        polyfill: true,
+                        polyfill: false,
                         regenerator: true,
                      }],
                      "syntax-dynamic-import",
