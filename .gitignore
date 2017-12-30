@@ -28,6 +28,7 @@
 /vendor/assets/javascripts/
 
 config/secrets.yml
+config/secrets.*.yml
 config/database.yml
 webpack.config.js
 public/webpack/manifest.json

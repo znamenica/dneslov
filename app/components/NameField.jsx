@@ -9,5 +9,6 @@ export default class NameField extends DynamicField {
       value_name: 'id',
       title: 'Имя',
       placeholder: 'Начни ввод имени...',
+      validations: {},
    }
 }

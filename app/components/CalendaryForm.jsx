@@ -35,9 +35,9 @@ export default class CalendaryForm extends Component {
 
    static propTypes = {
       slug: PropTypes.object,
-      licit: PropTypes.boolean,
+      licit: PropTypes.bool,
       language_code: PropTypes.string,
-      alphabeth_code: PropTypes.object,
+      alphabeth_code: PropTypes.string,
    }
 
    static validations = {

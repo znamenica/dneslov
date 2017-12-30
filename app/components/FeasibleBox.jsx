@@ -10,7 +10,7 @@ export default class FeasibleBox extends Component {
    }
 
    static propTypes = {
-      feasible: PropTypes.boolean.isRequired,
+      feasible: PropTypes.bool.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }

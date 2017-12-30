@@ -25,10 +25,10 @@ export default class CalendaryModal extends Component {
    }
 
    static propTypes = {
-      slug: PropTypes.string,
-      licit: PropTypes.boolean,
+      slug: PropTypes.object,
+      licit: PropTypes.bool,
       language_code: PropTypes.string,
-      alphabeth_code: PropTypes.object,
+      alphabeth_code: PropTypes.string,
       onUpdateCalendary: PropTypes.func.isRequired,
       onCloseCalendary: PropTypes.func.isRequired,
    }

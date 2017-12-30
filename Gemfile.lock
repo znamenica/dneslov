@@ -121,10 +121,6 @@ GEM
     database_cleaner (1.6.1)
     diff-lcs (1.3)
     docile (1.1.5)
-    dotenv (2.2.1)
-    dotenv-rails (2.2.1)
-      dotenv (= 2.2.1)
-      railties (>= 3.2, < 5.2)
     dry_crud (5.0.0)
       rails (>= 3.2)
     email_spec (2.1.1)
@@ -150,7 +146,7 @@ GEM
       actionpack (>= 4.1, < 5.2)
       activesupport (>= 4.1, < 5.2)
     htmlentities (4.3.4)
-    i18n (0.9.0)
+    i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     json (1.8.6)
     jsonapi-renderer (0.1.3)
@@ -206,7 +202,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.6)
       pry (>= 0.10.4)
-    public_suffix (3.0.0)
+    public_suffix (3.0.1)
     puma (3.10.0)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
@@ -311,7 +307,7 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tzinfo (1.2.3)
+    tzinfo (1.2.4)
       thread_safe (~> 0.1)
     validate_url (1.0.2)
       activemodel (>= 3.0.0)
@@ -348,7 +344,6 @@ DEPENDENCIES
   capybara-webkit
   cucumber-rails
   database_cleaner
-  dotenv-rails
   dry_crud
   email_spec
   excon (~> 0.60.0)
@@ -389,4 +384,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.4
+   1.16.1

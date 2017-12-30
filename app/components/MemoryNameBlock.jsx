@@ -29,7 +29,7 @@ export default class MemoryNameBlock extends Component {
       name_id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       state: PropTypes.string.isRequired,
-      feasible: PropTypes.boolean.isRequired,
+      feasible: PropTypes.bool.isRequired,
       mode: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }

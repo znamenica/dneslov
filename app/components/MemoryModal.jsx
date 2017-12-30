@@ -31,7 +31,7 @@ export default class MemoryModal extends Component {
    }
 
    static propTypes = {
-      slug: PropTypes.string,
+      slug: PropTypes.object,
       onUpdateMemory: PropTypes.func.isRequired,
       onCloseMemory: PropTypes.func.isRequired,
    }

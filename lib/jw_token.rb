@@ -1,22 +1,20 @@
 module JwToken
-  def self.encode(sub)
-    payload = {
-      iss: ENV['FLASHCARDS_CLIENT_URL'],
-      sub: sub,
-      exp: 4.hours.from_now.to_i,
-      iat: Time.now.to_i
-    }
-    JWT.encode payload, ENV['JWT_SECRET'], 'HS256'
-  end
+   class << self
+      def encode sub
+         payload = {
+            iss: Rails.application.secrets.github[:client_url],
+            sub: sub,
+            exp: 4.hours.from_now.to_i,
+            iat: Time.now.to_i
+         }
+         JWT.encode payload, Rails.application.secrets.github[:jwt_secret], 'HS256' ;end
 
-  def self.decode(token)
-    options = {
-      iss: ENV['FLASHCARDS_CLIENT_URL'],
-      verify_iss: true,
-      verify_iat: true,
-      leeway: 30,
-      algorithm: 'HS256'
-    }
-    JWT.decode token, ENV['JWT_SECRET'], true, options
-  end
-end
+      def decode token
+         options = {
+            iss: Rails.application.secrets.github[:client_url],
+            verify_iss: true,
+            verify_iat: true,
+            leeway: 30,
+            algorithm: 'HS256'
+         }
+         JWT.decode token, Rails.application.secrets.github[:jwt_secret], true, options ;end;end;end

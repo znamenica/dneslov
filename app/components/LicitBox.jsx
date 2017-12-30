@@ -9,7 +9,7 @@ export default class LicitBox extends Component {
    }
 
    static propTypes = {
-      licit: PropTypes.boolean.isRequired,
+      licit: PropTypes.bool.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }

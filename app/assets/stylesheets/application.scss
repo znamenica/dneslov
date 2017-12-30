@@ -1803,6 +1803,11 @@ header {
       align-items: center;
       overflow: hidden;
 
+      &.admin {
+         //TODO fix it for admin page on how to apply 'flex' display
+         display: inline;
+      }
+
       .brand-logo {
          padding-left: 10px;
          padding-right: 10px;

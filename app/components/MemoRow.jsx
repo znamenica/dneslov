@@ -17,11 +17,11 @@ export default class MemoRow extends Component {
 
    static propTypes = {
       locales: PropTypes.array.isRequired,
-      year_date: PropTypes.string.isRequired,
-      add_date: PropTypes.string.isRequired,
+      year_date: PropTypes.string,
+      add_date: PropTypes.string,
       calendary: PropTypes.string.isRequired,
       event: PropTypes.string.isRequired,
-      event_date: PropTypes.string.isRequired,
+      event_date: PropTypes.string,
       bind_kind: PropTypes.string,
       bond_to: PropTypes.string,
       onEdit: PropTypes.func.isRequired,

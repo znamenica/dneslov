@@ -65,7 +65,7 @@ export default class Dashboard extends Component {
       return (
          [<header>
             <nav className='terracota'>
-               <div className="nav-wrapper">
+               <div className="nav-wrapper admin">
                   <a className='brand-logo'
                      href='/'>
                      Днеслов</a>

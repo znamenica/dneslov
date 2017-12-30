@@ -25,7 +25,7 @@ export default class TextField extends Component {
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
-      data: PropTypes.object.isRequired,
+      data: PropTypes.object,
       validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,
       allowChange: PropTypes.func,

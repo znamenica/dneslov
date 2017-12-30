@@ -30,4 +30,4 @@ module GithubAuth
    private
 
    def issuer
-      ENV['CLIENT_URL'] ;end;end
+      Rails.application.secrets.github[:client_url] ;end;end

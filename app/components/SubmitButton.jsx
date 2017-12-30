@@ -9,7 +9,7 @@ export default class SubmitButton extends Component {
 
    static propTypes = {
       title: PropTypes.string.isRequired,
-      valid: PropTypes.boolean,
+      valid: PropTypes.bool,
    }
 
    state = {

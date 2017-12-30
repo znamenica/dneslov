@@ -12,10 +12,10 @@ class Auth::Github
    private
 
    def fetch_github_access_token code
-      resp = connection.get ENV[ 'GITHUB_ACCESS_TOKEN_URL' ], query: {
+      resp = connection.get Rails.application.secrets.github[:access_token_url], query: {
          code:          code,
-         client_id:     ENV[ 'CLIENT_ID' ],
-         client_secret: ENV[ 'CLIENT_SECRET' ] }
+         client_id:     Rails.application.secrets.github[:client_id],
+         client_secret: Rails.application.secrets.github[:client_secret] }
 
       if resp.status != 200
          Rails.logger.error "GITHUB OAUTH ERROR: FETCH_ACCESS_TOKEN. Response headers are: #{resp.headers.inspect}"
@@ -24,7 +24,7 @@ class Auth::Github
       URI.decode_www_form(resp.body).to_h ;end
 
    def fetch_github_user_info access_token
-      resp = connection.get ENV['GITHUB_USER_INFO_URL'], query: {
+      resp = connection.get Rails.application.secrets.github[:user_info_url], query: {
          access_token: access_token }
 
       if resp.status != 200

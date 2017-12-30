@@ -12,7 +12,7 @@ import ErrorSpan from 'ErrorSpan'
 export default class EventsCollection extends Component {
    static defaultProps = {
       name: null,
-      value: {},
+      value: [],
       title: null,
       action: null,
       onUpdate: null,
@@ -23,9 +23,9 @@ export default class EventsCollection extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      value: PropTypes.object.isRequired,
-      title: PropTypes.title.isRequired,
-      action: PropTypes.action.isRequired,
+      value: PropTypes.array.isRequired,
+      title: PropTypes.string,
+      action: PropTypes.string,
       child_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
       onUpdate: PropTypes.func.isRequired,

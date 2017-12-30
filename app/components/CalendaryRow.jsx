@@ -18,10 +18,10 @@ export default class CalendaryRow extends Component {
 
    static propTypes = {
       locales: PropTypes.array.isRequired,
-      id: PropTypes.integer.isRequired,
+      id: PropTypes.number.isRequired,
       slug: PropTypes.string.isRequired,
       names: PropTypes.array.isRequired,
-      licit: PropTypes.boolean.isRequired,
+      licit: PropTypes.bool.isRequired,
       language_code: PropTypes.string.isRequired,
       alphabeth_code: PropTypes.string.isRequired,
       author_name: PropTypes.string,
