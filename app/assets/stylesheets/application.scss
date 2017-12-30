@@ -1841,12 +1841,16 @@ header {
    }
 }
 
-main > .container {
-   margin-top: 20px;
+main {
+   overflow-x: hidden;
 
-   &.admin {
-      width: 95%;
-      padding: 0;
+   & > .container {
+      margin-top: 20px;
+
+      &.admin {
+         width: 95%;
+         padding: 0;
+      }
    }
 }
 
@@ -2248,6 +2252,30 @@ label.active .error {
       &.avatar :not(.circle-clipper) > .circle {
          left: 0.5rem;
          top: 1px;
+      }
+   }
+}
+
+.dates {
+   padding-left: 23px;
+
+   .date.fixed-action-btn {
+      position: relative;
+      display: inline-block;
+      padding: 0;
+      top: 0;
+
+      & > .chip {
+         background-color: aliceblue;
+      }
+
+      ul {
+         z-index: 1000;
+         bottom: 15px;
+
+         .chip {
+            background-color: antiquewhite;
+         }
       }
    }
 }

@@ -12,8 +12,15 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
       adapter_options[:cached_attributes] ||= ActiveModel::Serializer.cache_read_multi(self, adapter_instance, include_directive)
       adapter_opts = adapter_options.merge(include_directive: include_directive)
 
-      grouped_calendaries do |calendary_s|
-         calendary_s.serializable_hash(adapter_opts, options, adapter_instance) ;end;end
+      #grouped_calendaries do |calendary_s|
+      #   calendary_s.serializable_hash(adapter_opts, options, adapter_instance) ;end;end
+
+      primary_memoes do |memo_s|
+         memo_s.serializable_hash(adapter_opts, options, adapter_instance) ;end;end
+
+   def primary_memoes
+      object.primary.licit.map do |memo|
+         yield( MemoSpanSerializer.new( memo, locales: locales )) end;end
 
    def grouped_calendaries
       object.group_by do |memo|

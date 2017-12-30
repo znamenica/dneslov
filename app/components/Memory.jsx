@@ -16,11 +16,34 @@ export default class Memory extends Component {
       beings: [],
       wikies: [],
       paterics: [],
-      calendaries: [],
+      memos: [],
       icons: [],
       events: [],
       troparion: null,
       kontakion: null,
+   }
+
+   mapGroupedMemoesByDate(func) {
+      let hash = this.props.memos.reduce((hash, memo) => {
+         if (!hash[memo.date]) {
+            hash[memo.date] = []
+         }
+
+         hash[memo.date] = hash[memo.date].concat({
+            event: memo.event,
+            calendary: memo.calendary,
+            url: memo.url,
+         })
+
+         return hash
+      }, {})
+
+      console.log('HASH', hash)
+
+      return Object.entries(hash).map((value) => {
+         console.log('KV', value[0], value[1])
+         return func(value[0], value[1])
+      })
    }
 
    render() {
@@ -89,25 +112,35 @@ export default class Memory extends Component {
                               key={pateric.id}
                               url={pateric.url}
                               text={pateric.text} />)}</div></div></div>}
-            {this.props.calendaries.length > 0 &&
+            {this.props.memos.length > 0 &&
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12 title'>
-                        Календари</div>
+                        Даты</div>
                      <div className='col s12'>
-                        {this.props.calendaries.map((calendary) =>
-                           <Chip
-                              key={calendary.slug} >
-                              <span className='name'>
-                                 <a
-                                    href={calendary.url}
-                                    target='_blank'>
-                                       {calendary.name}</a></span>
-                              {calendary.dates.map((date) =>
-                                 <span
-                                    className='date'
-                                    key={date.date} >
-                                    {date.date}</span>)}</Chip>)}</div></div></div>}
+                        <div
+                           className='dates'>
+                           {this.mapGroupedMemoesByDate((memo, events) =>
+                              <div
+                                 className='date fixed-action-btn'>
+                                    <Chip
+                                       key={'memo-' + memo}
+                                       text={memo} />
+                                 <ul>
+                                    {events.map((event) =>
+                                       <li>
+                                          <Chip
+                                             key={'event-' + event.event}>
+                                             <span>
+                                                {event.event}</span>
+                                             <span>
+                                                -</span>
+                                             <span>
+                                                {event.url &&
+                                                   <a
+                                                      href={event.url}>
+                                                      {event.calendary}</a>}
+                                                {!event.url && event.calendary}</span></Chip></li>)}</ul></div>)}</div></div></div></div>}
             {this.props.icons.length > 0 &&
                <Carousel
                   images={this.props.icons} />}

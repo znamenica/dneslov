@@ -9,6 +9,7 @@ require('materialize-css/js/global')
 require('materialize-css/js/collapsible')
 require('materialize-css/js/modal')
 require('materialize-css/js/carousel')
+require('materialize-css/js/buttons')
 
 // http://stackoverflow.com/a/30652110/873870
 function requireAll (r) { r.keys().forEach(r) }

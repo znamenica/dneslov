@@ -1,5 +1,5 @@
 class MemorySerializer < CommonMemorySerializer
-   attributes :names, :beings, :wikies,:paterics, :calendaries, :icons, :events, :troparion, :kontakion
+   attributes :names, :beings, :wikies,:paterics, :memos, :icons, :events, :troparion, :kontakion
 
    def link_text link
       /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
@@ -28,7 +28,7 @@ class MemorySerializer < CommonMemorySerializer
    def paterics
       links_json( object.paterics_for( locales )) ;end
 
-   def calendaries
+   def memos
       MemoedCalendariesSerializer.new(object.memos, locales: locales) ;end
 
    def icons
