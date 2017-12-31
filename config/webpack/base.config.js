@@ -40,6 +40,7 @@ module.exports = {
       // JavaScript
       'javascripts/app': './app/webpack/js/app.js',
       'javascripts/admin': './app/webpack/js/admin.js',
+      'javascripts/about': './app/webpack/js/about.js',
       // Stylesheets
       //'stylesheets/webpack/app': './app/webpack/css/app.js',
    },

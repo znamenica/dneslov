@@ -1,4 +1,5 @@
 {
    "app.js": "app.js",
-   "admin.js": "admin.js"
+   "admin.js": "admin.js",
+   "about.js": "about.js"
 }

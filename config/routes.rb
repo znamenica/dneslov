@@ -8,6 +8,8 @@ Rails.application.routes.draw do
    # You can have the root of your site routed with "root"
    root 'memories#index'
 
+   get '/about' => 'about#index'
+
    scope module: 'admin' do
       get '/dashboard' => 'common#dashboard'
 
