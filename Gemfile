@@ -66,7 +66,8 @@ gem 'nokogiri', '~> 1.8.1'
 # gem 'rails-html-sanitizer', '~> 1.0.3'
 
 # models
-gem 'bukovina', github: 'znamenica/bukovina'
+gem 'bukovina', '~> 0.99'
+#gem 'bukovina', github: 'znamenica/bukovina'
 # gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'has_scope'

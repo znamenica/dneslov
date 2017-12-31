@@ -32,7 +32,8 @@ class MemorySerializer < CommonMemorySerializer
       MemoedCalendariesSerializer.new(object.memos, locales: locales) ;end
 
    def icons
-      object.valid_icon_links.map.with_index do | icon, index |
+      #TODO remove `where` when be ready
+      object.valid_icon_links.where("url !~ 'azbyka'").map.with_index do | icon, index |
          {
             id: index,
             description: icon.description_for( locales )&.text,

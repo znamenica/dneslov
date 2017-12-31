@@ -3,7 +3,7 @@ class MemoriesController < ApplicationController
    before_action :set_memory, only: %i(show)
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
-   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
+   before_action :set_tokens, :set_calendary_slugs, :set_page, :set_year_date, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end
@@ -21,6 +21,7 @@ class MemoriesController < ApplicationController
                               each_serializer: MemorySpanSerializer,
                               total: @memories.total_count,
                               page: @page,
+                              year_date: @year_date,
                               calendaries: @calendary_slugs,
                               locales: @locales }
          format.html { render :index } end;end
@@ -61,14 +62,17 @@ class MemoriesController < ApplicationController
       if is_html?
          params[:with_date] = [ @date.strftime("%d-%m-%Y"), is_julian_calendar? ] ;end;end
 
+   def set_locales
+      @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
+
    def set_page
       @page ||= params[:page] || 1 ;end
 
    def set_tokens
       @tokens ||= params[:with_tokens] || [] ;end
 
-   def set_locales
-      @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
+   def set_year_date
+      @year_date ||= params['with_date']&.[](0).to_s.split(/[\-\/\.]/)[0..1].join('.') ;end
 
    def set_calendary_slugs
       slugs = params[:in_calendaries].present? && params[:in_calendaries] ||

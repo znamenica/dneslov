@@ -15,7 +15,7 @@ class Admin::MemorySerializer < ApplicationSerializer
       ActiveModel::Serializer::CollectionSerializer.new(object.beings, locales: @instance_options[:locales]) ;end
 
    def events
-      ActiveModel::Serializer::CollectionSerializer.new(object.events, locales: @instance_options[:locales]) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.events, locales: @instance_options[:locales], serializer: Admin::EventSerializer) ;end
 
    def memory_names
       ActiveModel::Serializer::CollectionSerializer.new(object.memory_names, locales: @instance_options[:locales]) ;end

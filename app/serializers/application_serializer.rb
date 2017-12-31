@@ -9,6 +9,9 @@ class ApplicationSerializer < ActiveModel::Serializer
       I18n.t(full_link, options)
    end
 
+   def year_date
+      @instance_options[:year_date] ;end
+
    def locales
       @instance_options[:locales] ;end
 

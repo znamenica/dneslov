@@ -1,16 +1,25 @@
 class MemorySpanSerializer < CommonMemorySerializer
    attributes :icon_url, :url, :names, :default_calendary_name
 
+   def year
+      calendaries && memo && memo.event.happened_at || super ;end
+
    def default_calendary_name
-      if calendaries
-         memo = object.memos.in_calendaries(calendaries).first
-         memo && memo.description_for( locales )&.text ;end;end
+      calendaries && memo && memo.description_for( locales )&.text ;end
 
    def names
       MemoryNamesSerializer.new(object.memory_names, locales: locales) ;end
 
    def icon_url
-      object.valid_icon_links.first&.url ;end
+      #TODO remove `where` when be ready
+      object.valid_icon_links.where("url !~ 'azbyka'").first&.url ;end
 
    def url
-      slug_path( slug ) ;end;end
+      slug_path( slug ) ;end
+
+   protected
+
+   def memo
+      #TODO move `where` to model
+      @memo ||= calendaries &&
+         object.memos.in_calendaries(calendaries).where(year_date: year_date).first ;end;end
