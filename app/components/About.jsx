@@ -70,5 +70,11 @@ export default class About extends Component {
                                        edit</i>
                                  </td>
                               </tr>)}
+                           <tr>
+                              <td>
+                                 <a href='/'>Идти к календарю</a></td>
+                              <td>
+                                 <a href='/'><i className='small material-icons green'>call_made</i></a></td></tr>
                         </tbody>
-                     </table></div></div></div></div></main>])}}
+                     </table>
+            </div></div></div></div></main>])}}
