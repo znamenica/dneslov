@@ -2,6 +2,10 @@ class Admin::MemoSerializer < ApplicationSerializer
    attributes :id, :year_date, :add_date, :calendary_id, :calendary, :event_id, :event, :bind_kind,
               :bond_to_id, :bond_to, :memory, :memory_id, :descriptions, :links
 
+   def year_date
+      object.year_date
+   end
+
    def memory_id
       object.event.memory_id ;end
 
