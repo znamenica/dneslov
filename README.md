@@ -18,7 +18,7 @@ remotely execute:
 dropdb dneslov_production_old --if-exists
 createdb dneslov_tmp
 pg_restore  -d dneslov_tmp -1 dneslov_test.dump.sql.tar
-psql <<< "
+psql -d template1 <<< "
 SELECT pg_terminate_backend(pg_stat_activity.pid)
 FROM pg_stat_activity
 WHERE pg_stat_activity.datname = 'dneslov_production'

@@ -191,9 +191,12 @@ export default class MemoriesForm extends Component {
          [<header>
             <nav className='terracota'>
                <div className="nav-wrapper">
-                  <a className='brand-logo'
-                     href='/'>
-                     Днеслов</a>
+                  <a
+                     className='brand-logo'
+                     href='/'
+                     alt="Днеслов">
+                     <img
+                        src="dneslov-title.png" /></a>
                   <div className="right">
                      <div className='moon' /></div></div></nav></header>,
          <main>

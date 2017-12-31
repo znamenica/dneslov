@@ -67,8 +67,10 @@ export default class Dashboard extends Component {
             <nav className='terracota'>
                <div className="nav-wrapper admin">
                   <a className='brand-logo'
-                     href='/'>
-                     Днеслов</a>
+                     href='/'
+                     alt="Днеслов">
+                     <img
+                        src="dneslov-title.png" /></a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li>
