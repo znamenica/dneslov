@@ -65,12 +65,11 @@ gem 'nokogiri', '~> 1.8.1'
 # CVE-2015-7578 - POSSIBLE XSS VULNERABILITY
 # gem 'rails-html-sanitizer', '~> 1.0.3'
 
-# models
-gem 'bukovina', '~> 0.99'
-#gem 'bukovina', github: 'znamenica/bukovina'
-# gem 'bukovina', path: '/usr/local/home/majioa/git/bukovina'
-#gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
+## controllers
 gem 'has_scope'
+
+## models
+gem 'validate_url'
 
 # view
 ## NPM packaging
@@ -89,6 +88,13 @@ gem 'jwt'
 
 ## authorization
 gem 'pundit'
+
+## logging
+#gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
+gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
+
+## orthodox
+gem 'when_easter'
 
 group :development do
    gem 'capistrano', '~> 3.6'
@@ -113,11 +119,12 @@ group :development, :test do
    gem 'spring-commands-cucumber'
    gem 'spring-watcher-listen', '~> 2.0.0'
    gem 'faker'
+   gem 'ffaker'
 end
 
 group :test do
    gem 'cucumber-rails', require: nil
-   gem 'shoulda-matchers', '3.0'
+   gem 'shoulda-matchers', github: 'majioa/shoulda-matchers', branch: 'allow_to_use_the_matchers_with_just_rspec_expectations_gem'
    gem 'rspec-expectations'
    gem 'rspec-wait'
    gem 'simplecov'

@@ -15,7 +15,7 @@ require 'cucumber/rails'
 require 'shoulda-matchers'
 require 'factory_girl'
 require 'faker'
-require 'dotenv'
+require 'ffaker'
 
 Dotenv.load('.env.sample')
 
@@ -24,6 +24,25 @@ FactoryGirl.lint
 World( FactoryGirl::Syntax::Methods )
 World( Rack::Test::Methods )
 
+Shoulda::Matchers.configure do |config|
+   config.integrate do |with|
+      with.test_framework :rspec_exp
+      with.library :active_model
+      with.library :active_record ;end;end
+
+Around do |_scenario, block|
+   DatabaseCleaner.cleaning( &block ) ;end
+
+Before do
+   @owd = Dir.pwd
+   @workdir = Dir.mktmpdir ;end
+
+After do
+   Dir.chdir( @owd )
+   FileUtils.remove_entry_secure( @workdir ) ;end
+
+at_exit do
+   DatabaseCleaner.clean ;end
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
 # selectors in your step definitions to use the XPath syntax.

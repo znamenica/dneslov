@@ -1,0 +1,370 @@
+vim commands for hip conversion
+
+:set fileencodings=cp1251
+:w ++enc=utf-8 ++ff=unix
+
+шаблоны:
+
+Имени служба.цс_ро.yml
+---
+вечерня:
+   отпустительно:
+      тропарь:
+         глас:
+         текст:
+      молитва:
+утреня:
+   величание:
+   канон:
+      кондак:
+         глас:
+         текст:
+
+месяцеслов.ро.yml
+---
+   имя: 
+   прозвище: 
+   фамилия: 
+   чин: 
+   год: 
+   собор: 
+   служба: 
+   вики: http://ru.wikipedia.org/wiki/
+   бытие: 
+   отечник: 
+   образ: 
+
+чины: ап|апе|прп|прпп|сщмч|сщмчч|вмч|вмц|стсвт|прсвт|исвт|свт|прблж|прмч|прмчч|прмц|прмц|блгв|бвпрп|мч|мчч|мц|мцц|обр
+
+:сладкопевцы:
+свт ВЕНИГН АРМАХСКИЙ: http://drevo-info.ru/articles/14250.html
+прп Мар певец: 25.01
+?Феодор Антиохийский 6.12
+?ФИЛИМОН АНТИНОЙСКИЙ http://drevo-info.ru/articles/4578.html
+?ИОАНН СЕЗЕНОВСКИЙ http://drevo-info.ru/articles/25950.html
+
+слав:
+http://drevo-info.ru/articles/13253.html
+
+прпсвт: тропарь Нектарию Эгинскому 09.11 или Феофану Затворнику
+
+
+---
+потом:
+
+перепроверить соборы и из списки на принадлежность памятей им
+службы до 1/14 июня добавить с азбуки
+непрс - собор не прославленных
+автозамена русский(ие)/российский/cлавянский и русская/российская, России/Русь
+ демон->бес
+ монах->инок
+ за вся -> всяческих ради
+ финикс -> финик
+контроль на соотвествие
+ службы и ссылки на нее
+ даты помина и списка в месяцеслове
+проверить сербcких святых по дате преставления
+поделить правильно склеееные hip-куты
+обновить записи "отечник" с азбуки
+все неимущих дня памяти в т.ч. в соборе проверить
+список святых и их мощей по: http://azbyka.ru/spravochniki/ukazatel-mestonakhozhdenija-svjatyn-all.shtml
+
+Лесвийский собор http://akolouthies-agion.blogspot.gr/2011/05/blog-post_27.html
+
+переход на грегорианский
+----
+Декабрь 1912   Албания
+31 марта 1916  14 апреля 1916 Болгария
+31 января 1918 14 февраля 1918   Советская Россия, Эстония
+16 февраля 1918   1 марта 1918   Украина (Украинская народная республика)[14]
+17 апреля 1918 1 мая 1918  Закавказская демократическая федеративная республика (Грузия, Азербайджан и Армения)[15]
+18 января 1919 1 февраля 1919 Румыния, Югославия
+ 9 марта 1924   23 марта 1924  Греция[12]
+
+----
+
+чин:
+славл
+покая
+
+
+- неции накладки 30 июля помоему со службами и некот памятьми за ины дни (в тч. Климента Охридского)
+
+
+http://sr.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%B0%D0%BA_%D1%81%D0%B2%D0%B5%D1%82%D0%B8%D1%82%D0%B5%D1%99%D0%B0_%D0%A1%D1%80%D0%BF%D1%81%D0%BA%D0%B5_%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%81%D0%BB%D0%B0%D0%B2%D0%BD%D0%B5_%D1%86%D1%80%D0%BA%D0%B2%D0%B5
+
+три святителя ростиовские и ростовиские святители одно и тоже ли?
+всех апостолов поместить в соборы мч,свт, если полагается
+
+http://drevo-info.ru/articles/7093.html
+
+3 дек образ Кассиана - https://upload.wikimedia.org/wikipedia/commons/7/7f/Marcellus_Cassian.jpg
+
+прошерстить всех кто имеет брат на двоих святых и названить в группу
+
+https://ru.wikipedia.org/wiki/%D0%A8%D0%B0%D0%BF%D1%83%D1%80_(%D0%B8%D0%BC%D1%8F)
+http://www.pravoslavie.ru/orthodoxchurches/41625.htm
+
+как соотносятся Новодевичий и Иверский образы?
+
+глубина папки в "памяти" = 2 т.к. памяти/людин/...
+
+время от 16:00 -> 00:00
+
+надо выкачать подоьные записи без даты прославления - http://kuz3.pstbi.ru/bin/nkws.exe/no_dbpath/docum/ans/nm/?HYZ9EJxGHoxITYZCF2JMTdG6XbuBe8eieynVeeWd66WWc8oUXOWefeiUdO8ctk*
+
+
+печ = бпеч+дпеч
+Хиосский и Киосский одно ли и тоже чи ни?
+проверить даты, а затем просто дотянуть недостающие памяти новомучеников с сайта пстгу
+
+http://akafist.narod.ru
+
+пересчитать всех, кто имеет событие крещение на предмет имени из святцев
+
+возм.расставить даты для собора "бель" - бельковского в каждую из памятей
+перепроверить службы апостолов за 5-9 декабря с.с.
+обновить прославление для памяти: Никифора Литвинова
+
+обновить западных святых их журнала в ЖЖ
+
+собор: мск - для местного почитания, нмр - для общецерковного
+
+проверять память в один и тотже день напрямую и через собор
+
+поплести помины "само" и иные в одну запить с многими датами
+поле "тез" не только тезоимениство кому-то, но и явление кому-то (напр.явление Богородицы Сергию Радоженскому)
+
+"дата" по сс и по церковному времени (с 16:00 по 16:00), но "время" по современному, так 15:59 день первый, но 16:00 день другой
+
+- собор 3-х святых 05.01 сс (подневный)
+
+- собор великомучеников, кто?
+
+- проверить все даты pdf минейных по формату http://azbyka.ru/days/assets/upload/minei/07/minea_07_04.pdf
+
+- разобрать Мерсию и Среднюю Англию, а также Мерсию, Гвиссе и Магонсате
+
+в соборе по месту рождения:
+ - Парфений Киевский (туль)
+ - Саратовский собор (тропарь)
+ - Мирон Радонежский (вол)
+ - Иларион Оптинский (врнж)
+ - Брянский собор - вики: "На 2007 год были известны 43 cвятых, чьи жития связаны с брянской землей."
+ - Евфимий Суздальский (ниж)
+ - Геннадий Костромской (блр)
+
+храм на месте капища: 
+ - http://drevo-info.ru/articles/5315.html
+
+женатый (брак) епископ
+  Ириней Сирмийский?
+  Герман Оксеррский?
+
+
+http://www.saint.gr/840/saint.aspx
+http://www.saint.gr/284/saint.aspx
+http://www.saint.gr/4098/saint.aspx
+http://www.saint.gr/4286/saint.aspx
+
+21 марта - собор Катанских святых?
+
+кельтские святые - http://celtic-arc.upelsinka.com/calendar
+русские святые 19-го века http://tvereparhia.ru/publikaczii/voprosy-k-pravoslavnym/7864-evgenij-poselyanin-russkie-podvizhniki-19-veka
+карта Греции - https://ru.wikipedia.org/wiki/Номы_Греции
+грузинские святые и молитвы - http://www.georgianweb.com/religion.html
+мощи святых - http://azbyka.ru/spravochniki/ukazatel-mestonakhozhdenija-svjatyn-all.shtml
+http://otpusk-zdorovo.ru/starets-apollonij-v-gorode-murom/
+
+Ирландское деление и русское тоже - https://ru.wikipedia.org/wiki/Пятина
+Округа Сербии - https://ru.wikipedia.org/wiki/Категория:Округа_Сербии
+
+хороший канон:
+  - Даниил Переяславский
+  - 2-й канон Нифонту Новгородскому
+
+тропарь:
+ - кому
+ - с кем (2-й святой)
+ - о ком (напр. Господу о Богородице, или в поле "с кем" поместить?. может ли быть о нас? не вем)
+ - где (путь желательно полный до точного положения)
+
+
+дополнить   https://ru.wikipedia.org/wiki/%D0%A1%D0%B2%D1%8F%D1%82%D0%B0%D1%8F_%D0%95%D0%BB%D0%B8%D0%B7%D0%B0%D0%B2%D0%B5%D1%82%D0%B0_(%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D1%8F)
+!!!!разделять тип помина (само,прств,ржд...) и дату их отмечаний в календаре
+
+----
+https://crkvenikalendar.com/
+http://drevo-info.ru/articles/1511.html
+http://azbyka.ru/days/2015-06-24
+http://days.pravoslavie.ru/Days/20150611.html
+http://calendar.rop.ru/mes1/jun11.html
+http://www.saint.gr/06/11/index.aspx
+http://www.pravoslavnikalendar.iz.rs/index.php
+http://www.svetosavlje.org/biblioteka/prolog/?m=06&d=7&a=1&date=06-2015
+http://kuz3.pstbi.ru/bin/code.exe/frames/m/ind_oem.html/ans
+http://www.sfintiromani.ro/
+http://www.crestinortodox.ro/calendar-ortodox/
+http://www.glt.xyz/
+https://stcharalamboschurchluton.wordpress.com/liturgical-texts-in-greek/
+http://www.orthodoxy.ge/lotsvani/troparebi/tarigi/maisi.htm
+http://www.orthodoxy.ge/lotsvani/troparebi/tarigi/aprili.htm
+http://oca.org/saints/lives/2015/04/09
+http://www.ecclesia.gr/greek/synaxaire/synaxari.asp?minas=4&id=220
+http://martyrs.pstbi.ru/cl0.htm
+http://files2.regentjob.ru/minea/apr2/apr2102.html
+http://mylektsii.ru/5-30983.html
+http://www.orthodoxengland.org.uk/saintsf.htm
+http://www.forum-orthodoxe.com/synaxaire_presentation.php
+http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0064%3Aalphabetic+letter%3DP%3Aentry+group%3D3%3Aentry%3Dparambole-geo
+http://ucmopuockon.livejournal.com/10417604.html
+http://ortodossia.org/svyatyni/
+http://www.holytrinityorthodox.com/calendar/index.php
+http://www.georgiaorthodoxy.info/calendar.htm
+http://www.georgianweb.com/calendar.html
+http://www.orthodoxy.ge/kalendari.htm
+http://kutais-gaenati.ge/
+http://www.tveni.ge/
+https://www.facebook.com/%E1%83%94%E1%83%99%E1%83%9A%E1%83%94%E1%83%A1%E1%83%98%E1%83%98%E1%83%A1-%E1%83%99%E1%83%90%E1%83%9A%E1%83%94%E1%83%9C%E1%83%93%E1%83%90%E1%83%A0%E1%83%98-325555340800366/
+http://korolev.msk.ru/minea/oct/oct943.html
+https://www.nashavera.com/holydate/saints/20-avgusta-sv-proroka-samuila/
+http://www.catholic-saints.info/
+http://www.catholic.org/saints/
+https://en.wikipedia.org/wiki/List_of_Catholic_saints
+http://константиновохрам.рф/kanonnik/bogorodice/index.html
+http://www.palomnik.by/palomnik/sermons/
+https://wwwfyllades.wordpress.com/
+http://orthodoxhymnography.blogspot.ru/?view=timeslide
+http://web.archive.org/web/20161208082755/http://voutsinasilias.blogspot.com:80/
+https://vk.com/novomycheniki
+https://en.wikipedia.org/wiki/Odilia_of_Cologne
+http://www.lublin.cerkiew.pl/
+http://bg-patriarshia.bg/calendar.php
+https://ceacbg.com/calendar
+https://www.facebook.com/dobrin.velev.3
+https://www.facebook.com/ეკლესიის-კალენდარი-325555340800366/
+http://kalendar.or.cz/day.pl
+http://www.cerkiew.pl
+
+Иконы
+http://eikon.piwigo.com/
+http://vrc.princeton.edu/sinai/items/browse
+
+Новые памяти?
+https://drevo-info.ru/articles/4856.html
+http://www.solovki.ca/saints_11/lost_saints.php
+http://korolev.msk.ru/minea/feb/feb225.html
+http://patriarchate.ge/geo/%e1%83%ac%e1%83%9b%e1%83%98%e1%83%9c%e1%83%93%e1%83%90%e1%83%9c%e1%83%97%e1%83%90-%e1%83%aa%e1%83%ae%e1%83%9d%e1%83%95%e1%83%a0%e1%83%94%e1%83%91%e1%83%90/
+http://www.pravoslavieto.com/1/calendar.htm
+http://www.calendar-ortodox.ro/luna/mai/mai24.htm
+http://linguaeterna.com/vocabula/alph.php
+----
+http://novisrbljak.narod.ru/spisak.html
+http://www.mineya.ru/files/novoprosl.pdf
+http://ustavschik.livejournal.com/201419.html
+http://www.koinonia.orthodoxy.ru/stsilouan/Kanon2a.htm
+http://www.museum.ru/C3479 ; http://ru-icons.ru/icons/312.html
+http://ustav.livejournal.com/1258242.html
+http://www.oxfordreference.com/ - A Dictionary of First Names -> Оксфордский словарь имён (для платщиков)
+
+----
+службы:
+полунощница - https://vk.com/wall-63037832_509
+----
+фильтр!!!
+прозвище: на -ий,-ая - фальшивое
+----
+
+ТАБЛИЦЫ:
+память:
+  имена(имя): -> имя
+  описание(описание):
+    язык: текст
+  чин(чин): -> чин
+  соборы(собор): -> память
+  викие(вики): ->
+    язык: ссылка
+  бытия(бытие): ->
+    язык: ссылка
+  образы(образ): -> образ
+  события(событие): -> событие
+  помины(помин): -> помин
+
+чин:
+  -> память
+
+помин:
+? дата(дата): дата в году
+  вид(описание): <само,прств,ржд,обр,прен>
+? календари(календарь): -> календарь
+  служба(служба): ссылка на интернет или github
+
+имя:
+  язык:
+  текст:
+  вид:
+  подобия: -> имя
+  синонимы: -> имя
+  
+событие:
+  ->(belongs_to): память
+  дата(год,дата): [расш.дата: год,число,месяц, др.данные, ок.,вид. итд]
+  вид(описание): <само,прств,ржд,обр,прен,брак>
+  место: [ссылка на карты и название: или может добавить класс место]
+  супруг[вид:брак]: [ссылка либо имя]
+  образы(образ): -> образ
+  описание(описание_):
+    язык: текст
+  бытия(бытие): ->
+    язык: текст(ссылка)
+  образы(образ): -> образ
+  тезы(тез): -> память
+  ссылки(ссылка): -> 
+    язык: текст(ссылка)
+
+образ:
+  ->: событие
+  место:
+  ссылка: ссылка на сеть или облако
+
+календарь:
+! предусмотреть возможность добавлять событие памяти в календарь по дневно (напр. после прославления)
+  имя: строка: имя календаря
+  памяти: [дата, ссылка на событие у памяти]
+10. руꙇень
+11. листопадъ
+12. снѣжень
+1. просинецъ
+2. лѵтень
+3. сушень
+4. квѣтень
+5. травень
+6. червень
+7. липень
+8. серпень
+9. вресень
+bogor.hip
+info.txt
+parem.hip
+акаѳісты
+ѡбъщъ
+молебны
+По Пасхе
+пѡпѧтидесѧтничнѡ
+трипѣсньцъ постьнъ
+трипѣсньцъ цвѣтьнъ
+
+---
+прог ссылки
+https://github.com/scriptum/UBFG
+
+
+----
+модели
+
+
+после импорта:
+---
+памяти/Мария Дединовская/память.ро.yml - фамилия
+Егорий Тирнавский  - отчество
+Василий Выползовский:

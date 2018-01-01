@@ -15,14 +15,18 @@ module Dneslov
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
-    config.autoload_paths << Rails.root.join('lib')
+    folders = ['lib',
+               'app/models/events',
+               'app/models/cantoes',
+               'app/models/descriptions',
+               'app/models/links']
+    folders.each do |folder|
+       config.autoload_paths << Rails.root.join(folder) ;end
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :ru
     config.i18n.fallbacks = [:en]
-
-    config.paths['db/migrate'].concat(Bukovina::Engine.paths['db/migrate'].existent)
 
     config.npm.enable_watch = Rails.env.development?
 

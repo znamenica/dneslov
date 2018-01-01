@@ -1,0 +1,1 @@
+class Canonization < Event ;end

@@ -1,0 +1,1 @@
+class Prophecy < Event ;end

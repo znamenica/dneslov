@@ -1,0 +1,1 @@
+class Nativity < Event ;end
