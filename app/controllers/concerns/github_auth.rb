@@ -6,15 +6,15 @@ module GithubAuth
       user_info = authenticator[ params[:code] ]
 
       new_params = {
-         login: user_info['login'],
-         name: user_info['name'],
-         avatar_url: user_info['avatar_url'],
-         location: user_info['location'],
-         info: user_info['bio']}
+         'login': user_info['login'],
+         'name': user_info['name'],
+         'avatar_url': user_info['avatar_url'],
+         'location': user_info['location'],
+         'info': user_info['bio']}
 
       session.merge!( new_params.merge(
-         jwt: JwToken.encode( user_info[ 'login' ]),
-         email: user_info['email'] ))
+         'jwt': JwToken.encode( user_info[ 'login' ]),
+         'email': user_info['email'] ))
       logger.debug ("SESSION: #{session.to_hash.inspect}")
 
       # ... create user if it doesn't exist...

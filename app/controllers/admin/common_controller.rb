@@ -3,6 +3,7 @@ class Admin::CommonController < ApplicationController
    include Pundit
 
    before_action :authenticate_user!, except: %i(dashboard)
+   before_action :validate_session
    before_action :set_tokens, only: %i(index)
    before_action :set_page, only: %i(index)
    before_action :set_locales
@@ -60,6 +61,10 @@ class Admin::CommonController < ApplicationController
    end
 
    protected
+
+   def validate_session
+      if session_lost?
+         drop_session ;end;end
 
    def authorize!
       policy = Object.const_get(model.name + "Policy")

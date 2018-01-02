@@ -21,7 +21,7 @@ class Memo < ActiveRecord::Base
    has_many :descriptions, proc { where( type: nil ) }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
 
-   delegate :memory, to: :event
+   has_one :memory, through: :event
 
    #enum bind_kind: [ 'несвязаный', 'навечерие', 'предпразднество', 'попразднество' ]
 
@@ -46,15 +46,17 @@ class Memo < ActiveRecord::Base
       #
 #                                      merge(Calendary.with_token(text)).or(
 #            left_outer_joins(:memory).merge(Memory.with_token(text)))))) ;end
-      left_outer_joins(:descriptions).where("descriptions.text ILIKE ?", "%#{text}%").or(
-                                      where("memoes.add_date ILIKE ?", "%#{text}%").or(
-                                      where("memoes.year_date ILIKE ?", "%#{text}%"))) ;end
+      left_outer_joins(:descriptions, :memory)
+         .where("descriptions.text ILIKE ?", "%#{text}%").or(
+          where("memoes.add_date ILIKE ?", "%#{text}%").or(
+          where("memoes.year_date ILIKE ?", "%#{text}%").or(
+          where("memories.short_name ILIKE ?", "%#{text}%")))) ;end
 
    scope :with_tokens, -> token_list do
       # TODO fix the correctness of the query
       tokens = token_list.reject { |t| t =~ /\A[\s\+]*\z/ }
       cond = tokens.first[0] == '+' && 'TRUE' || 'FALSE'
-      rel = left_outer_joins(:descriptions).where( cond )
+      rel = left_outer_joins(:descriptions, :memory).where( cond )
       tokens.reduce(rel) do |rel, token|
          /\A(?<a>\+)?(?<text>.*)/ =~ token
          if a # AND operation

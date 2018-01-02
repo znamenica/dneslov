@@ -18,10 +18,10 @@ export function matchLetters(e) {
          res = ! e.text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѾꙖа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѿꙗ.,;* ]+$/) //TODO
          break
       case 'ук':
-         res = ! e.text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́ ]+$/)
+         res = ! e.text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́«» ]+$/)
          break
       case 'бл':
-         res = ! e.text.match(/^[:,.()0-9 ]+$/) //TODO
+         res = ! e.text.match(/^[:,.()0-9«» ]+$/) //TODO
          break
       case 'мк':
          res = ! e.text.match(/^[:,.()0-9 ]+$/) //TODO

@@ -78,8 +78,10 @@ export default class CalendaryForm extends Component {
                   s[uuid()] = this.deserializedHash(v)
                   return s
                }, {})
-            } else {
+            } else if (value[0]) {
                result[key] = value
+            } else {
+               result[key] = {}
             }
             break
          case 'Object':

@@ -57,7 +57,7 @@ class Event < ActiveRecord::Base
 
    scope :usual, -> { where(type: USUAL) }
    scope :with_token, -> text do
-      where("type ILIKE ?", "%#{text}%").or(where(type_number: text.to_i)) ;end
+      left_outer_joins(:kinds).where("type ILIKE ?", "%#{text}%").or(where(type_number: text.to_i).or(where("event_kinds.text ILIKE ?", "%#{text}%"))) ;end
    scope :with_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
 

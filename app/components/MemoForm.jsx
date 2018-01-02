@@ -33,8 +33,8 @@ export default class MemoForm extends Component {
       bond_to: '',
       memory_id: 0,
       memory: '',
-      descriptions: {},
-      links: {},
+      descriptions: [],
+      links: [],
    }
 
    static validations = {
@@ -58,9 +58,17 @@ export default class MemoForm extends Component {
 
    valid = false
 
+   constructor(props) {
+      super(props)
+
+      console.log(this.query, props)
+   }
+
    componentWillReceiveProps(nextProps) {
-      this.query = this.deserializedHash(nextProps)
-      console.log(this.query, nextProps)
+      if (nextProps.id != this.props.id) {
+         this.query = this.deserializedHash(nextProps)
+         console.log(this.query, nextProps)
+      }
    }
 
    shouldComponentUpdate(nextProps, nextState) {
@@ -80,6 +88,7 @@ export default class MemoForm extends Component {
       return this.serializedHash(this.query)
    }
 
+   // converts [] to {}
    deserializedHash(hash) {
       let result = {}
 
@@ -93,8 +102,10 @@ export default class MemoForm extends Component {
                   s[uuid()] = this.deserializedHash(v)
                   return s
                }, {})
-            } else {
+            } else if (value[0]) {
                result[key] = value
+            } else {
+               result[key] = {}
             }
             break
          case 'Object':
@@ -109,6 +120,7 @@ export default class MemoForm extends Component {
       return result
    }
 
+   // converts {} to []
    serializedHash(hash) {
       let result = {}, subkey
 

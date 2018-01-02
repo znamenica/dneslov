@@ -16,7 +16,7 @@ class Admin::MemoSerializer < ApplicationSerializer
       object.calendary.name_for(@instance_options[:locales]).text ;end
 
    def event
-      [ object.event.type, object.event.type_number ].compact.join( "#" ) ;end
+      [ object.event.kind_for(locales).text, object.event.type_number ].compact.join( "#" ) ;end
 
    def bond_to
       object.bond_to&.year_date ;end
