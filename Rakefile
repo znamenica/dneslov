@@ -1,9 +1,9 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
-require 'cucumber'
+#require 'cucumber'
 #require 'bundler/gem_tasks'
-require 'cucumber/rake/task'
+#require 'cucumber/rake/task'
 
 require File.expand_path('../config/application', __FILE__)
 
@@ -45,9 +45,9 @@ end
 
 Rake.add_rakelib 'lib/tasks'
 
-Cucumber::Rake::Task.new(:cucumber) do |t|
-   t.cucumber_opts = "features --format pretty"
-end
+#Cucumber::Rake::Task.new(:cucumber) do |t|
+#   t.cucumber_opts = "features --format pretty"
+#end
 
 task 'db:seed' => [:load_config]
 
