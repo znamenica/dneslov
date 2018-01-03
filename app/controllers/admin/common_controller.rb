@@ -69,9 +69,7 @@ class Admin::CommonController < ApplicationController
    def authorize!
       policy = Object.const_get(model.name + "Policy")
       if !policy.new(current_user, @object).send(action_name + '?')
-         raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}"
-      end
-   end
+         raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}" ;end;end
 
    def unprocessable_entity e
       errors = @object.errors.any? && @object.errors || e.to_s

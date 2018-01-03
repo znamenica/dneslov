@@ -77,7 +77,7 @@ class Memo < ActiveRecord::Base
    accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :calendary, :event
-   validates :year_date, format: { with: /\A(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])|[+-]\d{1,3}|0\z/ }
+   validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])(%[0-6])?|[+-]\d{1,3})\z/ }
 
    before_validation :fix_year_date
    before_create -> { self.bind_kind ||= 'несвязаный' }

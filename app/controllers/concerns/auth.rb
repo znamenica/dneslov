@@ -19,13 +19,13 @@ module Auth
 
    def drop_session
       session.merge!(
-         'login': nil,
-         'name': nil,
-         'avatar_url': nil,
-         'location': nil,
-         'info': nil,
-         'jwt': nil,
-         'email': nil) ;end
+         'login' => nil,
+         'name' => nil,
+         'avatar_url' => nil,
+         'location' => nil,
+         'info' => nil,
+         'jwt' => nil,
+         'email' => nil) ;end
 
    def authenticate_user!
       head :unauthorized unless logged_in? ;end;end;end
