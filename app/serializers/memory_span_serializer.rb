@@ -22,4 +22,4 @@ class MemorySpanSerializer < CommonMemorySerializer
    def memo
       #TODO move `where` to model
       @memo ||= calendaries &&
-         object.memos.in_calendaries(calendaries).where(year_date: year_date).first ;end;end
+         object.memos.in_calendaries(calendaries).with_date(date, julian).first ;end;end

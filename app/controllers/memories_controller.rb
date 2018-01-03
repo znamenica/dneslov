@@ -3,7 +3,7 @@ class MemoriesController < ApplicationController
    before_action :set_memory, only: %i(show)
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
-   before_action :set_tokens, :set_calendary_slugs, :set_page, :set_year_date, only: %i(index)
+   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end
@@ -21,7 +21,8 @@ class MemoriesController < ApplicationController
                               each_serializer: MemorySpanSerializer,
                               total: @memories.total_count,
                               page: @page,
-                              year_date: @year_date,
+                              date: @date,
+                              julian: @julian,
                               calendaries: @calendary_slugs,
                               locales: @locales }
          format.html { render :index } end;end
@@ -39,7 +40,7 @@ class MemoriesController < ApplicationController
       request.formats.first.symbol == :html ;end
 
    def is_julian_calendar?
-      params[ :calendar_style ].to_i == 0 ;end
+      @julian ||= params[ :calendar_style ].to_i == 0 ;end
 
    def will_select_date_only?
       params[:with_text].blank? ;end
@@ -71,9 +72,6 @@ class MemoriesController < ApplicationController
    def set_tokens
       @tokens ||= params[:with_tokens] || [] ;end
 
-   def set_year_date
-      @year_date ||= params['with_date']&.[](0).to_s.split(/[\-\/\.]/)[0..1].join('.') ;end
-
    def set_calendary_slugs
       slugs = params[:in_calendaries].present? && params[:in_calendaries] ||
               is_html? && [ default_calendary_slug ]
@@ -85,11 +83,11 @@ class MemoriesController < ApplicationController
    def set_date
       # TODO add detection time zone from request
       @date ||= (
-         if will_select_date_only?
+         if params[ :with_date ].is_a?(Array)
+            Time.parse( params[ :with_date ].first )
+         elsif will_select_date_only?
             date = Time.now + church_time_gap
             is_julian_calendar? && date - julian_gap || date
-         elsif params[ :with_date ].is_a?(Array)
-            Time.parse( params[ :with_date ].first )
          end) ;end
 
    def set_memory

@@ -32,12 +32,13 @@ class Memo < ActiveRecord::Base
       calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).pluck( :sluggable_id )
       where( calendary_id: calendary_ids ) ;end
 
-   scope :with_date, -> (date_str, julian = false) do
-      date = Date.parse(date_str)
+   scope :with_date, -> (in_date, julian = false) do
+      date = in_date.is_a?(Date) && in_date || Date.parse(in_date)
       new_date = date.strftime("%2d.%m")
-      wday = (date + (julian && 13.days || 0)).wday
+      gap = (julian && 13.days || 0)
+      wday = (date + gap).wday
       relays = (1..7).map { |x| (date - x.days).strftime("%2d.%m") + "%#{wday}" }
-      easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year)
+      easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
       days = sprintf( "%+i", date.to_time.yday - easter.yday )
       where( year_date: relays.dup << new_date << days ) ;end
 

@@ -65,10 +65,8 @@ export default class MemoForm extends Component {
    }
 
    componentWillReceiveProps(nextProps) {
-      if (nextProps.id != this.props.id) {
-         this.query = this.deserializedHash(nextProps)
-         console.log(this.query, nextProps)
-      }
+      this.query = this.deserializedHash(nextProps)
+      console.log(this.query, nextProps)
    }
 
    shouldComponentUpdate(nextProps, nextState) {

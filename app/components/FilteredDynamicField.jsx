@@ -203,19 +203,15 @@ export default class FilteredDynamicField extends Component {
       this.triggered = undefined
    }
 
-   onSuccessLoadText(dynamic_data) {
-      this.storeDynamicData(dynamic_data)
-
-      this.forceUpdate()
-   }
-
    onSuccessLoad(dynamic_data) {
       this.storeDynamicData(dynamic_data)
 
       console.log("SUCCESS", dynamic_data)
 
       //popup autocomplete
-      this.setAutocomplete()
+      if (this.$input) {
+         this.setAutocomplete()
+      }
 
       if (this.triggered) {
          if (this.value().length > this.triggered.length &&
