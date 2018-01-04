@@ -7,10 +7,26 @@ import Memories from 'Memories'
 import Names from 'Names'
 import Memoes from 'Memoes'
 
+const Objects = {
+   'calendaries': Calendaries,
+   'memories': Memories,
+   'names': Names,
+   'memoes': Memoes,
+}
+
 export default class Dashboard extends Component {
    state = assign({}, this.props, { form: null })
 
    // system
+   componentWillMount() {
+      let parts = window.location.href.split("#")
+
+      console.log("WILL", parts)
+      if (parts[1]) {
+         this.setState({ form: Objects[parts[1]] })
+      }
+   }
+
    componentDidMount() {
       this.$$avatarTap = $(this.$avatarTap)
    }
@@ -132,6 +148,6 @@ export default class Dashboard extends Component {
             <div className='row'>
                <div className='col s12 m12 l12 xl12'>
                   <div id='page'>
-                     {this.state.form &&
+                     {this.state.form && this.state.login &&
                         <this.state.form
                            locales={this.state.locales} />}</div></div></div></div></main>])}}
