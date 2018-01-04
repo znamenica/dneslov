@@ -32,7 +32,7 @@ export default class MemoryRow extends Component {
       id: PropTypes.number.isRequired,
       slug: PropTypes.object.isRequired,
       short_name: PropTypes.string.isRequired,
-      quantity: PropTypes.number,
+      quantity: PropTypes.string,
       covers_to: PropTypes.string,
       covers_to_id: PropTypes.number,
       bond_to: PropTypes.string,

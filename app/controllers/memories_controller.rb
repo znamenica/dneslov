@@ -3,7 +3,7 @@ class MemoriesController < ApplicationController
    before_action :set_memory, only: %i(show)
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
-   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
+   before_action :set_tokens, :set_calendary_slugs, :set_page, :set_julian, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end
@@ -40,7 +40,7 @@ class MemoriesController < ApplicationController
       request.formats.first.symbol == :html ;end
 
    def is_julian_calendar?
-      @julian ||= params[ :calendar_style ].to_i == 0 ;end
+      params[ :calendar_style ].to_i == 0 ;end
 
    def will_select_date_only?
       params[:with_text].blank? ;end
@@ -79,6 +79,9 @@ class MemoriesController < ApplicationController
 
    def set_calendary_cloud
       @calendary_cloud ||= Calendary.licit ;end
+
+   def set_julian
+      @julian ||= is_julian_calendar? ;end
 
    def set_date
       # TODO add detection time zone from request

@@ -33,7 +33,7 @@ class Admin::MemoriesController < Admin::CommonController
 
    def permitted_params
       params.require( :memory ).permit(
-         :covers_to_id, :bond_to_id, :short_name, :order, :council, :quantity,
+         :id, :covers_to_id, :bond_to_id, :short_name, :order, :council, :quantity, :base_year,
          slug_attributes: [:id, :text],
          memory_names_attributes: [:id, :name_id, :state, :feasible, :ored],
          events_attributes: [

@@ -121,7 +121,8 @@ class Memory < ActiveRecord::Base
 
    def filtered_events
       types = %w(Repose Appearance Miracle Writing Founding Canonization)
-      events.where(type: types) ;end
+      # TODO optimize sort to SQL order
+      events.where(type: types).sort_by { |e| types.index( e.type ) } ;end
 
    def troparions text_present = true
       relation = Troparion.joins( :services ).where( services: { id: services.pluck( :id ) } )

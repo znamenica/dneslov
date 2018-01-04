@@ -9,5 +9,6 @@ export default class ItemField extends DynamicField {
       value_name: 'id',
       title: 'Предмет',
       placeholder: 'Начни ввод наименования предмета...',
+      validations: {},
    }
 }

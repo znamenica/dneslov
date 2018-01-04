@@ -20,7 +20,10 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
 
    def primary_memoes
       object.primary.licit.joins(:event).merge(Event.usual).map do |memo| #TODO remove `merge`
-         yield( MemoSpanSerializer.new( memo, locales: locales )) end;end
+         yield( MemoSpanSerializer.new( memo,
+                                        locales: locales,
+                                        julian: julian,
+                                        date: date )) end;end
 
    def grouped_calendaries
       object.group_by do |memo|

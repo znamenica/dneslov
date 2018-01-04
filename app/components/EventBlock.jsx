@@ -28,9 +28,9 @@ export default class EventBlock extends Component {
       _id: PropTypes.string.isRequired,
       happened_at: PropTypes.string,
       type: PropTypes.string.isRequired,
-      place_id: PropTypes.number.isRequired,
-      item_id: PropTypes.number.isRequired,
-      person_name: PropTypes.string.isRequired,
+      place_id: PropTypes.number,
+      item_id: PropTypes.number,
+      person_name: PropTypes.string,
       onUpdate: PropTypes.func.isRequired,
    }
 

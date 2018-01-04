@@ -15,11 +15,16 @@ module Dneslov
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
-    folders = ['lib',
-               'app/models/events',
-               'app/models/cantoes',
-               'app/models/descriptions',
-               'app/models/links']
+    folders = %w(lib
+                 app/models/events
+                 app/models/cantoes
+                 app/models/cantoes/canticles
+                 app/models/cantoes/canticles/chants
+                 app/models/cantoes/canticles/chants/sessional_hymns
+                 app/models/cantoes/canticles/chants/stichiras
+                 app/models/cantoes/orisons
+                 app/models/descriptions
+                 app/models/links)
     folders.each do |folder|
        config.autoload_paths << Rails.root.join(folder) ;end
 
