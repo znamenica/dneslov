@@ -29,7 +29,10 @@ class MemorySerializer < CommonMemorySerializer
       links_json( object.paterics_for( locales )) ;end
 
    def memos
-      MemoedCalendariesSerializer.new(object.memos, locales: locales) ;end
+      MemoedCalendariesSerializer.new(object.memos,
+                                      locales: locales,
+                                      julian: julian,
+                                      date: date) ;end
 
    def icons
       #TODO remove `where` when be ready

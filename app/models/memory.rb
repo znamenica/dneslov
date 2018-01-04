@@ -70,6 +70,8 @@ class Memory < ActiveRecord::Base
 
       event = self.events.to_a.sort_by { |x| (types.index(x.type) || 100) }.first
 
+      return unless event
+
       dates = event.happened_at.split(/[\/-]/)
       self.base_year ||=
       case dates.first

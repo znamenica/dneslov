@@ -1,9 +1,9 @@
 class MemoriesController < ApplicationController
-   before_action :set_locales, :set_date, :set_calendary_cloud
+   before_action :set_locales, :set_date, :set_calendary_cloud, :set_julian
    before_action :set_memory, only: %i(show)
    before_action :default_with_date, only: %i(index)
    before_action :default_in_calendaries, only: %i(index)
-   before_action :set_tokens, :set_calendary_slugs, :set_page, :set_julian, only: %i(index)
+   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
 
    has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
       scope.with_date(*value) ;end

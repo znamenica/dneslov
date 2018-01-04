@@ -2,6 +2,12 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
    def locales
       @options[:locales] ;end
 
+   def date
+      @options[:date] ;end
+
+   def julian
+      @options[:julian] ;end
+
    def as_json *args
       serializable_hash ;end
 
