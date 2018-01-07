@@ -57,6 +57,10 @@ export default class CalendaryForm extends Component {
       return true
    }
 
+   componentWillMount() {
+      this.r = new Array
+   }
+
    componentDidUpdate() {
       this.validate()
    }
@@ -96,6 +100,7 @@ export default class CalendaryForm extends Component {
       return result
    }
 
+   // converts {} to []
    serializedHash(hash) {
       let result = {}, subkey
 
@@ -111,7 +116,12 @@ export default class CalendaryForm extends Component {
             }
             break
          case 'Object':
-            result[key + '_attributes'] = this.serializedHash(value)
+            subkey = Object.keys(value)[0]
+            if (subkey && subkey.match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
+               result[key + '_attributes'] = Object.values(value)
+            } else {
+               result[key + '_attributes'] = this.serializedHash(value)
+            }
             break
          default:
             result[key] = value
@@ -123,8 +133,8 @@ export default class CalendaryForm extends Component {
    }
 
    onChildUpdate(value) {
-      console.log(value)
       this.query = assign({}, this.query, value)
+      console.log(value, this.query)
       this.updateError(this.query)
       this.validate()
       this.props.onUpdate()
@@ -178,7 +188,6 @@ export default class CalendaryForm extends Component {
 
    validate() {
       if (this.r && this.r.length) {
-         console.log(this._traverse_map(this))
          this.valid = this._traverse_map(this).reduce((v, c) => { 
             return v && (! c.isValid || c.isValid()) }, true)
          console.log(this.valid)
@@ -186,10 +195,8 @@ export default class CalendaryForm extends Component {
    }
 
    render() {
-      this.r = []
-
-      console.log(this.props)
-      console.log(this.query)
+      console.log("props", this.props)
+      console.log("query", this.query)
 
       return (
          <div>
