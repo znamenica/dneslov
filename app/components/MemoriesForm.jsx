@@ -56,7 +56,7 @@ export default class MemoriesForm extends Component {
       return this.state.query.in_calendaries.map((slug) => {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
             return c || calendary.slug == slug && calendary || null
-         })
+         }, false)
       })
    }
 

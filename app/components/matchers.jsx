@@ -4,12 +4,12 @@ export function matchLetters(e) {
    if (e.text) {
       switch (e.alphabeth_code) {
       case 'ру':
-         res = ! e.text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́ ]+$/)
+         res = ! e.text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́– ]+$/)
          break
       case 'цс':
          res = ! e.text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/* ]+$/)
       case 'рп':
-         res = ! e.text.match(/^[А-ЯЁІѢѲѴа-яёіѣѳѵ:,.!;\-\/*()0-9«»́ ]+$/)
+         res = ! e.text.match(/^[А-ЯЁІѢѲѴа-яёіѣѳѵ:,.!;\-\/*()0-9«»́– ]+$/)
          break
       case 'цр':
          res = ! e.text.match(/^[А-ЯЁа-яё_<>:,.!;\-\/* ]+$/) //TODO
@@ -18,10 +18,10 @@ export function matchLetters(e) {
          res = ! e.text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѾꙖа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѿꙗ.,;* ]+$/) //TODO
          break
       case 'ук':
-         res = ! e.text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́«» ]+$/)
+         res = ! e.text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́«»– ]+$/)
          break
       case 'бл':
-         res = ! e.text.match(/^[:,.()0-9«» ]+$/) //TODO
+         res = ! e.text.match(/^[:,.()0-9«»– ]+$/) //TODO
          break
       case 'мк':
          res = ! e.text.match(/^[:,.()0-9 ]+$/) //TODO
