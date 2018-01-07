@@ -40,6 +40,7 @@ export default class MemoryForm extends Component {
       paterics: [],
       memory_names: [],
       events: [],
+      validations: {},
    }
 
    static propTypes = {

@@ -14,6 +14,7 @@ export default class WikiesCollection extends LanguagedCollection {
          "Языки в вики-ссылках не могут совпадать": matchLanguages,
          "Азбуки в вики-ссылках не могут совпадать": matchAlphabeths,
       },
+      child_validations: {},
       child_value_validations: {
          "Вики-ссылка отсутствует": /^$/,
          "Неверный формат вики-ссылки": [ "!", UrlRegexp ],

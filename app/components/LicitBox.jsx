@@ -15,16 +15,20 @@ export default class LicitBox extends Component {
    }
 
    state = {
-      licit: this.props.licit
+      licit: this.props.licit || false
    }
 
    componentWillReceiveProps(nextProps) {
-      this.setState({licit: nextProps.licit})
+      if (nextProps != this.props) {
+         this.setState({licit: nextProps.licit || false})
+      }
    }
 
    onCheck(e) {
-      this.setState({licit: e.target.checked})
-      this.props.onUpdate('licit', e.target.checked)
+      let value = e.target.checked
+
+      this.setState({licit: value})
+      this.props.onUpdate({licit: value})
    }
 
    render() {
