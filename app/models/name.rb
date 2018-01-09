@@ -28,6 +28,11 @@ class Name < ActiveRecord::Base
             rel.or(where("names.text ILIKE ?", "%#{text}%")) ;end;end
       .distinct ;end
 
-   validates :text, :language_code, presence: true
+   validates_presence_of :text, :language_code, :root_id
+   validates_presence_of :bond_to_id, if: :bond?
+   validates_absence_of :bond_to_id, unless: :bond?
 
-   before_create -> { self.bind_kind ||= 'несвязаное' } ;end
+   before_validation -> { self.bind_kind ||= 'несвязаное' }
+
+   def bond?
+      bind_kind != 'несвязаное' ;end;end

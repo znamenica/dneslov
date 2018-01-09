@@ -2,6 +2,22 @@ require 'rdoba/roman'
 
 module Tasks
    class << self
+      def fix_root_in_names
+         Name.all.each do |name|
+            line = [ name ]
+            last = name
+
+            while last.bond?
+               last = last.bond_to
+               binding.pry if !last
+               line.push(last) ;end
+
+            ids = line.map(&:id)
+            root_ids = line.map(&:root_id).uniq
+
+            if root_ids.size > 1
+               Name.where(id: ids).update_all(root_id: root_ids.last) ;end;end;end
+
       def import_event_kinds
          event_kinds = YAML.load( File.open( Bukovina.root.join( 'db/seeds/event_kinds.yaml' )))
          event_kinds.each do |event_kind|
