@@ -1,4 +1,4 @@
-# bind_type(string)  - type of binding
+# bind_kind(string)  - kind of binding
 # bond_to_id(int)    - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
    extend Language
@@ -14,7 +14,7 @@ class Name < ActiveRecord::Base
 
    has_alphabeth on: { text: [ :nosyntax, allow: " ‑" ] }
 
-   scope :with_token, -> text { where( "text ~* ?", "\\m#{text}.*" ) }
+   scope :with_token, -> text { where( "text ~* ?", text ) }
    scope :with_tokens, -> token_list do
       # TODO fix the correctness of the query
       tokens = token_list.reject { |t| t =~ /\A[\s\+]*\z/ }
