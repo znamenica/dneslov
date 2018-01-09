@@ -62,6 +62,10 @@ export default class NameForm extends Component {
       this.r = new Array
    }
 
+   componentWillUpdate() {
+      this.r = new Array
+   }
+
    componentDidUpdate() {
       this.validate()
    }

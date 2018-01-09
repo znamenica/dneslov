@@ -153,7 +153,6 @@ export default class MemoModal extends Component {
       // TODO inestigate why `this.$form` became null when form is closed,
       //and why the callback is called
       if (this.$form) {
-         console.log(this.$form.valid)
          this.$submit.setState({valid: this.$form.valid})
       }
    }

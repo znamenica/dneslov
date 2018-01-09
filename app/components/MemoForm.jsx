@@ -74,6 +74,11 @@ export default class MemoForm extends Component {
    }
 
    componentWillMount() {
+      console.log("MOUNT")
+      this.r = new Array
+   }
+
+   componentWillUpdate() {
       this.r = new Array
    }
 

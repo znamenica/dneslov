@@ -39,6 +39,10 @@ export default class MemoryNameBlock extends Component {
       this.r = new Array
    }
 
+   componentDidUpdate() {
+      this.r = new Array
+   }
+
    onChildUpdate(property) {
       this.props.onUpdate({[this.props._id]: property})
    }

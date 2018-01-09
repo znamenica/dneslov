@@ -41,6 +41,11 @@ export default class EventsCollection extends Component {
       this.updateError(this.state.value)
    }
 
+   componentDidUpdate() {
+      this.r = new Array
+      this.updateError(this.state.value)
+   }
+
    componentWillReceiveProps(nextProps) {
       console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
       if (this.props.value != nextProps.value) {

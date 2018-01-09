@@ -39,6 +39,10 @@ export default class EventBlock extends Component {
       this.r = new Array
    }
 
+   componentWillUpdate() {
+      this.r = new Array
+   }
+
    onChildUpdate(property) {
       this.props.onUpdate({[this.props._id]: property})
    }

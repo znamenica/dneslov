@@ -58,6 +58,10 @@ export default class LanguagedTextField extends Component {
       this.r = new Array
    }
 
+   componentWillUpdate() {
+      this.r = new Array
+   }
+
    // events
    onChange(property) {
       this.properties = assign(this.properties, property)

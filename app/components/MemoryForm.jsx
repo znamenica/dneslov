@@ -66,6 +66,10 @@ export default class MemoryForm extends Component {
       this.r = new Array
    }
 
+   componentWillUpdate() {
+      this.r = new Array
+   }
+
    componentDidUpdate() {
       this.validate()
    }

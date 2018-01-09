@@ -61,6 +61,10 @@ export default class CalendaryForm extends Component {
       this.r = new Array
    }
 
+   componentWillUpdate() {
+      this.r = new Array
+   }
+
    componentDidUpdate() {
       this.validate()
    }
