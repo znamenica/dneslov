@@ -39,9 +39,6 @@ export default class NameForm extends Component {
       'Связаное имя не должно соответствовать названию текущего имени': (query) => {
          return query.bond_to && query.bond_to == query.text
       },
-      'Корневое имя не должно соответствовать названию текущего имени': (query) => {
-         return query.root && query.root == query.text
-      },
    }
 
    // query has non-serialized form without '*_attributes' and with uuided hashes
