@@ -48,7 +48,7 @@ export default class DynamicField extends Component {
       console.log(props)
 
       let value = props[props.name] || '',
-          field_value = props[props.field_name] || 0,
+          field_value = props[props.field_name] || '',
           fixed = value && field_value
 
       return {[props.name]: value,

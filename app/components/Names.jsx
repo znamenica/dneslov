@@ -160,7 +160,7 @@ export default class Names extends Component {
                      onUpdate={this.onSearchUpdate.bind(this)} /></form>
                   <div className="col xl2 l2 m2 s4 flex">
                      <NameModal
-                        open={this.state.current}
+                        open={!!this.state.current}
                         {...this.state.current}
                         ref={$form => this.$form = $form}
                         onCloseName={this.onNameClose.bind(this)}
