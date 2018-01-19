@@ -47,7 +47,7 @@ module.exports = merge(sharedConfig, {
             if_return: true,
             join_vars: true,
             drop_debugger: true,
-            drop_console: true, // strips console statements
+            drop_console: false, // strips console statements
             booleans: true,
          },
 

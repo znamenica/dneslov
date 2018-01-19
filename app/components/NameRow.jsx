@@ -42,7 +42,7 @@ export default class NameRow extends Component {
    }
 
    removeQuery() {
-      Materialize.toast(this.$toast, 15000, 'rounded')
+      Materialize.toast(this.$toast, 10000, 'rounded')
    }
 
    render() {

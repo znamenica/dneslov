@@ -82,7 +82,7 @@ export default class MemoryRow extends Component {
    }
 
    removeQuery() {
-      Materialize.toast(this.$toast, 15000, 'rounded')
+      Materialize.toast(this.$toast, 10000, 'rounded')
    }
 
    makeDate() {
