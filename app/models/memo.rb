@@ -40,7 +40,15 @@ class Memo < ActiveRecord::Base
       relays = (1..7).map { |x| (date - x.days).strftime("%2d.%m") + "%#{wday}" }
       easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
       days = sprintf( "%+i", date.to_time.yday - easter.yday )
-      where( year_date: relays.dup << new_date << days ) ;end
+      result = relays.dup << new_date << days
+
+      if !date.leap?
+         if result.grep('28.02').present?
+            result << "29.02"
+         elsif result.grep(/28\.02%/).present?
+            result << "29.02%#{wday}" ;end;end
+
+      where( year_date: result ) ;end
 
    scope :with_token, -> text do
       #SELECT  DISTINCT  "memoes".* FROM "memoes","events","descriptions","calendaries" WHERE (("descriptions"."describable_id" = "memoes"."id" AND "descriptions"."describable_type" = 'Memo') OR ("memoes"."calendary_id" = "descriptions"."describable_id" AND "descriptions"."describable_type" = 'Calendary') OR ("memoes"."event_id" = "events"."id" AND "events"."memory_id" = "descriptions"."describable_id" AND "descriptions"."describable_type" = 'Memory')) AND descriptions.text ILIKE '%Азарьин%'; TODO + names
