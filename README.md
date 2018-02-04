@@ -26,3 +26,9 @@ WHERE pg_stat_activity.datname = 'dneslov_production'
 ALTER DATABASE dneslov_production RENAME TO dneslov_production_old;
 ALTER DATABASE dneslov_tmp RENAME TO dneslov_production;"
 ```
+
+or the last statement can be replaced with:
+
+```sql
+SELECT pg_terminate_backend (pid) FROM pg_stat_activity WHERE datname = 'db';
+```

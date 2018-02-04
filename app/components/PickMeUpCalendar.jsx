@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import Pickmeup from 'pickmeup/js/pickmeup.js'
+import * as Pickmeup from 'pickmeup/js/pickmeup.js'
 import PropTypes from 'prop-types'
 
 export default class PickMeUpCalendar extends Component {

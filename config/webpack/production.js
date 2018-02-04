@@ -47,7 +47,7 @@ module.exports = merge(sharedConfig, {
             if_return: true,
             join_vars: true,
             drop_debugger: true,
-            drop_console: false, // strips console statements
+            drop_console: false, // strips console statements NOTE disabled to allow popup remove minimodals in admin
             booleans: true,
          },
 
@@ -99,7 +99,7 @@ module.exports = merge(sharedConfig, {
                   plugins: [
                      [ "transform-runtime", { //automatically polyfilling but +30K
                         helpers: false,
-                        polyfill: false,
+                        polyfill: true,
                         regenerator: true,
                      }],
                      "syntax-dynamic-import",
