@@ -21,13 +21,13 @@ export default class LanguagedTextField extends Component {
       title: 'Текст',
       placeholder: 'Введи текст',
       onUpdate: null,
+      validations: {},
       value_validations: {
          "Текст отсутствует": /^$/
       },
    }
 
    static propTypes = {
-      _id: PropTypes.string.isRequired,
       key_name: PropTypes.string.isRequired,
       language_code: PropTypes.string,
       alphabeth_code: PropTypes.string,

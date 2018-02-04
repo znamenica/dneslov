@@ -57,10 +57,10 @@ export default class NameModal extends Component {
          text: '',
          language_code: '',
          alphabeth_code: '',
-         root_id: 0,
+         root_id: '',
          root: '',
          bind_kind: '',
-         bond_to_id: 0,
+         bond_to_id: '',
          bond_to: '',
       }
    }

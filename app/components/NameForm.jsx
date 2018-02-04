@@ -25,10 +25,6 @@ export default class NameForm extends Component {
       bond_to: '',
    }
 
-   static propTypes = {
-      order: PropTypes.string.isRequired,
-   }
-
    static validations = {
       'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (query) => {
          return query.bond_to_id && query.bind_kind == "несвязаное"
