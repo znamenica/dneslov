@@ -96,9 +96,19 @@ export default class FilteredDynamicField extends Component {
 
    //events
    onChange(e) {
-      let value = e.target.value
-      console.log("UPDATE", value)
-      this.setState({[this.props.name]: value, fixed: false})
+      let value = e.target.value,
+          state = {[this.props.name]: value, fixed: false}
+
+      if (value == '') {
+         state[this.props.field_name] = ''
+         this.setStateWithUpdate(state)
+      } else {
+         this.setState(state)
+      }
+
+      console.log("UPDATE to", this.props.name, 'with', value)
+
+      this.setStateWithUpdate(state)
       this.triggerListBy(value)
    }
 
@@ -150,18 +160,22 @@ export default class FilteredDynamicField extends Component {
    }
 
    fixValue(value) {
+      this.setStateWithUpdate({[this.props.name]: value,
+                               [this.props.field_name]: this.data.list[value],
+                               fixed: true}, value)
+   }
+
+   setStateWithUpdate(state, value = '') {
       let real, real_text
 
-      this.setState({[this.props.name]: value,
-                     [this.props.field_name]: this.data.list[value],
-                     fixed: true})
+      this.setState(state)
 
       if (this.props.subname) {
          // TODO add text as variable subkey
-         real = {[this.props.subname]: this.data.list[value]}
+         real = {[this.props.subname]: this.data.list[value] || ''}
          real_text = {[this.props.subname]: value}
       } else {
-         real = this.data.list[value]
+         real = this.data.list[value] || ''
          real_text = value
       }
 
