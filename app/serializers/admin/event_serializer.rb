@@ -1,6 +1,6 @@
 class Admin::EventSerializer < ApplicationSerializer
    attributes :id, :type, :place_id, :item_id, :happened_at, :about_string,
-              :tezo_string, :order, :council, :place, :item
+              :tezo_string, :order, :council, :place, :item, :person_name
 
    def place
       object.place&.description_for(@instance_options[:locales])&.text ;end
