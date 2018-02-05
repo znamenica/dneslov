@@ -19,13 +19,13 @@ module Tasks
                Name.where(id: ids).update_all(root_id: root_ids.last) ;end;end;end
 
       def import_event_kinds
-         event_kinds = YAML.load( File.open( Bukovina.root.join( 'db/seeds/event_kinds.yaml' )))
+         event_kinds = YAML.load( File.open( Rails.root.join( 'db/seeds/event_kinds.yaml' )))
          event_kinds.each do |event_kind|
             Kernel.puts "#{event_kind['kind']} => #{event_kind['text']}"
             EventKind.where(event_kind).find_or_create_by!(event_kind) ;end;end
 
       def import_orders
-         orders = YAML.load( File.open( Bukovina.root.join( 'db/seeds/orders.yaml' )))
+         orders = YAML.load( File.open( Rails.root.join( 'db/seeds/orders.yaml' )))
          orders.each do |order|
             Kernel.puts "#{order['order']} => #{order['text']}"
             Order.where(order).find_or_create_by!(order) ;end;end
