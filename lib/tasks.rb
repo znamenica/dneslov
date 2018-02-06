@@ -6,7 +6,7 @@ module Tasks
          descriptions = Description.with_languaged_calendary(calendary_slug, language_code)
          descriptions.each do |description|
             source = description.describable.memory.description_for(language_code)
-            description.update!(text: source.text) ;end;end
+            description.update!(text: source.text) if source ;end;end
 
       def fix_root_in_names
          Name.all.each do |name|
