@@ -5,7 +5,7 @@ class MemorySpanSerializer < CommonMemorySerializer
       calendaries && memo && memo.event.happened_at || super ;end
 
    def default_calendary_name
-      calendaries && memo && memo.description_for( locales )&.text ;end
+      calendaries && memo && memo.title_for( locales )&.text ;end
 
    def names
       MemoryNamesSerializer.new(object.memory_names, locales: locales) ;end
@@ -16,6 +16,9 @@ class MemorySpanSerializer < CommonMemorySerializer
 
    def url
       slug_path( slug ) ;end
+
+   def description
+      calendaries && memo && memo.description_for( locales )&.text || super ;end
 
    protected
 

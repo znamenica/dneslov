@@ -18,8 +18,9 @@ class Memo < ActiveRecord::Base
 
    has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
    has_many :services, as: :info, inverse_of: :info
-   has_many :descriptions, proc { where( type: nil ) }, as: :describable, dependent: :delete_all
+   has_many :titles, proc { where( type: 'Title' ) }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
+   has_many :descriptions, proc { where( type: nil ) }, as: :describable, dependent: :delete_all
 
    has_one :memory, through: :event
 
@@ -82,6 +83,7 @@ class Memo < ActiveRecord::Base
 
    accepts_nested_attributes_for :service_links, reject_if: :all_blank
    accepts_nested_attributes_for :services, reject_if: :all_blank
+   accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
@@ -142,6 +144,9 @@ class Memo < ActiveRecord::Base
 
    def calendary_string= value
       self.calendary = Calendary.includes(:slug).where(slugs: { text: value }).first ;end
+
+   def title_for language_code
+      titles.where(language_code: language_code).first ;end
 
    def description_for language_code
       descriptions.where(language_code: language_code).first ;end;end

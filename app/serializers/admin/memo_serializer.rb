@@ -1,6 +1,6 @@
 class Admin::MemoSerializer < ApplicationSerializer
    attributes :id, :year_date, :add_date, :calendary_id, :calendary, :event_id, :event, :bind_kind,
-              :bond_to_id, :bond_to, :memory, :memory_id, :descriptions, :links
+              :bond_to_id, :bond_to, :memory, :memory_id, :descriptions, :links, :titles
 
    def year_date
       object.year_date
@@ -20,6 +20,9 @@ class Admin::MemoSerializer < ApplicationSerializer
 
    def bond_to
       object.bond_to&.year_date ;end
+
+   def titles
+      ActiveModel::Serializer::CollectionSerializer.new(object.titles, locales: @instance_options[:locales]) ;end
 
    def descriptions
       ActiveModel::Serializer::CollectionSerializer.new(object.descriptions, locales: @instance_options[:locales]) ;end

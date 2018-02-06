@@ -5,6 +5,7 @@ import * as assign from 'assign-deep'
 import { mixin } from 'lodash-decorators'
 
 import SlugField from 'SlugField'
+import NotesCollection from 'NotesCollection'
 import DescriptionsCollection from 'DescriptionsCollection'
 import BeingsCollection from 'BeingsCollection'
 import WikiesCollection from 'WikiesCollection'
@@ -35,6 +36,7 @@ export default class MemoryForm extends Component {
       covers_to_id: 0,
       covers_to: '',
       descriptions: [],
+      notes: [],
       wikies: [],
       beings: [],
       paterics: [],
@@ -298,6 +300,14 @@ export default class MemoryForm extends Component {
                      key='descriptions'
                      name='descriptions'
                      value={this.query.descriptions}
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <NotesCollection
+                     ref={e => this.r.push(e)}
+                     key='notes'
+                     name='notes'
+                     value={this.query.notes}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>

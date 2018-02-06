@@ -5,6 +5,7 @@ import * as assign from 'assign-deep'
 import { mixin } from 'lodash-decorators'
 
 import DynamicField from 'DynamicField'
+import TitlesCollection from 'TitlesCollection'
 import DescriptionsCollection from 'DescriptionsCollection'
 import LinksCollection from 'LinksCollection'
 import FilteredDynamicField from 'FilteredDynamicField'
@@ -33,8 +34,9 @@ export default class MemoForm extends Component {
       bond_to: '',
       memory_id: 0,
       memory: '',
-      descriptions: [],
+      titles: [],
       links: [],
+      descriptions: [],
    }
 
    static validations = {
@@ -46,6 +48,10 @@ export default class MemoForm extends Component {
       },
       'Привязаная дата не должно соответствовать текущей дате': (query) => {
          return query.bond_to && query.bond_to == query.year_date
+      },
+      'Минимум один заголовок должен быть задан': (query) => {
+         console.log(query.titles, Object.keys(query.titles).length)
+         return Object.keys(query.titles).length == 0
       },
       'Минимум одно описание должно быть задано': (query) => {
          console.log(query.descriptions, Object.keys(query.descriptions).length)
@@ -295,16 +301,24 @@ export default class MemoForm extends Component {
                      key='error' /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
-                  <DescriptionsCollection
+                  <TitlesCollection
                      ref={e => this.r.push(e)}
-                     key='descriptions'
-                     name='descriptions'
-                     value={this.query.descriptions}
+                     key='titles'
+                     name='titles'
+                     value={this.query.titles}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div>
             <div className='row'>
                <div className='col l12 s12'>
                   <LinksCollection
                      ref={e => this.r.push(e)}
-                     key={'links'}
+                     key='links'
                      value={this.query.links}
+                     onUpdate={this.onChildUpdate.bind(this)} /></div></div>
+            <div className='row'>
+               <div className='col l12 s12'>
+                  <DescriptionsCollection
+                     ref={e => this.r.push(e)}
+                     key='descriptions'
+                     name='descriptions'
+                     value={this.query.descriptions}
                      onUpdate={this.onChildUpdate.bind(this)} /></div></div></div>)}}

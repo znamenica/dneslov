@@ -1,9 +1,13 @@
 class Admin::MemorySerializer < ApplicationSerializer
    attributes :id, :short_name, :slug, :order, :council, :quantity, :base_year,
-              :beings, :wikies, :paterics, :descriptions, :memory_names, :events
+              :beings, :wikies, :paterics, :descriptions, :memory_names, :events, :notes
 
    def slug
       SlugSerializer.new(object.slug) ;end
+
+   def notes
+      ActiveModel::Serializer::CollectionSerializer.new(object.notes,
+                                                        locales: locales) ;end
 
    def descriptions
       ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,

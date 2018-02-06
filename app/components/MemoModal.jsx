@@ -21,6 +21,7 @@ export default class MemoModal extends Component {
       memory: '',
       descriptions: {},
       links: {},
+      titles: {},
       open: false,
       onUpdateMemo: null,
       onCloseMemo: null,
@@ -57,6 +58,7 @@ export default class MemoModal extends Component {
          memory_id: props.memory_id,
          memory: props.memory,
          descriptions: props.descriptions,
+         titles: props.titles,
          links: props.links,
       }
    }
@@ -76,6 +78,7 @@ export default class MemoModal extends Component {
          memory_id: 0,
          memory: '',
          descriptions: {},
+         titles: {},
          links: {},
       }
    }
