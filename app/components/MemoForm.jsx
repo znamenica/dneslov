@@ -53,10 +53,6 @@ export default class MemoForm extends Component {
          console.log(query.titles, Object.keys(query.titles).length)
          return Object.keys(query.titles).length == 0
       },
-      'Минимум одно описание должно быть задано': (query) => {
-         console.log(query.descriptions, Object.keys(query.descriptions).length)
-         return Object.keys(query.descriptions).length == 0
-      },
    }
 
    // query has non-serialized form without '*_attributes' and with uuided hashes
