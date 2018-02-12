@@ -10,6 +10,9 @@ class MemoriesController < ApplicationController
    has_scope :with_tokens, only: %i(index), type: :array
    has_scope :in_calendaries, only: %i(index), type: :array
 
+   # NOTE https://stackoverflow.com/a/48744792/446267
+   rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
+
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
@@ -37,7 +40,7 @@ class MemoriesController < ApplicationController
    protected
 
    def is_html?
-      request.formats.first.symbol == :html ;end
+      request.formats.first&.symbol == :html ;end
 
    def is_julian_calendar?
       params[ :calendar_style ].to_i == 0 ;end

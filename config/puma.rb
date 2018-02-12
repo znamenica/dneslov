@@ -19,7 +19,7 @@ if Rails.env.production?
 
    workers Integer(ENV['WEB_CONCURRENCY'] || 2)
    bind "unix://#{shared_dir}/tmp/sockets/puma.sock"
-   stdout_redirect "#{shared_dir}/log/stdout.log", "#{shared_dir}/log/stderr.log"
+   stdout_redirect "#{shared_dir}/log/stdout.log", "#{shared_dir}/log/stderr.log", true
    pidfile "#{shared_dir}/tmp/pids/puma.pid"
    state_path "#{shared_dir}/tmp/pids/puma.state"
    activate_control_app
