@@ -4,7 +4,7 @@ export function matchLetters(e) {
    if (e.text) {
       switch (e.alphabeth_code) {
       case 'ру':
-         res = ! e.text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–\r\n† ]+$/)
+         res = ! e.text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–\r\n†№IVXLCDM ]+$/)
          break
       case 'цс':
          res = ! e.text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n ]+$/)

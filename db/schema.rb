@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180206164100) do
+ActiveRecord::Schema.define(version: 20180213185000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "btree_gin"
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
     t.string "date"
@@ -58,7 +59,7 @@ ActiveRecord::Schema.define(version: 20180206164100) do
     t.string "describable_type", null: false
     t.string "alphabeth_code", null: false
     t.string "type"
-    t.index ["describable_id", "describable_type", "alphabeth_code", "text"], name: "describable_alphabeth_index"
+    t.index ["describable_id", "describable_type", "alphabeth_code", "text"], name: "describable_alphabeth_index", using: :gin
   end
 
   create_table "event_kinds", id: :serial, force: :cascade do |t|
