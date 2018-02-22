@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213185000) do
+ActiveRecord::Schema.define(version: 20180214215300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 20180213185000) do
   end
 
   create_table "descriptions", id: :serial, force: :cascade do |t|
-    t.string "text", null: false
     t.string "language_code", null: false
     t.integer "describable_id", null: false
     t.datetime "created_at", null: false
@@ -59,7 +58,9 @@ ActiveRecord::Schema.define(version: 20180213185000) do
     t.string "describable_type", null: false
     t.string "alphabeth_code", null: false
     t.string "type"
-    t.index ["describable_id", "describable_type", "alphabeth_code", "text"], name: "describable_alphabeth_index", using: :gin
+    t.text "text"
+    t.index ["describable_id", "describable_type", "alphabeth_code"], name: "describable_id_type_alphabeth_code_index"
+    t.index ["text"], name: "descriptions_text_index", using: :gin
   end
 
   create_table "event_kinds", id: :serial, force: :cascade do |t|
