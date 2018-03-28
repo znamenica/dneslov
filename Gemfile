@@ -61,9 +61,8 @@ gem "sass-rails"
 # CVE-2016-4658 - libxml2 vulnerabilities
 gem 'nokogiri', '~> 1.8.1'
 
-# Explicitly defined to fix CVE-2015-7579 - XSS VULNERABILITY IN STRIP_TAGS
-# CVE-2015-7578 - POSSIBLE XSS VULNERABILITY
-# gem 'rails-html-sanitizer', '~> 1.0.3'
+# Fix CVE-2018-8048
+gem 'rails-html-sanitizer', '~> 1.0.4'
 
 ## controllers
 gem 'has_scope'
