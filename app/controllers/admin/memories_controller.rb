@@ -42,7 +42,7 @@ class Admin::MemoriesController < Admin::CommonController
          wikies_attributes: [:id, :url, :language_code, :alphabeth_code],
          beings_attributes: [:id, :url, :language_code, :alphabeth_code],
          paterics_attributes: [:id, :url, :language_code, :alphabeth_code],
-         notes_attributes: [:id, :text, :language_code, :alphabeth_code] )
+         notes_attributes: [:id, :text, :language_code, :alphabeth_code],
          descriptions_attributes: [:id, :text, :language_code, :alphabeth_code] ) ;end
 
    def object_serializer
