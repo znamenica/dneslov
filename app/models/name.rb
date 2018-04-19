@@ -33,7 +33,12 @@ class Name < ActiveRecord::Base
    validates_absence_of :bond_to_id, unless: :bond?
 
    before_validation -> { self.bind_kind ||= 'несвязаное' }
-   after_save -> { self.update!(root_id: self.id) }, on: :create, unless: :root_id?
+   after_save :fill_root_id, on: :create, unless: :root_id?
 
    def bond?
-      bind_kind != 'несвязаное' ;end;end
+      bind_kind != 'несвязаное' ;end
+
+   def fill_root_id
+      new_root_id = self.bond_to&.root_id || self.id
+      self.update!(root_id: new_root_id) ;end;end
+

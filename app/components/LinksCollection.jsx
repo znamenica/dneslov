@@ -17,7 +17,7 @@ export default class LinksCollection extends LanguagedCollection {
       child_validations: {},
       child_value_validations: {
          "Ссылка отсутствует": /^$/,
-         "Неверный формат вики-ссылки": [ "!", UrlRegexp ],
+         "Неверный формат ссылки": [ "!", UrlRegexp ],
       }
    }
 }

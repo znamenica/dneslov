@@ -51,6 +51,7 @@ export default class NameRow extends Component {
             <td>{this.props.text}</td>
             <td>{this.props.language_code}</td>
             <td>{this.props.alphabeth_code}</td>
+            <td>{this.props.bind_kind}</td>
             <td>{this.props.bond_to}</td>
             <td>{this.props.root}</td>
             <td className='actions'>

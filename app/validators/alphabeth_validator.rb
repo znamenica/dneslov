@@ -48,27 +48,27 @@ class AlphabethValidator < ActiveModel::EachValidator
    UKRAINIAN_CAPITAL = 'А-ЩЬЮЯЄІЇҐ'
    UKRAINIAN_STROKE = 'а-щьюяєіїґ'
 
-   RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9–№'
+   RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9–№†0-9IVXLCDM'
    HIP_SYNTAX = ' 0-9\(\[\{\/\'\+\.\:\!"=~@#\$%\^&\*_\)\]\}\\\\`\-,;?\|'
-   MODIFIED_RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9a-z©–№\'\[\]&^' #TODO after import rollack tp no latin chars
+   MODIFIED_RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9†IVXLCDM©–№\'\[\]&^'
    CSLAV_SYNTAX = ' \(\)\.,:;'
-   SERBIAN_SYNTAX = ' \(\)\.,\!:;“”\/'
-   GREEK_SYNTAX = ' \(\)a-z0-9~\+\(\)\-\.,;;:.·˙\!«»\'’"`©\/' # TODO last 4 to fix and merge
-   BULGARIAN_SYNTAX = ' \(\)\.,'
-   UKRAINIAN_SYNTAX = ' \(\)\.,—’;\/:'
+   SERBIAN_SYNTAX = ' \(\)\.,\!:;“”\/0-9'
+   GREEK_SYNTAX = ' \(\)0-9~\+\(\)\-\.,;;:.·˙\!«»\'’"`©\/' # TODO last 4 to fix and merge
+   BULGARIAN_SYNTAX = ' \(\)\.,0-9'
+   UKRAINIAN_SYNTAX = ' \(\)\.,—’;\/:0-9'
    LATIN_SYNTAX = ' \(\)\.,<\>'
-   IRISH_SYNTAX = ' \(\)\.,'
-   CZECH_SYNTAX = ' \(\)\.,'
-   ENGLISH_SYNTAX = ' \(\)\.,’\/\!\-:;\>"'
-   ITALIAN_SYNTAX = ' \(\)\.,'
-   ARMENIAN_SYNTAX = ' \(\)\.,'
+   IRISH_SYNTAX = ' \(\)\.,0-9'
+   CZECH_SYNTAX = ' \(\)\.,0-9'
+   ENGLISH_SYNTAX = ' \(\)\.,’\/\!\-:;\>"0-9'
+   ITALIAN_SYNTAX = ' \(\)\.,0-9'
+   ARMENIAN_SYNTAX = ' \(\)\.,0-9'
    IVERIAN_SYNTAX = ' \(\)\.,:;\-\!0-9'
-   ROMANIAN_SYNTAX = ' \(\)\.,;:\-\!'
+   ROMANIAN_SYNTAX = ' \(\)\.,;:\-\!0-9'
    OLD_ENGLISH_SYNTAX = ' \(\)\.,\/\>'
-   MIDDLE_ENGLISH_SYNTAX = ' \(\)\.,;\/\!\-:;’\>'
-   FRENCH_SYNTAX = ' \(\)\.,’\/'
-   SPANISH_SYNTAX = ' \(\)\.,'
-   GERMAN_SYNTAX = ' \(\)\.,'
+   MIDDLE_ENGLISH_SYNTAX = ' \(\)\.,;\/\!\-:;’\>0-9'
+   FRENCH_SYNTAX = ' \(\)\.,’\/0-9'
+   SPANISH_SYNTAX = ' \(\)\.,0-9'
+   GERMAN_SYNTAX = ' \(\)\.,0-9'
 
    UPCHAR = RUSSIAN_CAPITAL + MODIFIED_RUSSIAN_CAPITAL + CSLAV_CAPITAL + SERBIAN_CAPITAL + GREEK_CAPITAL +
       ENGLISH_CAPITAL + LATIN_CAPITAL + CZECH_CAPITAL + ARMENIAN_CAPITAL +

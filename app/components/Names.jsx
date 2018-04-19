@@ -172,6 +172,7 @@ export default class Names extends Component {
                      <th>Написание</th>
                      <th>Язык</th>
                      <th>Азбука</th>
+                     <th>Связка</th>
                      <th>Связано с...</th>
                      <th>Корневое имя</th>
                      <th><i className='tiny material-icons'>near_me</i></th></tr></thead>
