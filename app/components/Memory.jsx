@@ -5,12 +5,13 @@ import Carousel from 'Carousel'
 import EventSpans from 'EventSpans'
 import Chip from 'Chip'
 import Name from 'Name'
+import Description from 'Description'
 
 export default class Memory extends Component {
    static defaultProps = {
       slug: null,
       short_name: null,
-      description: null,
+      descriptions: [],
       names: [],
       councils: [],
       beings: [],
@@ -21,6 +22,7 @@ export default class Memory extends Component {
       events: [],
       troparion: null,
       kontakion: null,
+      selected_calendaries: [],
    }
 
    mapGroupedMemoesByDate(func) {
@@ -72,13 +74,6 @@ export default class Memory extends Component {
                               key={council.slug}
                               url={council.url}
                               text={council.slug} />)}</div></div></div>}
-            {this.props.description &&
-               <div className='col s12'>
-                  <div className='row'>
-                     <div className='col s12 title'>
-                        Описание</div>
-                     <div className='col s12'>
-                        {this.props.description}</div></div></div>}
             {this.props.beings.length > 0 &&
                <div className='col s12'>
                   <div className='row'>
@@ -112,6 +107,14 @@ export default class Memory extends Component {
                               key={pateric.id}
                               url={pateric.url}
                               text={pateric.text} />)}</div></div></div>}
+            {this.props.descriptions &&
+               <div className='col s12'>
+                  <div className='row'>
+                     <div className='col s12 title'>
+                        Описание</div>
+                     <Description
+                        descriptions={this.props.descriptions}
+                        selected_calendaries={this.props.selected_calendaries} /></div></div>}
             {this.props.memos.length > 0 &&
                <div className='col s12'>
                   <div className='row'>

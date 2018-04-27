@@ -8,4 +8,4 @@ class MemoSpanSerializer < MemoSerializer
       object.calendary.name_for( locales ).text ;end
 
    def url
-      (object.links.first || object.calendary.links.first)&.url ;end;end
+      (object.link_for( locales ) || object.calendary.link_for( locales ))&.url ;end;end

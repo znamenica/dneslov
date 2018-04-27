@@ -16,6 +16,9 @@ class Calendary < ActiveRecord::Base
    # scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
    scope :named_as, -> name { joins( :names ).where( names: { text: name } ) }
    scope :described_as, -> name { joins( :descriptions ).where( descriptions: { text: name } ) }
+   scope :by_slugs, -> slugs do
+      # TODO add correct sort by slugs pos
+      select("calendaries.*, slugs.*").from("slugs, calendaries").where( "slugs.sluggable_id = calendaries.id AND slugs.sluggable_type = 'Calendary' AND slugs.text IN (?)", [slugs].flatten).reorder("slugs.text") ;end
 
    scope :with_token, -> text do
       left_outer_joins( :names, :descriptions ).where( "descriptions.text ILIKE ?", "%#{text}%" ) ;end
@@ -50,6 +53,9 @@ class Calendary < ActiveRecord::Base
    class << self
       def by_slug slug
          joins( :slug ).where( slugs: { text: slug } ).first ;end;end
+
+   def link_for language_code
+      links.where(language_code: language_code).first ;end
 
    def description_for language_codes
       descriptions.where( language_code: language_codes ).first ;end

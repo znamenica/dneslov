@@ -12,6 +12,15 @@
 class Event < ActiveRecord::Base
    extend Informatible
 
+   NOTICE = [
+      'Repose',
+      'Veneration',
+      'Writing',
+      'Appearance',
+      'Council',
+      'Miracle',
+   ]
+
    USUAL = [
       'Marriage',
       'Exaltation',
@@ -55,6 +64,7 @@ class Event < ActiveRecord::Base
    # czin: has_one/many
    default_scope -> { order(:created_at) }
 
+   scope :notice, -> { where(type: NOTICE) }
    scope :usual, -> { where(type: USUAL) }
    scope :with_token, -> text do
       left_outer_joins(:kinds).where("type ILIKE ?", "%#{text}%").or(where(type_number: text.to_i).or(where("event_kinds.text ILIKE ?", "%#{text}%"))) ;end

@@ -219,6 +219,7 @@ export default class MemoriesForm extends Component {
                         {this.state.memory &&
                            <Memory
                               key='memory'
+                              selected_calendaries={this.state.query.in_calendaries}
                               {...this.state.memory} />}
                         {! this.state.memory &&
                            <div>

@@ -1,5 +1,5 @@
 class MemorySerializer < CommonMemorySerializer
-   attributes :names, :beings, :wikies,:paterics, :memos, :icons, :events, :troparion, :kontakion
+   attributes :names, :beings, :wikies, :paterics, :memos, :icons, :events, :troparion, :kontakion
 
    def link_text link
       /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link

@@ -1,5 +1,5 @@
 class CommonMemorySerializer < ApplicationSerializer
-   attributes :short_name, :slug, :description, :year, :order, :councils
+   attributes :short_name, :slug, :descriptions, :year, :order, :councils
 
    def slug
       object.slug.text ;end
@@ -7,8 +7,10 @@ class CommonMemorySerializer < ApplicationSerializer
    def short_name
       object.short_name ;end
 
-   def description
-      object.description_for( locales )&.text ;end
+   def descriptions
+      ActiveModel::Serializer::CollectionSerializer.new(object.all_descriptions_for( locales ),
+         serializer: DescriptionWithCalendarySerializer,
+         locales: locales) ;end
 
    def year
       # TODO if no proper event, just skip, remove then
@@ -18,13 +20,6 @@ class CommonMemorySerializer < ApplicationSerializer
    def order
       {
          slug: object.order_for( locales ).text,
-         color: self.color_by_slug( object.order ) }
-   rescue => e
-      Rails.logger.error(e.to_s)
-      Rails.logger.error(e.backtrace)
-      binding.pry
-      {
-         slug: object.order_for( locales )&.text,
          color: self.color_by_slug( object.order ) } ;end
 
    def councils

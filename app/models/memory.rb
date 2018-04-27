@@ -19,7 +19,7 @@ class Memory < ActiveRecord::Base
    has_many :paterics, as: :info, dependent: :destroy, class_name: :PatericLink
    has_many :events, dependent: :destroy
    has_many :memos, through: :events
-   has_many :calendaries, -> { distinct }, through: :memos
+   has_many :calendaries, -> { distinct.reorder('id') }, through: :memos
    has_many :photo_links, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy # ЧИНЬ во photos
    has_many :orders, foreign_key: :order, primary_key: :order
    has_one :slug, as: :sluggable, dependent: :destroy
@@ -101,6 +101,9 @@ class Memory < ActiveRecord::Base
 
    def order_for language_code
       orders.where(language_code: language_code).first ;end
+
+   def all_descriptions_for language_code
+      Description.all_by_memory(self).where(language_code: language_code) ;end
 
    def description_for language_code
       descriptions.where(language_code: language_code).first ;end

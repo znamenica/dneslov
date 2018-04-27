@@ -2228,7 +2228,7 @@ label.active .error {
 
 .collection {
    .collection-item {
-      &.memory, &.event {
+      &.memory, &.event, &.description {
          min-height: auto;
          padding: 3px 0 0 0;
          line-height: inherit;
@@ -2276,6 +2276,14 @@ label.active .error {
       &.avatar :not(.circle-clipper) > .circle {
          left: 0.5rem;
          top: 1px;
+      }
+   }
+}
+
+.collection.popout {
+   .collection-item {
+      &.active {
+         margin: 16px 3px;
       }
    }
 }

@@ -81,6 +81,8 @@ class Memo < ActiveRecord::Base
    scope :with_calendary_id, -> (calendary_id) do
       where(calendary_id: calendary_id) ;end
 
+   scope :notice, -> { joins(:event).merge(Event.notice) }
+
    accepts_nested_attributes_for :service_links, reject_if: :all_blank
    accepts_nested_attributes_for :services, reject_if: :all_blank
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
@@ -141,6 +143,9 @@ class Memo < ActiveRecord::Base
          "#{date.strftime("%1d.%m")}%#{daynum}"
       else
          self.year_date ;end;end
+
+   def link_for language_code
+      links.where(language_code: language_code).first ;end
 
    def calendary_string= value
       self.calendary = Calendary.includes(:slug).where(slugs: { text: value }).first ;end
