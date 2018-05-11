@@ -69,7 +69,7 @@ export default class EventTypeField extends SelectField {
          'Nativity': 'Рождение',
          'Frockbearing': 'Облечение в рясу',
          'Council': 'Собор',
-         'Bishopry': 'Святиельство',
+         'Bishopry': 'Святительство',
          'Priestship': 'Священство',
          'Founding': 'Создание',
          'Hiddening': 'Сокрытие',
