@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
 import CalendaryModal from 'CalendaryModal'
@@ -75,23 +76,22 @@ export default class Calendaries extends Component {
       this.setState({current: calendary})
    }
 
-   onCalendaryRemove(id) {
-      let calendary = this.state.calendaries.find((c) => { return c.id == id })
-
-      $.ajax({
-         method: 'DELETE',
-         dataType: 'JSON',
-         url: '/calendaries/' + calendary.id + '.json',
-         success: this.onSuccessRemove.bind(this)
-      })
-   }
-
    onCalendaryClose() {
       this.setState({current: null})
    }
 
-   onSuccessRemove(calendary) {
-      let calendaries = this.state.calendaries.slice()
+   onCalendaryRemove(id) {
+      let calendary = this.state.calendaries.find((c) => { return c.id == id })
+      let request = {
+         url: '/calendaries/' + calendary.id + '.json',
+         method: 'delete'
+      }
+
+      Axios(request).then(this.onSuccessRemove.bind(this))
+   }
+
+   onSuccessRemove(response) {
+      let calendary = response.data, calendaries = this.state.calendaries.slice()
       let index = calendaries.findIndex((c) => { return c.id == calendary.id })
 
       delete calendaries[index]
@@ -101,8 +101,8 @@ export default class Calendaries extends Component {
       })
    }
 
-   onSuccessLoad(calendaries) {
-      let new_calendaries
+   onSuccessLoad(response) {
+      let new_calendaries, calendaries = response.data
 
       console.log("SUCCESS", calendaries)
       if (calendaries.page > 1) {
@@ -128,12 +128,17 @@ export default class Calendaries extends Component {
    }
 
    submit(page = 1) {
+      let request = {
+         url: '/calendaries.json',
+      }
+
       this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
-      $.get('/calendaries.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+      Axios.get(request.url, { params: this.state.query })
+           .then(this.onSuccessLoad.bind(this))
    }
 
    onSearchUpdate(tokens) {
@@ -163,8 +168,8 @@ export default class Calendaries extends Component {
                         open={this.state.current}
                         {...this.state.current}
                         ref={$form => this.$form = $form}
-                        onCloseCalendary={this.onCalendaryClose.bind(this)}
-                        onUpdateCalendary={this.onCalendaryUpdate.bind(this)} /></div></div>
+                        onCloseModal={this.onCalendaryClose.bind(this)}
+                        onUpdateRecord={this.onCalendaryUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>

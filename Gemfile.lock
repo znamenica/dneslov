@@ -177,8 +177,6 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
-    materialize-sass (0.100.2)
-      sass (~> 3.3)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -355,7 +353,6 @@ DEPENDENCIES
   kaminari
   launchy
   listen (>= 3.0.5, < 3.2)
-  materialize-sass
   nokogiri (~> 1.8.1)
   npm-pipeline-rails
   pattern_generator

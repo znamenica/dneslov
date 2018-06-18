@@ -177,7 +177,7 @@ export class Intro extends Component {
 
    render() {
       return (
-         <div>
+         <div className="fixed-action-btn">
             <Steps
                enabled={this.state.enabled}
                steps={this.props.steps}

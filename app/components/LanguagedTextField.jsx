@@ -95,7 +95,7 @@ export default class LanguagedTextField extends Component {
       let embed = { [this.props.key_name]: this.props[this.props.key_name] }
 
       return (
-         <div className='row'>
+         <div className='row' key='lang'>
             <TextField
                ref={e => this.r.push(e)}
                key='value'

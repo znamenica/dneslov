@@ -1,11 +1,11 @@
-import { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import CommonModal from 'CommonModal'
 import MemoryForm from 'MemoryForm'
 import SubmitButton from 'SubmitButton'
 import ErrorSpan from 'ErrorSpan'
 
-export default class MemoryModal extends Component {
+export default class MemoryModal extends CommonModal {
    static defaultProps = {
       id: null,
       slug: {text: ''},
@@ -26,25 +26,14 @@ export default class MemoryModal extends Component {
       paterics: [],
       memory_names: [],
       events: [],
-      open: false,
-      onUpdateMemory: null,
-      onCloseMemory: null,
+
+      remoteName: 'memory',
+      remoteNames: 'memories',
    }
 
    static propTypes = {
       slug: PropTypes.object,
-      onUpdateMemory: PropTypes.func.isRequired,
-      onCloseMemory: PropTypes.func.isRequired,
-   }
-
-   state = this.getDefaultState()
-
-   componentWillReceiveProps(nextProps) {
-      if (this.props != nextProps) {
-         this.setState(this.getDefaultState(nextProps))
-         // clear old error
-         this.$error.setState({error: null})
-      }
+      id: PropTypes.number,
    }
 
    getDefaultState(props = this.props) {
@@ -96,86 +85,6 @@ export default class MemoryModal extends Component {
       }
    }
 
-   componentDidMount() {
-      this.modal = $(this.$modal).modal({
-         complete: this.props.onCloseMemory.bind(this)
-      })
-   }
-
-   componentDidUpdate() {
-      this.$submit.setState({valid: this.$form.valid})
-
-      if (this.props.open) {
-         this.modal.modal('open')
-      }
-   }
-
-   newMemory() {
-      this.setState(this.getCleanState())
-   }
-
-   onSubmitSuccess(data) {
-      console.log("SUCCESS", data)
-      this.props.onUpdateMemory(data)
-      this.$error.setState({error: null})
-      this.modal.modal('close')
-   }
-
-   onSubmitError(response) {
-      let error
-
-      console.log("ERROR", response, this.state, this.$form.query)
-
-      if (response.responseJSON) {
-         let errors = []
-
-         Object.entries(response.responseJSON).forEach(([key, value]) => {
-            errors.push(value.map((e) => { return key + " " + e }))
-         })
-
-         error = errors.join(", ")
-      } else {
-         error = response.responseText
-      }
-
-      this.$error.setState({error: error})
-   }
-
-   onSubmit(e) {
-      e.stopPropagation()
-      e.preventDefault()
-
-      let settings = {
-         data: { memory: this.$form.serializedQuery() },
-         dataType: 'JSON',
-         error: this.onSubmitError.bind(this),
-         success: this.onSubmitSuccess.bind(this),
-      }
-
-      if (settings.data.memory.id) {
-         settings.method = 'PUT'
-         settings.url = '/memories/' + settings.data.memory.id + '.json'
-      } else {
-         settings.method = 'POST'
-         settings.url = '/memories.json'
-      }
-
-      console.log("STATE",this.state)
-      console.log(settings)
-      $.ajax(settings)
-   }
-
-   onFormUpdate() {
-      if (this.$form) {
-         console.log(this.$form.valid)
-         this.$submit.setState({valid: this.$form.valid})
-      }
-   }
-
-   onCloseClick() {
-      this.modal.modal('close')
-   }
-
    render() {
       console.log(this.state)
 
@@ -185,7 +94,7 @@ export default class MemoryModal extends Component {
                <a
                   className="waves-effect waves-light btn modal-trigger"
                   href="#memory-form-modal"
-                  onClick={this.newMemory.bind(this)} >
+                  onClick={this.newRecord.bind(this)} >
                      Новая память</a></div>
             <div
                key='memory-form-modal'
@@ -201,11 +110,11 @@ export default class MemoryModal extends Component {
                         onUpdate={this.onFormUpdate.bind(this)} /></div>
                   <div className="modal-footer">
                      <div className="row">
-                        <div className="col xl9 l7 m7 s6">
+                        <div className="col xl9 l8 m7 s6">
                            <ErrorSpan
                               ref={e => this.$error = e}
-                              key={'error'} /></div>
-                        <div className="col xl3 l5 m5 s6">
+                              key='error' /></div>
+                        <div className="col xl3 l4 m5 s6">
                            <div className="row">
                               <div className="col s4">
                                  <button

@@ -1,11 +1,11 @@
-import { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import CommonModal from 'CommonModal'
 import MemoForm from 'MemoForm'
 import SubmitButton from 'SubmitButton'
 import ErrorSpan from 'ErrorSpan'
 
-export default class MemoModal extends Component {
+export default class MemoModal extends CommonModal {
    static defaultProps = {
       id: null,
       year_date: '',
@@ -22,24 +22,13 @@ export default class MemoModal extends Component {
       descriptions: {},
       links: {},
       titles: {},
-      open: false,
-      onUpdateMemo: null,
-      onCloseMemo: null,
+
+      remoteName: 'memo',
+      remoteNames: 'memoes',
    }
 
    static propTypes = {
-      onUpdateMemo: PropTypes.func.isRequired,
-      onCloseMemo: PropTypes.func.isRequired,
-   }
-
-   state = this.getDefaultState()
-
-   componentWillReceiveProps(nextProps) {
-      if (this.props != nextProps) {
-         this.setState(this.getDefaultState(nextProps))
-         // clear old error
-         this.$error.setState({error: null})
-      }
+      id: PropTypes.number,
    }
 
    getDefaultState(props = this.props) {
@@ -83,83 +72,6 @@ export default class MemoModal extends Component {
       }
    }
 
-   componentDidMount() {
-      this.modal = $(this.$modal).modal({
-         complete: this.props.onCloseMemo.bind(this)
-      })
-   }
-
-   componentDidUpdate() {
-      this.$submit.setState({valid: this.$form.valid})
-
-      if (this.props.open) {
-         this.modal.modal('open')
-      }
-   }
-
-   newMemo() {
-      this.setState(this.getCleanState())
-   }
-
-   onSubmitSuccess(data) {
-      console.log("SUCCESS", data)
-      this.props.onUpdateMemo(data)
-      this.$error.setState({error: null})
-      this.modal.modal('close')
-   }
-
-   onSubmitError(response) {
-      let error
-
-      console.log("ERROR", response, this.state, this.$form.query)
-
-      if (response.responseJSON) {
-         let errors = []
-
-         Object.entries(response.responseJSON).forEach(([key, value]) => {
-            errors.push(value.map((e) => { return key + " " + e }))
-         })
-
-         error = errors.join(", ")
-      } else {
-         error = response.responseText
-      }
-
-      this.$error.setState({error: error})
-   }
-
-   onSubmit(e) {
-      e.stopPropagation()
-      e.preventDefault()
-
-      let settings = {
-         data: { memo: this.$form.serializedQuery() },
-         dataType: 'JSON',
-         error: this.onSubmitError.bind(this),
-         success: this.onSubmitSuccess.bind(this),
-      }
-
-      if (settings.data.memo.id) {
-         settings.method = 'PUT'
-         settings.url = '/memoes/' + settings.data.memo.id + '.json'
-      } else {
-         settings.method = 'POST'
-         settings.url = '/memoes.json'
-      }
-
-      console.log("STATE",this.state)
-      console.log(settings)
-      $.ajax(settings)
-   }
-
-   onFormUpdate() {
-      // TODO inestigate why `this.$form` became null when form is closed,
-      //and why the callback is called
-      if (this.$form) {
-         this.$submit.setState({valid: this.$form.valid})
-      }
-   }
-
    render() {
       console.log(this.state)
 
@@ -169,7 +81,7 @@ export default class MemoModal extends Component {
                <a
                   className="waves-effect waves-light btn modal-trigger"
                   href="#memo-form-modal"
-                  onClick={this.newMemo.bind(this)} >
+                  onClick={this.newRecord.bind(this)} >
                      Новый помин</a></div>
             <div
                key='memo-form-modal'
@@ -190,6 +102,16 @@ export default class MemoModal extends Component {
                               ref={e => this.$error = e}
                               key={'error'} /></div>
                         <div className="col xl3 l4 m5 s6">
-                           <SubmitButton
-                              ref={e => this.$submit = e}
-                              title={this.props.id && 'Обнови помин' || 'Создай помин'} /></div></div></div></form></div></div>)}}
+                           <div className="row">
+                              <div className="col s4">
+                                 <button
+                                    key='close-button'
+                                    type='button'
+                                    className='btn close'
+                                    onClick={this.onCloseClick.bind(this)} >
+                                    Закрой</button></div>
+                              <div className="col s8">
+                                 <SubmitButton
+                                    key='submit'
+                                    ref={e => this.$submit = e}
+                                    title={this.props.id && 'Обнови помин' || 'Создай помин'} /></div></div></div></div></div></form></div></div>)}}

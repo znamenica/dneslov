@@ -33,14 +33,24 @@ export default class MemoRow extends Component {
    }
 
    remove() {
-      let toast = document.querySelector('.toast-wrapper.' + this.props.id).parentElement
+      let toast = document.querySelector('.toast-wrapper.id' + this.props.id).parentElement
 
+      this.toast.dismiss()
       toast.remove()
       this.props.onRemove(this.props.id)
    }
 
    removeQuery() {
-      Materialize.toast(this.$toast, 10000, 'rounded')
+      let toast = {
+         displayLength: 10000,
+         classes: 'rounded',
+         html: this.$toast.innerHTML,
+      }
+
+      this.toast = M.toast(toast)
+
+      document.querySelector('.toast.rounded > .toast-action')
+              .addEventListener('click', this.remove.bind(this))
    }
 
    render() {
@@ -63,7 +73,7 @@ export default class MemoRow extends Component {
                   onClick={this.removeQuery.bind(this)}>
                   delete</i>
                <div
-                  className={'toast-wrapper ' + this.props.id}
+                  className={'toast-wrapper id' + this.props.id}
                   key='toast'
                   ref={e => this.$toast = e} >
                   <span>Точно ли удалить помин "{this.props.text}"?</span>

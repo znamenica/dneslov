@@ -1,0 +1,20 @@
+html {
+   .introjs-tooltip {
+      max-width: fit-content;
+
+      .introjs-button {
+         font-size: inherit;
+      }
+   }
+
+   .run-intro {
+      bottom: 45px;
+      right: 24px;
+      position: fixed;
+      z-index: 997;
+
+      i {
+         font-size: 24px !important;
+      }
+   }
+}

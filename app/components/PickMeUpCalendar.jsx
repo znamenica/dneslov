@@ -1,5 +1,7 @@
 import { Component } from 'react'
 import * as Pickmeup from 'pickmeup/js/pickmeup.js'
+import * as assign from 'assign-deep'
+import * as Axios from 'axios'
 import PropTypes from 'prop-types'
 
 export default class PickMeUpCalendar extends Component {
@@ -40,6 +42,7 @@ export default class PickMeUpCalendar extends Component {
       Object.keys(value).forEach((key) => {
          this.state[key] = value[key]
       })
+
       this.props.onUpdate({ with_date: this.state.with_date })
       console.log("state", this.state)
    }
@@ -48,6 +51,7 @@ export default class PickMeUpCalendar extends Component {
       let selected = this.getToday()
 
       selected.setTime(selected.getTime() + 1*60*60*1000)
+
       return selected.getDate() + "/" + (selected.getMonth() + 1) + "/" + selected.getFullYear()
    }
 
@@ -71,38 +75,38 @@ export default class PickMeUpCalendar extends Component {
    }
 
    componentDidMount() {
-      let p = $.extend(this.props.pickmeup, {
+      let settings = assign({}, this.props.pickmeup, {
          date: this.selectedString(), // plus 9 hours
          current: this.getToday(),
          calendar_gap: this.recalculateGap.bind(this),
          render: this.onPickmeupRender.bind(this),
       })
 
-      this.pmu = Pickmeup('#calendar', p)
+      this.pmu = Pickmeup(this.$calendar, settings)
       this.pmu.show()
 
-      let cal = $('.pickmeup').remove()
-      let instance = cal.find('.pmu-instance')
-      let styles = $('.style-select').remove()
-      let nextprev = $('.next-prev').remove()
+      let cal = document.querySelector('.pickmeup') //.remove()
+      let instance = cal.querySelector('.pmu-instance')
+      let styles = document.querySelector('.style-select') //.remove()
+      let nextprev = document.querySelector('.next-prev') //.remove()
 
       instance.append(nextprev)
       instance.prepend(styles)
 
-      this.$el = $(this.el)
-      this.$el.append(cal)
-      this.$el.on('pickmeup-change', this.onPickmeupChange.bind(this))
-      this.$el.find('.pmu-yesterday').on('click', this.onYesterdayClick.bind(this))
-      this.$el.find('.pmu-tomorrow').on('click', this.onTomorrowClick.bind(this))
-      this.$el.find('input[name="calendar-style"]').on('click', this.onChangeStyle.bind(this))
+      this.$calendar.append(cal)
+      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
+      this.$calendar.querySelector('.pmu-yesterday').addEventListener('click', this.onYesterdayClick.bind(this))
+      this.$calendar.querySelector('.pmu-tomorrow').addEventListener('click', this.onTomorrowClick.bind(this))
+      this.$calendar.querySelector('input[name="calendar-style"]').addEventListener('click', this.onChangeStyle.bind(this))
    }
 
    componentWillUnmount() {
-      this.$el.off('pickmeup-change', this.onPickmeupChange.bind(this))
-      this.$el.find('.pmu-yesterday').off('click', this.onYesterdayClick.bind(this))
-      this.$el.find('.pmu-tomorrow').off('click', this.onTomorrowClick.bind(this))
-      this.$el.find('input[name="calendar-style"]').off('click', this.onChangeStyle.bind(this))
-      this.$el.empty()
+      this.$calendar.empty()
+      this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
+      this.$calendar.querySelector('.pmu-yesterday').removeEventListener('click', this.onYesterdayClick.bind(this))
+      this.$calendar.querySelector('.pmu-tomorrow').removeEventListener('click', this.onTomorrowClick.bind(this))
+      this.$calendar.querySelector('input[name="calendar-style"]').removeEventListener('click', this.onChangeStyle.bind(this))
+      console.log("UUUUUUUUUUUUUUUUUMO")
    }
 
    onPickmeupRender() {
@@ -134,7 +138,7 @@ export default class PickMeUpCalendar extends Component {
    }
 
    onChangeStyle(e) {
-      let new_calendar_style = $(e.target).val()
+      let new_calendar_style = e.target.getAttribute('value')
 
       if (new_calendar_style != this.state.calendar_style) {
          let new_date = this.pmu.get_date()
@@ -146,7 +150,8 @@ export default class PickMeUpCalendar extends Component {
          this.state.calendar_style = new_calendar_style
          this.pmu.set_date(new_date, new_date)
          this.setState({
-            with_date: [ this.pmu.get_date(true), new_calendar_style ]})
+            with_date: [ this.pmu.get_date(true), new_calendar_style ]
+         })
       }
    }
 
@@ -190,4 +195,4 @@ export default class PickMeUpCalendar extends Component {
             <div
                id='calendar'
                key='calendar'
-               ref={el => this.el = el} /></div>)}}
+               ref={e => this.$calendar = e} /></div>)}}

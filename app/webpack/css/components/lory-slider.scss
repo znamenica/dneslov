@@ -1,0 +1,129 @@
+@import "defines";
+
+html {
+   #slider-modal {
+      width: 90%;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+      filter: alpha(opacity=0);
+      display: block !important;
+      opacity: 1 !important;
+      max-height: none;
+      top: 0 !important;
+      height: 0;
+      box-shadow: none !important;
+      border: none !important;
+
+      .modal-content {
+         padding: 0;
+      }
+
+      &.open {
+         top: 5% !important;
+         height: inherit;
+      }
+
+      img.icon {
+         height: 70%; // about 1020px;
+
+         @media (max-height: $large_height) {
+            height: 55em; // about 825px
+         }
+
+         @media (max-height: $medium_height) {
+            height: 40em; // about 600px
+         }
+
+         @media (max-height: $small_height) {
+            height: 25em; // about 375
+         }
+      }
+
+      .lory_slider {
+         margin: 0 auto 0;
+         width: auto;
+         position: relative;
+         -moz-user-select: none;
+
+         .frame {
+            //line-height: 0;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+            padding: 0;
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: 0 none;
+
+            .slides {
+               //line-height: 0;
+               white-space: nowrap;
+               display: inline-block;
+
+               li {
+                  color: #fff;
+                  display: inline-block;
+                  font-family: "Source Sans Pro", sans;
+                  //line-height: 30px;
+                  position: relative;
+                  text-align: center;
+                  margin-right: 12px;
+
+                  img {
+                     margin-top: 8px;
+                     margin-bottom: 8px;
+                     margin-left: 8px;
+                     margin-right: 8px;
+                     background: rgba(255, 255, 255, 1) none repeat scroll 0 0;
+                     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3)
+                  }
+
+               }
+
+               li:nth-last-child(1) {
+                  margin-right: 0;
+               }
+            }
+         }
+
+         .prev, .next {
+            position: absolute;
+            top: 50%;
+            margin-top: -25px;
+            display: block;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+
+            svg {
+               width: 25px;
+            }
+
+            &.disabled {
+               display: none;
+            }
+         }
+
+         .next {
+            right: 0;
+         }
+
+         .prev {
+            left: 0;
+         }
+
+         .modal-action {
+            background: rgba(0, 0, 0, 0.3);
+            position: absolute;
+            bottom: 2em;
+            display: block;
+            cursor: pointer;
+            right: 1em;
+            color: #DEB3AA;
+         }
+
+         .prev:hover, .next:hover, .modal-action:hover {
+            background: rgba(0, 0, 0, 0.5);
+         }
+      }
+   }
+}

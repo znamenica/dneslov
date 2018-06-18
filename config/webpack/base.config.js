@@ -24,8 +24,8 @@ console.log("Rails root:", global.rootpath)
 
 var webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const smartImport = require("postcss-smart-import")
 const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
-const extractSCSS = new ExtractTextPlugin({ filename: '[name].scss', allChunks: true })
 //const postcssOpts = {postcss: {plugins: [autoprefixer(autoprefixerOpts)], sourceMap: true}}
 const postcssOpts = {sourceMap: true}
 
@@ -42,7 +42,9 @@ module.exports = {
       'javascripts/admin': './app/webpack/js/admin.js',
       'javascripts/about': './app/webpack/js/about.js',
       // Stylesheets
-      //'stylesheets/webpack/app': './app/webpack/css/app.js',
+      'stylesheets/app': './app/webpack/css/app.js',
+      'stylesheets/admin': './app/webpack/css/admin.js',
+      'stylesheets/about': './app/webpack/css/about.js',
    },
 
    module: {
@@ -53,15 +55,16 @@ module.exports = {
          },
          {
             test: /\.css$/,
-            loader: extractCSS.extract([ 'css-loader', 'postcss-loader' ])
+            loader: extractCSS.extract([ 'css-loader?minimize', 'postcss-loader' ])
          },
          {
             test: /\.scss$/,
             //loader: DEBUG
             //  ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
-            loader : extractSCSS.extract({
+            loader : extractCSS.extract({
                fallback: 'style-loader',
-               use: [ 'css-loader', 'sass-loader' ]
+               use: [ 'css-loader?-url&sourceMap&importLoaders=1',
+                      'sass-loader?sourceMap' ]
             })
          },
          {
@@ -97,7 +100,6 @@ module.exports = {
    plugins: [
       // allChunks will preserve source maps
       new ExtractTextPlugin({ filename: '[name].css.erb', allChunks: true }),
-      extractSCSS,
       extractCSS,
 
       // Ignore locales because it's around 400kb
@@ -113,7 +115,6 @@ module.exports = {
          },
          postcss: [
             require('autoprefixer')(),
-            require('postcss-asset-url-rails')()
          ],
       }),
       new webpack.ProvidePlugin({

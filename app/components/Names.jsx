@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
 import NameModal from 'NameModal'
@@ -81,17 +82,16 @@ export default class Names extends Component {
 
    onNameRemove(id) {
       let name = this.state.names.find((c) => { return c.id == id })
-
-      $.ajax({
-         method: 'DELETE',
-         dataType: 'JSON',
+      let request = {
          url: '/names/' + name.id + '.json',
-         success: this.onSuccessRemove.bind(this)
-      })
+         method: 'delete'
+      }
+
+      Axios(request).then(this.onSuccessRemove.bind(this))
    }
 
-   onSuccessRemove(name) {
-      let names = this.state.names.slice()
+   onSuccessRemove(response) {
+      let name = response.data, names = this.state.names.slice()
       let index = names.findIndex((c) => { return c.id == name.id })
 
       delete names[index]
@@ -101,8 +101,8 @@ export default class Names extends Component {
       })
    }
 
-   onSuccessLoad(names) {
-      let new_names
+   onSuccessLoad(response) {
+      let new_names, names = response.data
 
       console.log("SUCCESS", names)
       if (names.page > 1) {
@@ -128,12 +128,17 @@ export default class Names extends Component {
    }
 
    submit(page = 1) {
+      let request = {
+         url: '/names.json',
+      }
+
       this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
-      $.get('/names.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+      Axios.get(request.url, { params: this.state.query })
+           .then(this.onSuccessLoad.bind(this))
    }
 
    onSearchUpdate(tokens) {
@@ -162,9 +167,9 @@ export default class Names extends Component {
                      <NameModal
                         open={!!this.state.current}
                         {...this.state.current}
-                        ref={$form => this.$form = $form}
-                        onCloseName={this.onNameClose.bind(this)}
-                        onUpdateName={this.onNameUpdate.bind(this)} /></div></div>
+                        ref={e => this.$form = e}
+                        onCloseModal={this.onNameClose.bind(this)}
+                        onUpdateRecord={this.onNameUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>

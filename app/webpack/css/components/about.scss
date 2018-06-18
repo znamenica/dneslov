@@ -1,0 +1,23 @@
+main {
+   & > .container {
+      &.about {
+         width: 75%;
+         padding: 0;
+
+         h5 {
+            text-align: center;
+         }
+
+         .green {
+            color: green;
+            background-color: transparent !important;
+         }
+
+         .red {
+            color: red;
+            background-color: transparent !important;
+         }
+      }
+   }
+}
+

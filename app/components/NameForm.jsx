@@ -200,7 +200,7 @@ export default class NameForm extends Component {
       return (
          <div>
             <LanguagedTextField
-               key='languageTextField'
+               key='languagedTextField'
                ref={e => this.r.push(e)}
                title='Написание имени'
                placeholder='Введи написание имени'
@@ -211,10 +211,9 @@ export default class NameForm extends Component {
                validations={this.props.child_validations}
                key_name='text'
                onUpdate={this.onChildUpdate.bind(this)} />
-            <div className='row'>
                <NameField
                   ref={e => this.r.push(e)}
-                  key='bondToId'
+                  key='bondTo'
                   field_name='bond_to_id'
                   name='bond_to'
                   title='Связаное имя'
@@ -231,17 +230,16 @@ export default class NameForm extends Component {
                   onUpdate={this.onChildUpdate.bind(this)} />
                <NameField
                   ref={e => this.r.push(e)}
-                  key='rootId'
+                  key='root'
                   field_name='root_id'
                   name='root'
                   title='Корневое имя'
                   root_id={this.query.root_id}
                   root={this.query.root}
                   wrapperClassName='input-field col xl4 l4 m12 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} /></div>
-            <div className='row'>
+                  onUpdate={this.onChildUpdate.bind(this)} />
                <div className='col'>
                   <ErrorSpan
                      ref={e => this.$error = e}
                      error={this.getError(this.query)}
-                     key='error' /></div></div></div>)}}
+                     key='error' /></div></div>)}}

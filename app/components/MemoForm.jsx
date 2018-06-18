@@ -164,7 +164,7 @@ export default class MemoForm extends Component {
       this.validate()
       this.props.onUpdate()
 
-      if (value.memory || value.event || value.calendary) {
+      if (value.memory) {
          this.forceUpdate()
       }
    }

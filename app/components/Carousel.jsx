@@ -18,12 +18,6 @@ export default class Carousel extends Component {
       return nextState.loadCounter == 0
    }
 
-   componentDidMount() {
-      if (this.$carousel) {
-         this.$$carousel = $(this.$carousel)
-      }
-   }
-
    componentWillUnmount() {
       if (this.$carousel) {
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
@@ -35,25 +29,26 @@ export default class Carousel extends Component {
    // events
    onIconClick(e) {
       if (e.target.className.match(/\bactive\b/)) {
-         e.stopPropagation()
          let index = e.target.getAttribute('data-index')
-         console.log("OPEN MODAL", e.target)
+
          this.$lory.openModal(index)
+
+         e.stopPropagation()
       }
    }
 
    onLorySlideFrom(e) {
-      let index = parseInt(e.detail.nextSlide)
+      let index = parseInt(e.detail.currentSlide)
 
-      if (index >= 0) {
-         this.$$carousel.carousel('set', e.detail.nextSlide);
+      if (index >= 0 && this.carousel) {
+         this.carousel.set(e.detail.currentSlide)
       }
    }
 
    stateChanged() {
       if (this.state.loadCounter == this.props.images.length) {
          console.log("CAROUSEL COMPLETED")
-         this.$$carousel.carousel()
+         this.carousel = M.Carousel.init(this.$carousel, {});
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
             console.log("CAROUSEL", img)
             img.addEventListener('click', this.onIconClick.bind(this))

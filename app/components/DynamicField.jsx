@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
+import { Autocomplete } from 'materialize-css'
+import * as Axios from 'axios'
 
 import Chip from 'Chip'
 import Validation from 'Validation'
@@ -83,10 +85,16 @@ export default class DynamicField extends Component {
    }
 
    componentDidMount() {
+      this.setup()
       window.addEventListener('keypress', this.onKeyPress.bind(this))
    }
 
+   componentDidUpdate() {
+      this.setup()
+   }
+
    componentWillUnmount() {
+      this.destroy()
       window.removeEventListener('keypress', this.onKeyPress)
    }
 
@@ -109,13 +117,12 @@ export default class DynamicField extends Component {
    }
 
    onSelectFromList(value) {
-      console.log("FIX1")
       this.fixValue(value)
    }
 
    onKeyPress(e) {
       if (e.key === "Enter" && e.target == this.$input) {
-         console.log("FIX2")
+         console.log("FIX")
          e.preventDefault()
          if (this.data.list[this.$input.value]) {
             this.fixValue(this.$input.value)
@@ -125,7 +132,28 @@ export default class DynamicField extends Component {
 
    onChipAct() {
       console.log("UNFIX")
+
+      this.destroy()
+
       this.setState({fixed: false})
+   }
+
+   //actions
+   setup() {
+      this.input = Autocomplete.init(this.$input, {
+         data: {},
+         limit: 20,
+         minLength: 1,
+         onAutocomplete: this.onSelectFromList.bind(this)
+      })
+   }
+
+   destroy() {
+      if (this.input) {
+         this.input.destroy()
+      }
+
+      this.input = false
    }
 
    //checkers
@@ -137,19 +165,9 @@ export default class DynamicField extends Component {
    //actions
    setAutocomplete() {
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
-      
-      console.log("data", this.data.list, list)
-      $(this.$input).autocomplete({
-         data: list,
-         limit: 20,
-         minLength: 1,
-         onAutocomplete: this.onSelectFromList.bind(this)
-      })
 
-      //triggering popup
-      console.log("TRIGGER")
-      this.$input.dispatchEvent(new KeyboardEvent('keydown',{'key':'Shift'}))
-      this.$input.dispatchEvent(new KeyboardEvent('keyup',{'key':'Shift'}))
+      this.input.updateData(list)
+      this.input.open()
    }
 
    value() {
@@ -185,22 +203,25 @@ export default class DynamicField extends Component {
    triggerListBy(text) {
       if (!this.triggered) {
          this.triggered = text
-         $.ajax({
-            method: 'GET',
-            dataType: 'JSON',
+
+         var request = {
             data: { with_token: text },
             url: '/' + this.props.pathname + '.json',
-            success: this.onSuccessLoad.bind(this),
-            error: this.onErrorRequest.bind(this),
-         })
+         }
+
+         Axios.get(request.url, { params: request.data })
+           .then(this.onSuccessLoad.bind(this))
+           .catch(this.onErrorLoad.bind(this))
       }
    }
 
-   onErrorRequest() {
+   onErrorLoad() {
       this.triggered = undefined
    }
 
-   onSuccessLoad(dynamic_data) {
+   onSuccessLoad(response) {
+      var dynamic_data = response.data
+
       this.storeDynamicData(dynamic_data)
 
       console.log("SUCCESS", dynamic_data)
@@ -232,10 +253,21 @@ export default class DynamicField extends Component {
    render() {
       console.log("props: DynamicField", this.props)
       console.log("state: DynamicField", this.state)
-      
+      console.log("Has Value", this.hasValue())
+
       return (
          <div
             className={this.props.wrapperClassName}>
+            {this.hasValue() &&
+               <div
+                  className="chip">
+                  <span>
+                     {this.value()}</span>
+                  <i
+                     className='material-icons unfix'
+                     onClick={this.onChipAct.bind(this)}>
+                     close</i>
+               </div>}
             {!this.hasValue() &&
                <input
                   type='text'
@@ -247,16 +279,9 @@ export default class DynamicField extends Component {
                   placeholder={this.props.placeholder}
                   value={this.value()}
                   onChange={this.onChange.bind(this)} />}
-            {this.hasValue() &&
-               <Chip
-                  key={'chip-' + this.props.name}
-                  color='eee'
-                  text={this.value()}
-                  action='remove'
-                  onAct={this.onChipAct.bind(this)} />}
             <label
                className='active'
-               htmlFor='text'>
+               htmlFor={this.props.name}>
                {this.props.title}
                <ErrorSpan
                   key='error'

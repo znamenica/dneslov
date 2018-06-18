@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import GitHubLogin from 'react-github-login'
 import * as assign from 'assign-deep'
+//import { TapTarget } from 'materialize-css/js/tapTarget'
 
 import Calendaries from 'Calendaries'
 import Memories from 'Memories'
@@ -28,11 +29,15 @@ export default class Dashboard extends Component {
    }
 
    componentDidMount() {
-      this.$$avatarTap = $(this.$avatarTap)
+      console.log("QQQ", this.$avatarTap)
+      this.avatarTap = M.TapTarget.init(this.$avatarTap, {})
+      console.log("QQQQ", this.avatarTap)
    }
 
-   componentDidUpdate() {
-      this.$$avatarTap = $(this.$avatarTap)
+   componentWillUnmount() {
+      if (this.avatarTap) {
+         this.avatarTap.destroy()
+      }
    }
 
    // events
@@ -51,7 +56,7 @@ export default class Dashboard extends Component {
    }
 
    onAvatarClick(e) {
-      this.$$avatarTap.tapTarget('open')
+      this.avatarTap.open()
    }
 
    // props
@@ -123,7 +128,7 @@ export default class Dashboard extends Component {
                                  key='avatarTap'
                                  ref={e => this.$avatarTap = e}
                                  className='tap-target'
-                                 data-activates='avatar'>
+                                 data-target='avatar'>
                                  <div
                                     className='tap-target-content'>
                                     <h5>

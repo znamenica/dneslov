@@ -21,14 +21,14 @@ export default class IconLoryModal extends Component {
    componentDidMount() {
       this.$lory.addEventListener('after.lory.init', this.loryResize.bind(this))
       this.$lory.addEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.addEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
+      this.$lory.addEventListener('after.lory.slide', this.props.onLorySlideFrom.bind(this))
       document.addEventListener('click', this.onDocumentClick.bind(this))
    }
 
    componentWillUnmount() {
-      this.$lory.removeEventListener('before.lory.init', this.loryResize.bind(this))
+      this.$lory.removeEventListener('after.lory.init', this.loryResize.bind(this))
       this.$lory.removeEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.removeEventListener('before.lory.slide', this.props.onLorySlideFrom.bind(this))
+      this.$lory.removeEventListener('after.lory.slide', this.props.onLorySlideFrom.bind(this))
       document.removeEventListener('click', this.onDocumentClick.bind(this))
    }
 
@@ -41,7 +41,7 @@ export default class IconLoryModal extends Component {
    }
 
    componentReady() {
-      this.modal = $(this.$modal).modal()
+      this.modal = M.Modal.init(this.$modal, {})
       this.lory = lory(this.$lory, {
          slideSpeed: 750,
          ease: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
@@ -77,14 +77,14 @@ export default class IconLoryModal extends Component {
       }
 
       console.log("OPEN")
-      $(this.modal).modal('open')
+      this.modal.open()
    }
 
    onDocumentClick(e) {
       // TODO click to transparent area of the modal, get fired to the modal, not the 
       // page. Fix it then.
       if (! e.cancelBubble && this.isOpen() && ! e.target.closest('.modal')) {
-         $(this.modal).modal('close')
+         this.modal.close()
       }
    }
 
@@ -106,7 +106,7 @@ export default class IconLoryModal extends Component {
             id='slider-modal'
             ref={e => this.$modal = e} >
             <div className='modal-content'
-                  ref={e => this.$co = e} >
+                 ref={e => this.$co = e} >
                <div
                   className='lory_slider js_lory_slider'
                   ref={e => this.$lory = e} >

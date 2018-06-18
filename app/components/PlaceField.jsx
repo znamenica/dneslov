@@ -9,5 +9,6 @@ export default class PlaceField extends DynamicField {
       value_name: 'id',
       title: 'Место',
       placeholder: 'Начни ввод наименования места...',
+      validations: {},
    }
 }

@@ -1,0 +1,156 @@
+@import "defines";
+
+.name {
+   margin: 0;
+
+   &.short {
+      font-weight: 500;
+   }
+
+   &.first {
+      font-weight: 500;
+   }
+
+   &.nick {
+      font-weight: 500;
+
+      &::before {
+         //content: '«';
+      }
+
+      &::after {
+         //content: '»';
+      }
+   }
+
+   &.last {
+      font-style: italic;
+
+      &::before {
+         content: '(';
+      }
+
+      &::after {
+         content: ')';
+         padding-right: 3px;
+      }
+   }
+
+   &.feat {
+      font-weight: 500;
+   }
+
+   &::after {
+      content: ' ';
+   }
+
+   &:empty {
+      display: none;
+
+      &::before {
+         content: none;
+         display: none;
+      }
+
+      &::after {
+         content: none;
+         display: none;
+      }
+   }
+}
+
+.collection {
+   .collection-item {
+      &.memory, &.event, &.description {
+         min-height: auto;
+         padding: 3px 0 0 0;
+         line-height: inherit;
+         background-color: $book;
+         color: $dark;
+
+         .collapsible-header {
+            padding: 0 1rem 0 1rem;
+            line-height: 300%;
+            background-color: $book;
+            //min-height: 3rem;
+            display: block;
+
+            &:only-child {
+               cursor: default;
+            }
+         }
+
+         .collapsible-body {
+            padding: 1rem;
+            height: 0px;
+            max-height: 0px;
+
+            .row {
+               margin-bottom: 0px;
+            }
+         }
+      }
+
+      &.memory {
+         .collapsible-header {
+            padding-left: 4rem;
+         }
+      }
+
+      &.active {
+         .collapsible-body {
+            height: auto;
+            max-height: unset;
+            display: inline-block;
+         }
+      }
+
+      &.avatar:not(.circle-clipper) > .circle,
+      &.avatar :not(.circle-clipper) > .circle {
+         left: 0.5rem;
+         top: 1px;
+      }
+   }
+}
+
+.collection.popout {
+   .collection-item {
+      &.active {
+         margin: 16px 3px;
+      }
+   }
+}
+
+.dates {
+   padding-left: 23px;
+
+   .date.fixed-action-btn {
+      position: relative;
+      display: inline-block;
+      padding: 0;
+      top: 0;
+
+      & > .chip {
+         background-color: aliceblue;
+      }
+
+      ul {
+         z-index: 1000;
+         bottom: 15px;
+
+         .chip {
+            background-color: antiquewhite;
+         }
+      }
+   }
+}
+
+.carousel.compact {
+   height: 200px;
+
+   .carousel-item {
+      width: auto;
+      cursor: pointer !important;
+      display: block;
+   }
+}

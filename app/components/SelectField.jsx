@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
+import { FormSelect } from 'materialize-css'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
@@ -34,14 +35,14 @@ export default class SelectField extends Component {
    }
 
    componentDidMount() {
-      $(this.$select).material_select()
-      $(this.$select).on('change', this.onChange.bind(this))
+      this.select = FormSelect.init(this.$select, {})
+      this.$select.addEventListener('change', this.onChange.bind(this))
       this.$wrap = this.$parent.querySelector('.select-wrapper')
    }
 
    componentWillUnmount() {
-      $(this.$select).off('change', this.onChange.bind(this))
-      $(this.$select).material_select('destroy')
+      this.$select.removeEventListener('change', this.onChange.bind(this))
+      this.select.destroy()
    }
 
    componentDidUpdate() {
@@ -55,11 +56,11 @@ export default class SelectField extends Component {
    componentWillReceiveProps(nextProps) {
       if (this.state[this.props.name] != nextProps[this.props.name]) {
          let value = nextProps[this.props.name] || ''
-         $(this.$select).material_select('destroy')
+         this.select.destroy()
          this.setState({[this.props.name]: value})
          this.updateError(value)
          this.$select.value = value
-         $(this.$select).material_select()
+         this.select = FormSelect.init(this.$select, {})
          this.$wrap = this.$parent.querySelector('.select-wrapper')
       }
    }

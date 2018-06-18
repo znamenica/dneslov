@@ -9,7 +9,7 @@ export default class EventSpans extends Component {
 
    // system
    componentDidMount() {
-      $(this.$collapsible).collapsible()
+      M.Collapsible.init(this.$collapsible, {})
    }
 
    render() {

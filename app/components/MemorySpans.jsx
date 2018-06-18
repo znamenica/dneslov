@@ -13,7 +13,7 @@ export default class MemorySpans extends Component {
 
    // system
    componentDidMount() {
-      $(this.$collapsible).collapsible()
+      M.Collapsible.init(this.$collapsible, {})
    }
 
    // props

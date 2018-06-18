@@ -10,7 +10,7 @@ export default class FeasibleBox extends Component {
    }
 
    static propTypes = {
-      feasible: PropTypes.bool.isRequired,
+      feasible: PropTypes.bool,
       wrapperClassName: PropTypes.string.isRequired,
       onUpdate: PropTypes.func.isRequired,
    }
@@ -39,13 +39,9 @@ export default class FeasibleBox extends Component {
       return (
          <div
             className={this.props.wrapperClassName}>
-            <input
-               key='feasible'
-               type='checkbox'
-               id='feasible'
-               name='feasible'
-               onChange={this.onCheck.bind(this)}
-               checked={this.state.feasible} />
-            <label
-               htmlFor='feasible'>
-               Вероятное</label></div>)}}
+            <label>
+               <input
+                  type='checkbox'
+                  onChange={this.onCheck.bind(this)}
+                  checked={this.state.feasible} />
+               <span>Вероятное</span></label></div>)}}

@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
+import { CharacterCounter } from 'materialize-css'
 
 import Validation from 'Validation'
 import ErrorSpan from 'ErrorSpan'
@@ -48,7 +49,7 @@ export default class TextField extends Component {
 
    componentDidMount() {
       if (this.props.data && this.props.data['length']) {
-         $(this.$input).characterCounter()
+         CharacterCounter.init(this.$input)
       }
    }
 
@@ -69,7 +70,7 @@ export default class TextField extends Component {
       this.props.onUpdate({[this.props.name]: real})
 
       if (this.props.textArea) {
-         $(this.$input).trigger('autoresize') //TODO don't work
+         //$(this.$input).trigger('autoresize') //TODO don't work
       }
    }
 
@@ -113,7 +114,7 @@ export default class TextField extends Component {
                   onChange={this.onChange.bind(this)} />}
             <label
                className='active'
-               htmlFor='text'>
+               htmlFor={this.props.name}>
                {this.props.title}
                <ErrorSpan
                   key='error'

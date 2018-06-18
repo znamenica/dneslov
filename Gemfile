@@ -37,9 +37,6 @@ gem "figaro"
 # Slim html renderer
 gem 'slim-rails', '~> 3.1.2'
 
-# css
-gem 'materialize-sass'
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Use Redis adapter to run Action Cable in production

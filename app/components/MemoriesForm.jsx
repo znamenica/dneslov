@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import * as assign from 'assign-deep'
+import * as Axios from 'axios'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -106,20 +107,19 @@ export default class MemoriesForm extends Component {
       console.log("Sending...", this.state)
 
       let request = {
-         dataType: 'JSON',
          data: this.state.query,
          url: '/index.json',
-         success: this.onMemoriesLoadSuccess.bind(this),
-         error: this.onMemoriesLoadFailure.bind(this),
       }
 
       document.body.classList.add('in-progress')
 
-      $.ajax(request)
+      Axios.get(request.url, { params: request.data })
+        .then(this.onMemoriesLoadSuccess.bind(this))
+        .catch(this.onMemoriesLoadFailure.bind(this))
    }
 
-   onMemoriesLoadSuccess(memories) {
-      let state
+   onMemoriesLoadSuccess(response) {
+      let state, memories = response.data
 
       //let slugs = memories.list.map((m) => { return m.slug })
       //console.log("AJAX SUCCESS", slugs)
@@ -143,7 +143,7 @@ export default class MemoriesForm extends Component {
       this.setState(state)
    }
 
-   onMemoriesLoadFailure() {
+   onMemoriesLoadFailure(response) {
       let query = assign(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
       document.body.classList.remove('in-progress')
       this.setState({query: query})
@@ -151,19 +151,18 @@ export default class MemoriesForm extends Component {
 
    onLoadRequest(slug) {
       let request = {
-         dataType: 'JSON',
-         success: this.onMemoryLoadSuccess.bind(this),
-         method: 'GET',
          url: '/' + slug + '.json',
       }
 
       document.body.classList.add('in-progress')
 
-      $.ajax(request)
+      Axios.get(request.url)
+        .then(this.onMemoryLoadSuccess.bind(this))
+        .catch(this.onMemoriesLoadFailure.bind(this))
    }
 
-   onMemoryLoadSuccess(memory) {
-      let state = assign({}, this.state, { memory: memory })
+   onMemoryLoadSuccess(response) {
+      let memory= response.data, state = assign({}, this.state, { memory: memory })
 
       console.log("Loaded memory", memory)
 

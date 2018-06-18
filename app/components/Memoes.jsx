@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
 import MemoModal from 'MemoModal'
@@ -81,17 +82,16 @@ export default class Memoes extends Component {
 
    onMemoRemove(id) {
       let memo = this.state.memoes.find((c) => { return c.id == id })
-
-      $.ajax({
-         method: 'DELETE',
-         dataType: 'JSON',
+      let request = {
          url: '/memoes/' + memo.id + '.json',
-         success: this.onSuccessRemove.bind(this)
-      })
+         method: 'delete'
+      }
+
+      Axios(request).then(this.onSuccessRemove.bind(this))
    }
 
-   onSuccessRemove(memo) {
-      let memoes = this.state.memoes.slice()
+   onSuccessRemove(response) {
+      let memo = response.data, memoes = this.state.memoes.slice()
       let index = memoes.findIndex((c) => { return c.id == memo.id })
 
       delete memoes[index]
@@ -101,8 +101,8 @@ export default class Memoes extends Component {
       })
    }
 
-   onSuccessLoad(memoes) {
-      let new_memoes
+   onSuccessLoad(response) {
+      let new_memoes, memoes = response.data
 
       console.log("SUCCESS", memoes)
       if (memoes.page > 1) {
@@ -128,12 +128,17 @@ export default class Memoes extends Component {
    }
 
    submit(page = 1) {
+      let request = {
+         url: '/memoes.json',
+      }
+
       this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
-      $.get('/memoes.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+      Axios.get(request.url, { params: this.state.query })
+           .then(this.onSuccessLoad.bind(this))
    }
 
    onSearchUpdate(tokens) {
@@ -163,8 +168,8 @@ export default class Memoes extends Component {
                         open={this.state.current}
                         {...this.state.current}
                         ref={$form => this.$form = $form}
-                        onCloseMemo={this.onMemoClose.bind(this)}
-                        onUpdateMemo={this.onMemoUpdate.bind(this)} /></div></div>
+                        onCloseModal={this.onMemoClose.bind(this)}
+                        onUpdateRecord={this.onMemoUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>

@@ -1,0 +1,176 @@
+@import "defines";
+
+html {
+   .pickmeup {
+      font-size: inherit;
+      background: transparent;
+
+      &.pmu-hidden {
+         display: block;
+      }
+
+      .pmu-instance {
+         font-size: 111%;
+
+         .pmu-selected {
+            background-color: $selected_color;
+
+            &:hover {
+               background-color: $lighten_selected_color;
+            }
+         }
+      }
+   }
+
+   .row.calendary {
+      height: 23rem;
+      text-align: center;
+
+      #calendar {
+         background: transparent;
+         display: inline-block;
+
+         .pmu-view-days {
+            background-color: transparent;
+            position: relative;
+         }
+
+         .pmu-instance {
+            .pmu-days {
+               .pmu-button {
+                  border-radius: 50%;
+                  margin-left: 1px;
+                  margin-right: 1px;
+                  width: 1.8em !important;
+               }
+
+               .pmu-not-in-month {
+                  color: #717171;
+               }
+
+               .pmu-today {
+                  background-color: $today_color
+               }
+
+               .pmu-selected {
+                  background-color: $selected_color
+               }
+
+               .pmu-today.pmu-selected {
+                  @extend .pmu-today;
+                  border: 1px solid $selected_color;
+               }
+            }
+
+            .pmu-day-of-week {
+               background-color: #f79eb3;
+
+               div {
+                  margin-left: 1px;
+                  margin-right: 1px;
+                  width: 1.8em !important;
+               }
+            }
+
+            & > nav {
+               height: auto;
+               background-color: $terracota;
+               width: auto;
+
+               .pmu-yesterday {
+                  @extend .pmu-prev !optional
+               }
+
+               .pmu-tomorrow {
+                  @extend .pmu-next !optional
+               }
+
+               .pmu-left {
+                  width: 6em;
+                  text-align: left;
+               }
+
+               .pmu-right {
+                  width: 6em;
+                  text-align: right;
+               }
+            }
+
+            .pmu-button {
+               color: $dark;
+               //background-color: $terracota;
+               padding: 1px;
+               box-sizing: border-box;
+               border: 1px solid transparent;
+
+               &hover {
+                  @extend .pmu-button;
+                  //background-color: $lighten_terracota;
+               }
+            }
+         }
+
+         [type="radio"] + label.pmu-style:after,
+         [type="radio"] + label.pmu-style:before,
+         [type="radio"] + label.pmu-style {
+            content: none;
+            display: inline-block;
+            cursor: pointer;
+            color: $dark;
+            background: $terracota;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.22);
+            transition: 0.3s;
+            user-select: none;
+
+            width: fit-content;
+            height: 3em;
+            padding: 0;
+            text-align: center;
+            //font-stretch: condensed;
+            font-size: 90%;
+            outline: medium none;
+            text-decoration: none;
+            letter-spacing: -1px;
+            border: medium none;
+            border-radius: 2px;
+            line-height: 300%;
+            text-transform: uppercase;
+
+            span {
+               transform: scale(0.75);
+            }
+
+            &:hover {
+               background: darken($terracota, 10%);
+               color: darken($dark, 10%);
+               box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
+            }
+         }
+
+         [type="radio"] + label.pmu-style:after {
+            margin-left: 3px;
+         }
+
+         [type="radio"] + label.pmu-style:hover {
+            background: darken($terracota, 5%);
+            color: darken($dark, 5%);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.32);
+         }
+
+         [type="radio"]:checked + label.pmu-style {
+            background: darken($terracota, 25%);
+            color: lighten($dark, 5%);
+            transform: translateY(2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0px -1px 0 rgba(0,0,0,0.22);
+         }
+
+         [type="radio"] + label.pmu-style.julian {
+            width: 42%;
+         }
+
+         [type="radio"] + label.pmu-style.neo-julian {
+            width: 58%;
+         }
+      }
+   }
+}

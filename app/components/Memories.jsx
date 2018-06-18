@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
 import MemoryModal from 'MemoryModal'
@@ -81,17 +82,16 @@ export default class Memories extends Component {
 
    onMemoryRemove(id) {
       let memory = this.state.memories.find((c) => { return c.id == id })
-
-      $.ajax({
-         method: 'DELETE',
-         dataType: 'JSON',
+      let request = {
          url: '/memories/' + memory.id + '.json',
-         success: this.onSuccessRemove.bind(this)
-      })
+         method: 'delete'
+      }
+
+      Axios(request).then(this.onSuccessRemove.bind(this))
    }
 
-   onSuccessRemove(memory) {
-      let memories = this.state.memories.slice()
+   onSuccessRemove(response) {
+      let memory = response.data, memories = this.state.memories.slice()
       let index = memories.findIndex((c) => { return c.id == memory.id })
 
       delete memories[index]
@@ -101,8 +101,8 @@ export default class Memories extends Component {
       })
    }
 
-   onSuccessLoad(memories) {
-      let new_memories
+   onSuccessLoad(response) {
+      let new_memories, memories = response.data
 
       console.log("SUCCESS", memories)
       if (memories.page > 1) {
@@ -128,12 +128,17 @@ export default class Memories extends Component {
    }
 
    submit(page = 1) {
+      let request = {
+         url: '/memories.json',
+      }
+
       this.isRequesting = true
       this.state.query.page = page
 
       console.log("Sending...", this.state.query)
 
-      $.get('/memories.json', this.state.query, this.onSuccessLoad.bind(this), 'JSON')
+      Axios.get(request.url, { params: this.state.query })
+           .then(this.onSuccessLoad.bind(this))
    }
 
    onSearchUpdate(tokens) {
@@ -163,8 +168,8 @@ export default class Memories extends Component {
                         open={this.state.current}
                         {...this.state.current}
                         ref={$form => this.$form = $form}
-                        onCloseMemory={this.onMemoryClose.bind(this)}
-                        onUpdateMemory={this.onMemoryUpdate.bind(this)} /></div></div>
+                        onCloseModal={this.onMemoryClose.bind(this)}
+                        onUpdateRecord={this.onMemoryUpdate.bind(this)} /></div></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>

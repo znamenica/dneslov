@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import M from 'materialize-css'
 
 import Chip from 'Chip'
 
@@ -53,7 +54,7 @@ export default class Description extends Component {
    }
 
    componentDidMount() {
-      $(this.$collapsible).collapsible({onOpen: this.onOpen.bind(this)})
+      M.Collapsible.init(this.$collapsible, {onOpen: this.onOpen.bind(this)})
 
       this.$slugs.forEach((slug) => {
          slug.addEventListener('click', this.onSlugClick.bind(this))

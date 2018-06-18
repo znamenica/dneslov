@@ -13,7 +13,7 @@ export default class MemoryNamesCollection extends Component {
    static defaultProps = {
       name: null,
       key_name: null,
-      value: [],
+      value: {},
       title: null,
       action: null,
       single: null,
@@ -27,7 +27,7 @@ export default class MemoryNamesCollection extends Component {
    static propTypes = {
       name: PropTypes.string.isRequired,
       key_name: PropTypes.string,
-      value: PropTypes.array.isRequired,
+      value: PropTypes.object.isRequired,
       title: PropTypes.string,
       action: PropTypes.string,
       child_validations: PropTypes.object.isRequired,

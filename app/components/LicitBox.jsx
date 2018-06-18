@@ -35,13 +35,10 @@ export default class LicitBox extends Component {
       return (
          <div
             className={this.props.wrapperClassName}>
-            <input
-               key='licit'
-               type='checkbox'
-               id='licit'
-               name='licit'
-               onChange={this.onCheck.bind(this)}
-               checked={this.state.licit} />
-            <label
-               htmlFor='licit'>
-               Опубликовать</label></div>)}}
+            <label>
+               <input
+                  type='checkbox'
+                  onChange={this.onCheck.bind(this)}
+                  checked={this.state.licit} />
+               <span>
+                  Опубликовать</span></label></div>)}}
