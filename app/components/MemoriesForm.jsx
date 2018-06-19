@@ -98,7 +98,11 @@ export default class MemoriesForm extends Component {
    }
 
    onFetchNext() {
-      this.submit(this.state.query.page + 1)
+      if (! this.isNextRequesting) {
+         console.log("NEXT")
+         this.isNextRequesting = true
+         this.submit(this.state.query.page + 1)
+      }
    }
 
    submit(page = 1) {
@@ -121,8 +125,6 @@ export default class MemoriesForm extends Component {
    onMemoriesLoadSuccess(response) {
       let state, memories = response.data
 
-      //let slugs = memories.list.map((m) => { return m.slug })
-      //console.log("AJAX SUCCESS", slugs)
       console.log("LOADED", memories)
 
       if (memories.page > 1) {
@@ -141,12 +143,16 @@ export default class MemoriesForm extends Component {
       history.pushState(state, 'Днесловъ', '/')
       document.body.classList.remove('in-progress')
       this.setState(state)
+      this.isNextRequesting = false
    }
 
    onMemoriesLoadFailure(response) {
+      console.log("FAILURE", response)
+
       let query = assign(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
       document.body.classList.remove('in-progress')
       this.setState({query: query})
+      this.isNextRequesting = false
    }
 
    onLoadRequest(slug) {
@@ -235,5 +241,6 @@ export default class MemoriesForm extends Component {
                               <MemorySpans
                                  memories={this.state.memories}
                                  total_memories={this.state.memoriesTotal}
+                                 calendaries_cloud={this.state.query.in_calendaries}
                                  onLoadRequest={this.onLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}

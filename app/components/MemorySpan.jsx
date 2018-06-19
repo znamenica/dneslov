@@ -16,6 +16,10 @@ export default class MemorySpan extends Component {
       onLoadRequest: null,
    }
 
+   state = {
+      icon_url: this.props.icon_url
+   }
+
    // system
    componentDidMount() {
       this.$avatar.addEventListener('click', this.onAvatarClick.bind(this))
@@ -36,24 +40,37 @@ export default class MemorySpan extends Component {
       this.props.onLoadRequest(this.props.slug)
    }
 
+   onLoadImageError() {
+      console.log("ERROR")
+      this.setState({ icon_url: null })
+   }
+
    // props
+   hasNoImage() {
+      return !this.state.icon_url
+   }
+
    hasImage() {
-      return !!this.props.icon_url
+      return !this.hasNoImage()
    }
 
    render() {
       console.log("PROPS", this.props)
+      console.log("STATE", this.state)
 
       return (
-         <li className='collection-item avatar memory View_child'>
+         <li className='collection-item avatar memory'>
             <div className='collapsible-header'>
                <a
                   ref={e => this.$avatar = e}
                   key='avatar'
                   href={this.props.url} >
                   {this.hasImage() &&
-                     <img className='circle z-depth-1' src={this.props.icon_url}></img>}
-                  {!this.hasImage() &&
+                     <img
+                        className='circle z-depth-1'
+                        onError={this.onLoadImageError.bind(this)}
+                        src={this.state.icon_url} />}
+                  {this.hasNoImage() &&
                      <i className='material-icons circle terracota z-depth-1'>perm_identity</i>}</a>
                <Chip
                   color={this.props.order.color}
@@ -65,7 +82,7 @@ export default class MemorySpan extends Component {
                <Chip
                   className='year-date'
                   text={this.props.year} /></div>
-            {this.props.description &&
-               <div className='collapsible-body'
-                  onClick={this.onSpanClick.bind(this)} >
-                  <span>{this.props.description}</span></div>}</li>)}}
+            <div className='collapsible-body'
+               onClick={this.onSpanClick.bind(this)} >
+               {this.props.description &&
+                  <span>{this.props.description}</span>}</div></li>)}}

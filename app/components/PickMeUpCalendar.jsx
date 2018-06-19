@@ -95,18 +95,29 @@ export default class PickMeUpCalendar extends Component {
 
       this.$calendar.append(cal)
       this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
-      this.$calendar.querySelector('.pmu-yesterday').addEventListener('click', this.onYesterdayClick.bind(this))
-      this.$calendar.querySelector('.pmu-tomorrow').addEventListener('click', this.onTomorrowClick.bind(this))
-      this.$calendar.querySelector('input[name="calendar-style"]').addEventListener('click', this.onChangeStyle.bind(this))
+      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
+         el.addEventListener('click', this.onYesterdayClick.bind(this))
+      })
+      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
+         el.addEventListener('click', this.onTomorrowClick.bind(this))
+      })
+      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
+         el.addEventListener('click', this.onChangeStyle.bind(this))
+      })
    }
 
    componentWillUnmount() {
-      this.$calendar.empty()
+      this.$calendar.remove()
       this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
-      this.$calendar.querySelector('.pmu-yesterday').removeEventListener('click', this.onYesterdayClick.bind(this))
-      this.$calendar.querySelector('.pmu-tomorrow').removeEventListener('click', this.onTomorrowClick.bind(this))
-      this.$calendar.querySelector('input[name="calendar-style"]').removeEventListener('click', this.onChangeStyle.bind(this))
-      console.log("UUUUUUUUUUUUUUUUUMO")
+      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
+         el.removeEventListener('click', this.onYesterdayClick.bind(this))
+      })
+      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
+         el.removeEventListener('click', this.onTomorrowClick.bind(this))
+      })
+      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
+         removeEventListener('click', this.onChangeStyle.bind(this))
+      })
    }
 
    onPickmeupRender() {
@@ -119,6 +130,7 @@ export default class PickMeUpCalendar extends Component {
 
    onYesterdayClick(e) {
       let date = this.pmu.get_date()
+
       date.setDate(date.getDate() - 1)
       this.pmu.set_date(date)
       this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
@@ -129,6 +141,7 @@ export default class PickMeUpCalendar extends Component {
 
    onTomorrowClick(e) {
       let date = this.pmu.get_date()
+
       date.setDate(date.getDate() + 1)
       this.pmu.set_date(date)
       this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
@@ -138,7 +151,9 @@ export default class PickMeUpCalendar extends Component {
    }
 
    onChangeStyle(e) {
-      let new_calendar_style = e.target.getAttribute('value')
+      let radio_id = e.target.getAttribute('for'),
+          radio = e.target.parentElement.querySelector('#' + radio_id),
+          new_calendar_style = radio.getAttribute('value')
 
       if (new_calendar_style != this.state.calendar_style) {
          let new_date = this.pmu.get_date()

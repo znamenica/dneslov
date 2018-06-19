@@ -43,21 +43,11 @@ export default class Chip extends Component {
    }
 
    closeClassName() {
-      return 'material-icons close ' + (this.state.action || '')
+      return 'material-icons unfix ' + (this.state.action || '')
    }
 
    actionIcon() {
       return this.state.action == 'remove' && 'close' || this.state.action
-   }
-
-   actionRender() {
-      let action = null
-
-      if (this.state.action) {
-         action = <i className={this.closeClassName()} onClick={this.onAct.bind(this)} >{this.actionIcon()}</i>
-      }
-
-      return action
    }
 
    textRender() {
@@ -74,10 +64,26 @@ export default class Chip extends Component {
       return text
    }
 
+   hasDefaultText() {
+      return !this.props.children && !this.props.url
+   }
+
    render() {
       return (
          <div
             className={this.className()}
             style={{ backgroundColor: '#' + this.props.color }} >
-            {this.textRender()}
-            {this.actionRender()}</div>)}}
+            {this.props.children}
+            {this.props.url &&
+               <a
+                  href={this.props.url}
+                  target='_blank' >
+                  {this.props.text}</a>}
+            {this.hasDefaultText() &&
+               <span>
+                  {this.props.text}</span>}
+            {this.state.action &&
+               <i
+                  className={this.closeClassName()}
+                  onClick={this.onAct.bind(this)} >{
+                  this.actionIcon()}</i>}</div>)}}
