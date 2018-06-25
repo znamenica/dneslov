@@ -102,11 +102,14 @@ class Memory < ActiveRecord::Base
    def order_for language_code
       orders.where(language_code: language_code).first ;end
 
+   def all_titles_for language_code
+      Description.title.all_by_memory(self).with_lang(language_code) ;end
+
    def all_descriptions_for language_code
-      Description.all_by_memory(self).where(language_code: language_code) ;end
+      Description.common.all_by_memory(self).with_lang(language_code) ;end
 
    def description_for language_code
-      descriptions.where(language_code: language_code).first ;end
+      descriptions.with_lang(language_code).first ;end
 
    def beings_for language_code
       abeings = beings.where(language_code: language_code)

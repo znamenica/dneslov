@@ -12,13 +12,17 @@ class Description < ActiveRecord::Base
                  type: nil)
           .merge(Memo.in_calendaries(calendary_slug)).distinct ;end
 
+   scope :common, -> { self.where(type: nil) }
+   scope :title, -> { self.where(type: 'Title') }
+   scope :with_lang, ->(lang) { where(language_code: lang) }
+
    scope :all_by_memory, ->(memory) do
       ids = memory.memos.select(:id).notice
 
-      self.where(type: nil)
-        .merge(where(describable_type: "Memory",
-                     describable_id: memory.id)
-           .or(where(describable_type: "Memo",
-                     describable_id: ids))) ;end
+      self.merge(where(describable_type: "Memory",
+                       describable_id: memory.id)
+             .or(where(describable_type: "Memo",
+                       describable_id: ids))) ;end
+
 
    validates :text, :language_code, :alphabeth_code, presence: true ; end

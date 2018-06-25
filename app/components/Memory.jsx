@@ -11,6 +11,7 @@ export default class Memory extends Component {
    static defaultProps = {
       slug: null,
       short_name: null,
+      titles: [],
       descriptions: [],
       names: [],
       councils: [],
@@ -48,6 +49,29 @@ export default class Memory extends Component {
       })
    }
 
+   calculateDefaultCalendary(props = this.props) {
+      return props.selected_calendaries.reduce((cal, calendary_slug) => {
+         if (!cal) {
+            cal = props.titles.reduce((cal, title) => {
+               if (!cal && title.calendary == calendary_slug) {
+                  cal = calendary_slug
+               }
+
+               return cal
+            }, null)
+         }
+
+         return cal
+      }, null)
+   }
+
+   title() {
+      var cal = this.calculateDefaultCalendary(),
+          title = this.props.titles.find((title) => { return title.calendary == cal })
+
+      return title.text
+   }
+
    render() {
       console.log("MEMORY", this.props)
 
@@ -60,7 +84,7 @@ export default class Memory extends Component {
                         color={this.props.order.color}
                         text={this.props.order.slug} />
                      <Name
-                        short_name={this.props.short_name}
+                        short_name={this.title()}
                         names={this.props.names} />
                      <Chip
                         className='year-date'

@@ -1,11 +1,22 @@
 class CommonMemorySerializer < ApplicationSerializer
-   attributes :short_name, :slug, :descriptions, :year, :order, :councils
+   attributes :titles, :short_name, :slug, :descriptions, :year, :order, :councils
 
    def slug
       object.slug.text ;end
 
+   def titles
+      @titles ||= (
+         titles = object.all_titles_for( locales )
+
+         if locales.include?(:ру)
+            titles |= [ Title.new(text: object.short_name) ] ;end
+
+         ActiveModel::Serializer::CollectionSerializer.new(titles,
+            serializer: TitleSerializer,
+            locales: locales)) ;end
+
    def short_name
-      object.short_name ;end
+      self.titles.first.text ;end
 
    def descriptions
       ActiveModel::Serializer::CollectionSerializer.new(object.all_descriptions_for( locales ),

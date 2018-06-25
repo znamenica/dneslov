@@ -36,6 +36,29 @@ export default class MemorySpans extends Component {
       }, null)
    }
 
+   calculateDefaultCalendaryIn(array) {
+      return this.props.calendaries_cloud.reduce((cal, calendary_slug) => {
+         if (cal) {
+            return cal
+         } else {
+            return array.reduce((cal, value) => {
+               if (!cal && value.calendary == calendary_slug) {
+                  return calendary_slug
+               } else {
+                  return cal
+               }
+            }, null)
+         }
+      }, null)
+   }
+
+   titleFirst(memory) {
+      var cal = this.calculateDefaultCalendaryIn(memory.titles),
+          title = memory.titles.find((title) => { return title.calendary == cal })
+
+      return title.text
+   }
+
    render() {
       console.log("memorie spans", this.props)
 
@@ -52,8 +75,8 @@ export default class MemorySpans extends Component {
                      <MemorySpan
                         key={memory.slug}
                         slug={memory.slug}
-                        short_name={memory.short_name}
-                        default_calendary_name={memory.default_calendary_name}
+                        short_name={this.short_name}
+                        default_calendary_name={this.titleFirst(memory)}
                         url={memory.url}
                         icon_url={memory.icon_url}
                         year={memory.year}

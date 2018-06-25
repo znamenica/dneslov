@@ -168,7 +168,7 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoryLoadSuccess(response) {
-      let memory= response.data, state = assign({}, this.state, { memory: memory })
+      let memory = response.data, state = assign({}, this.state, { memory: memory })
 
       console.log("Loaded memory", memory)
 
