@@ -32,7 +32,7 @@ export default class CommonModal extends Component {
 
    componentDidMount() {
       this.modal = M.Modal.init(this.$modal, {
-         complete: this.props.onCloseModal.bind(this)
+         onCloseEnd: this.props.onCloseModal.bind(this)
       })
    }
 
