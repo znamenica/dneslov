@@ -15,6 +15,9 @@ export default class DynamicField extends Component {
       key_name: null,
       value_name: null,
       field_name: 'text_id',
+      filter: null,
+      filter_key: null,
+      filter_value: null,
       name: 'text',
       subname: null,
       wrapperClassName: null,
@@ -31,6 +34,8 @@ export default class DynamicField extends Component {
       value_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       field_name: PropTypes.string.isRequired,
+      filter: PropTypes.object,
+      filter_key: PropTypes.string,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -202,13 +207,31 @@ export default class DynamicField extends Component {
 
    triggerListBy(text) {
       if (!this.triggered) {
+         let data = { with_token: text }
+
+         if (this.props.filter) {
+            Object.keys(this.props.filter).forEach((key) => {
+               console.log(data, this.props.filter)
+               if (this.props.filter[key]) {
+                  data[key] = this.props.filter[key]
+               }
+            })
+         }
+
+         if (this.props.filter_key) {
+            if (this.props.filter_key && this.props.filter_value) {
+               data[this.props.filter_key] = this.props.filter_value
+            }
+         }
+
          this.triggered = text
 
          var request = {
-            data: { with_token: text },
+            data: data,
             url: '/' + this.props.pathname + '.json',
          }
 
+         console.log("Sending...",data, 'to /' + this.props.pathname + '.json')
          Axios.get(request.url, { params: request.data })
            .then(this.onSuccessLoad.bind(this))
            .catch(this.onErrorLoad.bind(this))

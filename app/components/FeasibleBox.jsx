@@ -1,47 +1,10 @@
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 
-// TODO this can't be used in arrays since the only first box is checked at all
-export default class FeasibleBox extends Component {
+import BooleanBox from 'BooleanBox'
+
+export default class FeasibleBox extends BooleanBox {
    static defaultProps = {
-      feasible: null,
-      wrapperClassName: null,
-      onUpdate: null,
+      name_key: 'feasible',
+      title: 'Вероятное'
    }
-
-   static propTypes = {
-      feasible: PropTypes.bool,
-      wrapperClassName: PropTypes.string.isRequired,
-      onUpdate: PropTypes.func.isRequired,
-   }
-
-   state = {
-      feasible: this.props.feasible || false
-   }
-
-   componentWillReceiveProps(nextProps) {
-      if (nextProps != this.props) {
-         this.setState({feasible: nextProps.feasible || false})
-      }
-   }
-
-   onCheck(e) {
-      let value = e.target.checked
-
-      this.setState({feasible: value})
-      this.props.onUpdate({feasible: value})
-   }
-
-   render() {
-      console.log(this.props)
-      console.log(this.state)
-
-      return (
-         <div
-            className={this.props.wrapperClassName}>
-            <label>
-               <input
-                  type='checkbox'
-                  onChange={this.onCheck.bind(this)}
-                  checked={this.state.feasible} />
-               <span>Вероятное</span></label></div>)}}
+}

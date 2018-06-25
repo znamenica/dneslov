@@ -1,6 +1,6 @@
-import FilteredDynamicField from 'FilteredDynamicField'
+import DynamicField from 'DynamicField'
 
-export default class EventField extends FilteredDynamicField {
+export default class EventField extends DynamicField {
    static defaultProps = {
       pathname: 'short_events',
       name: 'event',
