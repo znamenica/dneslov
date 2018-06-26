@@ -106,7 +106,7 @@ class Memory < ActiveRecord::Base
       Description.title.all_by_memory(self).with_lang(language_code) ;end
 
    def all_descriptions_for language_code
-      Description.common.all_by_memory(self).with_lang(language_code) ;end
+      Description.desc.all_by_memory(self).with_lang(language_code) ;end
 
    def description_for language_code
       descriptions.with_lang(language_code).first ;end

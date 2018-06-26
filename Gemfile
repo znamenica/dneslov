@@ -129,6 +129,7 @@ group :test do
    gem "capybara"
    gem 'capybara-webkit'
    gem "email_spec"
+   gem 'travis'
 end
 
 group :production do

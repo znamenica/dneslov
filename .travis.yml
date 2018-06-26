@@ -10,5 +10,6 @@ env:
    global:
     - BUNDLE_JOBS=4
 before_script:
+ - cp -f config/secret_env.yml config/secrets.yml
  - psql -c "CREATE ROLE dneslov WITH SUPERUSER CREATEDB LOGIN PASSWORD '';" -U postgres
  - bundle exec rake db:create db:migrate

@@ -7,7 +7,7 @@ module JwToken
             exp: 4.hours.from_now.to_i,
             iat: Time.now.to_i
          }
-         JWT.encode payload, Rails.application.secrets.github[:jwt_secret], 'HS256' ;end
+         JWT.encode payload, Rails.application.secrets.jwt_secret, 'HS256' ;end
 
       def decode token
          options = {
@@ -17,4 +17,4 @@ module JwToken
             leeway: 30,
             algorithm: 'HS256'
          }
-         JWT.decode token, Rails.application.secrets.github[:jwt_secret], true, options ;end;end;end
+         JWT.decode token, Rails.application.secrets.jwt_secret, true, options ;end;end;end
