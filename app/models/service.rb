@@ -9,11 +9,11 @@ class Service < ActiveRecord::Base
    has_many :orisons, through: :service_cantoes, foreign_key: :canto_id, source: :canto, dependent: :destroy
    has_many :canticles, through: :service_cantoes, foreign_key: :canto_id, source: :canto, dependent: :destroy
 
-#   has_alphabeth on: :name # TODO rollback
+   has_alphabeth on: :name
 
    accepts_nested_attributes_for :cantoes
    accepts_nested_attributes_for :chants
    accepts_nested_attributes_for :orisons
    accepts_nested_attributes_for :canticles
 
-   validates :name, :language_code, :info, :info_type, presence: true ;end
+   validates :name, :language_code, :info, presence: true ;end

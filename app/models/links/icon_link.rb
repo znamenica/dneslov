@@ -7,7 +7,7 @@ class IconLink < Link
 
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank
 
-   # validates :url, format: { with: /\.(?i-mx:jpg|png)\z/ }
+   # validates :url, format: { with: /\.(?i-mx:jpg|png)\z/ } # TODO
    validates :descriptions, associated: true
    validate :url, :accessible_image
 

@@ -45,14 +45,17 @@
          - :alphabeth_code: :ср
            :language_code: :сх
            :text: Бранко
+           :bind_kind: переводное
            :bond_to: *1
          - :alphabeth_code: :гр
            :language_code: :гр
            :text: Αλέξιος
+           :bind_kind: переводное
            :bond_to: *1
          - :alphabeth_code: :ан
            :language_code: :ан
            :text: Valentin
+           :bind_kind: переводное
            :bond_to: *2
          """
       То будут существовать русские личные имена "Валентин, Алексей"

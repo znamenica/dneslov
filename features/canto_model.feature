@@ -54,10 +54,14 @@
         | language_code    | ру              |
         | text             | Тропаря текстJ  |
         | type             | ---\n...        |
+        | prosomeion_title | Тропаря текстW  |
+        | title            | Тропаря текстR  |
       То русских песм не будет
       И увидим сообщение песмы об ошибке:
          """
          Text contains invalid char(s) "J" for the specified alphabeth "ру"
+         Prosomeion_title contains invalid char(s) "W" for the specified alphabeth "ру"
+         Title contains invalid char(s) "R" for the specified alphabeth "ру"
          Type can't be blank
          """
 
@@ -70,6 +74,7 @@
         | text           | Тропаря текст  |
         | tone           | 9              |
         | type           | Troparion      |
+        | title          | Тропаря титул  |
       То русских песнопений не будет
       И увидим сообщение песнопение об ошибке:
          """
@@ -86,6 +91,7 @@
         | tone             | 9               |
         | type             | Troparion       |
         | prosomeion_title | ---\n...        |
+        | title            | Тропаря титул   |
       То русских песнопений не будет
       И увидим сообщение спевны об ошибке:
          """
@@ -103,6 +109,7 @@
         | tone             | 8                  |
         | prosomeion_title | Василию подобен    |
         | type             | Troparion          |
+        | title            | Тропаря титул   |
       То русское песнопенье "Василию песнопение" будет существовать
 
 
@@ -115,6 +122,7 @@
         | tone             | 1               |
         | type             | Canticle        |
         | prosomeion_title | Василию подобен |
+        | title            | Тропаря титул   |
       То русских песнопений не будет
       И увидим сообщение спевны об ошибке:
          """
@@ -129,10 +137,12 @@
         | language_code  | гр                   |
         | text           | Василию песнопение   |
         | type           | Troparion            |
+        | title          | Тропаря титул        |
       То греческого песнопения "Василию песнопение" не будет
       И увидим сообщение песнопение об ошибке:
          """
          Text contains invalid char(s) "Ваеилнопсю" for the specified alphabeth "гр"
+         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "гр"
          """
 
    @chant
@@ -158,6 +168,7 @@
         | text             | Василию величание     |
         | prosomeion_title | ---\n...              |
         | tone             | ---\n...              |
+        | title            | Тропаря титул         |
       То русское моление "Василию величание" будет существовать
 
 
@@ -169,8 +180,10 @@
         | text             | Василию величание  |
         | prosomeion_title | ---\n...           |
         | tone             | ---\n...           |
+        | title            | Тропаря титул      |
       То греческого моления "Василию величание" не будет
       И увидим сообщение моление об ошибке:
          """
          Text contains invalid char(s) "Вавеилнсчю" for the specified alphabeth "гр"
+         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "гр"
          """

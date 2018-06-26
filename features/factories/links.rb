@@ -13,11 +13,13 @@ FactoryGirl.define do
       association :info, factory: :memory
 
       after( :build ) do |link, e|
-         if e.description != false
-            link.description = build :description, describable: link
-            end ; end
+         link.descriptions << build(:description, describable: link) ;end
+
+      trait :without_descriptions do
+         after( :build ) do |link, e|
+            link.descriptions.map(&:destroy) ;end;end
 
       trait :with_invalid_description do
          after( :build ) do |link, e|
-            link.description = build :invalid_description, describable: link
-            end ;end ;end ;end
+            link.descriptions << build(:invalid_description, describable: link)
+            end;end;end;end

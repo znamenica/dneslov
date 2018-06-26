@@ -6,13 +6,14 @@
    memory = Memory.where( short_name: short_name ).first
    name = Name.where( text: nametext ).first
    if !memory.names.include? name
-      memory.names << name ; end ; end
+      mn = MemoryName.new(name: name, state: :наречёное)
+      memory.memory_names << mn ; end ; end
 
 Допустим(/^применим входные данные модели имени:$/) do |string|
    data = YAML.load( string )
    data.each do |r|
       extract_key_to( r, :bond_to )
-      name = Name.create( r ) ; end ; end
+      name = Name.create!( r ) ; end ; end
 
 То(/^будут существовать русские личные имена "([^"]*)"$/) do |names|
    names.split( /,\s+/ ).each do |name|

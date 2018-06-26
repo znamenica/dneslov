@@ -1,7 +1,7 @@
 Допустим(/^есть памятное имя (.*) относящееся к памяти "([^"]*)"$/) do |nametext, short_name|
    memory = Memory.where( short_name: short_name ).first
    name = Name.where( text: nametext ).first
-   find_or_create MemoryName, name: name, memory: memory ;end
+   find_or_create MemoryName, name: name, memory: memory, state: :наречёное ;end
 
 То(/^свойства '(.*)' памятного имени "([^"]*)" являются отношением$/) do |attrs, nametext|
    memory_name = MemoryName.where( name: Name.where( text: nametext ).first ).first

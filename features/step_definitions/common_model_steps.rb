@@ -54,6 +54,9 @@
    expect( subject ).to have_one( prop ).dependent( :destroy ) ; end
 
 То(/^свойство "([^"]*)" модели есть включения описания с зависимостями удаления$/) do |prop|
+   expect( subject ).to have_many( prop ).dependent( :destroy ) ; end
+
+То(/^свойство "([^"]*)" модели есть включения описания с зависимостями стирания$/) do |prop|
    expect( subject ).to have_many( prop ).dependent( :delete_all ) ; end
 
 То(/^(?:(?:#{langs_re}) )?(#{kinds_re}) "([^"]*)" будет действительн(?:ой|ым)$/) do |kind, prop|

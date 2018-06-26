@@ -18,9 +18,9 @@ class Memo < ActiveRecord::Base
 
    has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
    has_many :services, as: :info, inverse_of: :info
-   has_many :titles, proc { where( type: 'Title' ) }, as: :describable, dependent: :delete_all
+   has_many :descriptions, -> { desc }, as: :describable, dependent: :delete_all
+   has_many :titles, -> { title }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
-   has_many :descriptions, proc { where( type: nil ) }, as: :describable, dependent: :delete_all
 
    has_one :memory, through: :event
 

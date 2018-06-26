@@ -17,8 +17,6 @@ require 'factory_girl'
 require 'faker'
 require 'ffaker'
 
-Dotenv.load('.env.sample')
-
 FactoryGirl.definition_file_paths = %w(features/factories)
 FactoryGirl.lint
 World( FactoryGirl::Syntax::Methods )

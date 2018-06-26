@@ -13,7 +13,7 @@ class MemoryName < ActiveRecord::Base
    accepts_nested_attributes_for :name, reject_if: :all_blank
 
    validates_presence_of :memory, :name
-   # validates :state, inclusion: { in: states.keys } # TODO later after import
+   validates :state, inclusion: { in: states.keys }
 
    def name_attributes= value
       self.name = Name.where(value).first || super && name ;end

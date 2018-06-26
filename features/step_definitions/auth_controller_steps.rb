@@ -7,12 +7,12 @@
 
 Допустим("есть имя описанное как:") do |string|
    attrs = YAML.load( string )
-   Bukovina::Importers::Name.new( attrs ).import ;end
+   Name.create!( attrs ) ;end
 
 Если("запросим короткие имена") do
    header 'Accept', 'application/json'
    header 'Content-Type', 'application/json'
-   @response = get('/short_names.json', session = { 'jwt': @token }) ;end
+   @response = get('/short_names.json', session: { 'jwt': @token }) ;end
 
 Если("сделаем {string} запрос к адресу {string} с параметром {string}") do |proto, address, parms|
    @response = send( proto.downcase, address, parms ) ;end

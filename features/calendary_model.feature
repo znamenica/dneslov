@@ -87,6 +87,6 @@
       То увидим сообщение календаря об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "I" for the specified alphabeth "ру"
+         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "ру"
          """
       И календаря "клнд" не будет

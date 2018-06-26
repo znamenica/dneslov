@@ -1,7 +1,7 @@
 FactoryGirl.define do
    factory :memory_name do
       state :наречёное
-      feasibly :non_feasible
+      feasible true
 
       association :memory, factory: :memory
       association :name, factory: :name
