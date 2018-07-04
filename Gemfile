@@ -45,7 +45,7 @@ gem 'slim-rails', '~> 3.1.2'
 # Use Simple Forms for forms
 # gem "simple_form"
 # Use Sass for Rails for CSS
-gem "sass-rails"
+gem "sass-rails" # TODO blow it out
 # gem "bootstrap-sass"
 # Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
 # gem 'rest-client', '~> 1.8.0'
