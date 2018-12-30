@@ -3,6 +3,14 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
+## Status
+
+[![Build Status](https://api.travis-ci.org/znamenica/dneslov.png?branch=master)](https://travis-ci.org/znamenica/dneslov.png)
+[![Code Climate](https://codeclimate.com/github/znamenica/dneslov/badges/gpa.svg)](https://codeclimate.com/github/znamenica/dneslov)
+[![Test Coverage](https://codeclimate.com/github/znamenica/dneslov/badges/coverage.svg)](https://codeclimate.com/github/znamenica/dneslov)
+[![Scan Coverage](https://scan.coverity.com/projects/17554/badge.svg?flat=1)](https://scan.coverity.com/projects/znamenica-dneslov)
+[![MIT License](http://b.repl.ca/v1/License-MIT-blue.png)](LICENSE)
+
 ## Dump test DB to production
 
 locally execute:
