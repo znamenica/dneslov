@@ -19,6 +19,7 @@ before_script:
  - gem install bundler
  - createuser -d -l -s -e -U postgres dneslov
  - bundle exec rake db:create db:migrate
+ - cp -f config/secret_env.yml config/secrets.yml
  - ./cc-test-reporter before-build
 
 before_install:
