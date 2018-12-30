@@ -19,8 +19,8 @@ before_script:
  - gem update --system
  - gem --version
  - gem install bundler
- - psql -c 'create database dneslov;' -U postgres
- - bundle exec rake db:migrate
+ - createuser -d -l -e -U postgres dneslov
+ - bundle exec rake db:create db:migrate
  - ./cc-test-reporter before-build
 
 before_install:
