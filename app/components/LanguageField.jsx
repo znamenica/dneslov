@@ -33,6 +33,7 @@ export default class LanguageField extends SelectField {
          ир: 'Ирландский',
          си: 'Староирландский',
          ан: 'Английский',
+         ев: 'Иврит',
       },
       validations: {
          'Пункт из списка должен быть выбран': /^$/,

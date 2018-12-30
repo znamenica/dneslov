@@ -92,6 +92,9 @@ export function matchLetters(e) {
       case 'ра':
          res = ! e.text.match(/^[A-IL-PR-UW-YÆÐꝽÞǷĊĠĀĒĪŌŪa-il-pr-uw-yæðᵹſþƿċġāēīūō:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
          break
+      case 'ев':
+         res = ! e.text.match(/^[א-ת׳״שׁ-זּטּ-לּמּנּסּףּפּצּ-ﭏ֑-ׇ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
+         break
       }
    }
 

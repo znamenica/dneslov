@@ -47,6 +47,8 @@ class AlphabethValidator < ActiveModel::EachValidator
    GERMAN_STROKE = 'a-zäöüßſ'
    UKRAINIAN_CAPITAL = 'А-ЩЬЮЯЄІЇҐ'
    UKRAINIAN_STROKE = 'а-щьюяєіїґ'
+   HEBREW_STROKE = 'א-תשׁ-זּטּ-לּמּנּסּףּפּצּ-ﭏ'
+   HEBREW_ACCENT = '׳״ׇ֑-ׇ'
 
    RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9–№†0-9IVXLCDM'
    HIP_SYNTAX = ' 0-9\(\[\{\/\'\+\.\:\!"=~@#\$%\^&\*_\)\]\}\\\\`\-,;?\|'
@@ -69,6 +71,7 @@ class AlphabethValidator < ActiveModel::EachValidator
    FRENCH_SYNTAX = ' \(\)\.,’\/0-9'
    SPANISH_SYNTAX = ' \(\)\.,0-9'
    GERMAN_SYNTAX = ' \(\)\.,0-9'
+   HEBREW_SYNTAX = ' \(\)\.,0-9'
 
    SPECIFIC_SYNTAX = '\*~`\+\-#=>\[\]\(\)!'
 
@@ -77,8 +80,9 @@ class AlphabethValidator < ActiveModel::EachValidator
       ROMANIAN_CAPITAL + OLD_ENGLISH_CAPITAL + IVERIAN_CAPITAL + GERMAN_CAPITAL + UKRAINIAN_CAPITAL + MIDDLE_ENGLISH_CAPITAL
    DOWNCHAR = RUSSIAN_STROKE + MODIFIED_RUSSIAN_STROKE + CSLAV_STROKE + SERBIAN_STROKE + GREEK_STROKE +
       ENGLISH_STROKE + LATIN_STROKE + CZECH_STROKE + ARMENIAN_STROKE +
-      IVERIAN_STROKE + ROMANIAN_STROKE + OLD_ENGLISH_STROKE + GERMAN_STROKE + UKRAINIAN_STROKE + MIDDLE_ENGLISH_STROKE
-   ACCENT = GREEK_ACCENT + RUSSIAN_ACCENT + CSLAV_ACCENT + FRENCH_ACCENT
+      IVERIAN_STROKE + ROMANIAN_STROKE + OLD_ENGLISH_STROKE + GERMAN_STROKE + UKRAINIAN_STROKE + MIDDLE_ENGLISH_STROKE +
+      HEBREW_STROKE
+   ACCENT = GREEK_ACCENT + RUSSIAN_ACCENT + CSLAV_ACCENT + FRENCH_ACCENT + HEBREW_ACCENT
    CHAR = DOWNCHAR + UPCHAR
 
    # TODO уравнять с LANGUAGE_TREE.alphabeths
@@ -105,6 +109,7 @@ class AlphabethValidator < ActiveModel::EachValidator
       :фр => FRENCH_SYNTAX,
       :ис => SPANISH_SYNTAX,
       :не => GERMAN_SYNTAX,
+      :ев => HEBREW_SYNTAX,
       # ЧИНЬ: сс, сц, цр, мк, со, сл, по, кш, вл, нл, цу
    }
 
@@ -131,6 +136,7 @@ class AlphabethValidator < ActiveModel::EachValidator
       :фр => "#{FRENCH_CAPITAL}#{FRENCH_STROKE}#{FRENCH_ACCENT}#{SPECIFIC_SYNTAX}",
       :ис => "#{SPANISH_CAPITAL}#{SPANISH_STROKE}#{SPECIFIC_SYNTAX}",
       :не => "#{GERMAN_CAPITAL}#{GERMAN_STROKE}#{SPECIFIC_SYNTAX}",
+      :ев => "#{HEBREW_STROKE}#{HEBREW_ACCENT}#{SPECIFIC_SYNTAX}",
    }
 
    def plain_options
