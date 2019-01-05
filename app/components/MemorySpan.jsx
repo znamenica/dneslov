@@ -1,4 +1,6 @@
 import { Component } from 'react'
+import ReactMarkdown from 'react-markdown'
+
 import Chip from 'Chip'
 import Name from 'Name'
 
@@ -82,7 +84,7 @@ export default class MemorySpan extends Component {
                <Chip
                   className='year-date'
                   text={this.props.year} /></div>
-            <div className='collapsible-body'
+            <div className='collapsible-body description'
                onClick={this.onSpanClick.bind(this)} >
                {this.props.description &&
-                  <span>{this.props.description}</span>}</div></li>)}}
+                  <ReactMarkdown source={this.props.description} />}</div></li>)}}

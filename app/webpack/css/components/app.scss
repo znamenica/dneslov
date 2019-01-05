@@ -1,7 +1,73 @@
 @import "defines";
 
-
 body {
+   .description {
+      strong {
+         font-weight: bolder;
+      }
+
+      em {
+         font-style: italic;
+      }
+
+      p, ul, ol, h1, h2, h3, h4 {
+         padding-top: 0.5em;
+         margin: 0;
+
+         &:first-child {
+            padding-top: 0;
+            margin-top: 0;
+         }
+      }
+
+      ul, ol {
+         padding-left: 2em;
+         display: block;
+         -webkit-margin-start: 0px;
+         -webkit-margin-end: 0px;
+         -webkit-padding-start: 2em;
+
+         ul {
+            li {
+               display: list-item;
+               text-align: -webkit-match-parent;
+            }
+         }
+      }
+
+      ul {
+         li {
+            list-style-type: circle;
+         }
+      }
+
+      h1 {
+         font-size: 200%;
+         margin: 0;
+         padding-bottom: 1em;
+      }
+
+      h2 {
+         font-size: 150%;
+         margin: 0;
+         padding-bottom: 0.8em;
+      }
+
+      h3 {
+         font-weight: bolder;
+         font-size: 100%;
+         margin: 0;
+         padding-bottom: 0.5em;
+      }
+
+      h4 {
+         font-style: italic;
+         font-size: 100%;
+         margin: 0;
+         padding-bottom: 0.2em;
+      }
+   }
+
    .name {
       margin: 0;
 

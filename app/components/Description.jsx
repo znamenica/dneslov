@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import ReactDOM from 'react-dom'
+import ReactMarkdown from 'react-markdown'
 import PropTypes from 'prop-types'
 import M from 'materialize-css'
 
@@ -140,5 +141,5 @@ export default class Description extends Component {
                                  text='Общее описание' />
                            }
                         </div>
-                        <div className="collapsible-body">
-                            {description.text}</div></li>)}</ul>}</div>)}}
+                        <div className="collapsible-body description">
+                           <ReactMarkdown source={description.text} /></div></li>)}</ul>}</div>)}}
