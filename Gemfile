@@ -7,7 +7,7 @@ end
 
 ruby '2.3.4'
 
-gem 'rails', '~> 5.1.1'
+gem 'rails', '~> 5.1.6.2' # CVE-2019-5418
 # Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
 gem 'rack', '~> 2.0'
 gem 'pg'
