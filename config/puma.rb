@@ -29,10 +29,16 @@ elsif Rails.env.development?
    threads_count = Integer(ENV['MAX_THREADS'] || 1)
    port = ENV['PORT'] || 33333
    host = ENV['HOST'] || '0.0.0.0'
+   key = ENV['SSL_KEY_PATH'] || File.join(ENV['HOME'], '.ssh', 'dneslov.dev.server.key')
+   cert = ENV['SSL_CERT_PATH'] || Rails.root.join('config/server.crt')
 
    worker_timeout 3600
    workers Integer(ENV['WEB_CONCURRENCY'] || 1)
-   bind "tcp://#{host}:#{port}"
+   ssl_bind host, port, {
+      key: key,
+      cert: cert,
+      verify_mode: 'none'
+   }
    rackup DefaultRackup
 end
 

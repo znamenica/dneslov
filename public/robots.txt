@@ -3,3 +3,18 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-agent: *
 # Disallow: /
+
+User-agent: *
+
+Disallow: /account/
+Disallow: /articles/dwqa-answer/
+Disallow: /qa/t/
+Disallow: /qa/c/
+Disallow: *?*
+Disallow: /wp-content/
+
+Allow: *.js*
+Allow: *.css*
+
+Host: https://dneslov.org/
+Sitemap: https://dneslov.org/sitemap.xml
