@@ -12,6 +12,10 @@ $stdout.puts "{puma.rb}: rails_env: #{rails_env}, ENV[RAILS_ENV]: #{ENV['RAILS_E
 
 environment rails_env
 
+def root
+  File.expand_path('../..', __FILE__)
+end
+
 if Rails.env.production?
    app_dir = File.expand_path("../..", __FILE__)
    shared_dir = File.expand_path("#{app_dir}/../../shared")
@@ -30,7 +34,7 @@ elsif Rails.env.development?
    port = ENV['PORT'] || 33333
    host = ENV['HOST'] || '0.0.0.0'
    key = ENV['SSL_KEY_PATH'] || File.join(ENV['HOME'], '.ssh', 'dneslov.dev.server.key')
-   cert = ENV['SSL_CERT_PATH'] || Rails.root.join('config/server.crt')
+   cert = ENV['SSL_CERT_PATH'] || File.join(root, 'config/server.crt')
 
    worker_timeout 3600
    workers Integer(ENV['WEB_CONCURRENCY'] || 1)
