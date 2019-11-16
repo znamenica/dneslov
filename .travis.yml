@@ -2,10 +2,11 @@ dist: xenial
 language: ruby
 postgresql: 9.6.10
 rvm:
- - 2.5.1
+ - 2.5.5
 env:
    global:
     - BUNDLE_JOBS=4
+    - RAILS_ENV=test
 
 addons:
    apt_packages:
@@ -14,22 +15,17 @@ addons:
     - libqtwebkit4
 
 before_script:
- - gem update --system
- - gem --version
- - gem install bundler
  - createuser -d -l -s -e -U postgres dneslov
  - bundle exec rake db:create db:migrate
  - cp -f config/secret_env.yml config/secrets.yml
  - ./cc-test-reporter before-build
 
 before_install:
- - bundle install
  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
  - chmod +x ./cc-test-reporter
 
 script:
  - bundle exec rake cucumber
- - bundle audit
 
 after_script:
  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

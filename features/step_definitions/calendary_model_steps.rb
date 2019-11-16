@@ -2,14 +2,14 @@
    create( :calendary, slug: slug ) ;end
 
 Допустим(/^попробуем создать календарь "([^"]*)"$/) do |slug|
-   sample { create( :calendary, slug: slug ) } ; end
+   sample { try_create( :calendary, slug: slug ) } ; end
 
 Допустим(/^попробуем создать календарь "([^"]*)" без описания$/) do |slug|
-   sample { create( :calendary, slug: slug, descriptions: false,
+   sample { try_create( :calendary, slug: slug, descriptions: false,
       names: false ) } ; end
 
 Если(/^попробуем создать новый календарь "([^"]*)" с неверным описанием$/) do |slug|
-   sample { create :calendary, :with_invalid_description, slug: slug } ; end
+   sample { try_create :calendary, :with_invalid_description, slug: slug } ; end
 
 То(/^у модели есть действенным многоимущее свойство "([^"]*)"$/) do |prop|
    expect( subject ).to have_many( prop ) ;end
@@ -21,7 +21,7 @@
          .dependent( hash[ "зависимость" ] ) ;end;end
 
 Если(/^создадим календарь "([^"]*)"$/) do |slug|
-   FactoryGirl.create( :calendary, slug: slug ) ;end
+   FactoryBot.create( :calendary, slug: slug ) ;end
 
 То(/^календарь "([^"]*)" будет иметь "([^"]*)" описание$/) do |slug, count|
    exa = Calendary.includes( :slug ).where( slugs: { text: slug } ).first

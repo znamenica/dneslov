@@ -2,15 +2,10 @@
  * Webpack config with Babel, Sass and PostCSS support.
  */
 
-var path = require('path');
-var join = path.join
+global.env = process.env.RAILS_ENV || process.env.NODE_ENV || 'development'
 
-if (process.env.RAILS_ENV === undefined) {
-   global.env = process.env.NODE_ENV || 'development'
-} else {
-   global.env = process.env.RAILS_ENV
-}
-
+const path = require('path');
+const join = path.join
 var PROD = global.env === 'production'
 var DEBUG = !PROD
 
@@ -20,13 +15,11 @@ if (__dirname.match(/config/)) {
    global.rootpath = __dirname
 }
 
-console.log("Rails root:", global.rootpath)
+console.log("Env:", global.env)
+console.log("Root:", global.rootpath)
 
 var webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const smartImport = require("postcss-smart-import")
-const extractCSS = new ExtractTextPlugin({ filename: '[name].css', allChunks: true })
-//const postcssOpts = {postcss: {plugins: [autoprefixer(autoprefixerOpts)], sourceMap: true}}
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssOpts = {sourceMap: true}
 
 module.exports = {
@@ -48,24 +41,30 @@ module.exports = {
    },
 
    module: {
-      loaders: [
+      // noParse: /lodash/, // ignore parsing for modules ex.lodash
+
+      rules: [
          {
             test: /~$/,
             loader: 'ignore-loader'
          },
          {
-            test: /\.css$/,
-            loader: extractCSS.extract([ 'css-loader?minimize', 'postcss-loader' ])
-         },
-         {
-            test: /\.scss$/,
-            //loader: DEBUG
-            //  ? ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader?-url&sourceMap&importLoaders=1!postcss-loader?sourceMap=inline!sass-loader?sourceMap'})
-            loader : extractCSS.extract({
-               fallback: 'style-loader',
-               use: [ 'css-loader?-url&sourceMap&importLoaders=1',
-                      'sass-loader?sourceMap' ]
-            })
+            test: /\.(sa|sc|c)ss$/,
+            use: [
+               {
+                  loader: MiniCssExtractPlugin.loader,
+                  options: {
+                     // you can specify a publicPath here
+                     // by default it uses publicPath in webpackOptions.output
+                     // publicPath: '../',
+                     hmr: DEBUG,
+                     reloadAll: true,
+                  },
+               },
+               'css-loader',
+               'postcss-loader',
+               'sass-loader',
+            ],
          },
          {
             test: /\.(png|jpe?g|gif|svg)$/,
@@ -98,9 +97,9 @@ module.exports = {
    },
 
    plugins: [
-      // allChunks will preserve source maps
-      new ExtractTextPlugin({ filename: '[name].css.erb', allChunks: true }),
-      extractCSS,
+      new MiniCssExtractPlugin({ filename: '[name].css',
+                                 chunkFilename: '[id].css',
+                                 ignoreOrder: DEBUG ? false : true }),
 
       // Ignore locales because it's around 400kb
       // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

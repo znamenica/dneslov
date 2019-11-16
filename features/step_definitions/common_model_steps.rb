@@ -3,7 +3,7 @@
 
 Допустим(/^попробуем создать (?:новую |новый )?(#{kinds_re}) с полями:$/) do |kind, table|
    attrs = table.rows_hash.map { |attr, value| [ attr, YAML.load(value) ] }.to_h
-   sample { create( model_of( kind ).to_s.tableize.singularize.to_sym, attrs ) } ; end
+   sample { try_create( model_of( kind ).to_s.tableize.singularize.to_sym, attrs ) } ; end
 
 То(/^значение свойства "([^"]*)" .*? строго попадает в размер перечислителя$/) do |prop|
    begin

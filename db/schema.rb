@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180626111500) do
+ActiveRecord::Schema.define(version: 2018_06_26_111500) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "btree_gin"
+  enable_extension "plpgsql"
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
     t.string "date"

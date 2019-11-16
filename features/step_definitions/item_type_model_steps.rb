@@ -1,8 +1,8 @@
 Если(/^попробуем создать новый тип предмета без описаний$/) do
-   sample { create :item_type, descriptions: [] }
+   sample { try_create :item_type, ru_description: false }
 end
 
 Если(/^попробуем создать новый тип предмета с неверным описанием$/) do
-   sample { create :item_type,
-      descriptions: FactoryGirl.build_list( :invalid_description, 1 ) }
+   sample { try_create :item_type,
+      descriptions: FactoryBot.build_list( :invalid_description, 1 ) }
 end

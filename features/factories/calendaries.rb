@@ -1,14 +1,14 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :calendary do
-      date { Faker::Date.forward(23) }
+     date { Faker::Date.forward(days: 23) }
       author_name { Faker::Superhero.name }
-      language_code :ру
-      alphabeth_code :ру
+      language_code { :ру }
+      alphabeth_code { :ру }
 
       transient do
-         slug nil
-         descriptions true
-         names true ;end
+         slug { nil }
+         descriptions { true }
+         names { true } ;end
 
       after( :build ) do |calendary, e|
          if e.slug.present?

@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :event do
-      happened_at Date.today.to_s
+      happened_at { Date.today.to_s }
       type { 'Canonization' }
 
       association :item

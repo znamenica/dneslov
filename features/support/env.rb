@@ -13,13 +13,13 @@ require 'rspec/expectations'
 require 'cucumber/rails'
 
 require 'shoulda-matchers'
-require 'factory_girl'
+require 'factory_bot'
 require 'faker'
 require 'ffaker'
 
-FactoryGirl.definition_file_paths = %w(features/factories)
-FactoryGirl.lint
-World( FactoryGirl::Syntax::Methods )
+FactoryBot.definition_file_paths = %w(features/factories)
+FactoryBot.lint
+World( FactoryBot::Syntax::Methods )
 World( Rack::Test::Methods )
 
 Shoulda::Matchers.configure do |config|

@@ -104,18 +104,23 @@ module MacrosSupport
 
       new_attrs ;end
 
-   def create model, *args
+   def try_create model, *args
       search_attrs = args.select { |x| x.is_a?(Hash) }.first
       attrs = args.select { |x| x.is_a?(Hash) }.last
       new_attrs = expand_attributes( model, search_attrs )
 
       if model.is_a?( Symbol )
          syms = args.select { |x| x.is_a?(Symbol) }
-         object = FactoryGirl.build( model, *syms, new_attrs )
+         object = FactoryBot.build( model, *syms, new_attrs )
          object.save
          object
       else
          model.create( attrs.merge( new_attrs ) ) ;end ;end
+
+   def create model, *args
+      object = try_create(model, *args)
+      object.save!
+      object ;end
 
    def find_or_create model, search_attrs, attrs = {}
       new_attrs = expand_attributes( model, search_attrs )
