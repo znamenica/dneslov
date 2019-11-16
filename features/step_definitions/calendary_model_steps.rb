@@ -21,7 +21,7 @@
          .dependent( hash[ "зависимость" ] ) ;end;end
 
 Если(/^создадим календарь "([^"]*)"$/) do |slug|
-   FactoryGirl.create( :calendary, slug: slug ) ;end
+   FactoryBot.create( :calendary, slug: slug ) ;end
 
 То(/^календарь "([^"]*)" будет иметь "([^"]*)" описание$/) do |slug, count|
    exa = Calendary.includes( :slug ).where( slugs: { text: slug } ).first

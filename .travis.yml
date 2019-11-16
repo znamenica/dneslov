@@ -2,7 +2,7 @@ dist: xenial
 language: ruby
 postgresql: 9.6.10
 rvm:
- - 2.5.1
+ - 2.5.5
 env:
    global:
     - BUNDLE_JOBS=4
@@ -17,6 +17,7 @@ before_script:
  - gem update --system
  - gem --version
  - gem install bundler
+ - bundle install --jobs=3 --retry=3 --deployment
  - createuser -d -l -s -e -U postgres dneslov
  - bundle exec rake db:create db:migrate
  - cp -f config/secret_env.yml config/secrets.yml

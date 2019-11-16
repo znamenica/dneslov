@@ -3,4 +3,4 @@
 
 Если(/^попробуем создать новое место с неверным описанием$/) do
    sample { create :place,
-      descriptions: FactoryGirl.build_list( :invalid_description, 1 ) } ;end
+      descriptions: FactoryBot.build_list( :invalid_description, 1 ) } ;end

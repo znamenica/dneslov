@@ -5,17 +5,15 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '2.5.1'
+ruby '2.5.5'
 
-gem 'rails', '~> 5.1.6.2' # CVE-2019-5418
-# Explicitly defined to fix CVE-2015-3225 - POTENTIAL DENIAL OF SERVICE VULNERABILITY
-gem 'rack', '~> 2.0'
+gem 'rails', '~> 5.2.3'
 gem 'pg'
 #NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
 
 # Use Uglifier as compressor for JavaScript assets
-# gem 'uglifier', '>= 2.7.2'
+gem 'uglifier', '>= 2.7.2'
 # Use CoffeeScript for .js.coffee assets and views
 # gem 'coffee-rails', '~> 4.2.2'
 
@@ -34,32 +32,10 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem "figaro"
 
-# Slim html renderer
-gem 'slim-rails', '~> 3.1.2'
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
-
-# Use Simple Forms for forms
-# gem "simple_form"
-# Use Sass for Rails for CSS
-gem "sass-rails" # TODO blow it out
-# gem "bootstrap-sass"
-# Explicitly defined: to fix OSVDB-119878 - SESSION FIXATION VULNERABILITY VIA SET-COOKIE HEADERS
-# gem 'rest-client', '~> 1.8.0'
-
-# Explicitly defined to fix CVE-2015-7499 - HEAP-BASED BUFFER OVERFLOW VULNERABILITY IN LIBXML2 and other in LIBXML2
-# and CVE-2015-8806 - Denial of service or RCE from libxml2 and libxslt
-# and 3 security alerts
-# USN-3424-1 - Vulnerabilities in libxml2
-# CVE-2017-5029 - Upstream libxslt vulnerabilities
-# CVE-2016-4658 - libxml2 vulnerabilities
-gem 'nokogiri', '~> 1.8.1'
-
-# Fix CVE-2018-8048
-gem 'rails-html-sanitizer', '~> 1.0.4'
 
 ## controllers
 gem 'has_scope'
@@ -69,7 +45,6 @@ gem 'validate_url'
 
 # view
 ## NPM packaging
-gem 'webpacker'
 gem 'npm-pipeline-rails'
 
 ## pagination
@@ -107,7 +82,7 @@ end
 
 group :development, :test do
    gem 'ruby-prof'
-   gem "factory_girl_rails"
+   gem "factory_bot_rails"
    gem 'pry', '~> 0.10.4'
    gem 'pry-rails', '~> 0.3.6'
    gem 'listen', '>= 3.0.5', '< 3.2'
@@ -134,6 +109,6 @@ group :test do
 end
 
 group :production do
-   gem 'puma', '~> 3.7'
+   gem 'puma', '~> 4.2'
 end
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :slug do
       text { Faker::Internet.slug }
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :canto do
       text { Faker::Lorem.paragraph }
       prosomeion_title { Faker::Lorem.word }

@@ -1,22 +1,35 @@
 // Note: You must restart bin/webpack-dev-server for changes to take effect
 
+const { join } = require('path')
+const { env } = require('process')
 const merge = require('webpack-merge')
 const sharedConfig = require('./base.config.js')
-const { settings, output } = require('./configuration.js')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const webpack = require('webpack')
+
+function removeOuterSlashes(string) {
+  return string.replace(/^\/*/, '').replace(/\/*$/, '')
+}
+
+function formatPublicPath(host = '', path = '') {
+  let formattedHost = removeOuterSlashes(host)
+  if (formattedHost && !/^http/i.test(formattedHost)) {
+    formattedHost = `//${formattedHost}`
+  }
+  const formattedPath = removeOuterSlashes(path)
+  return `${formattedHost}/${formattedPath}/`
+}
 
 module.exports = merge(sharedConfig, {
    devtool: 'cheap-module-eval-source-map',
 
    devServer: {
       clientLogLevel: 'none',
-      https: settings.dev_server.https,
-      host: settings.dev_server.host,
-      port: settings.dev_server.port,
-      contentBase: output.path,
-      publicPath: output.publicPath,
+      https: false,
+      host: "0.0.0.0",
+      port: "8080",
+      contentBase: join(global.rootpath, 'public', ''),
+      publicPath: formatPublicPath(env.ASSET_HOST, ''),
       compress: true,
       headers: { 'Access-Control-Allow-Origin': '*' },
       historyApiFallback: true,
@@ -25,8 +38,10 @@ module.exports = merge(sharedConfig, {
       }
    },
 
+   mode: "development",
+
    module: {
-      loaders: [
+      rules: [
          {
             test: /\.(js|jsx)$/,
             use: [{
@@ -46,7 +61,6 @@ module.exports = merge(sharedConfig, {
                            "useBuiltIns": true
                         },
                      ],
-                     //"es2015",
                      "stage-0",
                      "stage-2",
                      "react",
@@ -84,9 +98,6 @@ module.exports = merge(sharedConfig, {
    },
 
    plugins: [
-      new UglifyJsPlugin({
-         sourceMap: true
-      }),
       new LiveReloadPlugin({
          appendScriptTag: true
       }),

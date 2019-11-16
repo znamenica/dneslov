@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :calendary do
       date { Faker::Date.forward(23) }
       author_name { Faker::Superhero.name }
