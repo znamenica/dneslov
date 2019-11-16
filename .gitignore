@@ -24,6 +24,7 @@
 /node_modules
 
 /node_modules
+/vendor/assets/
 /vendor/assets/stylesheets/
 /vendor/assets/javascripts/
 

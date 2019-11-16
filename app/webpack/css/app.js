@@ -1,7 +1,6 @@
 // http://stackoverflow.com/a/30652110/873870
 function requireAll (r) { r.keys().forEach(r) }
 
-import 'materialize-css/sass/ghpages-materialize.scss'
 import 'materialize-css/sass/materialize.scss'
 import 'pickmeup/css/pickmeup.scss'
 import 'intro.js/introjs.css'

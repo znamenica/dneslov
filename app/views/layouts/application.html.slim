@@ -1,7 +1,0 @@
-html
-   head
-      title = [ 'Днеслов', @memory&.short_name ].compact.join(' – ')
-      = stylesheet_pack_tag 'app'
-      = javascript_pack_tag 'app'
-      = csrf_meta_tags
-   body = yield

@@ -111,7 +111,7 @@ module MacrosSupport
 
       if model.is_a?( Symbol )
          syms = args.select { |x| x.is_a?(Symbol) }
-         object = FactoryGirl.build( model, *syms, new_attrs )
+         object = FactoryBot.build( model, *syms, new_attrs )
          object.save
          object
       else

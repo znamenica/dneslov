@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :link do
       url { FFaker::Internet.http_url } ; end
 

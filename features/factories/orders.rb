@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :order do
       text { FFaker::NameRU.first_name }
       alphabeth_code :ру

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
    factory :item_type do
       transient do
          ru_description 'Текст' ;end
