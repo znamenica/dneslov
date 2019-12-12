@@ -18,11 +18,11 @@ before_script:
  - createuser -d -l -s -e -U postgres dneslov
  - bundle exec rake db:create db:migrate
  - cp -f config/secret_env.yml config/secrets.yml
+ - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+ - chmod +x ./cc-test-reporter
  - ./cc-test-reporter before-build
 
 before_install:
- - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
- - chmod +x ./cc-test-reporter
 
 script:
  - bundle exec rake cucumber
