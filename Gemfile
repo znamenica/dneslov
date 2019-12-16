@@ -54,7 +54,7 @@ gem 'kaminari'
 gem 'active_model_serializers'
 
 ## authentication
-gem 'excon', '~> 0.60.0'
+gem 'excon', '~> 0.71.0'
 gem 'jwt'
 
 ## authorization
