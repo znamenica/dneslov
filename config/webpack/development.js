@@ -99,7 +99,8 @@ module.exports = merge(sharedConfig, {
 
    plugins: [
       new LiveReloadPlugin({
-         appendScriptTag: true
+         appendScriptTag: true,
+         protocol: 'http'
       }),
    ],
 
