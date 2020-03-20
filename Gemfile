@@ -25,7 +25,7 @@ gem 'uglifier', '>= 2.7.2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'sdoc', '~> 1.0.0', group: :doc
 
 # gem 'globalize'
 # gem 'globalize-versioning'
@@ -99,13 +99,13 @@ group :test do
    gem 'shoulda-matchers', github: 'majioa/shoulda-matchers', branch: 'allow_to_use_the_matchers_with_just_rspec_expectations_gem'
    gem 'rspec-expectations'
    gem 'rspec-wait'
-   gem 'simplecov'
+   gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
    gem "launchy"
    gem "capybara"
-   gem 'capybara-webkit'
+   gem 'capybara-webkit', '>= 1.15.1'
    gem "email_spec"
-   gem 'travis'
+   gem 'travis', '>= 1.8.10'
 end
 
 group :production do
