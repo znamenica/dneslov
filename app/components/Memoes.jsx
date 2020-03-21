@@ -1,5 +1,5 @@
 import Records from 'Records'
-import MemoModal from 'MemoModal'
+import MemoForm from 'MemoForm'
 import MemoRow from 'MemoRow'
 
 export default class Memoes extends Records {
@@ -7,15 +7,23 @@ export default class Memoes extends Records {
       keyName: 'memo',
       keyNames: 'memoes',
       remoteNames: 'memoes',
-      title: 'Помины',
-      headers: [ 'Дата',
-                 'Дата добавления',
-                 'Событие',
-                 'Связка',
-                 'Связано с датою',
-                 'Календарь',
-                 'Память' ],
-      modal: MemoModal,
+      i18n: {
+         title: 'Помины',
+         new: 'Новый помин',
+         headers: [ 'Дата',
+                    'Дата добавления',
+                    'Событие',
+                    'Связка',
+                    'Связано с датою',
+                    'Календарь',
+                    'Память' ],
+         form: {
+            close: 'Закрой',
+            update: 'Обнови помин',
+            create: 'Создай помин',
+         }
+      },
+      form: MemoForm,
       row: MemoRow,
       memoes: {
          list: [],

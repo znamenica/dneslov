@@ -1,5 +1,5 @@
 import Records from 'Records'
-import CalendaryModal from 'CalendaryModal'
+import CalendaryForm from 'CalendaryForm'
 import CalendaryRow from 'CalendaryRow'
 
 export default class Calendaries extends Records {
@@ -7,15 +7,23 @@ export default class Calendaries extends Records {
       keyName: 'calendary',
       keyNames: 'calendaries',
       remoteNames: 'calendaries',
-      title: 'Календари',
-      headers: [ 'Имя',
-                 'thumb_up',
-                 'Язык',
-                 'Азбука',
-                 'Автор',
-                 'Дата',
-                 'Собор' ],
-      modal: CalendaryModal,
+      i18n: {
+         title: 'Календари',
+         new: 'Новый календарь',
+         headers: [ 'Имя',
+                    'thumb_up',
+                    'Язык',
+                    'Азбука',
+                    'Автор',
+                    'Дата',
+                    'Собор' ],
+         form: {
+            close: 'Закрой',
+            update: 'Обнови календарь',
+            create: 'Создай календарь',
+         }
+      },
+      form: CalendaryForm,
       row: CalendaryRow,
       calendaries: {
          list: [],

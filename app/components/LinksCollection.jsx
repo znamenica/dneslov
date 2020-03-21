@@ -14,7 +14,6 @@ export default class LinksCollection extends LanguagedCollection {
          "Языки в ссылках не могут совпадать": matchLanguages,
          "Азбуки в ссылках не могут совпадать": matchAlphabeths,
       },
-      child_validations: {},
       child_value_validations: {
          "Ссылка отсутствует": /^$/,
          "Неверный формат ссылки": [ "!", UrlRegexp ],

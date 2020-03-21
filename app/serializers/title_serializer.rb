@@ -1,5 +1,5 @@
 class TitleSerializer < ApplicationSerializer
-   attributes :text, :calendary
+   attributes :id, :text, :calendary, :language_code, :alphabeth_code
 
    def text
       object.text ;end

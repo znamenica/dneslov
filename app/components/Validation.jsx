@@ -9,25 +9,34 @@ const Validation = {
       return this.validations
    },
 
-   getError(value) {
-      let error = null
+   getErrorText(value_in, context_in = {}) {
+      let context = assign({}, this.constructor.validation_context, context_in),
+          error = null,
+          value = value_in || ''
 
       Object.entries(this.getValidations()).forEach(([e, rule]) => {
-         switch(typeof rule) {
-         case 'object':
-            switch(rule.constructor.name) {
-            case 'RegExp':
-               if ((value || "").match(rule)) {
-                  error = e
-               }
-            case 'Array':
-               if (rule[0] === '!' && !(value || "").match(rule[1])) {
+         switch(rule.constructor.name) {
+         case 'RegExp':
+            switch(value.constructor.name) {
+            case 'Object':
+               //console.log(value, Object.values(value))
+               //console.log(Object.values(value).forEach((v) => { console.log(typeof v.match !== "undefined", rule, v, typeof v.match !== "undefined" && v.match(rule), e) }))
+               error = Object.values(value).reduce((res, v) => { return res || typeof v.match !== "undefined" && v.match(rule) && e }, undefined)
+               break
+            case 'String':
+               if (typeof value.match !== "undefined" && value.match(rule)) {
                   error = e
                }
             }
             break
-         case 'function':
-            if (rule(value)) {
+         case 'Array':
+            if (rule[0] === '!' && !value.match(rule[1])) {
+               error = e
+            }
+            break
+         case 'Function':
+            console.log(value_in, rule)
+            if (rule(value_in, context)) {
                error = e
             }
          }
@@ -35,20 +44,6 @@ const Validation = {
 
       return error
    },
-
-   updateError(value) {
-      this.error = this.getError(value)
-
-      if (this.$error) {
-         this.$error.setState({error: this.error})
-      }
-
-      return this.error
-   },
-
-   isValid() {
-      return !this.error
-   }
 }
 
 export default Validation

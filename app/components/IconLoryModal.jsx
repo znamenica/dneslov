@@ -10,7 +10,7 @@ export default class IconLoryModal extends Component {
    state = { loadCounter: 0 }
 
    // system
-   componentWillReceiveProps(nextProps) {
+   getSnapshotBeforeUpdate() {
       this.setState({ loadCounter: 0 })
    }
 
@@ -41,6 +41,7 @@ export default class IconLoryModal extends Component {
    }
 
    componentReady() {
+      console.log(this.$modal)
       this.modal = M.Modal.init(this.$modal, {})
       this.lory = lory(this.$lory, {
          slideSpeed: 750,

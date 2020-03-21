@@ -7,7 +7,7 @@ import TextField from 'TextField'
 import LanguageField from 'LanguageField'
 import AlphabethField from 'AlphabethField'
 import ErrorSpan from 'ErrorSpan'
-import { matchCodes } from 'matchers'
+import { matchCodes, matchLetters } from 'matchers'
 import Validation from 'Validation'
 
 @mixin(Validation)
@@ -16,62 +16,42 @@ export default class LanguagedTextField extends Component {
       _id: null,
       key_name: null,
       textField: false,
-      language_code: '',
-      alphabeth_code: '',
+      name: null,
       title: 'Текст',
       placeholder: 'Введи текст',
-      onUpdate: null,
       validations: {},
       value_validations: {
-         "Текст отсутствует": /^$/
+         'Текст отсутствует': /^$/,
       },
    }
 
    static propTypes = {
       key_name: PropTypes.string.isRequired,
-      language_code: PropTypes.string,
-      alphabeth_code: PropTypes.string,
-      onUpdate: PropTypes.func.isRequired,
+      name: PropTypes.string,
       value_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
    }
 
-   static validations = {
-      'Избранный язык не соотвествует избранной азбуке': matchCodes,
-   }
+ //  state = {}
 
-   properties = {
-      value: this.props[this.props.key_name],
-      language_code: this.props.language_code,
-      alphabeth_code: this.props.alphabeth_code,
-   }
-
-   // system
-   componentWillReceiveProps(nextProps) {
-      if (this.props[this.props.key_name] != nextProps[nextProps.key_name]) {
-         this.setState({[this.props.key_name]: nextProps[nextProps.key_name]})
-         this.updateError(nextProps[nextProps.key_name] || '')
-      }
-   }
-
-   componentWillMount() {
-      this.r = new Array
-   }
-
-   componentWillUpdate() {
-      this.r = new Array
-   }
+//   static getDerivedStateFromProps(props, state) {
+//      return {
+///         value: props[props.key_name],
+//         language_code: props.language_code,
+//         alphabeth_code: props.alphabeth_code,
+//      }
+//   }
 
    // events
-   onChange(property) {
-      this.properties = assign(this.properties, property)
-      this.updateError(this.properties)
-      if (this.props._id) {
-         this.props.onUpdate({[this.props._id]: property})
-      } else {
-         this.props.onUpdate(property)
-      }
-   }
+//   onChange(property) {
+//      this.properties = assign(this.properties, property)
+//      this.updateError(this.properties)
+//      if (this.props._id) {
+//         this.props.onUpdate({[this.props._id]: property})
+//      } else {
+//         this.props.onUpdate(property)
+//      }
+//   }
 
    getTextClass() {
       if (this.props.textField) {
@@ -89,38 +69,47 @@ export default class LanguagedTextField extends Component {
       }
    }
 
+   nameForKey(key_name) {
+      let name
+
+      if (this.props.name) {
+         name = this.props.name + '.' + key_name
+      } else {
+         name = key_name
+      }
+
+      return name
+   }
+
    render() {
       console.log(this.props)
+      console.log(this.props.value)
+      console.log(this.props.validations)
+      console.log(this.validations)
+      console.log(this.constructor.validations)
+      console.log(this.getValidations())
+      console.log(this.getErrorText(this.props.value))
 
-      let embed = { [this.props.key_name]: this.props[this.props.key_name] }
-
-      return (
-         <div className='row' key='lang'>
-            <TextField
-               ref={e => this.r.push(e)}
-               key='value'
-               title={this.props.title}
-               placeholder={this.props.placeholder}
-               name={this.props.key_name}
-               textArea={this.props.textField}
-               validations={this.props.value_validations}
-               wrapperClassName={this.getTextClass()}
-               {...embed}
-               onUpdate={this.onChange.bind(this)} />
-            <LanguageField
-               ref={e => this.r.push(e)}
-               key='languageCode'
-               language_code={this.props.language_code}
-               wrapperClassName={this.getSelectClass()}
-               onUpdate={this.onChange.bind(this)} />
-            <AlphabethField
-               ref={e => this.r.push(e)}
-               key='alphabethCode'
-               alphabeth_code={this.props.alphabeth_code}
-               wrapperClassName={this.getSelectClass()}
-               onUpdate={this.onChange.bind(this)} />
-            <div className="col">
-               <ErrorSpan
-                  key='error'
-                  error={this.getError(this.properties)}
-                  ref={e => this.$error = e} /></div></div>)}}
+      return [
+         <TextField
+            key='value'
+            title={this.props.title}
+            placeholder={this.props.placeholder}
+            name={this.nameForKey(this.props.key_name)}
+            textArea={this.props.textField}
+            validations={this.props.value_validations}
+            wrapperClassName={this.getTextClass()}
+            value={this.props.value[this.props.key_name]} />,
+         <LanguageField
+            key='languageCode'
+            name={this.nameForKey('language_code')}
+            value={this.props.value['language_code']}
+            wrapperClassName={this.getSelectClass()} />,
+         <AlphabethField
+            key='alphabethCode'
+            name={this.nameForKey('alphabeth_code')}
+            value={this.props.value['alphabeth_code']}
+            wrapperClassName={this.getSelectClass()} />,
+         <ErrorSpan
+            appendClassName='col xl12 l12 m12 s12'
+            error={this.getErrorText(this.props.value)} />]}}

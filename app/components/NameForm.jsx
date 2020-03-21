@@ -3,6 +3,7 @@ import NameField from 'NameField'
 import NameBindKindField from 'NameBindKindField'
 import CommonForm from 'CommonForm'
 import ErrorSpan from 'ErrorSpan'
+import { matchLetters, matchCodes } from 'matchers'
 
 export default class NameForm extends CommonForm {
    static defaultProps = {
@@ -10,11 +11,21 @@ export default class NameForm extends CommonForm {
       text: '',
       language_code: '',
       alphabeth_code: '',
-      root_id: '',
+      root_id: undefined,
       root: '',
       bind_kind: '',
-      bond_to_id: '',
+      bond_to_id: undefined,
       bond_to: '',
+      child_validations: {
+         'Избранный язык не соотвествует избранной азбуке': matchCodes,
+         'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
+      },
+      child_value_validations: {
+         "Имя отсутствует": /^$/
+      },
+
+      remoteName: 'name',
+      remoteNames: 'names',
    }
 
    static validations = {
@@ -29,53 +40,51 @@ export default class NameForm extends CommonForm {
       },
    }
 
-   render() {
-      console.log(this.props)
-      console.log(this.query)
+   static getCleanState() {
+      return {
+         id: undefined,
+         text: '',
+         language_code: '',
+         alphabeth_code: '',
+         root_id: undefined,
+         root: '',
+         bind_kind: '',
+         bond_to_id: undefined,
+         bond_to: '',
+      }
+   }
 
-      return (
-         <div>
-            <LanguagedTextField
-               key='languagedTextField'
-               ref={e => this.r.push(e)}
-               title='Написание имени'
-               placeholder='Введи написание имени'
-               text={this.query.text}
-               language_code={this.query.language_code}
-               alphabeth_code={this.query.alphabeth_code}
-               value_validations={this.props.child_value_validations}
-               validations={this.props.child_validations}
-               key_name='text'
-               onUpdate={this.onChildUpdate.bind(this)} />
-               <NameField
-                  ref={e => this.r.push(e)}
-                  key='bondTo'
-                  field_name='bond_to_id'
-                  name='bond_to'
-                  title='Связаное имя'
-                  bond_to_id={this.query.bond_to_id}
-                  bond_to={this.query.bond_to}
-                  wrapperClassName='input-field col xl4 l4 m6 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} />
-               <NameBindKindField
-                  ref={e => this.r.push(e)}
-                  key='bindKind'
-                  name='bind_kind'
-                  bind_kind={this.query.bind_kind}
-                  wrapperClassName='input-field col xl4 l4 m6 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} />
-               <NameField
-                  ref={e => this.r.push(e)}
-                  key='root'
-                  field_name='root_id'
-                  name='root'
-                  title='Корневое имя'
-                  root_id={this.query.root_id}
-                  root={this.query.root}
-                  wrapperClassName='input-field col xl4 l4 m12 s12'
-                  onUpdate={this.onChildUpdate.bind(this)} />
-               <div className='col'>
-                  <ErrorSpan
-                     ref={e => this.$error = e}
-                     error={this.getError(this.query)}
-                     key='error' /></div></div>)}}
+   renderContent() {
+      return [
+         <LanguagedTextField
+            key='languagedTextField'
+            title='Написание имени'
+            placeholder='Введи написание имени'
+            value={this.state.query}
+            value_validations={this.props.child_value_validations}
+            validations={this.props.child_validations}
+            key_name='text' />,
+         <NameField
+            key='bondTo'
+            name='bond_to_id'
+            humanized_name='bond_to'
+            title='Связаное имя'
+            value={this.state.query.bond_to_id}
+            humanized_value={this.state.query.bond_to}
+            wrapperClassName='input-field col xl4 l4 m6 s12' />,
+         <NameBindKindField
+            key='bindKind'
+            name='bind_kind'
+            value={this.state.query.bind_kind}
+            wrapperClassName='input-field col xl4 l4 m6 s12' />,
+         <NameField
+            key='root'
+            name='root_id'
+            humanized_name='root'
+            title='Корневое имя'
+            value={this.state.query.root_id}
+            humanized_value={this.state.query.root}
+            wrapperClassName='input-field col xl4 l4 m12 s12' />,
+         <ErrorSpan
+            appendClassName='col xl12 l12 m12 s12'
+            error={this.getErrorText(this.state.query)} />]}}

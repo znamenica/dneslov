@@ -50,26 +50,26 @@ export default class MemoryRow extends Component {
       onRemove: PropTypes.func.isRequired,
    }
 
-   componentWillMount() {
-      this.date = this.makeDate()
-      this.description = this.makeDescription()
-      this.council = this.makeCouncil()
-   }
-
-   componentWillReceiveProps(nextProps) {
-      if (this.props.events != nextProps.events) {
+   // system
+   getSnapshotBeforeUpdate(prevProps, prevState) {
+      if (this.props.events != prevProps.events) {
          this.date = this.makeDate()
       }
 
-      if (this.props.descriptions != nextProps.descriptions) {
+      if (this.props.descriptions != prevProps.descriptions) {
          this.description = this.makeDescription()
       }
 
-      if (this.props.council != nextProps.council) {
+      if (this.props.council != prevProps.council) {
          this.council = this.makeCouncil()
       }
+
+      return null
    }
 
+   componentDidUpdate() {}
+
+   // custom
    edit() {
       this.props.onEdit(this.props.id)
    }

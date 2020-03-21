@@ -40,18 +40,18 @@ export default class Description extends Component {
    }
 
    // system
-   componentWillMount() {
-      this.componentWillTouch()
-   }
+//   static getDerivedStateFromProps(props, _) {
+//      if (this.props != props) {
+//         this.setState(this.getDefaultState(nextProps))
+//      }
+//   }
 
-   componentWillReceiveProps(nextProps) {
-      if (this.props != nextProps) {
-         this.setState(this.getDefaultState(nextProps))
-      }
-   }
-
-   componentWillMount() {
+   getSnapshotBeforeUpdate() {
       this.componentWillTouch()
+//    before unmounting
+//      this.$slugs.forEach((slug) => {
+//         slug.removeEventListener('click', this.onSlugClick.bind(this))
+//      })
    }
 
    componentDidMount() {

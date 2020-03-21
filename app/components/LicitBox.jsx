@@ -4,7 +4,7 @@ import BooleanBox from 'BooleanBox'
 
 export default class LicitBox extends BooleanBox {
    static defaultProps = {
-      name_key: 'licit',
+      name: 'licit',
       title: 'Опубликовать'
    }
 }

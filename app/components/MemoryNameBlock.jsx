@@ -21,31 +21,21 @@ export default class MemoryNameBlock extends Component {
       state: null,
       feasible: null,
       mode: null,
-      onUpdate: null,
    }
 
    static propTypes = {
-      _id: PropTypes.string.isRequired,
-      name_id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      state: PropTypes.string.isRequired,
-      feasible: PropTypes.bool.isRequired,
-      mode: PropTypes.string.isRequired,
-      onUpdate: PropTypes.func.isRequired,
+      _id: PropTypes.string,
+      name_id: PropTypes.number,
+      name: PropTypes.string,
+      state: PropTypes.string,
+      feasible: PropTypes.bool,
+      mode: PropTypes.string,
    }
 
    // system
-   componentWillMount() {
-      this.r = new Array
-   }
-
-   componentDidUpdate() {
-      this.r = new Array
-   }
-
-   onChildUpdate(property) {
-      this.props.onUpdate({[this.props._id]: property})
-   }
+//   onChildUpdate(property) {
+//      this.props.onUpdate({[this.props._id]: property})
+//   }
 
    render() {
       console.log(this.props)
@@ -53,30 +43,27 @@ export default class MemoryNameBlock extends Component {
       return (
          <div className='row'>
             <NameField
-               ref={e => this.r.push(e)}
                key='nameId'
-               name_id={this.props.name_id}
-               name_text={this.props.name}
-               wrapperClassName='input-field col xl3 l3 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               name={this.props._id + '.name_id'}
+               humanized_name={this.props._id + '.name'}
+               value={this.props.name_id}
+               humanized_value={this.props.name}
+               wrapperClassName='input-field col xl3 l3 m4 s12' />
             <NameStateField
-               ref={e => this.r.push(e)}
                key='state'
-               name='state'
-               state={this.props.state}
-               wrapperClassName='input-field col xl3 l3 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               name={this.props._id + '.state'}
+               value={this.props.state}
+               wrapperClassName='input-field col xl3 l3 m4 s12' />
             <NameModeField
-               ref={e => this.r.push(e)}
                key='mode'
-               name='mode'
-               mode={this.props.mode}
-               wrapperClassName='input-field col xl3 l3 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               name={this.props._id + '.mode'}
+               value={this.props.mode}
+               wrapperClassName='input-field col xl3 l3 m4 s12' />
             <FeasibleBox
-               ref={e => this.r.push(e)}
                key='feasibleBox'
-               feasible={this.props.feasible}
-               wrapperClassName='fake-input-field col xl2 l2 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
-         </div>)}}
+               name={this.props._id + '.feasible_box'}
+               value={this.props.feasible}
+               wrapperClassName='fake-input-field col xl2 l2 m4 s12' />
+         </div>)
+   }
+}

@@ -47,9 +47,9 @@ export default class SearchField extends Component {
       this.setState(state)
    }
 
-   componentWillReceiveProps(nextProps) {
-      this.setState({with_text: nextProps.with_text, changed: false})
-   }
+//   componentWillReceiveProps(nextProps) {
+//      this.setState({with_text: nextProps.with_text, changed: false})
+//   }
 
    onKeyPress(e) {
       if (e.key === "Enter") {

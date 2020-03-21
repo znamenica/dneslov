@@ -35,7 +35,19 @@ export default class DynamicSelectField extends Component {
    }
 
    // system
-   componentWillMount() {
+   static getDerivedStateFromProps(props, state) {
+      if (this.state[this.props.name] != props[this.props.name]) {
+         let value = props[this.props.name] || ''
+         $(this.$select).material_select('destroy')
+         this.setState({[this.props.name]: value})
+         this.updateError(value)
+         this.$select.value = value
+         $(this.$select).material_select()
+         this.$wrap = this.$parent.querySelector('.select-wrapper')
+      }
+   }
+
+   getSnapshotBeforeUpdate(prevProps, prevState) {
       this.updateError(this.state[this.props.name])
    }
 
@@ -55,18 +67,6 @@ export default class DynamicSelectField extends Component {
          this.$wrap.classList.add('invalid')
       } else {
          this.$wrap.classList.remove('invalid')
-      }
-   }
-
-   componentWillReceiveProps(nextProps) {
-      if (this.state[this.props.name] != nextProps[this.props.name]) {
-         let value = nextProps[this.props.name] || ''
-         $(this.$select).material_select('destroy')
-         this.setState({[this.props.name]: value})
-         this.updateError(value)
-         this.$select.value = value
-         $(this.$select).material_select()
-         this.$wrap = this.$parent.querySelector('.select-wrapper')
       }
    }
 

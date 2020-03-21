@@ -21,30 +21,20 @@ export default class EventBlock extends Component {
       place_id: null,
       item_id: null,
       person_name: null,
-      onUpdate: null,
    }
 
    static propTypes = {
       _id: PropTypes.string.isRequired,
       happened_at: PropTypes.string,
-      type: PropTypes.string.isRequired,
+      type: PropTypes.string,
       place_id: PropTypes.number,
       item_id: PropTypes.number,
       person_name: PropTypes.string,
-      onUpdate: PropTypes.func.isRequired,
    }
 
    // system
-   componentWillMount() {
-      this.r = new Array
-   }
-
-   componentWillUpdate() {
-      this.r = new Array
-   }
-
    onChildUpdate(property) {
-      this.props.onUpdate({[this.props._id]: property})
+//      this.props.onUpdate({[this.props._id]: property})
    }
 
    render() {
@@ -53,44 +43,44 @@ export default class EventBlock extends Component {
       return (
          <div className='row'>
             <EventTypeField
-               ref={e => this.r.push(e)}
                key='type'
-               name='type'
-               type={this.props.type}
+               name={this.props._id + '.type'}
+               value={this.props.type}
                wrapperClassName='input-field col xl4 l4 m6 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <TextField
-               ref={e => this.r.push(e)}
                key='happenedAt'
-               name='happened_at'
+               name={this.props._id + '.happened_at'}
                title='Случилось в...'
                placeholder='Введи пору'
-               name='happened_at'
-               happened_at={this.props.happened_at}
+               value={this.props.happened_at}
                validations={this.props.value_validations}
                wrapperClassName='input-field col xl3 l3 m6 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <PlaceField
-               ref={e => this.r.push(e)}
                key='placeId'
+               name={this.props._id + '.place_id'}
+               humanized_name={this.props._id + '.place'}
                title='Место происшествия'
-               place_id={this.props.place_id}
-               place={this.props.place}
+               value={this.props.place_id}
+               humanized_value={this.props.place}
                wrapperClassName='input-field col xl5 l5 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <ItemField
-               ref={e => this.r.push(e)}
                key='itemId'
-               item_id={this.props.item_id}
-               item={this.props.item}
+               name={this.props._id + '.item_id'}
+               humanized_name={this.props._id + '.item'}
+               value={this.props.item_id}
+               humanized_value={this.props.item}
                wrapperClassName='input-field col xl6 l6 m4 s12'
                onUpdate={this.onChildUpdate.bind(this)} />
             <TextField
-               ref={e => this.r.push(e)}
                key='personName'
-               name='person_name'
+               name={this.props._id + '.person_name'}
                title='Имя связанной личности...'
                placeholder='Введи имя'
-               person_name={this.props.person_name}
+               value={this.props.person_name}
                wrapperClassName='input-field col xl6 l6 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} /></div>)}}
+               onUpdate={this.onChildUpdate.bind(this)} /></div>)
+   }
+}

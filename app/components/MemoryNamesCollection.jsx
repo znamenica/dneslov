@@ -35,76 +35,81 @@ export default class MemoryNamesCollection extends Component {
       onUpdate: PropTypes.func.isRequired,
    }
 
-   state = {
-      value: this.props.value
-   }
-
    // system
-   componentWillMount() {
-      this.r = new Array
-      this.updateError(this.state.value)
-   }
+//   static getDerivedStateFromProps(props, state) {
+//      console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
+//      if (this.props.value != nextProps.value) {
+//         this.state.value = nextProps.value
+//         this.updateError(nextProps.value)
+//      }
+//   }
 
-   componentWillUpdate() {
-      this.r = new Array
-      this.updateError(this.state.value)
-   }
-
-   componentWillReceiveProps(nextProps) {
-      console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
-      if (this.props.value != nextProps.value) {
-         this.state.value = nextProps.value
-         this.updateError(nextProps.value)
-      }
-   }
+//   getSnapshotBeforeUpdate() {
+//      this.updateError(this.state.value)
+//   }
 
    // events
    onAddItem() {
-      this.state.value[uuid()] = {}
-      this.updateError(this.state.value)
-      this.forceUpdate()
+      let key = uuid()
+      let detail = { [this.props.name]: { [key]: { _id: key } } }
+      let e = new CustomEvent('dneslov-update-path', { detail: detail })
+      document.dispatchEvent(e)
    }
 
-   onChildUpdate(property) {
-      this.updateError(this.state.value)
-      this.props.onUpdate({[this.props.name]: property})
-   }
-
-   // proprties
-   getElementWith(key, element) {
-      return assign({_id: key, key: key}, element, this.props.value[key] || {})
-   }
-
+//   onAddItem() {
+//      this.state.value[uuid()] = {}
+//      this.updateError(this.state.value)
+//      this.forceUpdate()
+//   }
+//
+//   onChildUpdate(property) {
+//      this.updateError(this.state.value)
+////      this.props.onUpdate({[this.props.name]: property})
+//   }
+//
+//   // proprties
+//   getElementWith(key, element) {
+//      return assign({_id: key, key: key}, element, this.props.value[key] || {})
+//   }
+//
+//   asArray() {
+//      let a = []
+//      Object.entries(this.state.value).forEach(([key, element]) => {
+//         a.push(this.getElementWith(key, element))
+//      })
+//
+//      return a
+//   }
+//
    asArray() {
-      let a = []
-      Object.entries(this.state.value).forEach(([key, element]) => {
-         a.push(this.getElementWith(key, element))
-      })
-
-      return a
+      return Object.entries(this.props.value).map(([key, element]) =>
+         assign({}, element, {
+            key: key,
+            _id: this.props.name + '.' + key,
+         })
+      )
    }
 
    render() {
-      console.log(this.state,this.asArray())
+      console.log(this.asArray(), this.props)
 
       return (
-         <div className='row'>
-            <h5>Имена</h5>
-            <div id={this.props.name}>
-               {this.asArray().map((element) =>
-                  <MemoryNameBlock
-                     ref={e => this.r.push(e)}
-                     {...element}
-                     onUpdate={this.onChildUpdate.bind(this)} />)}</div>
+         <div className='col xl12 l12 m12 s12'>
             <div className='row'>
-               <div className='col'>
-                  <ErrorSpan
-                     error={this.error}
-                     key={'error'}
-                     ref={e => this.$error = e} /></div></div>
-            <button
-               className='btn btn-primary'
-               onClick={this.onAddItem.bind(this)}
-               type='button'>
-               <i className='small material-icons'>add_to_photos</i>
-               Добавь имя</button></div>)}}
+               <h5>Имена</h5>
+               <div id={this.props.name}>
+                  {this.asArray().map(element =>
+                     <MemoryNameBlock
+                        {...element} />)}</div>
+               <div className='row'>
+                  <div className='col'>
+                     <ErrorSpan
+                        error={this.getErrorText(this.props.value)} /></div></div>
+               <button
+                  className='btn btn-primary'
+                  onClick={this.onAddItem.bind(this)}
+                  type='button'>
+                  <i className='small material-icons'>add_to_photos</i>
+                  Добавь имя</button></div></div>)
+   }
+}

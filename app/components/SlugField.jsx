@@ -2,27 +2,15 @@ import TextField from 'TextField'
 
 export default class SlugField extends TextField {
    static defaultProps = {
-      name: 'slug',
-      subname: 'text',
-      slug: {text: ''},
+      name: 'slug.text',
+      value: '',
       title: 'Жетон',
       placeholder: 'Введи имя жетона',
       data: {length: '6'},
       validations: {
          "Слишком большое имя жетона": /^.{7,}$/,
          "Жетон отсутствует": /^$/,
-         "В имени жетона допустимы только кириллица и цифры": /[^ёа-я0-9]/
-      }
-   }
-
-   state = {
-      slug: this.props.slug.text
-   }
-
-   componentWillReceiveProps(nextProps) {
-      if (nextProps.slug && this.state.slug != nextProps.slug.text) {
-         this.setState({slug: nextProps.slug.text || ''})
-         this.updateError(nextProps.slug.text || '')
+         "В имени жетона допустимы только русская кириллица и цифры": /[^ёа-я0-9]/
       }
    }
 }

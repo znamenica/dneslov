@@ -4,14 +4,17 @@ import ReactScrollPagination from 'react-scroll-pagination/src/index'
 import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
+import CommonModal from 'CommonModal'
 
 export default class Records extends Component {
    static propTypes = {
       keyName: PropTypes.string.isRequired,
       keyNames: PropTypes.string.isRequired,
       remoteNames: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      headers: PropTypes.array.isRequired,
+      //title: PropTypes.string.isRequired,
+      //new: PropTypes.string.isRequired,
+      //headers: PropTypes.array.isRequired,
+      object: PropTypes.object.isRequired,
    }
 
    state = {
@@ -27,11 +30,16 @@ export default class Records extends Component {
    }
 
    // system
-   componentWillMount() {
-      console.log("MOUNT", this.props[this.props.keyNames].list)
-      if (this.props[this.props.keyNames].list.length == 0) {
-         this.submit()
-      }
+   componentDidMount() {
+      this.submit()
+      document.addEventListener('dneslov-record-stored', this.onRecordUpdate.bind(this))
+      document.addEventListener('dneslov-modal-close', this.onModalClose.bind(this))
+   }
+
+   componentWillUnmount() {
+      console.log("UNMOUNT")
+      document.removeEventListener('dneslov-record-stored', this.onRecordUpdate.bind(this))
+      document.removeEventListener('dneslov-modal-close', this.onModalClose.bind(this))
    }
 
    componentDidUpdate(nextProps) {
@@ -41,17 +49,19 @@ export default class Records extends Component {
    // custom
    fetchNext() {
       if ((this.state.total > this.state[this.props.keyNames].length) && ! this.isRequesting) {
-         console.log("FETCH NEXT FOR", this.state)
+         console.log("FETCH NEXT FOR", this.state, this.state.total, this.state[this.props.keyNames].length)
          this.submit(this.state.page + 1)
       }
    }
 
-   onRecordUpdate(record) {
-      let index = this.state[this.props.keyNames].findIndex((r) => { return r.id == record.id })
-      let records = this.state[this.props.keyNames].slice()
-      let total = this.state.total
-      let appended = this.state.appended
+   onRecordUpdate(e) {
+      let record = e.detail,
+          index = this.state[this.props.keyNames].findIndex((r) => { return r.id == record.id }),
+          records = this.state[this.props.keyNames].slice(),
+          total = this.state.total,
+          appended = this.state.appended
 
+      console.log("[onRecordUpdate]", record)
       console.log(index)
       if (index < 0) {
          records.unshift(record)
@@ -64,17 +74,14 @@ export default class Records extends Component {
       this.setState({
          [this.props.keyNames]: records,
          total: total,
-         appended: appended
+         appended: appended,
+         current: null,
       })
    }
 
    onRecordEdit(id) {
       let record = this.state[this.props.keyNames].find((r) => { return r.id == id })
       this.setState({current: record})
-   }
-
-   onModalClose() {
-      this.setState({current: null})
    }
 
    onRecordRemove(id) {
@@ -84,6 +91,10 @@ export default class Records extends Component {
       }
 
       Axios(request).then(this.onSuccessRemove.bind(this))
+   }
+
+   onModalClose() {
+      this.setState({current: null})
    }
 
    onSuccessRemove(response) {
@@ -149,34 +160,41 @@ export default class Records extends Component {
       return !this.isIcon(header)
    }
 
+   newRecord() {
+      this.setState({ current: this.props.form.getCleanState() })
+   }
+
    render() {
       console.log(this.props)
       console.log(this.state)
 
-      return (
+      return [
+         <div>
+            {this.state.current && <CommonModal
+               form={this.props.form}
+               i18n={this.props.i18n.form}
+               data={this.state.current} />}</div>,
          <div className={this.props.keyNames + ' list'}>
             <div className="row">
                <form>
-                  <div className="col xl3 l3 m8 s12">
+                  <div className="col xl3 l4 m6 s12">
                      <h4
                         className='title'>
-                        {this.props.title}</h4></div>
-                  <SearchField
-                     wrapperClassName='col xl7 l6 m9 s8'
-                     with_text={this.state.query.with_tokens.join(" ")}
-                     onUpdate={this.onSearchUpdate.bind(this)} /></form>
-                  <div className="col xl2 l3 m3 s4 flex">
-                     <this.props.modal
-                        open={this.state.current}
-                        {...this.state.current}
-                        ref={$form => this.$form = $form}
-                        onCloseModal={this.onModalClose.bind(this)}
-                        onUpdateRecord={this.onRecordUpdate.bind(this)} /></div></div>
+                        {this.props.i18n.title}</h4></div>
+                  <div className='col xl9 l8 m6 s12'>
+                     <SearchField
+                        wrapperClassName=''
+                        with_text={this.state.query.with_tokens.join(" ")}
+                        onUpdate={this.onSearchUpdate.bind(this)} />
+                     <a
+                        className="waves-effect waves-light btn modal-trigger"
+                        onClick={this.newRecord.bind(this)} >
+                           {this.props.i18n.new}</a></div></form></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>
                   <tr>
-                     {this.props.headers.map((header) =>
+                     {this.props.i18n.headers.map((header) =>
                         <th>
                            {this.isIcon(header) &&
                               <i className='tiny material-icons'>{header}</i>}
@@ -192,4 +210,4 @@ export default class Records extends Component {
                         onEdit={this.onRecordEdit.bind(this)}
                         onRemove={this.onRecordRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination
-               fetchFunc={this.fetchNext.bind(this)} /></div>)}}
+               fetchFunc={this.fetchNext.bind(this)} /></div>]}}

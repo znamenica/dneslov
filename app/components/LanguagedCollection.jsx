@@ -19,7 +19,6 @@ export default class LanguagedCollection extends Component {
       single: null,
       textField: false,
       placeholder: null,
-      onUpdate: null,
       child_value_validations: {},
       child_validations: {},
       validations: {},
@@ -33,88 +32,73 @@ export default class LanguagedCollection extends Component {
       action: PropTypes.string.isRequired,
       child_validations: PropTypes.object.isRequired,
       validations: PropTypes.object.isRequired,
-      onUpdate: PropTypes.func.isRequired,
    }
 
-   state = {
-      value: this.props.value
-   }
-
-   // system
-   componentWillMount() {
-      this.r = new Array
-      this.updateError(this.state.value)
-   }
-
-   componentWillUpdate() {
-      this.r = new Array
-      this.updateError(this.state.value)
-   }
-
-   componentWillReceiveProps(nextProps) {
-      console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
-      if (this.props.value != nextProps.value) {
-         this.state.value = nextProps.value
-         this.updateError(nextProps.value)
-       }
-   }
+ //  state = {
+ //     value: this.props.value
+ //  }
 
    // events
    onAddItem() {
       let key = uuid()
+      let detail = { [this.props.name]: { [key]: { _id: key } } }
+      let e = new CustomEvent('dneslov-update-path', { detail: detail })
+      console.log("ADD", detail)
+      document.dispatchEvent(e)
 
-      this.state.value[key] = {}
-      this.updateError(this.state.value)
-      this.props.onUpdate({[this.props.name]: {[key]: {}}})
-      this.forceUpdate()
+      // this.state.value[key] = {}
+      // this.updateError(this.state.value)
+      // this.props.onUpdate({[this.props.name]: {[key]: {}}})
+      //this.forceUpdate()
    }
 
    onChildUpdate(property) {
-      this.updateError(this.state.value)
-      this.props.onUpdate({[this.props.name]: property})
+      console.log("UPUPUP", property)
+      // this.updateError(this.state.value)
+      // this.props.onUpdate({[this.props.name]: property})
    }
 
    // proprties
-   getElementWith(key, element) {
-      return assign({_id: key, key: key}, element, this.props.value[key] || {})
-   }
+   //getElementWith(key, element) {
+ //     return assign({_id: key, key: key}, element, this.props.value[key] || {})
+ //  }
 
    asArray() {
-      let a = []
-      Object.entries(this.state.value).forEach(([key, element]) => {
-         a.push(this.getElementWith(key, element))
-      })
-
-      return a
+      return Object.entries(this.props.value).map(([key, element]) =>
+         assign({
+            name: this.props.name + '.' + key,
+            value: element,
+            key: key,
+         })
+      )
    }
 
    render() {
-      console.log(this.state,this.asArray())
+      console.log(this.asArray(), this.props.value)
 
       return (
-         <div className='row'>
-            <h5>{this.props.title}</h5>
-            <div id={this.props.name}>
-               {this.asArray().map((element) =>
-                  <LanguagedTextField
-                     ref={e => this.r.push(e)}
-                     title={this.props.single}
-                     placeholder={this.props.placeholder}
-                     value_validations={this.props.child_value_validations}
-                     validations={this.props.child_validations}
-                     key_name={this.props.key_name}
-                     textField={this.props.textField}
-                     {...element}
-                     onUpdate={this.onChildUpdate.bind(this)} />)}</div>
+         <div className='col xl12 l12 m12 s12'>
             <div className='row'>
-               <div className='col'>
-                  <ErrorSpan
-                     error={this.error}
-                     key={'error'}
-                     ref={e => this.$error = e} /></div></div>
-            <button
-               className='btn btn-primary'
-               onClick={this.onAddItem.bind(this)}
-               type='button'>
-               <i className='small material-icons'>add_to_photos</i>
-               {this.props.action}</button></div>)}}
+               <h5>{this.props.title}</h5>
+               <div id={this.props.name}>
+                  {this.asArray().map(element =>
+                     <LanguagedTextField
+                        title={this.props.single}
+                        placeholder={this.props.placeholder}
+                        value_validations={this.props.child_value_validations}
+                        validations={this.props.child_validations}
+                        key_name={this.props.key_name}
+                        textField={this.props.textField}
+                        {...element} />)}</div>
+               <div className='row'>
+                  <div className='col'>
+                     <ErrorSpan
+                        error={this.getErrorText(this.props.value)} /></div></div>
+               <button
+                  className='btn btn-primary'
+                  onClick={this.onAddItem.bind(this)}
+                  type='button'>
+                  <i className='small material-icons'>add_to_photos</i>
+                  {this.props.action}</button></div></div>)
+   }
+}

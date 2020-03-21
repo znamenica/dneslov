@@ -1,6 +1,15 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
+function makeName(props) {
+   let names = props.locales.map((locale) => {
+      return props.names.reduce((res, name) => {
+         return res || locale === name.language_code && name.text }, null)
+   }).filter((e) => { return e })
+
+   return names[0] || ''
+}
+
 export default class CalendaryRow extends Component {
    static defaultProps = {
       locales: [],
@@ -19,7 +28,7 @@ export default class CalendaryRow extends Component {
    static propTypes = {
       locales: PropTypes.array.isRequired,
       id: PropTypes.number.isRequired,
-      slug: PropTypes.string.isRequired,
+      slug: PropTypes.object.isRequired,
       names: PropTypes.array.isRequired,
       licit: PropTypes.bool.isRequired,
       language_code: PropTypes.string,
@@ -31,16 +40,21 @@ export default class CalendaryRow extends Component {
       onRemove: PropTypes.func.isRequired,
    }
 
-   componentWillMount() {
-      this.name = this.makeName()
-   }
+   // system
+   //
+   state = { prevProps: { names: null } }
 
-   componentWillReceiveProps(nextProps) {
-      if (this.props.names != nextProps.names) {
-         this.name = this.makeName()
+   static getDerivedStateFromProps(props, state) {
+      if (props.names != state.prevProps.names) {
+         return { prevProps: props, name: makeName(props) }
+      } else {
+         return null
       }
    }
 
+   //componentDidUpdate() {}
+
+   // custom
    edit() {
       this.props.onEdit(this.props.id)
    }
@@ -66,20 +80,10 @@ export default class CalendaryRow extends Component {
               .addEventListener('click', this.remove.bind(this))
    }
 
-   makeName() {
-      let names = this.props.locales.map((locale) => {
-         return this.props.names.reduce((res, name) => {
-            return res || locale === name.language_code && name.text }, null)
-      }).filter((e) => { return e })
-      
-      console.log("NAMES", names, this.props.names, this.props.locales)
-      return names[0] || ''
-   }
-
    render() {
       return (
          <tr>
-            <td>{this.name}</td>
+            <td>{this.state.name}</td>
             <td>
                {this.props.licit &&
                   <i className='tiny material-icons'>check</i>}</td>
@@ -101,7 +105,7 @@ export default class CalendaryRow extends Component {
                   className={'toast-wrapper id' + this.props.id}
                   key='toast'
                   ref={e => this.$toast = e} >
-                  <span>Точно ли удалить календарь "{this.name}"?</span>
+                  <span>Точно ли удалить календарь "{this.state.name}"?</span>
                   <button
                      className="btn-flat toast-action"
                      onClick={this.remove.bind(this)}>

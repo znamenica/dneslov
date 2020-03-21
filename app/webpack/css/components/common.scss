@@ -1893,18 +1893,14 @@ html {
    }
 
    .form-modal {
-      width: 90% !important;
-      left: 5% !important;
-      margin: 0 !important;
+      width: 90%;
+      left: 5%;
+      margin: 0;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.98) none repeat scroll 0 0;
       filter: alpha(opacity=0.98);
-      display: block !important;
       opacity: 0.98 !important;
       max-height: none;
-      top: -9999 !important;
-      height: 0;
-      border: none;
 
       .modal-content {
          padding: 1em;
@@ -1918,7 +1914,7 @@ html {
 
       &.open {
          top: 5% !important;
-         height: 90% !important;
+         height: 90%;
          border: outset #e7f3ff 1px;
          border-radius: 3px;
       }

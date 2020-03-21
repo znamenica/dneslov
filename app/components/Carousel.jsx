@@ -10,7 +10,7 @@ export default class Carousel extends Component {
    state = { loadCounter: 0 }
 
    // system
-   componentWillReceiveProps(nextProps) {
+   getSnapshotBeforeUpdate() {
       this.setState({ loadCounter: 0 })
    }
 

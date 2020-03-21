@@ -4,29 +4,40 @@ import PropTypes from 'prop-types'
 export default class SubmitButton extends Component {
    static defaultProps = {
       title: '',
-      valid: false,
+      active: false,
    }
 
    static propTypes = {
       title: PropTypes.string.isRequired,
-      valid: PropTypes.bool,
+      active: PropTypes.bool,
    }
 
-   state = {
-      valid: this.props.valid
+   state = { valid: this.props.valid }
+
+   componentDidMount() {
+      document.addEventListener('dneslov-form-valid', this.onFormValidChanged.bind(this))
    }
 
-   componentWillReceiveProps(nextProps) {
-      this.state.valid = nextProps.valid
+   componentWillUnmount() {
+      document.removeEventListener('dneslov-form-valid', this.onFormValidChanged.bind(this))
+   }
+
+   onFormValidChanged(e) {
+      this.setState({ active: e.detail.valid })
+   }
+
+   onClick() {
+      let ce = new CustomEvent('dneslov-record-submit', {})
+
+      document.dispatchEvent(ce)
    }
 
    render() {
-      console.log(this.state)
-
       return (
          <button
             type='submit'
             className='btn btn-primary'
-            disabled={! this.state.valid} >
+            disabled={! this.state.active}
+            onClick={this.onClick.bind(this)} >
             <span>
                {this.props.title}</span></button>)}}

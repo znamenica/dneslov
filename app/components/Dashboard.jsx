@@ -19,19 +19,20 @@ export default class Dashboard extends Component {
    state = assign({}, this.props, { form: null })
 
    // system
-   componentWillMount() {
-      let parts = window.location.href.split("#")
+   static getDerivedStateFromProps(_, state) {
+      if (! state.form) {
+         let parts = window.location.href.split("#")
 
-      console.log("WILL", parts)
-      if (parts[1]) {
-         this.setState({ form: Objects[parts[1]] })
+         if (parts[1]) {
+            return { form: Objects[parts[1]] }
+         }
       }
+
+      return null
    }
 
    componentDidMount() {
-      console.log("QQQ", this.$avatarTap)
       this.avatarTap = M.TapTarget.init(this.$avatarTap, {})
-      console.log("QQQQ", this.avatarTap)
    }
 
    componentWillUnmount() {
@@ -42,8 +43,6 @@ export default class Dashboard extends Component {
 
    // events
    onClick(list, e) {
-      console.log("list", list, e)
-
       this.setState({ form: list })
    }
 
@@ -62,18 +61,6 @@ export default class Dashboard extends Component {
    // props
    isAvatarTappen() {
       return !!this.$avatarSignIn.querySelector('.tap-target-wrapper.open')
-   }
-
-   name() {
-      let name
-
-      if (this.state.name) {
-         name = this.state.name + ' {' + this.state.login + '}'
-      } else {
-         name = this.state.login
-      }
-
-      return name
    }
 
    info() {
@@ -131,8 +118,10 @@ export default class Dashboard extends Component {
                                  data-target='avatar'>
                                  <div
                                     className='tap-target-content'>
+                                    <h6>
+                                       @{this.state.login}</h6>
                                     <h5>
-                                       {this.name()}</h5>
+                                       {this.state.name}</h5>
                                     <p>
                                        {this.info()}</p></div></div></div></li></ul>}
                   {!this.state.login && this.state.client_id &&

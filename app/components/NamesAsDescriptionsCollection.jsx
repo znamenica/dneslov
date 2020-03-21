@@ -1,5 +1,5 @@
 import LanguagedCollection from 'LanguagedCollection'
-import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject } from 'matchers'
+import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes } from 'matchers'
 
 export default class NamesAsDescriptionsCollection extends LanguagedCollection {
    static defaultProps = {
@@ -15,6 +15,7 @@ export default class NamesAsDescriptionsCollection extends LanguagedCollection {
          "Азбуки в именах не могут совпадать": matchAlphabeths,
       },
       child_validations: {
+         'Избранный язык не соотвествует избранной азбуке': matchCodes,
          'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
       },
       child_value_validations: {
