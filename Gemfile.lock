@@ -270,7 +270,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rdoc (4.3.0)
+    rdoc (6.2.1)
     regexp_parser (1.6.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -289,9 +289,8 @@ GEM
       rspec (>= 3, < 4)
     ruby-prof (1.0.0)
     ruby_dep (1.5.0)
-    sdoc (0.4.2)
-      json (~> 1.7, >= 1.7.7)
-      rdoc (~> 4.0)
+    sdoc (1.0.0)
+      rdoc (>= 5.0)
     simplecov (0.17.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -360,7 +359,7 @@ DEPENDENCIES
   capistrano-rvm
   capistrano3-nginx
   capybara
-  capybara-webkit
+  capybara-webkit (>= 1.15.1)
   cucumber-rails
   database_cleaner
   dry_crud
@@ -387,13 +386,13 @@ DEPENDENCIES
   rspec-expectations
   rspec-wait
   ruby-prof
-  sdoc (~> 0.4.0)
+  sdoc (~> 1.0.0)
   shoulda-matchers!
-  simplecov
+  simplecov (>= 0.17.1)
   spring
   spring-commands-cucumber
   spring-watcher-listen (~> 2.0.0)
-  travis
+  travis (>= 1.8.10)
   uglifier (>= 2.7.2)
   validate_url
   web-console (>= 3.3.0)
