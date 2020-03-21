@@ -108,7 +108,7 @@ export default class Dashboard extends Component {
                               className='sign-in circle'>
                               <img
                                  id='avatar'
-                                 className='circle z-depth-1 waves-effect'
+                                 className='circle z-depth-1 responsive-img'
                                  onClick={this.onAvatarClick.bind(this)}
                                  src={this.state.avatar_url} />
                               <div

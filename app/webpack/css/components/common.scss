@@ -1722,16 +1722,22 @@ html {
             left: auto;
          }
 
+         button.sign-in {
+            top: -2px;
+         }
+
          .sign-in {
             top: 4px;
             right: 4px;
             background-color: $darken_terracota;
             position: relative;
+            max-height: 56px;
 
             img {
                line-height: 56px;
                width: 56px;
                height: 56px;
+               cursor: pointer;
             }
 
             .tap-target-wrapper {
