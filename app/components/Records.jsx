@@ -11,9 +11,6 @@ export default class Records extends Component {
       keyName: PropTypes.string.isRequired,
       keyNames: PropTypes.string.isRequired,
       remoteNames: PropTypes.string.isRequired,
-      //title: PropTypes.string.isRequired,
-      //new: PropTypes.string.isRequired,
-      //headers: PropTypes.array.isRequired,
       object: PropTypes.object.isRequired,
    }
 

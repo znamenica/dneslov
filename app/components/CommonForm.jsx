@@ -22,29 +22,8 @@ export default class CommonForm extends Component {
 
    // state is treated as a query, which has non-serialized form without '*_attributes' and with uuided hashes
    state = { prevProps: null }
-   //query: CommonForm.deserializedHash(this.props), error: "", prevProps: this.props }
 
    valid = false
-
-//   shouldComponentUpdate(nextProps, nextState) {
-//      return true
-//   }
-
-//   getSnapshotBeforeUpdate(prevProps, prevState) {
-//      this.query = this.deserializedHash(prevProps)
-//      console.log(this.query, prevProps, prevState)
-
-//      return null
-//   }
-
-//   componentDidUpdate() {
-//      this.validate()
-//   }
-
-//   static getDerivedStateFromProps(props, state) {
-//      console.log(props,state)
-//      return CommonForm.deserializedHash(props)
-//   }
 
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
@@ -64,7 +43,6 @@ export default class CommonForm extends Component {
    }
 
    componentDidUpdate() {
-      //let valid = !!document.querySelector('.error.active')
       var valid = document.querySelectorAll('.error:not(:empty)').length == 0
 
       if (valid && !this.valid || !valid && this.valid) {
@@ -77,24 +55,17 @@ export default class CommonForm extends Component {
 
    // custom
    serializedQuery() {
-      // console.log('QUERY', this.state)
       return CommonForm.serializedHash(this.state.query)
    }
 
    // events
    onChildChanged(e) {
       console.log("new query path", e.detail)
-//      console.log("old state", this.state)
-//      console.log("new state", assign({}, this.state, e.detail))
-//      this.setState({ query: e.detail })
       this.setState({ query: assign({}, this.state.query, e.detail) })
    }
 
    onSubmitSuccess(response) {
       console.log("SUCCESS", response)
-      // this.props.onUpdateRecord(response.data)
-      // this.$error.setState({error: null})
-      // this.modal.close()
       let ce = new CustomEvent('dneslov-record-stored', { detail: response.data })
 
       document.dispatchEvent(ce)
@@ -104,8 +75,6 @@ export default class CommonForm extends Component {
 
    onSubmitError(error) {
       let error_text
-
-      //console.log("ERROR", response, response.constructor.name, response.message, response.response, Object.getOwnPropertyNames(response), response.statusText, response.responseJSON, response.responseText)
 
       if (error.response.responseJSON) {
          let errors = []
@@ -219,69 +188,6 @@ export default class CommonForm extends Component {
       return {}
    }
 
-//   onChildUpdate(value) {
-//      this.setState(assign({}, this.state, value))
-//      console.log(value, this.state)
-//      this.updateError(this.query)
-//      this.validate()
-//      this.props.onUpdate()
-//   }
-/*
-   static _traverse_map(node, state) {
-      if (!state) {
-         state = {level: 0, parent: null}
-      }
-
-      let result = []
-
-      if (node) {
-         result.push(node)
-
-         if (node.r && node.r.length) {
-            node.r.forEach((child) => {
-               let child_result = this._traverse_map(child, {
-                  level: state.level + 1, parent: node})
-               result = result.concat(child_result)
-            })
-         }
-      }
-
-      return result
-   }
-*/
-   /*
-   _traverse_map1(node, state){
-      if (!state) {
-         state = {level: 0, parent: null}
-      }
-
-      let result = []
-
-      result.push(node)
-      if (node.props) {
-         let children = React.Children.toArray(node.props.children)
-
-         console.log(node.props.children)
-         children.forEach((child) => {
-            let child_result = this._traverse_map(child, {
-               level: state.level + 1, parent: node})
-            result.concat(child_result)
-         })
-      }
-
-      console.log(node, result, result.length)
-      return result
-   }*/
-
-//   validate() {
-//      if (this.r && this.r.length) {
-//         console.log(this._traverse_map(this))
-//         this.valid = this._traverse_map(this).reduce((v, c) => {
-//            return v && (! c.isValid || c.isValid()) }, true)
-//         console.log(this.valid)
-//      }
-//      return true
-//   }
    renderContent() {
       return ""
    }

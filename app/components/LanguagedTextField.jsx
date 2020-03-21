@@ -32,27 +32,6 @@ export default class LanguagedTextField extends Component {
       validations: PropTypes.object.isRequired,
    }
 
- //  state = {}
-
-//   static getDerivedStateFromProps(props, state) {
-//      return {
-///         value: props[props.key_name],
-//         language_code: props.language_code,
-//         alphabeth_code: props.alphabeth_code,
-//      }
-//   }
-
-   // events
-//   onChange(property) {
-//      this.properties = assign(this.properties, property)
-//      this.updateError(this.properties)
-//      if (this.props._id) {
-//         this.props.onUpdate({[this.props._id]: property})
-//      } else {
-//         this.props.onUpdate(property)
-//      }
-//   }
-
    getTextClass() {
       if (this.props.textField) {
          return 'input-field col xl12 l12 m12 s12'
@@ -83,12 +62,6 @@ export default class LanguagedTextField extends Component {
 
    render() {
       console.log(this.props)
-      console.log(this.props.value)
-      console.log(this.props.validations)
-      console.log(this.validations)
-      console.log(this.constructor.validations)
-      console.log(this.getValidations())
-      console.log(this.getErrorText(this.props.value))
 
       return [
          <TextField

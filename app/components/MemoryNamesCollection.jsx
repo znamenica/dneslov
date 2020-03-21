@@ -35,19 +35,6 @@ export default class MemoryNamesCollection extends Component {
       onUpdate: PropTypes.func.isRequired,
    }
 
-   // system
-//   static getDerivedStateFromProps(props, state) {
-//      console.log(this.props.value != nextProps.value, this.props.value, nextProps.value)
-//      if (this.props.value != nextProps.value) {
-//         this.state.value = nextProps.value
-//         this.updateError(nextProps.value)
-//      }
-//   }
-
-//   getSnapshotBeforeUpdate() {
-//      this.updateError(this.state.value)
-//   }
-
    // events
    onAddItem() {
       let key = uuid()
@@ -56,31 +43,6 @@ export default class MemoryNamesCollection extends Component {
       document.dispatchEvent(e)
    }
 
-//   onAddItem() {
-//      this.state.value[uuid()] = {}
-//      this.updateError(this.state.value)
-//      this.forceUpdate()
-//   }
-//
-//   onChildUpdate(property) {
-//      this.updateError(this.state.value)
-////      this.props.onUpdate({[this.props.name]: property})
-//   }
-//
-//   // proprties
-//   getElementWith(key, element) {
-//      return assign({_id: key, key: key}, element, this.props.value[key] || {})
-//   }
-//
-//   asArray() {
-//      let a = []
-//      Object.entries(this.state.value).forEach(([key, element]) => {
-//         a.push(this.getElementWith(key, element))
-//      })
-//
-//      return a
-//   }
-//
    asArray() {
       return Object.entries(this.props.value).map(([key, element]) =>
          assign({}, element, {

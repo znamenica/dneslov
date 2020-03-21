@@ -29,20 +29,7 @@ export default class EventsCollection extends Component {
       validations: PropTypes.object.isRequired,
    }
 
-   // system
- //  static getDerivedStateFromProps(props, state) {
- //     if (state.value != props.value) {
-//         this.updateError(props.value)
- //        return { value: props.value }
- //     } else {
- //        return null
- //     }
- //  }
-
-//   getSnapshotBeforeUpdate() {
-//      this.updateError(this.state.value)
-//   }
-
+   // event
    onAddItem() {
       let key = uuid()
       let detail = { [this.props.name]: { [key]: { _id: key } } }
@@ -50,32 +37,7 @@ export default class EventsCollection extends Component {
       document.dispatchEvent(e)
    }
 
-   // events
- //  onAddItem() {
- //     this.state.value[uuid()] = {}
- //     this.updateError(this.state.value)
- //     this.forceUpdate()
- //  }
-
- //  onChildUpdate(property) {
-//      this.updateError(this.state.value)
-//      this.props.onUpdate({[this.props.name]: property})
-//   }
-
    // proprties
-//   getElementWith(key, element) {
-//      return assign({_id: key, key: key}, element, this.props.value[key] || {})
-//   }
-//
-//   asArray() {
-//      let a = []
-//      Object.entries(this.state.value).forEach(([key, element]) => {
-//         a.push(this.getElementWith(key, element))
-//      })
-//
-//      return a
-//   }
-//
    asArray() {
       return Object.entries(this.props.value).map(([key, element]) =>
          assign({}, element, {
@@ -84,7 +46,6 @@ export default class EventsCollection extends Component {
          })
       )
    }
-
 
    render() {
       console.log(this.asArray(), this.props)

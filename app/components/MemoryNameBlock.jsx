@@ -33,10 +33,6 @@ export default class MemoryNameBlock extends Component {
    }
 
    // system
-//   onChildUpdate(property) {
-//      this.props.onUpdate({[this.props._id]: property})
-//   }
-
    render() {
       console.log(this.props)
 

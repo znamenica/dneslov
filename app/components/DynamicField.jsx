@@ -50,34 +50,7 @@ export default class DynamicField extends Component {
       total: 0,
    }
 
-//   // system
-//   static getDerivedStateFromProps(props, state) {
-//      console.log ("getD")
-//      let value = props.value || undefined,
-//          humanized_value = props.humanized_value || undefined,
-//          fixed = humanized_value && value
-//
-//      return assign(state, {
-//                  value: value,
-//                  humanized_value: humanized_value,
-//                  fixed: fixed
-//               }, state)
-//   }
-//
- //  getSnapshotBeforeUpdate(prevProps, prevState) {
-//      let value
-
-//      console.log(props, state)
-//      if (props.name.match(/_id$/)) {
-//         value = state['data'][state[props.name]]
-//      } else {
-//         value = state[props.name]
-//      }
-
-//      this.updateError(value)
-//      this.updateError(prevState[prevProps.name])
-//   }
-
+   // system
    componentDidMount() {
       this.setup()
       window.addEventListener('keypress', this.onKeyPress.bind(this))
@@ -100,23 +73,15 @@ export default class DynamicField extends Component {
    onChange(e) {
       let humanized_value = e.target.value
 
-      //console.log("UPDATE ", this.props.humanized_name, 'with', humanized_value, e, e.nativeEvent)
-
       this.updateTo(humanized_value, false)
-      // this.triggerListBy(humanized_value)
-      //console.log("UPDATE1111 ", this.triggered, humanized_value, this.data.total, this.data.list)
+
       if (!this.triggered || humanized_value &&
           (!humanized_value.includes(this.triggered) &&
            !this.triggered.includes(humanized_value) ||
            this.data && (this.data.total > this.data.list.length &&
             humanized_value.includes(this.triggered) ||
             this.triggered.includes(humanized_value)))) {
-         //       if (this.props.humanized_value.length > this.triggered.length &&
-//          dynamic_data.total > dynamic_data.list.length ||
-//          this.props.humanized_value.length < this.triggered.length &&
-//          this.props.humanized_value.length > 0) {
          this.getDataFor(humanized_value)
-         //   this.setAutocomplete()
       }
    }
 
@@ -148,7 +113,6 @@ export default class DynamicField extends Component {
    //actions
    setup() {
       if (this.$input) {
-         //var aaa = M.Autocomplete.init(this.$input, {
          this.input = Autocomplete.init(this.$input, {
             data: {},
             limit: 20,
@@ -156,14 +120,6 @@ export default class DynamicField extends Component {
             onAutocomplete: this.onSelectFromList.bind(this)
          })
       }
-
- //     this.input = Autocomplete.init(this.$input, {
- //        data: {},
- //        limit: 20,
- //        minLength: 1,
- //        onAutocomplete: this.onSelectFromList.bind(this)
- //     })
-      console.log("----------", this.$input)
    }
 
    destroy() {
@@ -171,16 +127,8 @@ export default class DynamicField extends Component {
          this.input.destroy()
       }
 
-      console.log("----------", this.input)
       this.input = false
    }
-
-   //checkers
- //  hasValue() {
-      // has fixed value which is presented on the server side
-      //return this.state.fixed && !!this.state.value
- //     return this.props.value
- //  }
 
    //actions
    setAutocomplete() {
@@ -193,8 +141,6 @@ export default class DynamicField extends Component {
 
    updateTo(humanized_value_in, autofix = true) {
       let ce, detail, value_detail, value, humanized_value
-
-      //this.setState(state)
 
       if (this.props.subname) {
          // TODO add text as variable subkey

@@ -25,23 +25,8 @@ export default class SelectField extends Component {
       title: PropTypes.string.isRequired,
    }
 
-//   state = {}
-
    // system
-//   static getDerivedStateFromProps(props, state) {
-//      console.log(props, state)
-//      if (state[props.name] != props[props.name]) {
-//         return { [props.name]: props[props.name] }
-//      } else {
-//         return null;
-//      }
-//   }
-//   static getDerivedStateFromProps(props, state) {
-//      return { [props.name]: props[props.name] }
-//   }
-
    componentDidMount() {
-      // this.$select.addEventListener('change', this.onChangeA.bind(this))
       this.select = FormSelect.init(this.$select, {})
       this.$wrap = this.$parent.querySelector('.select-wrapper')
       console.log("MOUNT")
@@ -49,23 +34,8 @@ export default class SelectField extends Component {
 
    componentWillUnmount() {
       console.log("UNMOUNT")
-     // console.log(this.state)
-      // this.$select.removeEventListener('change', this.onChangeA.bind(this))
       this.select.destroy()
    }
-
-//   componentDidUpdate() {
-   //   console.log("state", this.state)
-   // this.select.destroy()
-     // this.select = FormSelect.init(this.$select, {})
-     // this.$select.value = this.state[this.props.name]
-     // this.$wrap = this.$parent.querySelector('.select-wrapper')
-     // if (this.error) {
-    //     this.$wrap.classList.add('invalid')
-    //  } else {
-    //     this.$wrap.classList.remove('invalid')
-    //  }
-   // }
 
    // events
    onChange(e) {
@@ -73,19 +43,10 @@ export default class SelectField extends Component {
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
       document.dispatchEvent(ce)
- //     this.updateError(value)
-
-//      console.log(e.target.value, {[name]: value})
-//      this.setState({[name]: value})
- //     // this.props.onUpdate({[name]: value})
    }
 
    render() {
       console.log(this.props)
-//      console.log(typeof this.props.value)
-//      console.log(this.props.value)
-//      console.log(this.getErrorText(this.props.value))
-//      console.log(this.state)
 
       return (
          <div

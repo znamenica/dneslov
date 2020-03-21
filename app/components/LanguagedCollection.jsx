@@ -34,10 +34,6 @@ export default class LanguagedCollection extends Component {
       validations: PropTypes.object.isRequired,
    }
 
- //  state = {
- //     value: this.props.value
- //  }
-
    // events
    onAddItem() {
       let key = uuid()
@@ -45,24 +41,9 @@ export default class LanguagedCollection extends Component {
       let e = new CustomEvent('dneslov-update-path', { detail: detail })
       console.log("ADD", detail)
       document.dispatchEvent(e)
-
-      // this.state.value[key] = {}
-      // this.updateError(this.state.value)
-      // this.props.onUpdate({[this.props.name]: {[key]: {}}})
-      //this.forceUpdate()
-   }
-
-   onChildUpdate(property) {
-      console.log("UPUPUP", property)
-      // this.updateError(this.state.value)
-      // this.props.onUpdate({[this.props.name]: property})
    }
 
    // proprties
-   //getElementWith(key, element) {
- //     return assign({_id: key, key: key}, element, this.props.value[key] || {})
- //  }
-
    asArray() {
       return Object.entries(this.props.value).map(([key, element]) =>
          assign({

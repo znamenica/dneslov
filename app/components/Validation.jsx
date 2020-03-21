@@ -19,8 +19,6 @@ const Validation = {
          case 'RegExp':
             switch(value.constructor.name) {
             case 'Object':
-               //console.log(value, Object.values(value))
-               //console.log(Object.values(value).forEach((v) => { console.log(typeof v.match !== "undefined", rule, v, typeof v.match !== "undefined" && v.match(rule), e) }))
                error = Object.values(value).reduce((res, v) => { return res || typeof v.match !== "undefined" && v.match(rule) && e }, undefined)
                break
             case 'String':

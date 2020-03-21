@@ -20,23 +20,11 @@ export default class BooleanBox extends Component {
       onUpdate: PropTypes.func.isRequired,
    }
 
-//   state = {
-//      [this.props.name_key]: this.props[this.props.name_key] || false
-//   }
-
-//   componentWillReceiveProps(nextProps) {
-//      if (nextProps != this.props) {
-//         this.setState({[this.props.name_key]: nextProps[nextProps.name_key] || false})
-//      }
-//   }
-
    onCheck(e) {
       let object = this.valueToObject(this.props.name, e.target.checked),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
       document.dispatchEvent(ce)
-      //this.setState({[this.props.name_key]: value})
-      //this.props.onUpdate({[this.props.name_key]: value})
    }
 
    render() {

@@ -26,7 +26,6 @@ export default class TextField extends Component {
    static propTypes = {
       name: PropTypes.string.isRequired,
       value: PropTypes.string,
- //     path: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -34,16 +33,6 @@ export default class TextField extends Component {
       validations: PropTypes.object.isRequired,
       allowChange: PropTypes.func,
    }
-
-//   state = {}
-
-//   static getDerivedStateFromProps(props, state) {
-//      state = [props.name]: props[props.name],
-//      return {
-//         [props.name]: props[props.name],
-//         error: getErrorText()
-//      }
-//   }
 
    // system
    componentDidMount() {
@@ -53,13 +42,7 @@ export default class TextField extends Component {
    }
 
    componentDidUpdate() {
-//      let real = this.props.value
-
-//      if (this.props.subname) {
-//         real = {[this.props.subname]: real} // TODO add text as variable subkey
-//      }
       console.log('up', this.props )
-//      this.props.onUpdate({[this.props.path]: real})
 
       if (this.props.textArea) {
          M.textareaAutoResize(this.$input)
@@ -73,16 +56,9 @@ export default class TextField extends Component {
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
       document.dispatchEvent(ce)
- //     this.updateError(value)
 
       console.log(e.target.value, object)
- //     this.setState({[name]: value})
    }
-
-   // support
- //  value(state = this.state) {
- //     return state[this.props.name]
- //  }
 
    render() {
       console.log(this.props, this.props.value)

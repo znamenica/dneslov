@@ -50,24 +50,7 @@ export default class CalendaryForm extends CommonForm {
       descriptions: PropTypes.array,
       links: PropTypes.array,
    }
-/*
-   static getDerivedStateFromProps(props, state) {
-      return {
-         id: props.id,
-         licit: props.licit,
-         slug: props.slug,
-         language_code: props.language_code,
-         alphabeth_code: props.alphabeth_code,
-         author_name: props.author_name,
-         date: props.date,
-         council: props.council,
-         names: props.names,
-         descriptions: props.descriptions,
-         wikies: props.wikies,
-         links: props.links,
-      }
-   }
-*/
+
    static getCleanState() {
       return {
          id: null,

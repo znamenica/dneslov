@@ -33,10 +33,6 @@ export default class EventBlock extends Component {
    }
 
    // system
-   onChildUpdate(property) {
-//      this.props.onUpdate({[this.props._id]: property})
-   }
-
    render() {
       console.log(this.props)
 
@@ -46,8 +42,7 @@ export default class EventBlock extends Component {
                key='type'
                name={this.props._id + '.type'}
                value={this.props.type}
-               wrapperClassName='input-field col xl4 l4 m6 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               wrapperClassName='input-field col xl4 l4 m6 s12' />
             <TextField
                key='happenedAt'
                name={this.props._id + '.happened_at'}
@@ -55,8 +50,7 @@ export default class EventBlock extends Component {
                placeholder='Введи пору'
                value={this.props.happened_at}
                validations={this.props.value_validations}
-               wrapperClassName='input-field col xl3 l3 m6 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               wrapperClassName='input-field col xl3 l3 m6 s12' />
             <PlaceField
                key='placeId'
                name={this.props._id + '.place_id'}
@@ -64,23 +58,20 @@ export default class EventBlock extends Component {
                title='Место происшествия'
                value={this.props.place_id}
                humanized_value={this.props.place}
-               wrapperClassName='input-field col xl5 l5 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               wrapperClassName='input-field col xl5 l5 m4 s12' />
             <ItemField
                key='itemId'
                name={this.props._id + '.item_id'}
                humanized_name={this.props._id + '.item'}
                value={this.props.item_id}
                humanized_value={this.props.item}
-               wrapperClassName='input-field col xl6 l6 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} />
+               wrapperClassName='input-field col xl6 l6 m4 s12' />
             <TextField
                key='personName'
                name={this.props._id + '.person_name'}
                title='Имя связанной личности...'
                placeholder='Введи имя'
                value={this.props.person_name}
-               wrapperClassName='input-field col xl6 l6 m4 s12'
-               onUpdate={this.onChildUpdate.bind(this)} /></div>)
+               wrapperClassName='input-field col xl6 l6 m4 s12' /></div>)
    }
 }

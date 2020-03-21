@@ -52,8 +52,6 @@ export default class CalendaryRow extends Component {
       }
    }
 
-   //componentDidUpdate() {}
-
    // custom
    edit() {
       this.props.onEdit(this.props.id)
