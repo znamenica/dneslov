@@ -7,7 +7,7 @@ end
 
 ruby '2.5.5'
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 5.2.4', '>= 5.2.4.2'
 gem 'pg'
 #NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
@@ -38,20 +38,20 @@ gem "figaro"
 # gem 'redis', '~> 3.0'
 
 ## controllers
-gem 'has_scope'
+gem 'has_scope', '>= 0.7.2'
 
 ## models
 gem 'validate_url'
 
 # view
 ## NPM packaging
-gem 'npm-pipeline-rails'
+gem 'npm-pipeline-rails', '>= 1.8.1'
 
 ## pagination
-gem 'kaminari'
+gem 'kaminari', '>= 1.1.1'
 
 ## decoration/serialization
-gem 'active_model_serializers'
+gem 'active_model_serializers', '>= 0.10.10'
 
 ## authentication
 gem 'excon', '~> 0.71.0'
@@ -74,15 +74,15 @@ group :development do
    gem 'capistrano-bundler'
    gem 'capistrano-rake'
    gem 'capistrano-rvm'
-   gem 'dry_crud' # then rails generate dry_crud [--templates haml] [--tests rspec]
-   gem 'web-console', '>= 3.3.0'
-   gem 'pattern_generator'
+   gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
+   gem 'web-console', '>= 3.7.0'
+   gem 'pattern_generator', '>= 0.1.0'
    # gem 'bullet' # gives exception
 end
 
 group :development, :test do
    gem 'ruby-prof'
-   gem "factory_bot_rails"
+   gem "factory_bot_rails", ">= 5.1.1"
    gem 'pry', '~> 0.10.4'
    gem 'pry-rails', '~> 0.3.6'
    gem 'listen', '>= 3.0.5', '< 3.2'
@@ -95,7 +95,7 @@ group :development, :test do
 end
 
 group :test do
-   gem 'cucumber-rails', require: nil
+   gem 'cucumber-rails', '>= 1.8.0', require: nil
    gem 'shoulda-matchers', github: 'majioa/shoulda-matchers', branch: 'allow_to_use_the_matchers_with_just_rspec_expectations_gem'
    gem 'rspec-expectations'
    gem 'rspec-wait'
