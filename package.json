@@ -62,7 +62,7 @@
     "webpack-livereload-plugin": "^2.2.0",
     "webpack-manifest-plugin": "~1.1.0",
     "webpack-merge": "~4.1.0",
-    "yarn": "^1.19.1"
+    "yarn": "^1.22.0"
   },
   "dependencies": {
     "assign-deep": "^1.0.1",
