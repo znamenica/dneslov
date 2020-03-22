@@ -7,21 +7,21 @@ export default class Carousel extends Component {
       images: [],
    }
 
-   state = { loadCounter: 0 }
+   state = {}
+
+   static getDerivedStateFromProps(props, state) {
+      if (state.prevProps !== props) {
+         return { loadCounter: 0, prevProps: props }
+      } else {
+         return null
+      }
+   }
 
    // system
    constructor(props) {
       super(props)
 
       this.onIconClick = this.onIconClick.bind(this)
-   }
-
-   getSnapshotBeforeUpdate() {
-      this.setState({ loadCounter: 0 })
-   }
-
-   shouldComponentUpdate(nextProps, nextState) {
-      return nextState.loadCounter == 0
    }
 
    componentWillUnmount() {
@@ -52,6 +52,7 @@ export default class Carousel extends Component {
    }
 
    stateChanged() {
+         console.log("LOADED", this.state.loadCounter)
       if (this.state.loadCounter == this.props.images.length) {
          console.log("CAROUSEL COMPLETED")
          this.carousel = M.Carousel.init(this.$carousel, {});

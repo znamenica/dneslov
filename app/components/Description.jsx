@@ -15,10 +15,12 @@ export default class Description extends Component {
    state = this.getDefaultState()
 
    // system
-   constructor(props) {
-      super(props)
+   componentDidMount() {
+      this.collapsible = M.Collapsible.init(this.$collapsible, {onOpen: this.onOpen.bind(this)})
+   }
 
-      this.onSlugClick = this.onSlugClick.bind(this)
+   componentWillUnmount() {
+      this.collapsible.destroy()
    }
 
    //private
@@ -46,45 +48,9 @@ export default class Description extends Component {
       }, null)
    }
 
-   // system
-   getSnapshotBeforeUpdate() {
-      this.componentWillTouch()
-   }
-
-   componentDidMount() {
-      this.collapsible = M.Collapsible.init(this.$collapsible, {onOpen: this.onOpen.bind(this)})
-
-      this.$slugs.forEach((slug) => {
-         slug.addEventListener('click', this.onSlugClick)
-      })
-
-      this.mounting = false
-   }
-
-   componentWillUnmount() {
-      this.$slugs.forEach((slug) => {
-         slug.removeEventListener('click', this.onSlugClick)
-      })
-
-      this.collapsible.destroy()
-   }
-
-   componentWillTouch() {
-      this.calculateDefaultCalendary()
-      this.$headers = new Array
-      this.$slugs = new Array
-      this.mounting = true
-   }
-
    // events
-   onSlugClick(e) {
-      e.stopPropagation()
-   }
-
    onOpen(e) {
-      if (!this.mounting) {
-         e[0].scrollIntoView({ behavior: "instant" })
-      }
+      e[0].scrollIntoView({ behavior: "instant" })
    }
 
    // state
@@ -107,7 +73,7 @@ export default class Description extends Component {
    }
 
    render() {
-      console.log("DESCRIPTION", this.state)
+      console.log("[render] > state", this.state)
 
       return (
          <div className='col s12'>
@@ -121,12 +87,10 @@ export default class Description extends Component {
                         className={"collection-item description " + this.activeClassFor(description)}>
                         <div
                            key={description.calendary && description.calendary.slug + '-description-header' || 'common-description-header'}
-                           ref={e => this.$headers.push(e)}
                            className={"collapsible-header " + this.activeClassFor(description)}>
                            {description.calendary &&
                               <Chip
                                  key={description.calendary.slug + '-description-slug'}
-                                 ref={e => this.$slugs.push(ReactDOM.findDOMNode(e))}
                                  data={{slug: description.calendary.slug}}
                                  className='calendary'
                                  text={description.calendary.name}

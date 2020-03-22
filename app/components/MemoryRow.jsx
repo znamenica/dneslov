@@ -3,6 +3,35 @@ import PropTypes from 'prop-types'
 
 const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Translation', 'Sanctification']
 
+function makeDate(props) {
+   let dates = [...event_types].map((event_type) => {
+      return props.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)
+   }).filter((e) => { return e })
+
+   return dates[0] || ''
+}
+
+function makeCouncil(props) {
+   if (props.council && props.council.length > 17) {
+      return props.council.slice(0, 17) + '...'
+   } else {
+      return props.council || ''
+   }
+}
+
+function makeDescription(props) {
+   let descriptions = props.locales.map((locale) => {
+      return props.descriptions.reduce((res, description) => {
+         return res || locale === description.language_code && description.text }, null)
+   }).filter((e) => { return e })
+
+   if (descriptions[0] && descriptions[0].length > 27) {
+      return descriptions[0].slice(0, 27) + '...'
+   } else {
+      return descriptions[0] || ''
+   }
+}
+
 export default class MemoryRow extends Component {
    static defaultProps = {
       locales: [],
@@ -51,23 +80,20 @@ export default class MemoryRow extends Component {
    }
 
    // system
-   getSnapshotBeforeUpdate(prevProps, prevState) {
-      if (this.props.events != prevProps.events) {
-         this.date = this.makeDate()
-      }
+   state = { prevProps: { names: null } }
 
-      if (this.props.descriptions != prevProps.descriptions) {
-         this.description = this.makeDescription()
+   static getDerivedStateFromProps(props, state) {
+      if (props.names != state.prevProps.names) {
+         return {
+            prevProps: props,
+            date: makeDate(props),
+            description: makeDescription(props),
+            council: makeCouncil(props),
+         }
+      } else {
+         return null
       }
-
-      if (this.props.council != prevProps.council) {
-         this.council = this.makeCouncil()
-      }
-
-      return null
    }
-
-   componentDidUpdate() {}
 
    // custom
    edit() {
@@ -95,44 +121,15 @@ export default class MemoryRow extends Component {
               .addEventListener('click', this.remove.bind(this))
    }
 
-   makeDate() {
-      let dates = [...event_types].map((event_type) => {
-         return this.props.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)
-      }).filter((e) => { return e })
-
-      return dates[0] || ''
-   }
-
-   makeCouncil() {
-      if (this.props.council && this.props.council.length > 17) {
-         return this.props.council.slice(0, 17) + '...'
-      } else {
-         return this.props.council || ''
-      }
-   }
-
-   makeDescription() {
-      let descriptions = this.props.locales.map((locale) => {
-         return this.props.descriptions.reduce((res, description) => {
-            return res || locale === description.language_code && description.text }, null)
-      }).filter((e) => { return e })
-
-      if (descriptions[0] && descriptions[0].length > 27) {
-         return descriptions[0].slice(0, 27) + '...'
-      } else {
-         return descriptions[0] || ''
-      }
-   }
-
    render() {
       return (
          <tr>
             <td>{this.props.short_name}</td>
             <td>{this.props.order}</td>
-            <td>{this.council}</td>
+            <td>{this.state.council}</td>
             <td>{this.props.quantity}</td>
-            <td>{this.date}</td>
-            <td>{this.description}</td>
+            <td>{this.state.date}</td>
+            <td>{this.state.description}</td>
             <td className='actions'>
                <i
                   className='small material-icons'

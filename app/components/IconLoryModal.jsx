@@ -7,17 +7,17 @@ export default class IconLoryModal extends Component {
       onLorySlideFrom: null,
    }
 
-   state = { loadCounter: 0 }
+   state = {}
+
+   static getDerivedStateFromProps(props, state) {
+      if (state.prevProps !== props) {
+         return { loadCounter: 0, prevProps: props }
+      } else {
+         return null
+      }
+   }
 
    // system
-   getSnapshotBeforeUpdate() {
-      this.setState({ loadCounter: 0 })
-   }
-
-   shouldComponentUpdate(nextProps, nextState) {
-      return nextState.loadCounter == 0
-   }
-
    constructor(props) {
       super(props)
 
@@ -43,13 +43,12 @@ export default class IconLoryModal extends Component {
    // events
    stateChanged() {
       if (this.state.loadCounter == this.props.links.length) {
-         console.log("LORY COMPLETED")
          this.componentReady()
       }
    }
 
    componentReady() {
-      console.log(this.$modal)
+      console.log("[componentReady] <<<")
       this.modal = M.Modal.init(this.$modal, {})
       this.lory = lory(this.$lory, {
          slideSpeed: 750,
@@ -64,7 +63,7 @@ export default class IconLoryModal extends Component {
       }, 0)
 
       this.lory_scroll = this.items_width > this.$modal.clientWidth
-      console.log("SIZE", this.items_width, this.$modal.clientWidth)
+      console.log("[loryResize] > size:", this.items_width, this.$modal.clientWidth)
       if (this.lory_scroll) {
          this.$lory.querySelector('.prev').classList.remove('hidden')
          this.$lory.querySelector('.next').classList.remove('hidden')
@@ -77,14 +76,14 @@ export default class IconLoryModal extends Component {
    }
 
    openModal(index) {
-      console.log("OPENING", this.lory_scroll)
+      console.log("[openModal] > Opening", this.lory_scroll)
       if (this.lory_scroll) {
          document.body.style.overflowY = 'hidden' // required to fix width of modal in proper value
          // TODO fix scroll to last (it is buggy)
          this.lory.slideTo(index, 0)
       }
 
-      console.log("OPEN")
+      console.log("[openModal] > open")
       this.modal.open()
    }
 
@@ -106,7 +105,7 @@ export default class IconLoryModal extends Component {
    }
 
    render() {
-      console.log("STATE", this.state)
+      console.log("[render] > state", this.state)
 
       return (
          <div
@@ -152,6 +151,5 @@ export default class IconLoryModal extends Component {
                               fill="#DEB3AA"
                               d="M199.33 410.622l-55.77-55.508L247.425 250.75 143.56 146.384l55.77-55.507L358.44 250.75z" /></g></svg></div>
                   <a
-                     className='modal-action modal-close waves-effect btn-flat pulse chip'
-                     href="javascript:">
+                     className='modal-action modal-close waves-effect btn-flat pulse chip'>
                         Закрыть</a></div></div></div>)}}
