@@ -1,0 +1,20 @@
+#/bin/bash
+set -x 
+export RAILS_ENV=development
+export RAKE_ENV=$RAILS_ENV
+
+rake db:drop
+dropuser -U postgres dneslov
+createuser -U postgres --createdb --createrole --superuser majioa
+createuser -U postgres --createdb --createrole --superuser dneslov
+
+rake db:create
+if [ -f "./dneslov_development.sql" ]; then
+   psql -d dneslov_development < dneslov_development.sql
+fi
+
+RAILS_ENV=test RAKE_ENV=test rake db:create db:migrate
+
+
+yarn
+npm run build
