@@ -51,9 +51,15 @@ export default class DynamicField extends Component {
    }
 
    // system
+   constructor() {
+      super()
+
+      this.onKeyPress = this.onKeyPress.bind(this)
+   }
+
    componentDidMount() {
       this.setup()
-      window.addEventListener('keypress', this.onKeyPress.bind(this))
+      document.addEventListener('keypress', this.onKeyPress)
    }
 
    componentDidUpdate() {
@@ -66,7 +72,7 @@ export default class DynamicField extends Component {
 
    componentWillUnmount() {
       this.destroy()
-      window.removeEventListener('keypress', this.onKeyPress)
+      document.removeEventListener('keypress', this.onKeyPress)
    }
 
    //events

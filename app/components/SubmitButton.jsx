@@ -14,14 +14,22 @@ export default class SubmitButton extends Component {
 
    state = { valid: this.props.valid }
 
+   // system
+   constructor(props) {
+      super(props)
+
+      this.onFormValidChanged = this.onFormValidChanged.bind(this)
+   }
+
    componentDidMount() {
-      document.addEventListener('dneslov-form-valid', this.onFormValidChanged.bind(this))
+      document.addEventListener('dneslov-form-valid', this.onFormValidChanged)
    }
 
    componentWillUnmount() {
-      document.removeEventListener('dneslov-form-valid', this.onFormValidChanged.bind(this))
+      document.removeEventListener('dneslov-form-valid', this.onFormValidChanged)
    }
 
+   // events
    onFormValidChanged(e) {
       this.setState({ active: e.detail.valid })
    }

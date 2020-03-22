@@ -24,8 +24,15 @@ export default class CommonModal extends Component {
       i18n: PropTypes.object.isRequired,
    }
 
+   //system
+   constructor() {
+      super()
+
+      this.onCloseClick = this.onCloseClick.bind(this)
+   }
+
    componentDidMount() {
-      document.addEventListener('dneslov-record-stored', this.onCloseClick.bind(this))
+      document.addEventListener('dneslov-record-stored', this.onCloseClick)
 
       this.modal = M.Modal.init(this.$modal, {
          onCloseEnd: this.onModalClosed.bind(this)
@@ -34,7 +41,13 @@ export default class CommonModal extends Component {
       this.componentDidRender()
    }
 
-   componentDidUpdate() {
+   componentWillUnmount() {
+      document.removeEventListener('dneslov-record-stored', this.onCloseClick)
+
+      this.modal.destroy()
+   }
+
+    componentDidUpdate() {
       this.componentDidRender()
    }
 

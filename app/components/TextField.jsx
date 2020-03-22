@@ -37,7 +37,7 @@ export default class TextField extends Component {
    // system
    componentDidMount() {
       if (this.props.data && this.props.data['length']) {
-         CharacterCounter.init(this.$input)
+         this.counter = CharacterCounter.init(this.$input)
       }
    }
 
@@ -46,6 +46,13 @@ export default class TextField extends Component {
 
       if (this.props.textArea) {
          M.textareaAutoResize(this.$input)
+      }
+   }
+
+   componentWillUnmount() {
+      if (this.counter) {
+         this.counter.destroy()
+         this.counter = null
       }
    }
 

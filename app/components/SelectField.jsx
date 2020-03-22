@@ -27,13 +27,13 @@ export default class SelectField extends Component {
 
    // system
    componentDidMount() {
+      console.log("[componentDidMount] <<<")
       this.select = FormSelect.init(this.$select, {})
       this.$wrap = this.$parent.querySelector('.select-wrapper')
-      console.log("MOUNT")
    }
 
    componentWillUnmount() {
-      console.log("UNMOUNT")
+      console.log("[componentWillUnmount] <<<")
       this.select.destroy()
    }
 

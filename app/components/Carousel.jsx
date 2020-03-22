@@ -10,6 +10,12 @@ export default class Carousel extends Component {
    state = { loadCounter: 0 }
 
    // system
+   constructor(props) {
+      super(props)
+
+      this.onIconClick = this.onIconClick.bind(this)
+   }
+
    getSnapshotBeforeUpdate() {
       this.setState({ loadCounter: 0 })
    }
@@ -21,7 +27,7 @@ export default class Carousel extends Component {
    componentWillUnmount() {
       if (this.$carousel) {
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
-            img.removeEventListener('click', this.onIconClick.bind(this))
+            img.removeEventListener('click', this.onIconClick)
          })
       }
    }
@@ -51,7 +57,7 @@ export default class Carousel extends Component {
          this.carousel = M.Carousel.init(this.$carousel, {});
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
             console.log("CAROUSEL", img)
-            img.addEventListener('click', this.onIconClick.bind(this))
+            img.addEventListener('click', this.onIconClick)
          })
       }
    }

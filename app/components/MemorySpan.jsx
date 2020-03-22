@@ -23,12 +23,18 @@ export default class MemorySpan extends Component {
    }
 
    // system
+   constructor(props) {
+      super(props)
+
+      this.onAvatarClick = this.onAvatarClick.bind(this)
+   }
+
    componentDidMount() {
-      this.$avatar.addEventListener('click', this.onAvatarClick.bind(this))
+      this.$avatar.addEventListener('click', this.onAvatarClick)
    }
 
    componentWillUnmount() {
-      this.$avatar.removeEventListener('click', this.onAvatarClick.bind(this))
+      this.$avatar.removeEventListener('click', this.onAvatarClick)
    }
 
    // events

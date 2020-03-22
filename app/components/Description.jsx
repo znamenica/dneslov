@@ -14,6 +14,13 @@ export default class Description extends Component {
 
    state = this.getDefaultState()
 
+   // system
+   constructor(props) {
+      super(props)
+
+      this.onSlugClick = this.onSlugClick.bind(this)
+   }
+
    //private
    getDefaultState(props = this.props) {
       return {
@@ -45,10 +52,10 @@ export default class Description extends Component {
    }
 
    componentDidMount() {
-      M.Collapsible.init(this.$collapsible, {onOpen: this.onOpen.bind(this)})
+      this.collapsible = M.Collapsible.init(this.$collapsible, {onOpen: this.onOpen.bind(this)})
 
       this.$slugs.forEach((slug) => {
-         slug.addEventListener('click', this.onSlugClick.bind(this))
+         slug.addEventListener('click', this.onSlugClick)
       })
 
       this.mounting = false
@@ -56,8 +63,10 @@ export default class Description extends Component {
 
    componentWillUnmount() {
       this.$slugs.forEach((slug) => {
-         slug.removeEventListener('click', this.onSlugClick.bind(this))
+         slug.removeEventListener('click', this.onSlugClick)
       })
+
+      this.collapsible.destroy()
    }
 
    componentWillTouch() {

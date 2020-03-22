@@ -37,9 +37,24 @@ export default class CommonForm extends Component {
       }
    }
 
+   // system
+   constructor() {
+      super()
+
+      this.onSubmit = this.onSubmit.bind(this)
+      this.onChildChanged = this.onChildChanged.bind(this)
+   }
+
    componentDidMount() {
-      document.addEventListener('dneslov-update-path', this.onChildChanged.bind(this))
-      document.addEventListener('dneslov-record-submit', this.onSubmit.bind(this))
+      console.log("[componentDidMount] <<<")
+      document.addEventListener('dneslov-update-path', this.onChildChanged)
+      document.addEventListener('dneslov-record-submit', this.onSubmit)
+   }
+
+   componentWillUnmount() {
+      console.log("[componentWillUnmount] <<<")
+      document.removeEventListener('dneslov-update-path', this.onChildChanged)
+      document.removeEventListener('dneslov-record-submit', this.onSubmit)
    }
 
    componentDidUpdate() {
@@ -193,11 +208,10 @@ export default class CommonForm extends Component {
    }
 
    render() {
-      console.log("[render] > props", this.props)
       console.log("[render] > state", this.state)
 
       return (
-         <form onSubmit={this.onSubmit.bind(this)}>
+         <form>
             <div className='row'>
                {this.renderContent()}</div>
             <div className='row'>

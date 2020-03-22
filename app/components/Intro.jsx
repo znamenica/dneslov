@@ -114,20 +114,15 @@ export class Intro extends Component {
 
    state = { enabled: this.props.enabled }
 
-   DOMLoaded() {
-      const { cookies } = this.props
+   // system
+   constructor(props) {
+      super(props)
 
-      let introLetterDate = this.calculateLatterStepDateStamp(this.props)
-      let require_run = introLetterDate > this.getLatterStepDateStamp()
-      console.log('CAL', introLetterDate, this.getLatterStepDateStamp(), require_run)
-      this.setState({
-         enabled: this.props.enabled || require_run,
-         introLetterDate: introLetterDate
-      })
+      this.onDOMLoaded = this.onDOMLoaded.bind(this)
    }
 
    componentDidMount() {
-      window.addEventListener('load', this.DOMLoaded.bind(this))
+      document.addEventListener('load', this.onDOMLoaded)
    }
 
    componentDidUpdate() {
@@ -137,7 +132,7 @@ export class Intro extends Component {
    }
 
    componentWillUnmount() {
-      window.removeEventListener('load', this.DOMLoaded.bind(this))
+      document.removeEventListener('load', this.onDOMLoaded)
    }
 
    // custom
@@ -162,6 +157,7 @@ export class Intro extends Component {
       }, '0')
    }
 
+   // events
    handleNameChange(name) {
       const { cookies } = this.props
  
@@ -173,6 +169,18 @@ export class Intro extends Component {
    }
 
    onExitIntro() {
+   }
+
+   onDOMLoaded() {
+      const { cookies } = this.props
+
+      let introLetterDate = this.calculateLatterStepDateStamp(this.props)
+      let require_run = introLetterDate > this.getLatterStepDateStamp()
+      console.log('CAL', introLetterDate, this.getLatterStepDateStamp(), require_run)
+      this.setState({
+         enabled: this.props.enabled || require_run,
+         introLetterDate: introLetterDate
+      })
    }
 
    render() {

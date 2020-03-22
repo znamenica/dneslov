@@ -18,18 +18,26 @@ export default class IconLoryModal extends Component {
       return nextState.loadCounter == 0
    }
 
+   constructor(props) {
+      super(props)
+
+      this.loryResize = this.loryResize.bind(this)
+      this.onDocumentClick = this.onDocumentClick.bind(this)
+      this.onLorySlideFrom = props.onLorySlideFrom.bind(this)
+   }
+
    componentDidMount() {
-      this.$lory.addEventListener('after.lory.init', this.loryResize.bind(this))
-      this.$lory.addEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.addEventListener('after.lory.slide', this.props.onLorySlideFrom.bind(this))
-      document.addEventListener('click', this.onDocumentClick.bind(this))
+      this.$lory.addEventListener('after.lory.init', this.loryResize)
+      this.$lory.addEventListener('on.lory.resize', this.loryResize)
+      this.$lory.addEventListener('after.lory.slide', this.onLorySlideFrom)
+      document.addEventListener('click', this.onDocumentClick)
    }
 
    componentWillUnmount() {
-      this.$lory.removeEventListener('after.lory.init', this.loryResize.bind(this))
-      this.$lory.removeEventListener('on.lory.resize', this.loryResize.bind(this))
-      this.$lory.removeEventListener('after.lory.slide', this.props.onLorySlideFrom.bind(this))
-      document.removeEventListener('click', this.onDocumentClick.bind(this))
+      this.$lory.removeEventListener('after.lory.init', this.loryResize)
+      this.$lory.removeEventListener('on.lory.resize', this.loryResize)
+      this.$lory.removeEventListener('after.lory.slide', this.onLorySlideFrom)
+      document.removeEventListener('click', this.onDocumentClick)
    }
 
    // events

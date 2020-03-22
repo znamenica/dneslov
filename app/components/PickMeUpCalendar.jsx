@@ -38,6 +38,16 @@ export default class PickMeUpCalendar extends Component {
 
    pmu = null
 
+   // system
+   constructor(props) {
+      super(props)
+
+      this.onPickmeupChange = this.onPickmeupChange.bind(this)
+      this.onYesterdayClick = this.onYesterdayClick.bind(this)
+      this.onTomorrowClick = this.onTomorrowClick.bind(this)
+      this.onChangeStyle = this.onChangeStyle.bind(this)
+   }
+
    setState(value) {
       Object.keys(value).forEach((key) => {
          this.state[key] = value[key]
@@ -94,29 +104,29 @@ export default class PickMeUpCalendar extends Component {
       instance.prepend(styles)
 
       this.$calendar.append(cal)
-      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
+      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange)
       this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
-         el.addEventListener('click', this.onYesterdayClick.bind(this))
+         el.addEventListener('click', this.onYesterdayClick)
       })
       this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
-         el.addEventListener('click', this.onTomorrowClick.bind(this))
+         el.addEventListener('click', this.onTomorrowClick)
       })
       this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         el.addEventListener('click', this.onChangeStyle.bind(this))
+         el.addEventListener('click', this.onChangeStyle)
       })
    }
 
    componentWillUnmount() {
       this.$calendar.remove()
-      this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange.bind(this))
+      this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange)
       this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
-         el.removeEventListener('click', this.onYesterdayClick.bind(this))
+         el.removeEventListener('click', this.onYesterdayClick)
       })
       this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
-         el.removeEventListener('click', this.onTomorrowClick.bind(this))
+         el.removeEventListener('click', this.onTomorrowClick)
       })
       this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         removeEventListener('click', this.onChangeStyle.bind(this))
+         removeEventListener('click', this.onChangeStyle)
       })
    }
 

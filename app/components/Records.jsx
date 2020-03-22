@@ -27,16 +27,23 @@ export default class Records extends Component {
    }
 
    // system
+   constructor(props) {
+      super(props)
+
+      this.onRecordUpdate = this.onRecordUpdate.bind(this)
+      this.onModalClose = this.onModalClose.bind(this)
+   }
+
    componentDidMount() {
       this.submit()
-      document.addEventListener('dneslov-record-stored', this.onRecordUpdate.bind(this))
-      document.addEventListener('dneslov-modal-close', this.onModalClose.bind(this))
+      document.addEventListener('dneslov-record-stored', this.onRecordUpdate)
+      document.addEventListener('dneslov-modal-close', this.onModalClose)
    }
 
    componentWillUnmount() {
-      console.log("UNMOUNT")
-      document.removeEventListener('dneslov-record-stored', this.onRecordUpdate.bind(this))
-      document.removeEventListener('dneslov-modal-close', this.onModalClose.bind(this))
+      console.log("[componentWillUnmount] <<<")
+      document.removeEventListener('dneslov-record-stored', this.onRecordUpdate)
+      document.removeEventListener('dneslov-modal-close', this.onModalClose)
    }
 
    componentDidUpdate(nextProps) {

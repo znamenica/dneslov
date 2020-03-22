@@ -14,7 +14,11 @@ export default class MemorySpans extends Component {
 
    // system
    componentDidMount() {
-      M.Collapsible.init(this.$collapsible, {})
+      this.collapsible = M.Collapsible.init(this.$collapsible, {})
+   }
+
+   componentWillUnmount() {
+      this.collapsible.destroy()
    }
 
    // props
