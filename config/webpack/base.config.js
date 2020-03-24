@@ -97,6 +97,9 @@ module.exports = {
    },
 
    plugins: [
+      new webpack.ProvidePlugin({
+         React: 'react'
+      }),
       new MiniCssExtractPlugin({ filename: '[name].css',
                                  chunkFilename: '[id].css',
                                  ignoreOrder: DEBUG ? false : true }),
@@ -115,9 +118,6 @@ module.exports = {
          postcss: [
             require('autoprefixer')(),
          ],
-      }),
-      new webpack.ProvidePlugin({
-         React: 'react',
       }),
    ],
 }

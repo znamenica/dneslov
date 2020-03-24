@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
 import { Autocomplete } from 'materialize-css'
 import * as Axios from 'axios'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 
 import ErrorSpan from 'ErrorSpan'
 import Chip from 'Chip'
@@ -79,6 +79,7 @@ export default class DynamicField extends Component {
    onChange(e) {
       let humanized_value = e.target.value
 
+      console.log("[onKeyPress] > update: ", humanized_value)
       this.updateTo(humanized_value, false)
 
       if (!this.triggered || humanized_value &&
@@ -92,12 +93,13 @@ export default class DynamicField extends Component {
    }
 
    onSelectFromList(humanized_value, e) {
+      console.log("[onSelectFromList] > fix to:", humanized_value)
       this.updateTo(humanized_value)
    }
 
    onKeyPress(e) {
       if (e.key === "Enter" && e.target == this.$input) {
-         console.log("FIX")
+         console.log("[onKeyPress] > fix to:", this.$input.value)
          e.preventDefault()
          if (this.data.list[this.$input.value]) {
             this.updateTo(this.$input.value)
@@ -106,7 +108,7 @@ export default class DynamicField extends Component {
    }
 
    onChipAct() {
-      console.log("UNFIX")
+      console.log("[onChipAct] > unfix")
       let ce = new CustomEvent('dneslov-update-path', {
          detail: {
             [this.props.name]: null,
@@ -138,7 +140,7 @@ export default class DynamicField extends Component {
 
    //actions
    setAutocomplete() {
-      console.log("=======---", this.input)
+      console.log("[setAutocomplete] >", this.input)
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
 
       this.input.updateData(list)
@@ -146,7 +148,8 @@ export default class DynamicField extends Component {
    }
 
    updateTo(humanized_value_in, autofix = true) {
-      let ce, detail, value_detail, value, humanized_value
+      console.log("[updateTo] <<<", humanized_value_in, autofix)
+      let ce, detail, value_detail = {}, value, humanized_value
 
       if (this.props.subname) {
          // TODO add text as variable subkey
@@ -163,10 +166,10 @@ export default class DynamicField extends Component {
          value_detail = this.valueToObject(this.props.name, value)
       }
 
-      detail = assign({}, this.valueToObject(this.props.humanized_name, humanized_value), value_detail)
+      detail = merge({}, this.valueToObject(this.props.humanized_name, humanized_value), value_detail)
+      console.log("[updateTo] >> detail", detail)
 
-      console.log("[updateTo]", humanized_value_in, this.data.list[humanized_value_in], detail)
-      ce = new CustomEvent('dneslov-update-path', { detail: detail })
+      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: detail }))
       document.dispatchEvent(ce)
    }
 
@@ -195,32 +198,35 @@ export default class DynamicField extends Component {
          url: '/' + this.props.pathname + '.json',
       }
 
-      console.log("[DynamicField]: load send" ,data, 'to /' + this.props.pathname + '.json')
+      console.log("[getDataFor] > load send" ,data, 'to /' + this.props.pathname + '.json')
       Axios.get(request.url, { params: request.data })
         .then(this.onLoadSuccess.bind(this))
         .catch(this.onLoadFailure.bind(this))
    }
 
    onLoadFailure() {
-      console.log("[DynamicField]: failure load")
+      console.log("[onLoadFailure] <<<")
       this.triggered = undefined
    }
 
    onLoadSuccess(response) {
+      console.log("[onLoadSuccess] <<<")
+
       var dynamic_data = response.data
 
       this.storeDynamicData(dynamic_data)
 
-      console.log("[DynamicField]: success load", dynamic_data, "for: ",  this.triggered, "having: ", this.props.humanized_value, "and resp:", response)
+      console.log("[onLoadSuccess] >", dynamic_data, "for: ",  this.triggered, "with response:", response)
 
       if (this.$input) {
-         console.log("1 qweqwqwq")
+         console.log("[onLoadSuccess] > update autocomplete for", this.props.humanized_value)
          this.setAutocomplete()
          this.updateTo(this.props.humanized_value, false)
       }
    }
 
    storeDynamicData(dynamic_data) {
+      console.log("[storeDynamicData] <<<", dynamic_data)
       this.data = {
          total: dynamic_data.total,
          list: dynamic_data.list.reduce((h, x) => {
@@ -228,10 +234,11 @@ export default class DynamicField extends Component {
             return h
          }, {}),
       }
+      console.log("[storeDynamicData] > after store", this.data)
    }
 
    render() {
-      console.log("[DynamicField]: props", this.props)
+      console.log("[render] > props", this.props)
 
       return (
          <div

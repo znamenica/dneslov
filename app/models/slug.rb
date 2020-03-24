@@ -4,6 +4,8 @@
 class Slug < ActiveRecord::Base
    belongs_to :sluggable, polymorphic: true
 
+   has_many :memories, primary_key: :text, foreign_key: :order
+
    validates :text, format: { with: /\A[0-9а-яё]+\z/ }
 
    scope :for_calendary, -> { where( sluggable_type: 'Calendary' ) }

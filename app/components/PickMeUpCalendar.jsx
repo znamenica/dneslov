@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import * as Pickmeup from 'pickmeup/js/pickmeup.js'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 import * as Axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -85,7 +85,7 @@ export default class PickMeUpCalendar extends Component {
    }
 
    componentDidMount() {
-      let settings = assign({}, this.props.pickmeup, {
+      let settings = merge({}, this.props.pickmeup, {
          date: this.selectedString(), // plus 9 hours
          current: this.getToday(),
          calendar_gap: this.recalculateGap.bind(this),

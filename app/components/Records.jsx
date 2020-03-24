@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import ReactScrollPagination from '@majioa/react-scroll-pagination'
 import * as Axios from 'axios'
 
 import SearchField from 'SearchField'
@@ -169,8 +169,7 @@ export default class Records extends Component {
    }
 
    render() {
-      console.log(this.props)
-      console.log(this.state)
+      console.log("[render] > props:", this.props, "state:", this.state)
 
       return [
          <div>
@@ -214,4 +213,6 @@ export default class Records extends Component {
                         onEdit={this.onRecordEdit.bind(this)}
                         onRemove={this.onRecordRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination
+               excludeElement='header'
+               totalPages={this.state.total}
                fetchFunc={this.fetchNext.bind(this)} /></div>]}}

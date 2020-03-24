@@ -24,34 +24,40 @@ module.exports = merge(sharedConfig, {
                loader: 'babel-loader',
                options: {
                   cacheDirectory: true,
-                  ignore: /cjs/,
+                  babelrc: false,
+                  configFile: false,
+                  compact: false,
+                  ignore: [ /cjs/, /node_modules/ ],
                   presets: [
                      [
-                        "env",
+                        "@babel/preset-env",
                         {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
                               "uglify": true
                            },
-                           "useBuiltIns": true
+                           "useBuiltIns": "usage"
                         },
                      ],
-                     "stage-0",
-                     "stage-2",
-                     "react",
+                     "@babel/preset-react",
                   ],
                   plugins: [
-                     [ "transform-runtime", { //automatically polyfilling but +30K
+                     [ "@babel/transform-runtime", { //automatically polyfilling but +30K
                         helpers: false,
-                        polyfill: false, // TODO make it to have `true`, currently true throws an error in prod
                         regenerator: true,
                      }],
-                     "syntax-dynamic-import",
+                     "@babel/plugin-syntax-dynamic-import",
                      [
-                        "transform-class-properties", // +0.1K
+                        "@babel/plugin-proposal-class-properties",
                         {
                            "spec": true
+                        }
+                     ],
+                     [
+                        "@babel/plugin-proposal-decorators",
+                        {
+                           "legacy": true,
                         }
                      ],
                      "transform-react-remove-prop-types",//didnt pillout the import of PropTypes
@@ -62,7 +68,6 @@ module.exports = merge(sharedConfig, {
                      'transform-object-rest-spread',
                      'transform-async-to-generator',
                      'transform-es3-modules-literals',
-                     'transform-decorators-legacy',
                   ],
                },
             }]

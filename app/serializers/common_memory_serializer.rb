@@ -30,8 +30,8 @@ class CommonMemorySerializer < ApplicationSerializer
 
    def order
       {
-         slug: object.order_for( locales ).text,
-         color: self.color_by_slug( object.order ) } ;end
+        slug: object.orders.first&.tweet_for( locales )&.text,
+        color: self.color_by_slug( object.orders.first&.slug&.text ) } ;end
 
    def councils
       council = object.council || ''

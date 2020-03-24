@@ -16,13 +16,13 @@ import PlaceField from 'PlaceField'
 import DynamicField from 'DynamicField'
 import CommonForm from 'CommonForm'
 import ErrorSpan from 'ErrorSpan'
+import { matchEmptyObject } from 'matchers'
 
 export default class MemoryForm extends CommonForm {
    static defaultProps = {
       slug: {text: ''},
       base_year: 0,
       short_name: '',
-      order: null,
       council: '',
       quantity: '',
       bond_to_id: 0,
@@ -43,14 +43,12 @@ export default class MemoryForm extends CommonForm {
 
    static propTypes = {
       slug: PropTypes.object,
-      order: PropTypes.string.isRequired,
    }
 
    static getCleanState() {
       return {
          id: undefined,
          slug: { text: '' },
-         order: '',
          short_name: '',
          base_year: 0,
          council: '',
@@ -79,14 +77,10 @@ export default class MemoryForm extends CommonForm {
             key='shortName'
             value={this.state.query.short_name}
             wrapperClassName='input-field col xl3 l3 m6 s12' />,
-         <OrderField
-            key='order'
-            value={this.state.query.order}
-            wrapperClassName='input-field col xl5 l5 m6 s12' />,
          <BaseYearField
             key='baseYear'
             value={this.state.query.base_year.toString()}
-            wrapperClassName='input-field col xl2 l2 m6 s12' />,
+            wrapperClassName='input-field col xl2 l3 m6 s12' />,
          <PlaceField
             key='coversTo'
             name='covers_to_id'
@@ -95,21 +89,21 @@ export default class MemoryForm extends CommonForm {
             placeholder='Введи место покровительства'
             value={this.state.query.covers_to_id}
             humanized_value={this.state.query.covers_to}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
+            wrapperClassName='input-field col xl5 l4 m6 s12' />,
          <TextField
             key='council'
             name='council'
             title='Собор'
             placeholder='Введи сокращение собора'
             value={this.state.query.council}
-            wrapperClassName='input-field col xl2 l2 m6 s12' />,
+            wrapperClassName='input-field col xl3 l3 m6 s12' />,
          <TextField
             key='quantity'
             name='quantity'
             title='Количество'
             placeholder='Введи количество'
             value={this.state.query.quantity}
-            wrapperClassName='input-field col xl2 l2 m6 s12' />,
+            wrapperClassName='input-field col xl3 l3 m6 s12' />,
          <DynamicField
             key='bondTo'
             pathname='icons'
@@ -121,7 +115,7 @@ export default class MemoryForm extends CommonForm {
             placeholder='Введи вид образа'
             value={this.state.query.bond_to_id}
             humanized_value={this.state.query.bond_to}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
+            wrapperClassName='input-field col xl6 l6 m6 s12' />,
          <DescriptionsCollection
             key='descriptions'
             name='descriptions'

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 import * as uuid from 'uuid/v1'
 import { mixin } from 'lodash-decorators'
 
@@ -40,7 +40,7 @@ export default class EventsCollection extends Component {
    // proprties
    asArray() {
       return Object.entries(this.props.value).map(([key, element]) =>
-         assign({}, element, {
+         merge({}, element, {
             key: key,
             _id: this.props.name + '.' + key,
          })

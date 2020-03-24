@@ -1,16 +1,16 @@
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 
 const Validation = {
    getValidations() {
       if (!this.validations) {
-         this.validations = assign({}, this.constructor.validations, this.props.validations)
+         this.validations = merge({}, this.constructor.validations, this.props.validations)
       }
 
-      return this.validations
+      return this.validations || {}
    },
 
    getErrorText(value_in, context_in = {}) {
-      let context = assign({}, this.constructor.validation_context, context_in),
+      let context = merge({}, this.constructor.validation_context, context_in),
           error = null,
           value = value_in || ''
 

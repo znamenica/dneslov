@@ -1,4 +1,3 @@
-# order[string]         - чин памяти
 # council[string]       - соборы для памяти
 # short_name[string]    - краткое имя
 # covers_to_id[integer] - прокровительство
@@ -14,6 +13,7 @@ class Memory < ActiveRecord::Base
    belongs_to :covers_to, class_name: :Place, optional: true
    belongs_to :bond_to, class_name: :Memory, optional: true
 
+   has_one :slug, as: :sluggable, dependent: :destroy
    has_many :memory_names, dependent: :destroy
    has_many :names, through: :memory_names
    has_many :paterics, as: :info, dependent: :destroy, class_name: :PatericLink
@@ -21,12 +21,12 @@ class Memory < ActiveRecord::Base
    has_many :memos, through: :events
    has_many :calendaries, -> { distinct.reorder('id') }, through: :memos
    has_many :photo_links, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy # ЧИНЬ во photos
-   has_many :orders, foreign_key: :order, primary_key: :order
-   has_one :slug, as: :sluggable, dependent: :destroy
    has_many :notes, as: :describable, dependent: :destroy, class_name: :Note
+   has_many :orders, -> { distinct.reorder('id') }, through: :memos, source: :orders
+   has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
 
    default_scope { left_outer_joins( :slug ).order( base_year: :asc, short_name: :asc, id: :asc ) }
-   scope :icons, -> { where( order: :обр ) }
+   scope :icons, -> { joins(:slugs).where( slugs: { text: :обр } ) }
    scope :by_short_name, -> name { where( short_name: name ) }
    scope :in_calendaries, -> calendaries do
       left_outer_joins( :memos ).merge( Memo.in_calendaries( calendaries )).distinct ;end
@@ -59,8 +59,6 @@ class Memory < ActiveRecord::Base
 
    validates_presence_of :short_name, :events
    validates :base_year, format: { with: /\A-?\d+\z/ }
-   validates :order, format: { with: /\A[ёа-я0-9]+\z/ }
-   validates_presence_of :orders
 
    before_create :set_slug
    before_validation :set_base_year, on: :create
@@ -98,9 +96,6 @@ class Memory < ActiveRecord::Base
 
    def self.by_slug slug
       unscoped.joins( :slug ).where( slugs: { text: slug } ).first ;end
-
-   def order_for language_code
-      orders.where(language_code: language_code).first ;end
 
    def all_titles_for language_code
       Description.title.all_by_memory(self).with_lang(language_code) ;end

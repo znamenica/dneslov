@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_26_111500) do
+ActiveRecord::Schema.define(version: 2020_03_23_144100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -114,6 +114,14 @@ ActiveRecord::Schema.define(version: 2018_06_26_111500) do
     t.string "info_type", null: false
   end
 
+  create_table "memo_orders", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "memo_id"
+    t.index ["memo_id"], name: "index_memo_orders_on_memo_id"
+    t.index ["order_id", "memo_id"], name: "index_memo_orders_on_order_id_and_memo_id", unique: true
+    t.index ["order_id"], name: "index_memo_orders_on_order_id"
+  end
+
   create_table "memoes", id: :serial, force: :cascade do |t|
     t.string "add_date"
     t.string "year_date"
@@ -168,16 +176,6 @@ ActiveRecord::Schema.define(version: 2018_06_26_111500) do
   end
 
   create_table "orders", id: :serial, force: :cascade do |t|
-    t.string "order"
-    t.string "text"
-    t.string "alphabeth_code"
-    t.string "language_code"
-    t.string "short_note"
-    t.string "note"
-    t.index ["order", "alphabeth_code"], name: "index_orders_on_order_and_alphabeth_code", unique: true
-    t.index ["order"], name: "index_orders_on_order"
-    t.index ["text", "alphabeth_code", "language_code"], name: "index_orders_on_text_and_alphabeth_code_and_language_code"
-    t.index ["text"], name: "index_orders_on_text"
   end
 
   create_table "places", id: :serial, force: :cascade do |t|

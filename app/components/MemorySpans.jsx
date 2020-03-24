@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import ReactScrollPagination from 'react-scroll-pagination/src/index'
+import ReactScrollPagination from '@majioa/react-scroll-pagination'
 
 import MemorySpan from 'MemorySpan'
 

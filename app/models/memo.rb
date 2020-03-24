@@ -21,7 +21,10 @@ class Memo < ActiveRecord::Base
    has_many :descriptions, -> { desc }, as: :describable, dependent: :delete_all
    has_many :titles, -> { title }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
-
+   has_many :memo_orders
+   has_many :orders, through: :memo_orders
+   has_one :memo_order
+   has_one :order, through: :memo_order
    has_one :memory, through: :event
 
    #enum bind_kind: [ 'несвязаный', 'навечерие', 'предпразднество', 'попразднество' ]

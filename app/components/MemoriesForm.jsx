@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 import * as Axios from 'axios'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
@@ -129,12 +129,12 @@ export default class MemoriesForm extends Component {
 
       if (memories.page > 1) {
          let newMemories = this.state.memories.concat(memories.list)
-         state = assign({}, this.state, {
+         state = merge({}, this.state, {
             memories: newMemories,
             memoriesTotal: memories.total,
             memory: null})
       } else {
-         state = assign({}, this.state, {
+         state = merge({}, this.state, {
             memories: memories.list,
             memoriesTotal: memories.total,
             memory: null})
@@ -149,7 +149,7 @@ export default class MemoriesForm extends Component {
    onMemoriesLoadFailure(response) {
       console.log("FAILURE", response)
 
-      let query = assign(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
+      let query = merge(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
       document.body.classList.remove('in-progress')
       this.setState({query: query})
       this.isNextRequesting = false
@@ -168,7 +168,7 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoryLoadSuccess(response) {
-      let memory = response.data, state = assign({}, this.state, { memory: memory })
+      let memory = response.data, state = merge({}, this.state, { memory: memory })
 
       console.log("Loaded memory", memory)
 

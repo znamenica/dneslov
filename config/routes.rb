@@ -17,7 +17,9 @@ Rails.application.routes.draw do
       resources :calendaries, param: :id, except: :edit
       resources :memoes, param: :id, except: :edit
       resources :names, param: :id, except: :edit
+      resources :orders, param: :id, except: :edit
 
+      get '/short_orders' => 'orders#all'
       get '/short_calendaries' => 'calendaries#all'
       get '/short_memoes' => 'memoes#all'
       get '/short_events' => 'events#all'

@@ -47,45 +47,56 @@ module.exports = merge(sharedConfig, {
             use: [{
                loader: 'babel-loader',
                options: {
+                  babelrc: false,
+                  configFile: false,
+                  compact: false,
                   cacheDirectory: true,
-                  ignore: /cjs/,
+                  ignore: [ /cjs/, /node_modules/ ],
                   presets: [
                      [
-                        "env",
+                        "@babel/preset-env",
                         {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
                               "uglify": true
                            },
-                           "useBuiltIns": true
+                           "useBuiltIns": false
                         },
                      ],
-                     "stage-0",
-                     "stage-2",
-                     "react",
+                     [
+                        "@babel/preset-react",
+                        {
+                           runtime: "classic"
+                        }
+                     ]
                   ],
                   plugins: [
-                     [ "transform-runtime", { //automatically polyfilling but +30K
+                     [ "@babel/transform-runtime", { //automatically polyfilling but +30K
                         helpers: false,
-                        polyfill: false,
                         regenerator: true,
                      }],
-                     "syntax-dynamic-import",
                      [
-                        "transform-class-properties", // +0.1K
+                        "@babel/plugin-proposal-decorators",
+                        {
+                           "legacy": true,
+                        }
+                     ],
+                     [
+                        "@babel/plugin-proposal-class-properties",
                         {
                            "spec": true
                         }
                      ],
-                     "transform-react-constant-elements",//+0.01K
-                     "transform-react-inline-elements", //+0.5K
-                     "transform-react-pure-class-to-function", //+0*/
-                     'transform-es2015-destructuring',
-                     'transform-object-rest-spread',
-                     'transform-async-to-generator',
+                     '@babel/plugin-syntax-dynamic-import',
+                     '@babel/plugin-transform-react-jsx-source',
+                     '@babel/plugin-transform-react-jsx-self',
+                     '@babel/plugin-transform-react-constant-elements',
+                     '@babel/plugin-transform-react-inline-elements',
+                     '@babel/plugin-transform-destructuring',
+                     '@babel/plugin-transform-async-to-generator',
+                     'transform-react-pure-class-to-function',
                      'transform-es3-modules-literals',
-                     'transform-decorators-legacy',
                   ],
                },
             }]

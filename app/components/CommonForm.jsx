@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as uuid from 'uuid/v1'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 import * as Axios from 'axios'
 import { mixin } from 'lodash-decorators'
 
@@ -75,8 +75,11 @@ export default class CommonForm extends Component {
 
    // events
    onChildChanged(e) {
-      console.log("new query path", e.detail)
-      this.setState({ query: assign({}, this.state.query, e.detail) })
+      console.log("[onChildChanged] <<<", e)
+
+      let newState = { query: merge({}, this.state.query, e.detail) }
+      console.log("[onChildChanged] > new state", newState)
+      this.setState(newState)
    }
 
    onSubmitSuccess(response) {

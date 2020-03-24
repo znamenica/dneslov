@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as assign from 'assign-deep'
+import { merge } from 'merge-anything'
 import { mixin } from 'lodash-decorators'
 
 import TextField from 'TextField'

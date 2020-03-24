@@ -1,22 +1,38 @@
 import { Component } from 'react'
 import GitHubLogin from 'react-github-login'
-import * as assign from 'assign-deep'
-//import { TapTarget } from 'materialize-css/js/tapTarget'
+import { merge } from 'merge-anything'
 
 import Calendaries from 'Calendaries'
 import Memories from 'Memories'
 import Names from 'Names'
 import Memoes from 'Memoes'
+import Orders from 'Orders'
 
-const Objects = {
-   'calendaries': Calendaries,
-   'memories': Memories,
-   'names': Names,
-   'memoes': Memoes,
+const Pages = {
+   'calendaries': {
+      object: Calendaries,
+      title: "Календари",
+   },
+   'memories': {
+      object: Memories,
+      title: "Памяти",
+   },
+   'names': {
+      object: Names,
+      title: "Имена",
+   },
+   'memoes': {
+      object: Memoes,
+      title: "Помины",
+   },
+   'orders': {
+      object: Orders,
+      title: "Чины",
+   }
 }
 
 export default class Dashboard extends Component {
-   state = assign({}, this.props, { form: null })
+   state = merge({}, this.props, { form: null })
 
    // system
    static getDerivedStateFromProps(_, state) {
@@ -24,7 +40,7 @@ export default class Dashboard extends Component {
          let parts = window.location.href.split("#")
 
          if (parts[1]) {
-            return { form: Objects[parts[1]] }
+            return { form: Pages[parts[1].object] }
          }
       }
 
@@ -39,6 +55,10 @@ export default class Dashboard extends Component {
       if (this.avatarTap) {
          this.avatarTap.destroy()
       }
+   }
+
+   componentDidCatch(error, errorInfo) {
+      console.log(error, errorInfo)
    }
 
    // events
@@ -81,26 +101,12 @@ export default class Dashboard extends Component {
                         src="dneslov-title.png" /></a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li>
-                           <a
-                              href="#calendaries"
-                              onClick={this.onClick.bind(this, Calendaries)} >
-                              Календари</a></li>
-                        <li>
-                           <a
-                              href="#memories"
-                              onClick={this.onClick.bind(this, Memories)} >
-                              Памяти</a></li>
-                        <li>
-                           <a
-                              href="#names"
-                              onClick={this.onClick.bind(this, Names)} >
-                              Имена</a></li>
-                        <li>
-                           <a
-                              href="#memoes"
-                              onClick={this.onClick.bind(this, Memoes)} >
-                              Помины</a></li>
+                        {Object.entries(Pages).map(([path, data]) =>
+                           <li>
+                              <a
+                                 href={"#" + path}
+                                 onClick={this.onClick.bind(this, data.object)} >
+                                 {data.title}</a></li>)}
                         <li>
                            <div
                               ref={e => this.$avatarSignIn = e}
@@ -137,7 +143,7 @@ export default class Dashboard extends Component {
                               className="material-icons">
                               perm_identity</i></GitHubLogin></div>}
                   </div></nav></header>,
-      <main>
+      <main key='main'>
          <div className='container admin'>
             <div className='row'>
                <div className='col s12 m12 l12 xl12'>

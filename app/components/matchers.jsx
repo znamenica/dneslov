@@ -164,6 +164,27 @@ export function matchAlphabeths(hash) {
    return false
 }
 
-export function matchEmptyObject(e) {
-   return !e || Object.values(e).length == 0
+export function matchEmptyObject(value, context) {
+   let res = false
+
+   if (value === null || value === undefined) {
+      res = true
+   } else {
+      switch(value.constructor.name) {
+      case 'Number':
+         break
+      case 'Array':
+         res = value.length == 0
+
+         break
+      case 'Object':
+         res = Object.values(value).length == 0
+
+         break
+      default:
+         res = !value
+      }
+   }
+
+   return res
 }

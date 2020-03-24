@@ -1,4 +1,5 @@
 import DynamicField from 'DynamicField'
+import OrdersCollection from 'OrdersCollection'
 import TitlesCollection from 'TitlesCollection'
 import DescriptionsCollection from 'DescriptionsCollection'
 import LinksCollection from 'LinksCollection'
@@ -26,6 +27,7 @@ export default class MemoForm extends CommonForm {
       bond_to: '',
       memory_id: undefined,
       memory: '',
+      orders: [],
       titles: [],
       links: [],
       descriptions: [],
@@ -51,9 +53,14 @@ export default class MemoForm extends CommonForm {
                }
             },
          },
+         orders: {
+            validations: {
+               'Минимум один чин должен быть задан':  matchEmptyObject
+            }
+         },
          titles: {
             validations: {
-            'Минимум один заголовок должен быть задан':  matchEmptyObject
+               'Минимум один заголовок должен быть задан':  matchEmptyObject
             }
          }
       },
@@ -73,6 +80,7 @@ export default class MemoForm extends CommonForm {
          bond_to: '',
          memory_id: 0,
          memory: '',
+         orders: [],
          descriptions: [],
          titles: [],
          links: [],
@@ -136,6 +144,11 @@ export default class MemoForm extends CommonForm {
             title='Пора добавления'
             value={this.state.query.add_date}
             wrapperClassName='input-field col xl3 l3 m6 s12' />,
+         <OrdersCollection
+            key='orders'
+            name='orders'
+            value={this.state.query.orders}
+            validations={this.props.meta.orders.validations}/>,
          <TitlesCollection
             key='titles'
             name='titles'
