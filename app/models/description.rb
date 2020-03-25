@@ -18,10 +18,8 @@ class Description < ActiveRecord::Base
    scope :all_by_memory, ->(memory) do
       ids = memory.memos.select(:id).notice
 
-      self.merge(where(describable_type: "Memory",
-                       describable_id: memory.id)
-             .or(where(describable_type: "Memo",
-                       describable_id: ids))) ;end
+      self.where(describable_type: "Memo",
+                 describable_id: ids) ;end
 
    before_create -> { self.type ||= 'Description' }
 

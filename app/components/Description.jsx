@@ -86,7 +86,6 @@ export default class Description extends Component {
                      <li
                         className={"collection-item description " + this.activeClassFor(description)}>
                         <div
-                           key={description.calendary && description.calendary.slug + '-description-header' || 'common-description-header'}
                            className={"collapsible-header " + this.activeClassFor(description)}>
                            {description.calendary &&
                               <Chip
