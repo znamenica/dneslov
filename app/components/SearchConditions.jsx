@@ -21,19 +21,11 @@ export default class SearchConditions extends Component {
       this.props.onAct(data)
    }
 
-   renderDate() {
-      let date
+   query() {
+      let tokens = this.props.query.join(' ').split(/\//),
+          filtered = tokens.filter((t) => { return ! t.match(/^[\s+]*$/) })
 
-      if (this.props.date) {
-         date = <Chip
-                  className='date'
-                  data={{date: this.props.date}}
-                  text={this.props.date}
-                  action='remove'
-                  onAct={this.onChipAct.bind(this)} />
-      }
-
-      return date
+      return filtered.map(t => { return t.trim().replace(/ /g, "+") })
    }
 
    render() {
@@ -47,7 +39,12 @@ export default class SearchConditions extends Component {
                <Chip
                   className='white'
                   text='Выборка:' />
-               {this.renderDate()}
+               {this.props.date && <Chip
+                  className='date'
+                  data={{date: this.props.date}}
+                  text={this.props.date}
+                  action='remove'
+                  onAct={this.onChipAct.bind(this)} />}
                {this.props.calendaries.map((calendary) =>
                   <Chip
                      key={calendary.slug}
@@ -56,7 +53,7 @@ export default class SearchConditions extends Component {
                      text={calendary.name}
                      action='remove'
                      onAct={this.onChipAct.bind(this)} />)}
-               {this.props.query.map((token, index) =>
+               {this.query().map((token, index) =>
                   <Chip
                      key={index}
                      data={{token: token}}

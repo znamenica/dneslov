@@ -19,7 +19,7 @@ export default class SearchField extends Component {
    }
 
    fireUpdate() {
-      let tokens = this.state.with_text.replace(/\++/g, " +").split(/\s+/)
+      let tokens = this.state.with_text.replace(/\/+/g, " /").split(/\s+/)
       let filtered = tokens.filter((t) => { return ! t.match(/^[\s+]*$/) })
 
       if (this.timeout) {

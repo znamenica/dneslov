@@ -35,17 +35,16 @@ class Memory < ActiveRecord::Base
    scope :with_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
          where("descriptions.text ILIKE ? OR names.text ILIKE ?", "%#{text}%", "%#{text}%")).distinct ;end
-   scope :with_tokens, -> token_list do
+   scope :with_tokens, -> tokens_in do
       # TODO fix the correctness of the query
-      tokens = token_list.reject { |t| t =~ /\A[\s\+]*\z/ }
-      cond = tokens.first[0] == '+' && 'TRUE' || 'FALSE'
-      rel = left_outer_joins( :names, :descriptions, :memos ).where( cond )
-      tokens.reduce(rel) do |rel, token|
-         /\A(?<a>\+)?(?<text>.*)/ =~ token
-         if a # AND operation
-            rel.merge(Memory.with_token(text))
-         else # OR operation
-            rel.or(merge(Memory.with_token(text))) ;end;end
+      rel_in = left_outer_joins( :names, :descriptions, :memos ).where( 'FALSE' )
+      tokens_in.join(' ').split(/\//).reduce(rel_in) do |rel, or_token|
+         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+            # AND operation
+            and_rel = Memory.with_token(and_token)
+            rel && rel.merge(and_rel) || and_rel ;end
+         # OR operation
+         rel.or(or_rel);end
       .distinct ;end
 
    accepts_nested_attributes_for :memory_names, reject_if: :all_blank
