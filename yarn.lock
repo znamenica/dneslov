@@ -881,10 +881,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@majioa/react-scroll-pagination@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@majioa/react-scroll-pagination/-/react-scroll-pagination-0.2.0.tgz#523c7f8a73a9a90e51546625acbda89eab16443c"
-  integrity sha512-XV2rSidcIaqDIMLN4tjjZ5ngnGzBl8NS2WMX2+PIesuB9D2FzVwQtvoQTYHUglOIRktJVLCh9UJrc+CMmNwiDw==
+"@majioa/react-scroll-pagination@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@majioa/react-scroll-pagination/-/react-scroll-pagination-0.2.1.tgz#da87984840a8cd6340494874d18ab4419cfdeae9"
+  integrity sha512-GuDZzOY4UTuLb44WoyjY9y20pdKvyxKCOG6iAEXadzd5F06gqNxbQ8emqnRCyWR7fqNspg2R9xGUcd39rmMn2Q==
   dependencies:
     prop-types "^15.6.0"
     react "^16.0.0"
