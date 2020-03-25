@@ -28,7 +28,10 @@ export default class SelectField extends Component {
    // system
    componentDidMount() {
       console.log("[componentDidMount] <<<")
-      this.select = FormSelect.init(this.$select, {})
+      this.select = FormSelect.init(this.$select, { dropdownOptions: {
+         coverTrigger: true,
+         container: document.querySelector(".modal-content"),
+      } })
       this.$wrap = this.$parent.querySelector('.select-wrapper')
    }
 
