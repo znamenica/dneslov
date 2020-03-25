@@ -98,7 +98,8 @@ module.exports = {
 
    plugins: [
       new webpack.ProvidePlugin({
-         React: 'react'
+         React: 'react',
+         M: 'materialize-css'
       }),
       new MiniCssExtractPlugin({ filename: '[name].css',
                                  chunkFilename: '[id].css',
