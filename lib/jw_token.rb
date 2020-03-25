@@ -4,7 +4,7 @@ module JwToken
          payload = {
             iss: Rails.application.secrets.github[:client_url],
             sub: sub,
-            exp: 4.hours.from_now.to_i,
+            exp: 6.months.from_now.to_i,
             iat: Time.now.to_i
          }
          JWT.encode payload, Rails.application.secrets.jwt_secret, 'HS256' ;end
