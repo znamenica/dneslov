@@ -33,8 +33,8 @@ module Tasks
       def import_orders
          orders = YAML.load( File.open( Rails.root.join( 'db/seeds/orders.yaml' )))
          orders.each do |order|
-            Kernel.puts "#{order['order']} => #{order['text']}"
-            Order.where(order).find_or_create_by!(order) ;end;end
+            Kernel.puts "#{order['slug_attributes']['order']} => #{order['notes_attributes'][0]['text']}"
+            Order.create!(order) ;end;end
 
       def fix_base_year
          memories = Memory.all

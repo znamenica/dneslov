@@ -1,637 +1,1485 @@
 ---
-- order: бог
-  text: Бог
-  language_code: ру
-  alphabeth_code: ру
-  note: Бог Троица
-  short_note: Бог
-- order: спс
-  text: спас
-  language_code: ру
-  alphabeth_code: ру
-  note: Спаситель
-  short_note: Спаситель
-- order: бдц
-  text: бдц
-  language_code: ру
-  alphabeth_code: ру
-  note: Богородица
-  short_note: Богородица
-- order: крлт
-  text: ангел
-  language_code: ру
-  alphabeth_code: ру
-  note: 'ангел (крылатец)'
-  short_note: Крылатец
-- order: св
-  text: св
-  language_code: ру
-  alphabeth_code: ру
-  note: святой
-  short_note: Святой
-- order: сбр
-  text: сбр
-  language_code: ру
-  alphabeth_code: ру
-  note: собор святых и святынь
-  short_note: Собор святых и святынь
-- order: свв
-  text: свв
-  language_code: ру
-  alphabeth_code: ру
-  note: собор святых
-  short_note: Собор святых
-- order: прав
-  text: прав
-  language_code: ру
-  alphabeth_code: ру
-  note: праведник
-  short_note: Праведный
-- order: правж
-  text: прав
-  language_code: ру
-  alphabeth_code: ру
-  note: праведница
-  short_note: Праведная
-- order: сщпр
-  text: прав
-  language_code: ру
-  alphabeth_code: ру
-  note: праведник в священном сане
-  short_note: Священноправедник
-- order: правв
-  text: правв
-  language_code: ру
-  alphabeth_code: ру
-  note: праведники
-  short_note: Праведные
-- order: правжж
-  text: правв
-  language_code: ру
-  alphabeth_code: ру
-  note: праведницы
-  short_note: Праведницы
-- order: брак
-  text: правв
-  language_code: ру
-  alphabeth_code: ру
-  note: праведники в браке
-  short_note: Брак
-- order: блж
-  text: блж
-  language_code: ру
-  alphabeth_code: ру
-  note: блаженный
-  short_note: Блаженный
-- order: блжя
-  text: блж
-  language_code: ру
-  alphabeth_code: ру
-  note: блаженная
-  short_note: Блаженная
-- order: блжж
-  text: блжж
-  language_code: ру
-  alphabeth_code: ру
-  note: блаженные
-  short_note: Блаженные
-- order: блжяя
-  text: блжж
-  language_code: ру
-  alphabeth_code: ру
-  note: блаженные жены
-  short_note: Блаженные жены
-- order: блпр
-  text: блж
-  language_code: ру
-  alphabeth_code: ру
-  note: блаженный преподобный
-  short_note: Блаженнопреподобник
-- order: блгв
-  text: блгв
-  language_code: ру
-  alphabeth_code: ру
-  note: благоверный
-  short_note: Благоверный
-- order: блгвя
-  text: блгв
-  language_code: ру
-  alphabeth_code: ру
-  note: благоверная
-  short_note: Благоверная
-- order: блгвв
-  text: блгвв
-  language_code: ру
-  alphabeth_code: ру
-  note: благоверные
-  short_note: Благоверные
-- order: блгвяя
-  text: блгвв
-  language_code: ру
-  alphabeth_code: ру
-  note: благоверные жены
-  short_note: Благоверные жены
-- order: бср
-  text: бср
-  language_code: ру
-  alphabeth_code: ру
-  note: бессребренник
-  short_note: Бессребренник
-- order: бсрр
-  text: бсрр
-  language_code: ру
-  alphabeth_code: ру
-  note: бессребренники
-  short_note: Бессребренники
-- order: прор
-  text: прор
-  language_code: ру
-  alphabeth_code: ру
-  note: пророк
-  short_note: Пророк
-- order: пррч
-  text: прор
-  language_code: ру
-  alphabeth_code: ру
-  note: пророчица
-  short_note: Пророчица
-- order: прорр
-  text: прорр
-  language_code: ру
-  alphabeth_code: ру
-  note: пророки
-  short_note: Пророки
-- order: пррчч
-  text: прорр
-  language_code: ру
-  alphabeth_code: ру
-  note: пророчицы
-  short_note: Пророчицы
-- order: ап
-  text: ап
-  language_code: ру
-  alphabeth_code: ру
-  note: апостол
-  short_note: Апостол
-- order: апп
-  text: апп
-  language_code: ру
-  alphabeth_code: ру
-  note: апостолы
-  short_note: Апостолы
-- order: рап
-  text: рап
-  language_code: ру
-  alphabeth_code: ру
-  note: равноапостольный
-  short_note: Равноапостольный
-- order: рапж
-  text: рап
-  language_code: ру
-  alphabeth_code: ру
-  note: равноапостольная
-  short_note: Равноапостольная
-- order: рапп
-  text: рапп
-  language_code: ру
-  alphabeth_code: ру
-  note: равноапостольные
-  short_note: Равноапостольные
-- order: рапжж
-  text: рапп
-  language_code: ру
-  alphabeth_code: ру
-  note: равноапостольные жены
-  short_note: Равноапостольные жены
-- order: мч
-  text: мч
-  language_code: ру
-  alphabeth_code: ру
-  note: мученик
-  short_note: Мученик
-- order: мчр
-  text: мч
-  language_code: ру
-  alphabeth_code: ру
-  note: мученик русской церкви
-  short_note: Мученик русский
-- order: мц
-  text: мц
-  language_code: ру
-  alphabeth_code: ру
-  note: мученица
-  short_note: Мученица
-- order: мцр
-  text: мц
-  language_code: ру
-  alphabeth_code: ру
-  note: мученица русской церкви
-  short_note: Мученица русская
-- order: вмч
-  text: вмч
-  language_code: ру
-  alphabeth_code: ру
-  note: великомученик
-  short_note: Великомученик
-- order: вмц
-  text: вмц
-  language_code: ру
-  alphabeth_code: ру
-  note: великомученица
-  short_note: Великомученица
-- order: сщмч
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученик
-  short_note: Священномученик
-- order: смчр
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученик русской церкви
-  short_note: Священномученик русский
-- order: прмч
-  text: прмч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученик
-  short_note: Преподобномученик
-- order: пмчр
-  text: прмч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученик русской церкви
-  short_note: Преподобномученик русский
-- order: прмц
-  text: прмц
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученица
-  short_note: Преподобномученица
-- order: пмцр
-  text: прмц
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученица русской церкви
-  short_note: Преподобномученица русская
-- order: мсвт
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученик в святительском сане
-  short_note: Умученосвятитель
-- order: мсвтр
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученик русской церкви в святительском сане
-  short_note: Умученосвятитель русский
-- order: мчч
-  text: мчч
-  language_code: ру
-  alphabeth_code: ру
-  note: мученики
-  short_note: Мученики
-- order: мчрр
-  text: мчч
-  language_code: ру
-  alphabeth_code: ру
-  note: мученики русской церкви
-  short_note: Мученики русские
-- order: мцц
-  text: мцц
-  language_code: ру
-  alphabeth_code: ру
-  note: мученицы
-  short_note: Мученицы
-- order: мцрр
-  text: мцц
-  language_code: ру
-  alphabeth_code: ру
-  note: мученицы русской церкви
-  short_note: Мученицы русские
-- order: прмчч
-  text: прмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученики
-  short_note: Преподобномученики
-- order: пмчрр
-  text: прмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученики русской церкви
-  short_note: Преподобномученики русские
-- order: сщмчч
-  text: сщмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученики
-  short_note: Священномученики
-- order: смчрр
-  text: сщмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученики русской церкви
-  short_note: Священномученики русские
-- order: мсвтт
-  text: сщмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученики в святительском сане
-  short_note: Умученосвятители
-- order: мсвтрр
-  text: сщмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: священномученики русские в святительском сане
-  short_note: Умученосвятители русские
-- order: стц
-  text: стц
-  language_code: ру
-  alphabeth_code: ру
-  note: страстотерпец
-  short_note: Страстотерпец
-- order: стца
-  text: стц
-  language_code: ру
-  alphabeth_code: ру
-  note: страстотерпица
-  short_note: Страстотерпица
-- order: сщстц
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священнострастотерпец
-  short_note: Священнострастотерпец
-- order: стсвт
-  text: сщмч
-  language_code: ру
-  alphabeth_code: ру
-  note: священнострастотерпец в святительском сане
-  short_note: Страстотерпосвятитель
-- order: прстц
-  text: прмч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобнострастотерпец
-  short_note: Преподобнострастотерпец
-- order: прстца
-  text: прмч
-  language_code: ру
-  alphabeth_code: ру
-  note: страстотерпица
-  short_note: Преподобнострастотерпица
-- order: стцц
-  text: стцц
-  language_code: ру
-  alphabeth_code: ру
-  note: страстотерпцы
-  short_note: Страстотерпцы
-- order: прстцц
-  text: прмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобнострастотерпцы
-  short_note: Преподобнострастотерпцы
-- order: стцаа
-  text: стцц
-  language_code: ру
-  alphabeth_code: ру
-  note: страстотерпицы
-  short_note: Страстотерпицы
-- order: пстцц
-  text: прмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобнострастотерпцы
-  short_note: Преподобнострастотерпцы
-- order: пстцаа
-  text: прмчч
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобнострастотерпицы
-  short_note: Преподобнострастотерпицы
-- order: прмцц
-  text: прмцц
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобномученицы
-  short_note: Преподобномученицы
-- order: исп
-  text: исп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедник
-  short_note: Исповедник
-- order: иср
-  text: исп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедник русской церкви
-  short_note: Исповедник русский
-- order: исц
-  text: исп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедница
-  short_note: Исповедница
-- order: ицр
-  text: исп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедница русской церкви
-  short_note: Исповедница русская
-- order: сщисп
-  text: сщисп
-  language_code: ру
-  alphabeth_code: ру
-  note: священноисповедник
-  short_note: Священноисповедник
-- order: сщиср
-  text: сщисп
-  language_code: ру
-  alphabeth_code: ру
-  note: священноисповедник русской церкви
-  short_note: Священноисповедник русский
-- order: присп
-  text: присп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобноисповедник
-  short_note: Преподобноисповедник
-- order: приср
-  text: присп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобноисповедник русской церкви
-  short_note: Преподобноисповедник русский
-- order: присц
-  text: присп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобноисповедница
-  short_note: Преподобноисповедница
-- order: прицр
-  text: присп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобноисповедница русской церкви
-  short_note: Преподобноисповедница русская
-- order: исвт
-  text: сщисп
-  language_code: ру
-  alphabeth_code: ру
-  note: священноисповедник в святительском сане
-  short_note: Исповедносвятитель
-- order: исвтр
-  text: сщисп
-  language_code: ру
-  alphabeth_code: ру
-  note: священноисповедник русской церкви в святительском сане
-  short_note: Исповедносвятитель русский
-- order: испп
-  text: испп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедники
-  short_note: Исповедники
-- order: исцц
-  text: испп
-  language_code: ру
-  alphabeth_code: ру
-  note: исповедницы
-  short_note: Исповедницы
-- order: исвтт
-  text: сщиспп
-  language_code: ру
-  alphabeth_code: ру
-  note: священноисповедники в святительском сане
-  short_note: Исповедносвятители
-- order: приспп
-  text: приспп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобноисповедники
-  short_note: Преподобноисповедники
-- order: прп
-  text: прп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобный
-  short_note: Преподобный
-- order: прпж
-  text: прп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобная
-  short_note: Преподобная
-- order: прпс
-  text: прп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобный пустынник
-  short_note: Преподобный пустынник
-- order: прпсж
-  text: прп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобная пустынница
-  short_note: Преподобная пустынница
-- order: свт
-  text: свт
-  language_code: ру
-  alphabeth_code: ру
-  note: святитель
-  short_note: Святитель
-- order: прсвт
-  text: прп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобый в святительском сане
-  short_note: Преподобносвятитель
-- order: свтт
-  text: свтт
-  language_code: ру
-  alphabeth_code: ру
-  note: святители
-  short_note: Святители
-- order: прпп
-  text: прпп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобные
-  short_note: Преподобные
-- order: прпжж
-  text: прпп
-  language_code: ру
-  alphabeth_code: ру
-  note: преподобные жены
-  short_note: Преподобные жены
-- order: оспс
-  text: обр
-  language_code: ру
-  alphabeth_code: ру
-  note: образ Спасителя
-  short_note: Образ Спасителя
-- order: обр
-  text: обр
-  language_code: ру
-  alphabeth_code: ру
-  note: образ Богородицы
-  short_note: Образ Богородицы
-- order: оник
-  text: обр
-  language_code: ру
-  alphabeth_code: ру
-  note: образ Николы Мирликийского
-  short_note: Образ Николы
-- order: озпр
-  text: обр
-  language_code: ру
-  alphabeth_code: ру
-  note: образ Димитрия Прилуцкого
-  short_note: Образ Дмитрия Прилуцкого
-- order: вещь
-  text: вещь
-  language_code: ру
-  alphabeth_code: ру
-  note: почитаемая вещь или предмет
-  short_note: Предмет
-- order: древо
-  text: древо
-  language_code: ру
-  alphabeth_code: ру
-  note: дерево
-  short_note: Дерево
-- order: храм
-  text: храм
-  language_code: ру
-  alphabeth_code: ру
-  note: церковь
-  short_note: Храм
-- order: обит
-  text: обит
-  language_code: ру
-  alphabeth_code: ру
-  note: обитель
-  short_note: Обитель
-- order: град
-  text: град
-  language_code: ру
-  alphabeth_code: ру
-  note: град
-  short_note: Град
-- order: место
-  text: место
-  language_code: ру
-  alphabeth_code: ру
-  note: место
-  short_note: Место
-- order: сбт
-  text: сбт
-  language_code: ру
-  alphabeth_code: ру
-  note: событие
-  short_note: Событие
+- slug_attributes:
+     text: бог
+  tweets_attributes:
+   - text: Бог
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Бог Троица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Бог
+- slug_attributes:
+     text: спс
+  tweets_attributes:
+   - text: спас
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Спаситель
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Спаситель
+- slug_attributes:
+     text: бдц
+  tweets_attributes:
+   - text: бдц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Богородица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Богородица
+- slug_attributes:
+     text: крлт
+  tweets_attributes:
+   - text: ангел
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: 'ангел (крылатец)'
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Крылатец
+- slug_attributes:
+     text: св
+  tweets_attributes:
+   - text: св
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: святой
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Святой
+- slug_attributes:
+     text: сбр
+  tweets_attributes:
+   - text: сбр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: собор святых и святынь
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Собор святых и святынь
+- slug_attributes:
+     text: свв
+  tweets_attributes:
+   - text: свв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: собор святых
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Собор святых
+- slug_attributes:
+     text: прав
+  tweets_attributes:
+   - text: прав
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Праведный
+- slug_attributes:
+     text: правж
+  tweets_attributes:
+   - text: прав
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведница
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Праведная
+- slug_attributes:
+     text: сщпр
+  tweets_attributes:
+   - text: прав
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведник в священном сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священноправедник
+- slug_attributes:
+     text: правв
+  tweets_attributes:
+   - text: правв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведники
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Праведные
+- slug_attributes:
+     text: правжж
+  tweets_attributes:
+   - text: правв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведницы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Праведницы
+- slug_attributes:
+     text: брак
+  tweets_attributes:
+   - text: правв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: праведники в браке
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Брак
+- slug_attributes:
+     text: блж
+  tweets_attributes:
+   - text: блж
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: блаженный
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Блаженный
+- slug_attributes:
+     text: блжя
+  tweets_attributes:
+   - text: блж
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: блаженная
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Блаженная
+- slug_attributes:
+     text: блжж
+  tweets_attributes:
+   - text: блжж
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: блаженные
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Блаженные
+- slug_attributes:
+     text: блжяя
+  tweets_attributes:
+   - text: блжж
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: блаженные жены
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Блаженные жены
+- slug_attributes:
+     text: блпр
+  tweets_attributes:
+   - text: блж
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: блаженный преподобный
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Блаженнопреподобник
+- slug_attributes:
+     text: блгв
+  tweets_attributes:
+   - text: блгв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: благоверный
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Благоверный
+- slug_attributes:
+     text: блгвя
+  tweets_attributes:
+   - text: блгв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: благоверная
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Благоверная
+- slug_attributes:
+     text: блгвв
+  tweets_attributes:
+   - text: блгвв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: благоверные
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Благоверные
+- slug_attributes:
+     text: блгвяя
+  tweets_attributes:
+   - text: блгвв
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: благоверные жены
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Благоверные жены
+- slug_attributes:
+     text: бср
+  tweets_attributes:
+   - text: бср
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: бессребренник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Бессребренник
+- slug_attributes:
+     text: бсрр
+  tweets_attributes:
+   - text: бсрр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: бессребренники
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Бессребренники
+- slug_attributes:
+     text: прор
+  tweets_attributes:
+   - text: прор
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: пророк
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Пророк
+- slug_attributes:
+     text: пррч
+  tweets_attributes:
+   - text: прор
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: пророчица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Пророчица
+- slug_attributes:
+     text: прорр
+  tweets_attributes:
+   - text: прорр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: пророки
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Пророки
+- slug_attributes:
+     text: пррчч
+  tweets_attributes:
+   - text: прорр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: пророчицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Пророчицы
+- slug_attributes:
+     text: ап
+  tweets_attributes:
+   - text: ап
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: апостол
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Апостол
+- slug_attributes:
+     text: апп
+  tweets_attributes:
+   - text: апп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: апостолы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Апостолы
+- slug_attributes:
+     text: рап
+  tweets_attributes:
+   - text: рап
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: равноапостольный
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Равноапостольный
+- slug_attributes:
+     text: рапж
+  tweets_attributes:
+   - text: рап
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: равноапостольная
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Равноапостольная
+- slug_attributes:
+     text: рапп
+  tweets_attributes:
+   - text: рапп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: равноапостольные
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Равноапостольные
+- slug_attributes:
+     text: рапжж
+  tweets_attributes:
+   - text: рапп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: равноапостольные жены
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Равноапостольные жены
+- slug_attributes:
+     text: мч
+  tweets_attributes:
+   - text: мч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученик
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученик
+- slug_attributes:
+     text: мчр
+  tweets_attributes:
+   - text: мч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученик русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученик русский
+- slug_attributes:
+     text: мц
+  tweets_attributes:
+   - text: мц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученица
+- slug_attributes:
+     text: мцр
+  tweets_attributes:
+   - text: мц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученица русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученица русская
+- slug_attributes:
+     text: вмч
+  tweets_attributes:
+   - text: вмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: великомученик
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Великомученик
+- slug_attributes:
+     text: вмц
+  tweets_attributes:
+   - text: вмц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: великомученица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Великомученица
+- slug_attributes:
+     text: сщмч
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученик
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священномученик
+- slug_attributes:
+     text: смчр
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученик русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священномученик русский
+- slug_attributes:
+     text: прмч
+  tweets_attributes:
+   - text: прмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученик
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученик
+- slug_attributes:
+     text: пмчр
+  tweets_attributes:
+   - text: прмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученик русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученик русский
+- slug_attributes:
+     text: прмц
+  tweets_attributes:
+   - text: прмц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученица
+- slug_attributes:
+     text: пмцр
+  tweets_attributes:
+   - text: прмц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученица русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученица русская
+- slug_attributes:
+     text: мсвт
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученик в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Умученосвятитель
+- slug_attributes:
+     text: мсвтр
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученик русской церкви в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Умученосвятитель русский
+- slug_attributes:
+     text: мчч
+  tweets_attributes:
+   - text: мчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученики
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученики
+- slug_attributes:
+     text: мчрр
+  tweets_attributes:
+   - text: мчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученики русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученики русские
+- slug_attributes:
+     text: мцц
+  tweets_attributes:
+   - text: мцц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученицы
+- slug_attributes:
+     text: мцрр
+  tweets_attributes:
+   - text: мцц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: мученицы русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Мученицы русские
+- slug_attributes:
+     text: прмчч
+  tweets_attributes:
+   - text: прмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученики
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученики
+- slug_attributes:
+     text: пмчрр
+  tweets_attributes:
+   - text: прмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученики русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученики русские
+- slug_attributes:
+     text: сщмчч
+  tweets_attributes:
+   - text: сщмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученики
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священномученики
+- slug_attributes:
+     text: смчрр
+  tweets_attributes:
+   - text: сщмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученики русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священномученики русские
+- slug_attributes:
+     text: мсвтт
+  tweets_attributes:
+   - text: сщмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученики в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Умученосвятители
+- slug_attributes:
+     text: мсвтрр
+  tweets_attributes:
+   - text: сщмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священномученики русские в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Умученосвятители русские
+- slug_attributes:
+     text: стц
+  tweets_attributes:
+   - text: стц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: страстотерпец
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Страстотерпец
+- slug_attributes:
+     text: стца
+  tweets_attributes:
+   - text: стц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: страстотерпица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Страстотерпица
+- slug_attributes:
+     text: сщстц
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священнострастотерпец
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священнострастотерпец
+- slug_attributes:
+     text: стсвт
+  tweets_attributes:
+   - text: сщмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священнострастотерпец в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Страстотерпосвятитель
+- slug_attributes:
+     text: прстц
+  tweets_attributes:
+   - text: прмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобнострастотерпец
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобнострастотерпец
+- slug_attributes:
+     text: прстца
+  tweets_attributes:
+   - text: прмч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: страстотерпица
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобнострастотерпица
+- slug_attributes:
+     text: стцц
+  tweets_attributes:
+   - text: стцц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: страстотерпцы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Страстотерпцы
+- slug_attributes:
+     text: прстцц
+  tweets_attributes:
+   - text: прмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобнострастотерпцы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобнострастотерпцы
+- slug_attributes:
+     text: стцаа
+  tweets_attributes:
+   - text: стцц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: страстотерпицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Страстотерпицы
+- slug_attributes:
+     text: пстцц
+  tweets_attributes:
+   - text: прмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобнострастотерпцы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобнострастотерпцы
+- slug_attributes:
+     text: пстцаа
+  tweets_attributes:
+   - text: прмчч
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобнострастотерпицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобнострастотерпицы
+- slug_attributes:
+     text: прмцц
+  tweets_attributes:
+   - text: прмцц
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобномученицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобномученицы
+- slug_attributes:
+     text: исп
+  tweets_attributes:
+   - text: исп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедник
+- slug_attributes:
+     text: иср
+  tweets_attributes:
+   - text: исп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедник русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедник русский
+- slug_attributes:
+     text: исц
+  tweets_attributes:
+   - text: исп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедница
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедница
+- slug_attributes:
+     text: ицр
+  tweets_attributes:
+   - text: исп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедница русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедница русская
+- slug_attributes:
+     text: сщисп
+  tweets_attributes:
+   - text: сщисп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священноисповедник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священноисповедник
+- slug_attributes:
+     text: сщиср
+  tweets_attributes:
+   - text: сщисп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священноисповедник русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Священноисповедник русский
+- slug_attributes:
+     text: присп
+  tweets_attributes:
+   - text: присп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобноисповедник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобноисповедник
+- slug_attributes:
+     text: приср
+  tweets_attributes:
+   - text: присп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобноисповедник русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобноисповедник русский
+- slug_attributes:
+     text: присц
+  tweets_attributes:
+   - text: присп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобноисповедница
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобноисповедница
+- slug_attributes:
+     text: прицр
+  tweets_attributes:
+   - text: присп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобноисповедница русской церкви
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобноисповедница русская
+- slug_attributes:
+     text: исвт
+  tweets_attributes:
+   - text: сщисп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священноисповедник в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедносвятитель
+- slug_attributes:
+     text: исвтр
+  tweets_attributes:
+   - text: сщисп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священноисповедник русской церкви в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедносвятитель русский
+- slug_attributes:
+     text: испп
+  tweets_attributes:
+   - text: испп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедники
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедники
+- slug_attributes:
+     text: исцц
+  tweets_attributes:
+   - text: испп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: исповедницы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедницы
+- slug_attributes:
+     text: исвтт
+  tweets_attributes:
+   - text: сщиспп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: священноисповедники в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Исповедносвятители
+- slug_attributes:
+     text: приспп
+  tweets_attributes:
+   - text: приспп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобноисповедники
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобноисповедники
+- slug_attributes:
+     text: прп
+  tweets_attributes:
+   - text: прп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобный
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобный
+- slug_attributes:
+     text: прпж
+  tweets_attributes:
+   - text: прп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобная
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобная
+- slug_attributes:
+     text: прпс
+  tweets_attributes:
+   - text: прп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобный пустынник
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобный пустынник
+- slug_attributes:
+     text: прпсж
+  tweets_attributes:
+   - text: прп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобная пустынница
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобная пустынница
+- slug_attributes:
+     text: свт
+  tweets_attributes:
+   - text: свт
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: святитель
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Святитель
+- slug_attributes:
+     text: прсвт
+  tweets_attributes:
+   - text: прп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобый в святительском сане
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобносвятитель
+- slug_attributes:
+     text: свтт
+  tweets_attributes:
+   - text: свтт
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: святители
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Святители
+- slug_attributes:
+     text: прпп
+  tweets_attributes:
+   - text: прпп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобные
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобные
+- slug_attributes:
+     text: прпжж
+  tweets_attributes:
+   - text: прпп
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: преподобные жены
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Преподобные жены
+- slug_attributes:
+     text: оспс
+  tweets_attributes:
+   - text: обр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: образ Спасителя
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Образ Спасителя
+- slug_attributes:
+     text: обр
+  tweets_attributes:
+   - text: обр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: образ Богородицы
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Образ Богородицы
+- slug_attributes:
+     text: оник
+  tweets_attributes:
+   - text: обр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: образ Николы Мирликийского
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Образ Николы
+- slug_attributes:
+     text: озпр
+  tweets_attributes:
+   - text: обр
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: образ Димитрия Прилуцкого
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Образ Дмитрия Прилуцкого
+- slug_attributes:
+     text: вещь
+  tweets_attributes:
+   - text: вещь
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: почитаемая вещь или предмет
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Предмет
+- slug_attributes:
+     text: древо
+  tweets_attributes:
+   - text: древо
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: дерево
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Дерево
+- slug_attributes:
+     text: храм
+  tweets_attributes:
+   - text: храм
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: церковь
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Храм
+- slug_attributes:
+     text: обит
+  tweets_attributes:
+   - text: обит
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: обитель
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Обитель
+- slug_attributes:
+     text: град
+  tweets_attributes:
+   - text: град
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: град
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Град
+- slug_attributes:
+     text: место
+  tweets_attributes:
+   - text: место
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: место
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Место
+- slug_attributes:
+     text: сбт
+  tweets_attributes:
+   - text: сбт
+     language_code: ру
+     alphabeth_code: ру
+  descriptions_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: событие
+  notes_attributes:
+   - language_code: ру
+     alphabeth_code: ру
+     text: Событие

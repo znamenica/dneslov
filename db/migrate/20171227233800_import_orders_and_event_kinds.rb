@@ -1,7 +1,9 @@
 class ImportOrdersAndEventKinds < ActiveRecord::Migration[4.2]
    def up
-      ::Tasks.import_orders
-      ::Tasks.import_event_kinds ;end
+      begin
+         ::Tasks.import_orders
+         ::Tasks.import_event_kinds
+      rescue Exception ;end;end
    
    def down
       ::Order.destroy_all
