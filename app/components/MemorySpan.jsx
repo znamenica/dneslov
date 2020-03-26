@@ -8,7 +8,8 @@ export default class MemorySpan extends Component {
    static defaultProps = {
       slug: null,
       short_name: null,
-      default_calendary_name: null,
+      default_name_in_calendary: null,
+      default_calendary_slug: null,
       url: null,
       icon_url: null,
       year: null,
@@ -63,8 +64,7 @@ export default class MemorySpan extends Component {
    }
 
    render() {
-      console.log("PROPS", this.props)
-      console.log("STATE", this.state)
+      console.log("[render] > props:", this.props, "state:", this.state)
 
       return (
          <li className='collection-item avatar memory'>
@@ -72,7 +72,7 @@ export default class MemorySpan extends Component {
                <a
                   ref={e => this.$avatar = e}
                   key='avatar'
-                  href={this.props.url} >
+                  href={this.props.url + "#" + this.props.default_calendary_slug} >
                   {this.hasImage() &&
                      <img
                         className='circle z-depth-1'
@@ -85,7 +85,7 @@ export default class MemorySpan extends Component {
                   text={this.props.order.slug} />
                <Name
                   short_name={this.props.short_name}
-                  default_calendary_name={this.props.default_calendary_name}
+                  default_name_in_calendary={this.props.default_name_in_calendary}
                   names={this.props.names} />
                <Chip
                   className='year-date'

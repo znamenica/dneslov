@@ -26,6 +26,22 @@ export default class Memory extends Component {
       selected_calendaries: [],
    }
 
+   state = {}
+
+   // system
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         let cal = Memory.calculateDefaultCalendary(props)
+         return {
+            calendary_slug: cal,
+            title: Memory.getTitle(props, cal),
+            prevProps: props
+         }
+      }
+
+      return null
+   }
+
    mapGroupedMemoesByDate(func) {
       let hash = this.props.memos.reduce((hash, memo) => {
          if (!hash[memo.date]) {
@@ -49,31 +65,33 @@ export default class Memory extends Component {
       })
    }
 
-   calculateDefaultCalendary(props = this.props) {
-      return props.selected_calendaries.reduce((cal, calendary_slug) => {
-         if (!cal) {
-            cal = props.titles.reduce((cal, title) => {
-               if (!cal && title.calendary == calendary_slug) {
-                  cal = calendary_slug
-               }
+   static calculateDefaultCalendary(props) {
+      let parts = window.location.href.split("#"),
+          cal = parts[1] && decodeURIComponent(parts[1])
 
-               return cal
-            }, null)
-         }
+      return cal || props.selected_calendaries.reduce((cal, calendary_slug) => {
+            if (!cal) {
+               cal = props.titles.reduce((cal, title) => {
+                  if (!cal && title.calendary == calendary_slug) {
+                     cal = calendary_slug
+                  }
 
-         return cal
-      }, null)
+                  return cal
+               }, null)
+            }
+
+            return cal
+         }, null)
    }
 
-   title() {
-      var cal = this.calculateDefaultCalendary(),
-          title = this.props.titles.find((title) => { return title.calendary == cal })
+   static getTitle(props, cal) {
+      let title = props.titles.reduce((title, t) => { return t.calendary == cal && cal || title })
 
-      return title.text
+      return title && title.text
    }
 
    render() {
-      console.log("MEMORY", this.props)
+      console.log("[render] > props", this.props, "state: ", this.state)
 
       return (
          <div className='row'>
@@ -84,7 +102,8 @@ export default class Memory extends Component {
                         color={this.props.order.color}
                         text={this.props.order.slug} />
                      <Name
-                        short_name={this.title()}
+                        short_name={this.state.title}
+                        default_name_in_calendary={this.state.title}
                         names={this.props.names} />
                      <Chip
                         className='year-date'
@@ -131,14 +150,10 @@ export default class Memory extends Component {
                               key={pateric.id}
                               url={pateric.url}
                               text={pateric.text} />)}</div></div></div>}
-            {this.props.descriptions &&
-               <div className='col s12'>
-                  <div className='row'>
-                     <div className='col s12 title'>
-                        Описание</div>
-                     <Description
-                        descriptions={this.props.descriptions}
-                        selected_calendaries={this.props.selected_calendaries} /></div></div>}
+            {this.props.descriptions.length > 0 &&
+               <Description
+                  descriptions={this.props.descriptions}
+                  calendary_slug={this.state.calendary_slug} />}
             {this.props.memos.length > 0 &&
                <div className='col s12'>
                   <div className='row'>

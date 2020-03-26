@@ -1,10 +1,10 @@
 class MemorySpanSerializer < CommonMemorySerializer
-   attributes :icon_url, :url, :names, :default_calendary_name
+   attributes :icon_url, :url, :names, :default_name_in_calendary
 
    def year
       calendaries && memo && memo.event.happened_at || super ;end
 
-   def default_calendary_name
+   def default_name_in_calendary
       calendaries && memo && memo.title_for( locales )&.text ;end
 
    def names

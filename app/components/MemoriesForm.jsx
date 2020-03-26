@@ -2,6 +2,7 @@ import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import { merge } from 'merge-anything'
 import * as Axios from 'axios'
+import crypto from 'crypto'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -26,30 +27,56 @@ export default class MemoriesForm extends Component {
       memory: null,
    }
 
-   state = this.getDefaultState()
+   state = {}
 
    // system
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         let state = {
+               prevProps: props,
+               default_calendary_slug: props.calendaries_cloud[0],
+               memories: props.memories.list,
+               memoriesTotal: props.memories.total,
+               memory: props.memory,
+               query: {
+                  page: props.memories.page,
+                  with_date: [ props.date, props.julian ],
+                  in_calendaries: props.calendaries_used.slice(),
+                  with_tokens: props.tokens
+               }
+             }
+
+         history.pushState({id: MemoriesForm.hashFromState(state)}, 'Днеслов', '/')
+         return state
+      }
+
+      return null
+   }
+
+   static hashFromState(state) {
+      let json = JSON.stringify(state),
+          hash = crypto.createHash('sha1').update(json).digest('hex')
+
+      console.log("[hashFromState] > id:", hash)
+      console.log("[hashFromState] > json string:", json)
+      sessionStorage.setItem(hash, json)
+
+      return hash
+   }
+
+   updateState(state) {
+      let hash = MemoriesForm.hashFromState(state)
+
+      history.replaceState({id: hash}, document.title)
+      this.setState(state)
+   }
+
    componentDidMount() {
       window.onpopstate = this.onPopState.bind(this)
    }
 
    componentWillUnmount() {
       window.onpopstate = null
-   }
-
-   getDefaultState(props = this.props) {
-      console.log(props)
-      return {
-         memories: this.props.memories.list,
-         memoriesTotal: this.props.memories.total,
-         memory: this.props.memory,
-         query: {
-            page: this.props.memories.page,
-            with_date: [ this.props.date, this.props.julian ],
-            in_calendaries: this.props.calendaries_used.slice(),
-            with_tokens: this.props.tokens
-         }
-      }
    }
 
    // custom
@@ -140,9 +167,7 @@ export default class MemoriesForm extends Component {
             memory: null})
       }
 
-      history.pushState(state, 'Днесловъ', '/')
-      document.body.classList.remove('in-progress')
-      this.setState(state)
+      this.updateState(state)
       this.isNextRequesting = false
    }
 
@@ -151,7 +176,7 @@ export default class MemoriesForm extends Component {
 
       let query = merge(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
       document.body.classList.remove('in-progress')
-      this.setState({query: query})
+      this.updateState({query: query})
       this.isNextRequesting = false
    }
 
@@ -168,29 +193,29 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoryLoadSuccess(response) {
-      let memory = response.data, state = merge({}, this.state, { memory: memory })
+      let memory = response.data,
+          state = merge({}, this.state, { memory: memory })
 
-      console.log("Loaded memory", memory)
+      console.log("[onMemoryLoadSuccess] > memory:", memory)
 
-      history.pushState(state, 'Днесловъ – ' + memory.short_name, '/' + memory.slug)
+      history.pushState({key: 2},
+                        'Днесловъ – ' + memory.short_name,
+                        '/' + memory.slug + '#' + this.props.calendaries_used[0])
       document.body.classList.remove('in-progress')
-      this.setState(state)
+      this.updateState(state)
    }
 
-   onPopState(state) {
-      console.log("oldstate", state)
+   onPopState(e) {
+      console.log("[onPopState] > session:", e.state)
 
-      if (state.state && (state.state.memories || state.state.memory)) {
-         this.setState(state.state)
-      } else {
-         this.setState(this.getDefaultState())
+      if (e.state) {
+         let state = JSON.parse(sessionStorage.getItem(e.state.id))
+         this.setState(state)
       }
    }
 
    render() {
-      console.log("props", this.props)
-      console.log("state", this.state)
-      console.log("length", this.state.memories.length, "of total", this.state.memoriesTotal)
+      console.log("[render] > props:", this.props, "state:", this.state)
 
       return (
          [<header>

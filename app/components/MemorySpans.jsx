@@ -64,7 +64,7 @@ export default class MemorySpans extends Component {
    }
 
    render() {
-      console.log("memorie spans", this.props)
+      console.log("[render] > props:", this.props)
 
       return (
          <div className='row'
@@ -80,7 +80,8 @@ export default class MemorySpans extends Component {
                         key={memory.slug}
                         slug={memory.slug}
                         short_name={this.short_name}
-                        default_calendary_name={this.titleFirst(memory)}
+                        default_name_in_calendary={this.titleFirst(memory)}
+                        default_calendary_slug={this.props.calendaries_cloud[0]}
                         url={memory.url}
                         icon_url={memory.icon_url}
                         year={memory.year}
