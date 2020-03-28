@@ -1,11 +1,11 @@
 class Admin::MemoriesController < Admin::CommonController
-   has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
-      scope.with_date(*value) ;end
-   has_scope :with_tokens, only: %i(index), type: :array
-   has_scope :in_calendaries, only: %i(index), type: :array
+   has_scope :d, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
+      scope.d(*value) ;end
+   has_scope :q, only: %i(index), type: :array
+   has_scope :c, only: %i(index), type: :array
 
    def all
-      @memories = model.with_token(params[:with_token])
+      @memories = model.t(params[:t])
 
       respond_to do |format|
          format.json { render :index, json: @memories.limit(500),
@@ -16,7 +16,7 @@ class Admin::MemoriesController < Admin::CommonController
       end;end
 
    def icons
-      @icons = model.icons.with_token(params[:with_token])
+      @icons = model.icons.t(params[:t])
 
       respond_to do |format|
          format.json { render :index, json: @icons.limit(500),

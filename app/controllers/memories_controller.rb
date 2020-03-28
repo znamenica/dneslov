@@ -1,14 +1,16 @@
 class MemoriesController < ApplicationController
+   before_action :default, only: %i(index), if: :is_html?
    before_action :set_locales, :set_date, :set_calendary_cloud, :set_julian
    before_action :set_memory, only: %i(show)
-   before_action :default_with_date, only: %i(index)
-   before_action :default_in_calendaries, only: %i(index)
-   before_action :set_tokens, :set_calendary_slugs, :set_page, only: %i(index)
+   before_action :set_query, :set_calendary_slugs, :set_page, only: %i(index)
 
-   has_scope :with_date, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
-      scope.with_date(*value) ;end
-   has_scope :with_tokens, only: %i(index), type: :array
-   has_scope :in_calendaries, only: %i(index), type: :array
+   has_scope :d, only: %i(index) do |_, scope, value|
+      if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
+         scope.d( date, julian != "н" )
+      else
+         scope ;end;end
+   has_scope :q, only: %i(index)
+   has_scope :c, only: %i(index)
 
    # NOTE https://stackoverflow.com/a/48744792/446267
    rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
@@ -16,7 +18,7 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      @memories = apply_scopes(Memory).page(params[:page])
+      @memories = apply_scopes(Memory).page(params[ :p ])
 
       respond_to do |format|
          format.json { render json: @memories,
@@ -39,14 +41,18 @@ class MemoriesController < ApplicationController
 
    protected
 
+   # lazy property
+   def _date
+      # TODO add detection time zone from request
+      @_date ||= (
+         date = Time.now + church_time_gap
+         is_julian_calendar? && date - julian_gap || date );end
+
    def is_html?
       request.formats.first&.symbol == :html ;end
 
    def is_julian_calendar?
-      params[ :calendar_style ].to_i == 0 ;end
-
-   def will_select_date_only?
-      params[:with_text].blank? ;end
+      params[ :d ]&.[](0) != 'н' ;end
 
    def church_time_gap
       9.hours ;end
@@ -59,26 +65,29 @@ class MemoriesController < ApplicationController
       #TODO make automatic detection of calendary depended on the IP and country of request
       'рпц' ;end
 
-   def default_in_calendaries
-      params[:in_calendaries] ||= [ default_calendary_slug ] if is_html? and params[:in_calendaries].blank? ;end
-
-   def default_with_date
-      if is_html?
-         params[:with_date] = [ @date.strftime("%d-%m-%Y"), is_julian_calendar? ] ;end;end
+   def default
+      if (params[ :c ].blank? and params[ :d ].blank? and params[ :q ].blank?)
+         params[ :d ] ||= "#{is_julian_calendar? && 'ю' || "н"}#{_date.strftime("%d-%m-%Y")}"
+         params[ :c ] ||= [ default_calendary_slug ] ;end;end
 
    def set_locales
       @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
 
    def set_page
-      @page ||= params[:page] || 1 ;end
+      @page ||= params[ :p ] || 1 ;end
 
-   def set_tokens
-      @tokens ||= params[:with_tokens] || [] ;end
+   def set_query
+      @query ||= params[ :q ] || "" ;end
+
+   def set_date
+      @date ||= (
+         if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ params[ :d ]
+            _date ;end);end
 
    def set_calendary_slugs
-      slugs = params[:in_calendaries].present? && params[:in_calendaries] ||
-              is_html? && [ default_calendary_slug ]
-      @calendary_slugs ||= Slug.for_calendary.where( text: slugs ).pluck( :text ) ;end
+      @calendary_slugs =
+      if params[ :c ].present?
+         Slug.for_calendary.where( text: params[ :c ] ).pluck( :text ) ;end;end
 
    def set_calendary_cloud
       @calendary_cloud ||= Calendary.licit ;end
@@ -86,15 +95,5 @@ class MemoriesController < ApplicationController
    def set_julian
       @julian ||= is_julian_calendar? ;end
 
-   def set_date
-      # TODO add detection time zone from request
-      @date ||= (
-         if params[ :with_date ].is_a?(Array)
-            Time.parse( params[ :with_date ].first )
-         elsif will_select_date_only?
-            date = Time.now + church_time_gap
-            is_julian_calendar? && date - julian_gap || date
-         end) ;end
-
    def set_memory
-      @memory ||= Memory.by_slug(params[:slug]) || raise(ActiveRecord::RecordNotFound) ;end;end
+      @memory ||= Memory.by_slug(params[ :slug ]) || raise(ActiveRecord::RecordNotFound) ;end;end

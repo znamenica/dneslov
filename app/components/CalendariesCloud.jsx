@@ -14,9 +14,10 @@ export default class CalendariesCloud extends Component {
    }
 
    isCalendaryUsed(calendary) {
-      return this.props.calendaries_used.reduce((used, slug) => {
-         return used || (slug == calendary.slug)
-      }, false)
+      return this.props.calendaries_used &&
+         this.props.calendaries_used.reduce((used, c) => {
+         return used || (c.slug == calendary.slug)
+      }, null)
    }
 
    actionFor(calendary) {
@@ -24,7 +25,7 @@ export default class CalendariesCloud extends Component {
    }
 
    render() {
-      console.log(this.props)
+      console.log("[render] > props:", this.props)
 
       return (
          <div className='row centering'

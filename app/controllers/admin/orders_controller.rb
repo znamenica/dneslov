@@ -1,8 +1,8 @@
 class Admin::OrdersController < Admin::CommonController
-   has_scope :with_tokens, only: %i(index), type: :array
+   has_scope :q, only: %i(index), type: :array
 
    def all
-      @orders = model.with_token(params[:with_token])
+      @orders = model.t(params[:t])
 
       respond_to do |format|
          format.json { render :index, json: @orders.limit(500),

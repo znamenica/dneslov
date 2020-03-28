@@ -15,10 +15,10 @@ import Intro from 'Intro'
 export default class MemoriesForm extends Component {
    static defaultProps = {
       date: '',
-      julian: false,
+      measure: "юлианский",
       calendaries_used: [],
       calendaries_cloud: [],
-      tokens: [],
+      query: "",
       memories: {
          list: [],
          page: 1,
@@ -34,40 +34,91 @@ export default class MemoriesForm extends Component {
       if (props !== state.prevProps) {
          let state = {
                prevProps: props,
-               default_calendary_slug: props.calendaries_cloud[0],
+               default_calendary_slug: props.calendaries_cloud[0].slug,
                memories: props.memories.list,
                memoriesTotal: props.memories.total,
                memory: props.memory,
                query: {
-                  page: props.memories.page,
-                  with_date: [ props.date, props.julian ],
-                  in_calendaries: props.calendaries_used.slice(),
-                  with_tokens: props.tokens
+                  c: MemoriesForm.getCalendariesString(props),
+                  d: MemoriesForm.getDateString(props),
+                  q: props.query,
+                  p: props.memories.page,
                }
              }
 
-         history.pushState({id: MemoriesForm.hashFromState(state)}, 'Днеслов', '/')
+         history.pushState({id: MemoriesForm.hashFromValue(state.query)},
+                           'Днеслов',
+                           MemoriesForm.getPathFromState(state))
          return state
       }
 
       return null
    }
 
-   static hashFromState(state) {
-      let json = JSON.stringify(state),
+   static getCalendariesString(props) {
+      let c_a = props.calendaries_used && props.calendaries_used.slice()
+
+      return c_a && c_a.join(",") || null
+   }
+
+   static getDateString(props) {
+      return props.date && (props.measure == "юлианский" && "ю" || "н") + props.date || null
+   }
+
+   static parseCalendariesString(string) {
+      return string && string.split(",") || null
+   }
+
+   static parseDateString(string) {
+      if (string) {
+         console.log(string)
+         let r = string.match(/([юн])?([0-9\-\.]+)/)
+         if (r) {
+            return r.slice(2,3).reverse()
+         }
+      }
+
+      return null
+   }
+
+   static getPathFromState(state) {
+      let path = "/?" + Object.entries(state.query).reduce((line, [key, value]) => {
+            console.log("[getPathFromState] >", "key:", key, "value:", value, "query:", line)
+            if (value && value.length > 0) {
+               let part = key + "=" + encodeURIComponent(value)
+               return line && line + "&" + part || part
+            } else {
+               return line
+            }
+         }, undefined)
+
+      return path
+   }
+
+   static hashFromValue(value) {
+      let json = JSON.stringify(value),
           hash = crypto.createHash('sha1').update(json).digest('hex')
 
-      console.log("[hashFromState] > id:", hash)
-      console.log("[hashFromState] > json string:", json)
+      console.log("[hashFromValue] > id:", hash)
+      console.log("[hashFromValue] > json string:", json)
       sessionStorage.setItem(hash, json)
 
       return hash
    }
 
    updateState(state) {
-      let hash = MemoriesForm.hashFromState(state)
+      console.log("[updateState] <<< state", state)
+      let hash = MemoriesForm.hashFromValue(state.query),
+          path = MemoriesForm.getPathFromState(state)
 
-      history.replaceState({id: hash}, document.title)
+      if (path === MemoriesForm.getPathFromState(this.state)) {
+         console.log("[updateState] > stable")
+         history.replaceState({id: hash}, document.title)
+      } else {
+         console.log("[updateState] > new")
+         history.pushState({id: hash}, document.title, path)
+      }
+
       this.setState(state)
    }
 
@@ -81,64 +132,73 @@ export default class MemoriesForm extends Component {
 
    // custom
    calendariesUsed() {
-      return this.state.query.in_calendaries.map((slug) => {
+      return this.state.query.c && this.state.query.c.split(",").map((slug) => {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
             return c || calendary.slug == slug && calendary || null
-         }, false)
+         }, null)
       })
    }
 
    onCloudAct(data) {
-      this.state.query.in_calendaries.push(data.slug)
+      let c = (this.state.query.c || "").split(",").filter(c => {
+         c.length == 0
+      }).concat([ data.slug ]).join(",")
 
-      this.submit()
+      this.submit({c: c, p: 1})
    }
 
    onSearchAct(data) {
-      let index
+      let query = merge({}, this.state.query)
+         console.log(data, query, query.q)
 
       if (data.date) {
-         this.state.query.with_date = []
+         query.d = null
       } else if (data.slug) {
-         index = this.state.query.in_calendaries.indexOf(data.slug)
-         this.state.query.in_calendaries.splice(index, 1)
+         let tokens = query.c.split(","),
+             index = tokens.indexOf(data.slug)
+         tokens.splice(index, 1)
+         if (tokens.length == 0) {
+            query.c = null
+         } else {
+            query.c = tokens.join(",")
+         }
       } else if (data.token) {
-         index = this.state.query.with_tokens.indexOf(data.token)
-         this.state.query.with_tokens.splice(index, 1)
+         console.log(query.q)
+         let tokens = query.q.split("/"),
+             index = tokens.indexOf(data.token)
+
+         console.log(tokens, index, tokens.splice(index, 1))
+         query.q = tokens.splice(index, 1).join("/")
       }
 
-      this.submit()
+      this.submit(merge(query, {p: 1}))
    }
 
-   onSearchUpdate(tokens) {
-      this.state.query.with_tokens = tokens
-
-      this.submit()
+   onSearchUpdate(query) {
+      this.submit({q: query, p: 1})
    }
 
    onCalendarUpdate(value) {
-      Object.keys(value).forEach((key) => {
-         this.state.query[key] = value[key]
-      })
+      let d = (value['with_date'][1] == 'julian' && 'ю' || 'н') +  value['with_date'][0]
 
-      this.submit()
+      this.submit({d: d, p: 1})
    }
 
    onFetchNext() {
       if (! this.isNextRequesting) {
-         console.log("NEXT")
+         console.log("[onFetchNext] > getting...")
          this.isNextRequesting = true
-         this.submit(this.state.query.page + 1)
+         this.submit({p: this.state.query.p + 1})
       }
    }
 
-   submit(page = 1) {
-      this.state.query.page = page
+   submit(query_in) {
+      let query = merge(this.state.query, query_in)
 
-      console.log("Sending...", this.state)
+      console.log("Sending...", query)
 
       let request = {
-         data: this.state.query,
+         data: query,
          url: '/index.json',
       }
 
@@ -150,9 +210,9 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoriesLoadSuccess(response) {
-      let state, memories = response.data
+      console.log("[onMemoriesLoadSuccess] > response", response)
 
-      console.log("LOADED", memories)
+      let state, memories = response.data
 
       if (memories.page > 1) {
          let newMemories = this.state.memories.concat(memories.list)
@@ -167,16 +227,15 @@ export default class MemoriesForm extends Component {
             memory: null})
       }
 
-      this.updateState(state)
+      document.body.classList.remove('in-progress')
+      this.updateState(merge(state, {query: response.config.params}))
       this.isNextRequesting = false
    }
 
    onMemoriesLoadFailure(response) {
-      console.log("FAILURE", response)
+      console.log("[onMemoriesLoadFailure] <<< response", response)
 
-      let query = merge(this.state.query, { in_calendaries: this.props.calendaries_used.slice() })
       document.body.classList.remove('in-progress')
-      this.updateState({query: query})
       this.isNextRequesting = false
    }
 
@@ -198,9 +257,9 @@ export default class MemoriesForm extends Component {
 
       console.log("[onMemoryLoadSuccess] > memory:", memory)
 
-      history.pushState({key: 2},
+      history.pushState({},
                         'Днесловъ – ' + memory.short_name,
-                        '/' + memory.slug + '#' + this.props.calendaries_used[0])
+                        '/' + memory.slug + '#' + this.state.default_calendary_slug)
       document.body.classList.remove('in-progress')
       this.updateState(state)
    }
@@ -209,8 +268,8 @@ export default class MemoriesForm extends Component {
       console.log("[onPopState] > session:", e.state)
 
       if (e.state) {
-         let state = JSON.parse(sessionStorage.getItem(e.state.id))
-         this.setState(state)
+         this.state.query = JSON.parse(sessionStorage.getItem(e.state.id))
+         this.submit(merge(this.state.query, {p: 1}))
       }
    }
 
@@ -243,29 +302,30 @@ export default class MemoriesForm extends Component {
                               onUpdate={this.onCalendarUpdate.bind(this)} />
                            <CalendariesCloud
                               calendaries={this.props.calendaries_cloud}
-                              calendaries_used={this.state.query.in_calendaries}
+                              calendaries_used={this.calendariesUsed()}
                               onAct={this.onCloudAct.bind(this)} /></div></div>
                      <div className='col s12 m7 l9 xl10'>
                         {this.state.memory &&
                            <Memory
                               key='memory'
-                              selected_calendaries={this.state.query.in_calendaries}
+                              selected_calendaries={this.state.query.c}
                               {...this.state.memory} />}
                         {! this.state.memory &&
                            <div>
                               <div className='row'>
                                  <SearchField
                                     wrapperClassName='col xl12 l12 m12 s12'
-                                    with_text={this.state.query.with_tokens.join(" ")}
+                                    with_text={this.state.query.q}
                                     onUpdate={this.onSearchUpdate.bind(this)} /></div>
                               <SearchConditions
-                                 date={this.state.query.with_date[0]}
+                                 date={MemoriesForm.parseDateString(this.state.query.d)}
                                  calendaries={this.calendariesUsed()}
-                                 query={this.state.query.with_tokens}
+                                 query={this.state.query.q || ""}
                                  onAct={this.onSearchAct.bind(this)} />
                               <MemorySpans
                                  memories={this.state.memories}
                                  total_memories={this.state.memoriesTotal}
-                                 calendaries_cloud={this.state.query.in_calendaries}
+                                 calendaries_cloud={MemoriesForm.parseCalendariesString(this.state.query.c)}
+                                 default_calendary_slug={this.state.default_calendary_slug}
                                  onLoadRequest={this.onLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}

@@ -1,8 +1,8 @@
 class Admin::NamesController < Admin::CommonController
-   has_scope :with_token, only: %i(index)
+   has_scope :t, only: %i(index)
 
    def all
-      @names = model.with_token(params[:with_token])
+      @names = model.with_token(params[ :t ])
 
       respond_to do |format|
          format.json { render :index, json: @names.limit(500),

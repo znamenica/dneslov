@@ -75,6 +75,9 @@ class Event < ActiveRecord::Base
    accepts_nested_attributes_for :coordinate
    accepts_nested_attributes_for :item, reject_if: :all_blank
 
+   singleton_class.send(:alias_method, :t, :with_token)
+   singleton_class.send(:alias_method, :mid, :with_memory_id)
+
    validates_presence_of :kinds, :type
 
    def kind_for language_code

@@ -22,8 +22,17 @@ export default class Chip extends Component {
       onAct: PropTypes.func,
    }
 
-   state = {
-      action: this.props.action
+   state = {}
+
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         return {
+            action: props.action,
+            prevProps: props
+         }
+      }
+
+      return null
    }
 
    onAct(e) {

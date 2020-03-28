@@ -7,7 +7,8 @@ export default class MemorySpans extends Component {
    static defaultProps = {
       memories: [],
       total_memories: 0,
-      calendaries_cloud: [],
+      calendaries_cloud: null,
+      default_calendary_slug: null,
       onFetchNext: null,
       onLoadRequest: null,
    }
@@ -32,8 +33,12 @@ export default class MemorySpans extends Component {
       return this.props.memories.length > 0
    }
 
+   calendary_slugs() {
+      return this.props.calendaries_cloud || [ this.props.default_calendary_slug ]
+   }
+
    descriptionFirst(memory) {
-      return this.props.calendaries_cloud.reduce((text, slug) => {
+      return this.calendary_slugs().reduce((text, slug) => {
          return text || memory.descriptions.reduce((desc, description) => {
             return desc || description.calendary && description.calendary.slug == slug && description.text || null
          }, null)
@@ -41,7 +46,7 @@ export default class MemorySpans extends Component {
    }
 
    calculateDefaultCalendaryIn(array) {
-      return this.props.calendaries_cloud.reduce((cal, calendary_slug) => {
+      return this.calendary_slugs().reduce((cal, calendary_slug) => {
          if (cal) {
             return cal
          } else {
@@ -81,7 +86,7 @@ export default class MemorySpans extends Component {
                         slug={memory.slug}
                         short_name={this.short_name}
                         default_name_in_calendary={this.titleFirst(memory)}
-                        default_calendary_slug={this.props.calendaries_cloud[0]}
+                        default_calendary_slug={this.props.default_calendary_slug}
                         url={memory.url}
                         icon_url={memory.icon_url}
                         year={memory.year}
@@ -90,6 +95,8 @@ export default class MemorySpans extends Component {
                         names={memory.names}
                         onLoadRequest={this.props.onLoadRequest} />)}
                   <ReactScrollPagination
+                     excludeElement='header'
+                     totalPages={this.props.total_memories}
                      fetchFunc={this.fetchNext.bind(this)} /></ul>}
             {!this.isPresent() &&
                <div className='card-panel'>

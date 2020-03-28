@@ -19,8 +19,8 @@ export default class Records extends Component {
       page: this.props[this.props.keyNames].page,
       total: this.props[this.props.keyNames].total,
       query: {
-         page: this.props[this.props.keyNames].page,
-         with_tokens: this.props.tokens || [],
+         p: this.props[this.props.keyNames].page,
+         q: this.props.tokens || [],
       },
       appended: 0,
       current: null
@@ -142,7 +142,7 @@ export default class Records extends Component {
       }
 
       this.isRequesting = true
-      this.state.query.page = page
+      this.state.query.p = page
 
       console.log("Sending...", this.state.query)
 
@@ -151,7 +151,7 @@ export default class Records extends Component {
    }
 
    onSearchUpdate(tokens) {
-      this.state.query.with_tokens = tokens
+      this.state.query.q = tokens
 
       this.submit(1)
    }
@@ -187,7 +187,7 @@ export default class Records extends Component {
                   <div className='col xl9 l8 m6 s12'>
                      <SearchField
                         wrapperClassName=''
-                        with_text={this.state.query.with_tokens.join(" ")}
+                        with_text={this.state.query.q}
                         onUpdate={this.onSearchUpdate.bind(this)} />
                      <a
                         className="waves-effect waves-light btn modal-trigger"

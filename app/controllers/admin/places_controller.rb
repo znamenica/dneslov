@@ -14,10 +14,10 @@ class Admin::PlacesController < Admin::CommonController
 
    def set_places
       @places =
-      if params[:with_token]
-         model.with_token(params[:with_token])
-      elsif params[:with_value] && params[:value_name]
-         model.where(params[:value_name] => params[:with_value])
+      if params[ :t ]
+         model.with_token(params[ :t ])
+      elsif params[ :v ] && params[ :value_name ]
+         model.where(params[ :v ] => params[ :v ])
       else
          model.none ;end;end
 

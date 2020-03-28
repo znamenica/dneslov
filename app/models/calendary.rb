@@ -22,18 +22,23 @@ class Calendary < ActiveRecord::Base
    scope :with_token, -> text do
       left_outer_joins( :names, :descriptions ).where( "descriptions.text ILIKE ?", "%#{text}%" ) ;end
 
-   scope :with_tokens, -> token_list do
+   scope :with_tokens, -> string_in do
+      return self if string_in.blank?
       # TODO fix the correctness of the query
-      tokens = token_list.reject { |t| t =~ /\A[\s\+]*\z/ }
-      cond = tokens.first[0] == '+' && 'TRUE' || 'FALSE'
-      rel = left_outer_joins( :names, :descriptions ).where( cond )
-      tokens.reduce(rel) do |rel, token|
-         /\A(?<a>\+)?(?<text>.*)/ =~ token
-         if a # AND operation
-            rel.merge(self.with_token(text))
-         else # OR operation
-            rel.or(merge(self.with_token(text))) ;end;end
+      klass = self.model_name.name.constantize
+      rel_in = left_outer_joins( :names, :descriptions ).where( 'FALSE' )
+      string_in.split(/\//).reduce(rel_in) do |rel, or_token|
+         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+            # AND operation
+            and_rel = klass.with_token(and_token)
+            rel && rel.merge(and_rel) || and_rel ;end
+         # OR operation
+         rel.or(or_rel);end
       .distinct ;end
+
+
+   singleton_class.send(:alias_method, :t, :with_token)
+   singleton_class.send(:alias_method, :q, :with_tokens)
 
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true

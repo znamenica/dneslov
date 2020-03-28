@@ -15,6 +15,23 @@ class Order < ActiveRecord::Base
    scope :with_token, -> text do
       left_outer_joins(:slug).where( "slugs.text ~* ?", "\\m#{text}.*" ).distinct ;end
 
+   scope :with_tokens, -> string_in do
+      return self if string_in.blank?
+      # TODO fix the correctness of the query
+      klass = self.model_name.name.constantize
+      rel_in = left_outer_joins( :names, :descriptions, :memos ).where( 'FALSE' )
+      string_in.split(/\//).reduce(rel_in) do |rel, or_token|
+         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+            # AND operation
+            and_rel = klass.with_token(and_token)
+            rel && rel.merge(and_rel) || and_rel ;end
+         # OR operation
+         rel.or(or_rel);end
+      .distinct ;end
+
+   singleton_class.send(:alias_method, :t, :with_token)
+   singleton_class.send(:alias_method, :q, :with_tokens)
+
    validates_presence_of :slug, :notes, :tweets
 
    def tweet_for locales

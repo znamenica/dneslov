@@ -5,8 +5,8 @@ import Chip from 'Chip'
 export default class SearchConditions extends Component {
    static defaultProps = {
       date: null,
-      calendaries: [],
-      query: [],
+      calendaries: null,
+      query: "",
       onAct: null,
    }
 
@@ -22,14 +22,14 @@ export default class SearchConditions extends Component {
    }
 
    query() {
-      let tokens = this.props.query.join(' ').split(/\//),
+      let tokens = this.props.query.split(/\//),
           filtered = tokens.filter((t) => { return ! t.match(/^[\s+]*$/) })
 
       return filtered.map(t => { return t.trim().replace(/ /g, "+") })
    }
 
    render() {
-      console.log(this.props)
+      console.log("[render] > props", this.props)
 
       return (
          <div className='row'>
@@ -45,7 +45,8 @@ export default class SearchConditions extends Component {
                   text={this.props.date}
                   action='remove'
                   onAct={this.onChipAct.bind(this)} />}
-               {this.props.calendaries.map((calendary) =>
+               {this.props.calendaries &&
+                this.props.calendaries.map((calendary) =>
                   <Chip
                      key={calendary.slug}
                      data={{slug: calendary.slug}}

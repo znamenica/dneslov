@@ -22,7 +22,7 @@ class ApplicationSerializer < ActiveModel::Serializer
       @instance_options[:calendaries] ;end
 
    def color_by_slug slug
-      slug = slug.strip
+      slug = slug&.strip || ""
       coeff = 3.0 / ( POSES.size - 1 )
       colors = slug.split("").map { |c| 12 + coeff * POSES.index( c ) }
       letters = colors.map { |c| c < 10 && (c.to_i + '0'.ord) || (c.to_i - 10 + 'a'.ord) }.pack("c*")

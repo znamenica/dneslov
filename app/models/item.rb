@@ -6,5 +6,7 @@ class Item < ActiveRecord::Base
 
    scope :with_token, -> token { unscoped.joins( :item_type ).merge(ItemType.with_token( token )) }
 
+   singleton_class.send(:alias_method, :t, :with_token)
+
    def description_for language_code
       item_type.description_for(language_code) ;end;end

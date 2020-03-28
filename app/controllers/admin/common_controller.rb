@@ -4,7 +4,7 @@ class Admin::CommonController < ApplicationController
 
    before_action :authenticate_user!, except: %i(dashboard)
    before_action :validate_session
-   before_action :set_tokens, only: %i(index)
+   before_action :set_query, only: %i(index)
    before_action :set_page, only: %i(index)
    before_action :set_locales
    before_action :new_object, only: %i(create)
@@ -18,8 +18,8 @@ class Admin::CommonController < ApplicationController
                ActiveRecord::RecordNotSaved,
                ActiveRecord::RecordNotFound, with: :unprocessable_entity
 
-   has_scope :with_token, only: %i(index all)
-   has_scope :with_tokens, only: %i(index), type: :array
+   has_scope :t, only: %i(index all)
+   has_scope :q, only: %i(index)
 
    # GET /<objects>/
    def index
@@ -76,20 +76,20 @@ class Admin::CommonController < ApplicationController
       render json: errors, status: :unprocessable_entity ;end
 
    def set_page
-      @page ||= (params[:page] || 1).to_i ;end
+      @page ||= (params[ :p ] || 1).to_i ;end
 
    def set_locales
       #TODO unfix of the ru only (will depend on the locale)
       @locales ||= %i(ру цс) ;end
 
-   def set_tokens
-      @tokens ||= params[:with_tokens] || [] ;end
+   def set_query
+      @query ||= params[ :q ] || "" ;end
 
    def new_object
       @object = model.new( permitted_params ) ;end
 
    def fetch_objects
-      @objects = apply_scopes( model ).page( params[:page] ) ;end
+      @objects = apply_scopes( model ).q( params[ :q ] ).page( params[ :p ]) ;end
 
    def fetch_object
       if params[:slug]

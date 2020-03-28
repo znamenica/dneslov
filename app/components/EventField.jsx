@@ -5,7 +5,7 @@ export default class EventField extends DynamicField {
       pathname: 'short_events',
       name: 'event',
       field_name: 'event_id',
-      filter_key: 'with_memory_id',
+      filter_key: 'mid',
       key_name: 'event',
       value_name: 'id',
       title: 'Событие',

@@ -27,7 +27,7 @@ export default class SearchField extends Component {
       }
 
       this.state.changed = false
-      this.props.onUpdate(filtered)
+      this.props.onUpdate(filtered.join(" "))
    }
 
    onBlur() {
@@ -55,8 +55,7 @@ export default class SearchField extends Component {
    }
 
    render() {
-      console.log(this.props)
-      console.log(this.state)
+      console.log("[render] > props:", this.props, "state:", this.state)
 
       return (
          <div

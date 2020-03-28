@@ -26,26 +26,40 @@ class Memory < ActiveRecord::Base
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
 
    default_scope { left_outer_joins( :slug ).order( base_year: :asc, short_name: :asc, id: :asc ) }
+
    scope :icons, -> { joins(:slugs).where( slugs: { text: :обр } ) }
+
    scope :by_short_name, -> name { where( short_name: name ) }
-   scope :in_calendaries, -> calendaries do
+
+   scope :in_calendaries, -> calendaries_in do
+      calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
       left_outer_joins( :memos ).merge( Memo.in_calendaries( calendaries )).distinct ;end
+
    scope :with_date, -> (date, julian = false) do
       left_outer_joins( :memos ).merge( Memo.with_date( date, julian )).distinct ;end
+
    scope :with_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
          where("descriptions.text ILIKE ? OR names.text ILIKE ?", "%#{text}%", "%#{text}%")).distinct ;end
-   scope :with_tokens, -> tokens_in do
+
+   scope :with_tokens, -> string_in do
+      return self if string_in.blank?
       # TODO fix the correctness of the query
+      klass = self.model_name.name.constantize
       rel_in = left_outer_joins( :names, :descriptions, :memos ).where( 'FALSE' )
-      tokens_in.join(' ').split(/\//).reduce(rel_in) do |rel, or_token|
+      string_in.split(/\//).reduce(rel_in) do |rel, or_token|
          or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
-            and_rel = Memory.with_token(and_token)
+            and_rel = klass.with_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end
          # OR operation
          rel.or(or_rel);end
       .distinct ;end
+
+   singleton_class.send(:alias_method, :t, :with_token)
+   singleton_class.send(:alias_method, :q, :with_tokens)
+   singleton_class.send(:alias_method, :d, :with_date)
+   singleton_class.send(:alias_method, :c, :in_calendaries)
 
    accepts_nested_attributes_for :memory_names, reject_if: :all_blank
    accepts_nested_attributes_for :paterics, reject_if: :all_blank

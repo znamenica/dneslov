@@ -5,6 +5,8 @@ class ItemType < ActiveRecord::Base
    scope :with_token, -> text { joins(:descriptions).where( "descriptions.text ~* ?", "\\m#{text}.*" ) }
    scope :descriptions_for, -> language_code { joins(:descriptions).where(descriptions: { language_code: language_code }) }
 
+   singleton_class.send(:alias_method, :t, :with_token)
+
    accepts_nested_attributes_for :descriptions
 
    validates :descriptions, presence: true

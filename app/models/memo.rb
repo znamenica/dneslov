@@ -31,13 +31,16 @@ class Memo < ActiveRecord::Base
 
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
-   scope :in_calendaries, -> calendaries do
+   scope :in_calendaries, -> calendaries_in do
       # TODO make single embedded select or after fix rails bug use merge
+      calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
       calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).pluck( :sluggable_id )
       where( calendary_id: calendary_ids ) ;end
 
-   scope :with_date, -> (in_date, julian = false) do
-      date = in_date.is_a?(Date) && in_date || Date.parse(in_date)
+   scope :with_date, -> (date_in, julian = false) do
+      return self if date_in.blank?
+
+      date = date_in.is_a?(Date) && date_in || Date.parse(date_in)
       new_date = date.strftime("%2d.%m")
       gap = (julian && 13.days || 0)
       wday = (date + gap).wday
@@ -65,18 +68,20 @@ class Memo < ActiveRecord::Base
           where("memoes.year_date ILIKE ?", "%#{text}%").or(
           where("memories.short_name ILIKE ?", "%#{text}%")))) ;end
 
-   scope :with_tokens, -> token_list do
+   scope :with_tokens, -> string_in do
+      return self if string_in.blank?
       # TODO fix the correctness of the query
-      tokens = token_list.reject { |t| t =~ /\A[\s\+]*\z/ }
-      cond = tokens.first[0] == '+' && 'TRUE' || 'FALSE'
-      rel = left_outer_joins(:descriptions, :memory).where( cond )
-      tokens.reduce(rel) do |rel, token|
-         /\A(?<a>\+)?(?<text>.*)/ =~ token
-         if a # AND operation
-            rel.with_token(text)
-         else # OR operation
-            rel.or(self.with_token(text)) ;end;end
+      klass = self.model_name.name.constantize
+      rel_in = left_outer_joins( :memory, :descriptions ).where( 'FALSE' )
+      string_in.split(/\//).reduce(rel_in) do |rel, or_token|
+         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+            # AND operation
+            and_rel = klass.with_token(and_token)
+            rel && rel.merge(and_rel) || and_rel ;end
+         # OR operation
+         rel.or(or_rel);end
       .distinct ;end
+
 
    scope :with_event_id, -> (event_id) do
       where(event_id: event_id) ;end
@@ -85,6 +90,11 @@ class Memo < ActiveRecord::Base
       where(calendary_id: calendary_id) ;end
 
    scope :notice, -> { joins(:event).merge(Event.notice) }
+
+   singleton_class.send(:alias_method, :t, :with_token)
+   singleton_class.send(:alias_method, :q, :with_tokens)
+   singleton_class.send(:alias_method, :d, :with_date)
+   singleton_class.send(:alias_method, :c, :in_calendaries)
 
    accepts_nested_attributes_for :service_links, reject_if: :all_blank
    accepts_nested_attributes_for :services, reject_if: :all_blank
