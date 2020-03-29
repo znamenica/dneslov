@@ -12,7 +12,7 @@ import { matchLanguages, matchAlphabeths, matchLetters } from 'matchers'
 @mixin(Validation)
 export default class OrdersCollection extends Component {
    static defaultProps = {
-      name: 'orders',
+      name: 'memo_orders',
       title: 'Чины',
       action: 'Добавь чин',
       validations: {

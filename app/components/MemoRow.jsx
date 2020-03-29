@@ -56,13 +56,13 @@ export default class MemoRow extends Component {
    render() {
       return (
          <tr>
-            <td>{this.props.year_date}</td>
-            <td>{this.props.add_date}</td>
-            <td>{this.props.event}</td>
-            <td>{this.props.bind_kind}</td>
-            <td>{this.props.bond_to}</td>
-            <td>{this.props.calendary}</td>
+            <td>{this.props.memo_orders[0].order}</td>
             <td>{this.props.memory}</td>
+            <td>{this.props.year_date}</td>
+            <td>{this.props.event}</td>
+            <td>{this.props.bond_to}</td>
+            <td>{this.props.add_date}</td>
+            <td>{this.props.calendary}</td>
             <td className='actions'>
                <i
                   className='small material-icons'

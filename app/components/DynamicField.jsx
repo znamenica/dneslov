@@ -45,41 +45,45 @@ export default class DynamicField extends Component {
       validations: PropTypes.object.isRequired,
    }
 
-   data = {
-      list: {}, //hash, key: name, value: id
-      total: 0,
-   }
+   data = { list: {}, total: 0 }
 
    // system
-   constructor() {
-      super()
+   constructor(props) {
+      super(props)
 
-      this.onKeyPress = this.onKeyPress.bind(this)
+      if (props.value) {
+         this.data = { list: { [props.humanized_value]: props.value }, total: 1 }
+      }
+      this.onKeyDown = this.onKeyDown.bind(this)
    }
 
    componentDidMount() {
+      console.log("[componentDidMount] <<<")
+      console.log("[componentDidMount] > ", this.data, this.props.value)
       this.setup()
-      document.addEventListener('keypress', this.onKeyPress)
+      document.addEventListener('keydown', this.onKeyDown)
    }
 
    componentDidUpdate() {
-      //popup autocomplete
+      console.log("[componentDidUpdate] <<<")
+
       if (this.$input) {
          this.setup()
-         this.setAutocomplete()
+         this.autoPopup()
       }
    }
 
    componentWillUnmount() {
+      console.log("[componentWillUnmount] <<<")
       this.destroy()
-      document.removeEventListener('keypress', this.onKeyPress)
+      document.removeEventListener('keypress', this.onKeyDown)
    }
 
    //events
    onChange(e) {
       let humanized_value = e.target.value
 
-      console.log("[onKeyPress] > update: ", humanized_value)
+      console.log("[onChange] > update to", humanized_value)
       this.updateTo(humanized_value, false)
 
       if (!this.triggered || humanized_value &&
@@ -97,9 +101,9 @@ export default class DynamicField extends Component {
       this.updateTo(humanized_value)
    }
 
-   onKeyPress(e) {
+   onKeyDown(e) {
       if (e.key === "Enter" && e.target == this.$input) {
-         console.log("[onKeyPress] > fix to:", this.$input.value)
+         console.log("[onKeyDown] > fix to", this.$input.value)
          e.preventDefault()
          if (this.data.list[this.$input.value]) {
             this.updateTo(this.$input.value)
@@ -108,13 +112,10 @@ export default class DynamicField extends Component {
    }
 
    onChipAct() {
-      console.log("[onChipAct] > unfix")
-      let ce = new CustomEvent('dneslov-update-path', {
-         detail: {
-            [this.props.name]: null,
-            [this.props.humanized_name]: this.props.humanized_value
-         } })
+      let object = this.valueToObject(this.props.name, null),
+          ce = new CustomEvent('dneslov-update-path', { detail: object })
 
+      console.log("[onChipAct] > unfix with", object)
       document.dispatchEvent(ce)
    }
 
@@ -139,8 +140,8 @@ export default class DynamicField extends Component {
    }
 
    //actions
-   setAutocomplete() {
-      console.log("[setAutocomplete] >", this.input)
+   autoPopup() {
+      console.log("[autoPopup] >", this.input)
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
 
       this.input.updateData(list)
@@ -220,7 +221,7 @@ export default class DynamicField extends Component {
 
       if (this.$input) {
          console.log("[onLoadSuccess] > update autocomplete for", this.props.humanized_value)
-         this.setAutocomplete()
+         this.autoPopup()
          this.updateTo(this.props.humanized_value, false)
       }
    }

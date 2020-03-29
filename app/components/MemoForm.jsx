@@ -27,7 +27,7 @@ export default class MemoForm extends CommonForm {
       bond_to: '',
       memory_id: undefined,
       memory: '',
-      orders: [],
+      memo_orders: [],
       titles: [],
       links: [],
       descriptions: [],
@@ -53,7 +53,7 @@ export default class MemoForm extends CommonForm {
                }
             },
          },
-         orders: {
+         memo_orders: {
             validations: {
                'Минимум один чин должен быть задан':  matchEmptyObject
             }
@@ -80,7 +80,7 @@ export default class MemoForm extends CommonForm {
          bond_to: '',
          memory_id: 0,
          memory: '',
-         orders: [],
+         memo_orders: [],
          descriptions: [],
          titles: [],
          links: [],
@@ -145,10 +145,10 @@ export default class MemoForm extends CommonForm {
             value={this.state.query.add_date}
             wrapperClassName='input-field col xl3 l3 m6 s12' />,
          <OrdersCollection
-            key='orders'
-            name='orders'
-            value={this.state.query.orders}
-            validations={this.props.meta.orders.validations}/>,
+            key='memo_orders'
+            name='memo_orders'
+            value={this.state.query.memo_orders}
+            validations={this.props.meta.memo_orders.validations}/>,
          <TitlesCollection
             key='titles'
             name='titles'
