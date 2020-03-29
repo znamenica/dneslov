@@ -404,7 +404,7 @@
    html {
       main {
          & > .container {
-            width: 91%;
+            width: 92%;
          }
 
          .pickmeup {
@@ -601,7 +601,7 @@
    html {
       main {
          & > .container {
-            width: 89%;
+            width: 91%;
          }
 
          .pickmeup {
@@ -1591,6 +1591,7 @@ html {
 
       & > .container {
          margin-top: 20px;
+         max-width: 95%;
       }
    }
 
@@ -1638,6 +1639,27 @@ html {
 
       &.close {
          background-color: $grayed_terracota;
+      }
+
+   }
+
+   .modal {
+      .modal-footer {
+         .btn, .btn-large, .btn-small {
+            margin-right: 10px;
+         }
+
+         .btn:last-of-type {
+            margin-right: 0;
+         }
+
+         .btn-large:last-of-type {
+            margin-right: 0;
+         }
+
+         .btn-small:last-of-type {
+            margin-right: 0;
+         }
       }
    }
 
@@ -1710,11 +1732,12 @@ html {
       .nav-wrapper {
          height: 64px;
          line-height: inherit;
-         display: flex;
+         display: inherit;
          align-items: center;
          overflow: hidden;
 
          .brand-logo {
+            margin-left: -10px;
             padding-left: 10px;
             padding-right: 10px;
             line-height: initial;
@@ -1758,8 +1781,12 @@ html {
       }
    }
 
-   .input-field label:not(.label-icon).active {
-      height: 4.5rem;
+   .input-field label {
+      pointer-events: none;
+
+      &:not(.label-icon).active {
+         height: 4.5rem;
+      }
    }
 
    .select-wrapper + label {

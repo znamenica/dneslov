@@ -1,13 +1,4 @@
 html {
-   header {
-      .nav-wrapper {
-         &.admin {
-            //TODO fix it for admin page on how to apply 'flex' display
-            display: inline;
-         }
-      }
-   }
-
    main {
       & > .container {
          &.admin {

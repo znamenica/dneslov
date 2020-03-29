@@ -82,19 +82,17 @@ export default class CommonModal extends Component {
                   <this.props.form {...this.props.data} /></div>
                <div className="modal-footer">
                   <div className="row">
-                     <div className="col xl3 l4 m5 s6">
+                     <div className="col xl12 l12 m12 s12">
                         <div className="row">
-                           <div className="col s4">
                               <button
                                  key='close-button'
                                  type='button'
                                  className='btn close'
                                  onClick={this.onCloseClick.bind(this)} >
-                                 {this.props.i18n.close}</button></div>
-                           <div className="col s8">
+                                 {this.props.i18n.close}</button>
                               <SubmitButton
                                  title={this.props.data.id &&
                                         this.props.i18n.update ||
-                                        this.props.i18n.create } /></div></div></div></div></div></div></div>)
+                                        this.props.i18n.create } /></div></div></div></div></div></div>)
    }
 }
