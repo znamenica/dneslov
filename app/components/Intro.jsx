@@ -112,40 +112,34 @@ export class Intro extends Component {
       ],
    }
 
-   state = { enabled: this.props.enabled }
+   state = {
+      enabled: this.isRunRequired(),
+      introLetterDate: this.calculateLatterStepDateStamp(this.props)
+   }
 
    // system
-   constructor(props) {
-      super(props)
-
-      this.onDOMLoaded = this.onDOMLoaded.bind(this)
-   }
-
    componentDidMount() {
-      document.addEventListener('load', this.onDOMLoaded)
-   }
-
-   componentDidUpdate() {
       if (this.state.enabled) {
          this.setLatterStepDateStamp()
       }
    }
 
-   componentWillUnmount() {
-      document.removeEventListener('load', this.onDOMLoaded)
+   // custom
+   isRunRequired() {
+      return this.calculateLatterStepDateStamp(this.props) > this.getLatterStepDateStamp()
    }
 
-   // custom
    getLatterStepDateStamp() {
       const { cookies } = this.props
 
-      return cookies.get('intro-datestamp') || '0'
+      return cookies.get('introDatestamp') || '0'
    }
 
    setLatterStepDateStamp() {
       const { cookies } = this.props
 
-      cookies.set('intro-datestamp', this.state.introLetterDate)
+      console.log( "save", this.state.introLetterDate )
+      cookies.set('introDatestamp', this.state.introLetterDate)
    }
 
    calculateLatterStepDateStamp(props = this.props) {
@@ -166,21 +160,11 @@ export class Intro extends Component {
 
    onRunIntroClick() {
       this.setState({ enabled: true })
+      this.setLatterStepDateStamp()
    }
 
    onExitIntro() {
-   }
-
-   onDOMLoaded() {
-      const { cookies } = this.props
-
-      let introLetterDate = this.calculateLatterStepDateStamp(this.props)
-      let require_run = introLetterDate > this.getLatterStepDateStamp()
-      console.log('CAL', introLetterDate, this.getLatterStepDateStamp(), require_run)
-      this.setState({
-         enabled: this.props.enabled || require_run,
-         introLetterDate: introLetterDate
-      })
+      this.setState({ enabled: false })
    }
 
    render() {
@@ -205,7 +189,7 @@ export class Intro extends Component {
                   positionPrecedence: ["bottom", "right", "left", "top"],
                   hintButtonLabel: 'Ясно!',
                }}
-               onExit={this.onExitIntro}
+               onExit={this.onExitIntro.bind(this)}
             />
             <a
                className="run-intro btn-floating btn-large waves-effect waves-light terracota"

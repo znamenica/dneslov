@@ -75,7 +75,7 @@
     "merge-anything": "^3.0.3",
     "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",
     "react": "^16.2.0",
-    "react-cookie": "^4.0.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.2.0",
     "react-github-login": "git+https://git@github.com/majioa/react-github-login.git#devel",
     "react-markdown": "^4.0.4",

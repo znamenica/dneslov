@@ -291,9 +291,7 @@ export default class MemoriesForm extends Component {
          <main>
             <div className='container'>
                <div className='row'>
-                  <CookiesProvider>
                      <Intro />
-                  </CookiesProvider>
                   <form>
                      <div className='col s12 m5 l3 xl2'>
                         <div className='hidden' id='calendary' />
