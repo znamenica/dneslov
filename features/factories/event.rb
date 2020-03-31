@@ -5,4 +5,7 @@ FactoryBot.define do
 
       association :item
       association :memory
-      association :place ;end ;end
+      association :place
+      after( :build ) do |e, _|
+         e.kinds << (EventKind.find_by(kind: 'Canonization') ||
+                     build( :event_kind, kind: 'Canonization' ));end;end;end

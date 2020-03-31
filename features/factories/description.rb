@@ -16,7 +16,14 @@ FactoryBot.define do
       language_code { :ру }
       alphabeth_code { :ру } ;end
 
+   factory :tweet, class: :Tweet do
+      type { 'Tweet' }
+      text { FFaker::NameRU.name }
+      language_code { :ру }
+      alphabeth_code { :ру } ;end
+
    factory :invalid_description, parent: :description do
       text { 'Invalid' }
       language_code { :ру }
-      alphabeth_code { :ру } ;end ;end
+      alphabeth_code { :ру }
+      ;end ;end

@@ -1,8 +1,11 @@
 FactoryBot.define do
    factory :order do
-      text { FFaker::NameRU.first_name }
-      alphabeth_code { :ру }
-      language_code { :ру }
-      note { 'тест' }
-      short_note { 'текст' }
-      order { 'св' } ;end;end
+      transient do
+         order { 'Чин' }
+      end
+
+      after( :build ) do |o, ev|
+         o.slug = build( :slug, sluggable: o )
+         o.descriptions << build( :description )
+         o.notes << build( :note, text: ev.order )
+         o.tweets << build( :tweet ) ;end;end;end
