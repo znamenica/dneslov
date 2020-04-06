@@ -10,14 +10,12 @@ export default class BooleanBox extends Component {
       name: null,
       title: null,
       wrapperClassName: null,
-      onUpdate: null,
    }
 
    static propTypes = {
       name: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
-      onUpdate: PropTypes.func.isRequired,
    }
 
    onCheck(e) {
@@ -32,7 +30,7 @@ export default class BooleanBox extends Component {
 
       return (
          <div
-            className={this.props.wrapperClassName}>
+            className={"input-field " + this.props.wrapperClassName}>
             <label>
                <input
                   type='checkbox'

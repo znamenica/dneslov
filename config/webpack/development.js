@@ -88,6 +88,7 @@ module.exports = merge(sharedConfig, {
                            "spec": true
                         }
                      ],
+                     '@babel/plugin-proposal-logical-assignment-operators',
                      '@babel/plugin-syntax-dynamic-import',
                      '@babel/plugin-transform-react-jsx-source',
                      '@babel/plugin-transform-react-jsx-self',

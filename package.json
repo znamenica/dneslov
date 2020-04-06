@@ -20,11 +20,12 @@
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.8.3",
+    "@babel/plugin-transform-async-to-generator": "^7.8.3",
+    "@babel/plugin-transform-destructuring": "^7.8.8",
     "@babel/plugin-transform-react-constant-elements": "^7.9.0",
     "@babel/plugin-transform-react-inline-elements": "^7.9.0",
-    "@babel/plugin-transform-destructuring": "^7.8.8",
-    "@babel/plugin-transform-async-to-generator": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.1",
     "@babel/types": "^7.9.0",
@@ -63,6 +64,7 @@
     "yarn": "^1.22.0"
   },
   "dependencies": {
+    "@majioa/react-scroll-pagination": "^0.2.2",
     "axios": "^0.19.2",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
@@ -80,7 +82,6 @@
     "react-github-login": "git+https://git@github.com/majioa/react-github-login.git#devel",
     "react-markdown": "^4.0.4",
     "react-rails-ujs": "^1.1.0",
-    "@majioa/react-scroll-pagination": "^0.2.2",
     "uuid": "^3.1.0",
     "velocity-animate": "^1.5.1"
   },

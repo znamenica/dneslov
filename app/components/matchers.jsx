@@ -1,9 +1,11 @@
-export function matchLetters(e_in) {
+import { merge } from 'merge-anything'
+
+export function matchLetters(text, context) {
    let res = false
-   let e = e_in || {},
-       text = e.text || ''
-   
-   switch (e.alphabeth_code) {
+
+   console.debug("[matchLetters] > text:", text, "context:", context)
+
+   switch (context.alphabeth_code) {
    case 'ру':
       res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=>\[\]\(\)!]+$/)
       break
@@ -101,7 +103,7 @@ export function matchLetters(e_in) {
    return res
 }
 
-export function matchCodes(e_in) {
+export function matchCodes(e_in, context) {
    let e = e_in || {}
 
    const language_tree = {
@@ -134,11 +136,11 @@ export function matchCodes(e_in) {
       ан: ['ан', 'са', 'ра'],
    }
    if (e) {
-      let alphabeth_codes = language_tree[e.language_code]
+      let alphabeth_codes = language_tree[context.language_code]
 
       return alphabeth_codes &&
-             e.alphabeth_code &&
-             alphabeth_codes.indexOf(e.alphabeth_code) < 0
+             context.alphabeth_code &&
+             alphabeth_codes.indexOf(context.alphabeth_code) < 0
    }
 }
 
@@ -164,8 +166,14 @@ export function matchAlphabeths(hash) {
    return false
 }
 
+export function matchEmptyCollection(value, context) {
+   return value.reduce((res, v) => { return res && v.value._destroy }, true)
+}
+
 export function matchEmptyObject(value, context) {
    let res = false
+
+   console.debug("[matchEmptyObject] >", value)
 
    if (value === null || value === undefined) {
       res = true

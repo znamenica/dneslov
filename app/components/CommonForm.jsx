@@ -7,6 +7,7 @@ import { mixin } from 'lodash-decorators'
 
 import { matchCodes } from 'matchers'
 import Validation from 'Validation'
+import { renderElement } from 'render'
 import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
@@ -174,14 +175,14 @@ export default class CommonForm extends Component {
       let result = {}
       console.log("[deserializedHash] >", hash)
 
-      Object.entries(hash).forEach(([key, value]) => {
+      Object.entries(hash).forEach(([key, value], index) => {
          console.log("[deserializedHash] *", key, value, (value && value.constructor.name))
          switch(value && value.constructor.name) {
          case 'Array':
             console.log("[deserializedHash] **", value[0], value[0] && value[0].constructor.name)
             if (value[0] instanceof Object) {
-               result[key] = value.reduce((s, v) => {
-                  s[uuid()] = CommonForm.deserializedHash(v)
+               result[key] = value.reduce((s, v, index) => {
+                  s[uuid()] = merge({ _pos: index }, CommonForm.deserializedHash(v))
                   return s
                }, {})
             } else if (value[0]) {
@@ -191,7 +192,7 @@ export default class CommonForm extends Component {
             }
             break
          case 'Object':
-            result[key] = CommonForm.deserializedHash(value)
+            result[key] = merge({ _pos: index }, CommonForm.deserializedHash(value))
             break
          default:
             result[key] = value
@@ -206,17 +207,13 @@ export default class CommonForm extends Component {
       return {}
    }
 
-   renderContent() {
-      return ""
-   }
-
    render() {
       console.log("[render] > state", this.state)
 
       return (
          <form>
             <div className='row'>
-               {this.renderContent()}</div>
+               {renderElement({value: this.state.query}, this.props.meta)}</div>
             <div className='row'>
                <ErrorSpan
                   error={this.state.error} /></div></form>)

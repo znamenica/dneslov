@@ -1782,7 +1782,9 @@ html {
    }
 
    .input-field label {
-      pointer-events: none;
+      &[for] {
+         pointer-events: none;
+      }
 
       &:not(.label-icon).active {
          height: 4.5rem;
@@ -1960,6 +1962,21 @@ html {
 
          .row {
             margin-bottom: 0.5em;
+         }
+      }
+
+      .block {
+         position: relative;
+
+         &.blank {
+            height: 45px;
+         }
+
+          .block-item {
+             z-index: 1000;
+             position: absolute;
+             right: 0px;
+             top: 0px
          }
       }
    }

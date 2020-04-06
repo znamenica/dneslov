@@ -1,17 +1,7 @@
-import DynamicField from 'DynamicField'
-import OrdersCollection from 'OrdersCollection'
-import TitlesCollection from 'TitlesCollection'
-import DescriptionsCollection from 'DescriptionsCollection'
-import LinksCollection from 'LinksCollection'
-import MemoBindKindField from 'MemoBindKindField'
-import DateField from 'DateField'
-import YearDateField from 'YearDateField'
-import CalendaryField from 'CalendaryField'
-import MemoryField from 'MemoryField'
-import EventField from 'EventField'
 import CommonForm from 'CommonForm'
 import ErrorSpan from 'ErrorSpan'
-import { matchEmptyObject } from 'matchers'
+import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
+import UrlRegexp from 'UrlRegexp'
 
 export default class MemoForm extends CommonForm {
    static defaultProps = {
@@ -34,35 +24,465 @@ export default class MemoForm extends CommonForm {
 
       remoteName: 'memo',
       remoteNames: 'memoes',
-      
+
       meta: {
-         bind_kind: {
+         calendary_id: {
+            kind: 'dynamic',
+            title: 'Календарь',
+            humanized_name: 'calendary',
+            pathname: 'short_calendaries',
+            field_name: 'calendary_id',
+            key_name: 'calendary',
+            value_name: 'id',
+            placeholder: 'Начни ввод наименования календаря...',
+            display_scheme: '12-6-4-4',
             validations: {
+               "Календарь должен быть избран": /^$/
+            }
+         },
+         memory_id: {
+            kind: 'dynamic',
+            humanized_name: 'memory',
+            display_scheme: '12-6-4-4',
+            pathname: 'short_memories',
+            field_name: 'memory_id',
+            key_name: 'short_name',
+            value_name: 'id',
+            title: 'Память',
+            placeholder: 'Начни ввод текста имени или описания памяти...',
+            validations: {
+               "Память должна быть избрана": /^$/
+            }
+         },
+         event_id: {
+            kind: 'dynamic',
+            context_names: 'memory_id',
+            humanized_name: 'event',
+            pathname: 'short_events',
+            field_name: 'event_id',
+            filter_key: 'mid',
+            key_name: 'event',
+            value_name: 'id',
+            title: 'Событие',
+            placeholder: 'Начни ввод имени события...',
+            display_scheme: '12-6-4-4',
+            validations: {
+               "Событие должно быть избрано": /^$/
+            }
+         },
+         year_date: {
+            kind: 'text',
+            title: 'Дата в году',
+            placeholder: 'Введи дату в году',
+            data: { length: '7' },
+            display_scheme: '12-6-2-2',
+            validations: {
+               "Слишком длинное значение даты в году": /^.{8,}$/,
+               "Дата в году отсутствует": matchEmptyObject,
+               "В значении даты допустимы только цифры, точка, процент или знаки + и -": /[^0-9+\.\-%]/,
+               "Процент должен следовать за датой года": /^([0-9]+\.?|)%/,
+               "Опорный день после знака процент обязателен": /^[0-9\.]+%([^0-6]|)?$/,
+               "Знак + или - может только предварять число": /^.[\-+]{1,4}$/,
+               "Цифры должны быть введены обязательно": /^[\-+\.]+$/,
+            }
+         },
+         bind_kind: {
+            kind: 'select',
+            title: 'Вид привязки к помину',
+            codeNames: {
+               '': 'Избери вид привязки...',
+               'несвязаный': 'Не привязаный',
+               'навечерие': 'Навечерие',
+               'предпразднество': 'Предпразднество',
+               'попразднество': 'Попразднество',
+            },
+            display_scheme: '12-6-3-3',
+            validations: {
+               'Пункт из списка должен быть выбран': matchEmptyObject,
                'Вид привязки не должен иметь значение "Не привязаный" в случае, если привязка задана': (value, context) => {
                   return context.bond_to_id && value == "несвязаный"
                },
                'Вид привязки должен иметь значение "Не привязаный" в случае, если привязка отсутствует': (value, context) => {
                   return !context.bond_to_id && value != "несвязаный"
                },
-            },
+            }
          },
          bond_to_id: {
+            kind: 'dynamic',
+            title: 'Привязаный помин',
+            humanized_name: 'bond_to',
+            display_scheme: '12-6-4-4',
+            placeholder: 'Начни ввод даты привязаного помина...',
+            pathname: 'short_memoes',
+            key_name: 'memo',
+            value_name: 'id',
+            context_names: [ 'event_id', 'calendary_id' ],
             validations: {
                'Привязаная дата не должна соответствовать текущей дате': (value, context) => {
                   return value && context.bond_to == context.year_date
                }
             },
          },
-         memo_orders: {
+         add_date: {
+            kind: 'text',
+            title: 'Пора добавления',
+            placeholder: 'Введи пору',
+            display_scheme: '12-6-3-3',
             validations: {
+               "Пора отсутствует":matchEmptyObject,
+            }
+         },
+         memo_orders: {
+            kind: 'collection',
+            title: 'Чины',
+            action: 'Добавь чин',
+            display_scheme: '12-12-12-12',
+            validations: {
+               "Языки в чинах не могут совпадать": matchLanguages,
+               "Азбуки в чинах не могут совпадать": matchAlphabeths,
                'Минимум один чин должен быть задан':  matchEmptyObject
+            },
+            meta: {
+               id: {
+                  kind: 'hidden',
+               },
+               order_id: {
+                  kind: 'dynamic',
+                  title: 'Чин',
+                  pathname: 'short_orders',
+                  humanized_name: 'order',
+                  key_name: 'order',
+                  value_name: 'id',
+                  placeholder: 'Начни ввод наименования чина...',
+                  display_scheme: '12-12-12-12',
+                  validations: {
+                     "Чин отсутствует": matchEmptyObject,
+                     'Чин содержит знаки вне перечня избранной азбуки': matchLetters,
+                  }
+               },
             }
          },
          titles: {
+            kind: 'collection',
+            key_name: 'text',
+            title: 'Заголовки',
+            action: 'Добавь заголовок',
+            single: 'Заголовок',
+            placeholder: 'Введи заголовок',
+            display_scheme: '12-12-12-12',
             validations: {
+               "Языки в заголовках не могут совпадать": matchLanguages,
+               "Азбуки в заголовках не могут совпадать": matchAlphabeths,
                'Минимум один заголовок должен быть задан':  matchEmptyObject
+            },
+            meta: {
+               id: {
+                  kind: 'hidden',
+               },
+               text: {
+                  kind: 'tale',
+                  title: 'Заголовок',
+                  placeholder: 'Введи заголовок',
+                  display_scheme: '12-12-12-12',
+                  validations: {
+                     "Заголовок отсутствует": matchEmptyObject,
+                     'Заголовок содержит знаки вне перечня избранной азбуки': matchLetters,
+                  }
+               },
+               language_code: {
+                  kind: 'select',
+                  title: 'Язык',
+                  display_scheme: '12-12-6-6',
+                  codeNames: {
+                     '': 'Избери язык...',
+                     ру: 'Русский',
+                     цс: 'Церковнославянский',
+                     сс: 'Старославянский',
+                     ук: 'Украинский',
+                     бл: 'Белорусский',
+                     мк: 'Македонский',
+                     сх: 'Сербохорватский',
+                     со: 'Словенский',
+                     бг: 'Болгарский',
+                     чх: 'Чешский',
+                     сл: 'Словацкий',
+                     по: 'Польский',
+                     кш: 'Кашубский',
+                     вл: 'Верхнелужийкий',
+                     нл: 'Нижнелужицкий',
+                     ар: 'Армянский',
+                     ив: 'Грузинский',
+                     рм: 'Румынский',
+                     гр: 'Греческий',
+                     ла: 'Латинский',
+                     ит: 'Итальянский',
+                     фр: 'Французский',
+                     ис: 'Испанский',
+                     не: 'Немецкий',
+                     ир: 'Ирландский',
+                     си: 'Староирландский',
+                     ан: 'Английский',
+                     ев: 'Иврит',
+                  },
+                  validations: {
+                     'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                     'Язык из списка должен быть выбран': matchEmptyObject,
+                  }
+               },
+               alphabeth_code: {
+                  kind: 'select',
+                  title: 'Азбука',
+                  display_scheme: '12-12-6-6',
+                  codeNames: {
+                     '': 'Избери азбуку...',
+                     ру: 'Пореформенная русская азбука',
+                     рп: 'Дореформенная русская азбука',
+                     цс: 'Церковнославянская кириллица',
+                     цр: 'Церковнославянская разметка (hip)',
+                     сс: 'Старославянкая кириллица',
+                     ук: 'Украинская азбука',
+                     ср: 'Сербская азбука (кириллица)',
+                     хр: 'Хорватская азубка (латиница)',
+                     со: 'Словнеская азбука',
+                     бг: 'Болгарская азбука',
+                     чх: 'Чешская азбука',
+                     сл: 'Словацкая азбука',
+                     по: 'Польская азбука',
+                     ар: 'Армянская азбука',
+                     ив: 'Грузинская азбука',
+                     рм: 'Румынская латиница',
+                     цу: 'Церковнославянская кириллица румынского извода',
+                     гр: 'Греческая азбука',
+                     ла: 'Латынь',
+                     ит: 'Итальянская азбука',
+                     фр: 'Французская азбука',
+                     ис: 'Испанская азбука',
+                     не: 'Немецкая азбука',
+                     ир: 'Ирландская азбука',
+                     си: 'Староирландская азбука',
+                     ан: 'Английская азбука',
+                     са: 'Среднеанглийская азбука',
+                     ра: 'Раннеанглийская азбука',
+                     ев: 'Еврейская азбука',
+                  },
+                  validations: {
+                     'Азбука из списка должна быть выбрана': matchEmptyObject,
+                  }
+               },
             }
-         }
+         },
+         links: {
+            kind: 'collection',
+            key_name: 'url',
+            title: 'Ссылки',
+            action: 'Добавь ссылку',
+            single: 'Ссылка',
+            placeholder: 'Введи ссылку',
+            display_scheme: '12-12-12-12',
+            validations: {
+               "Языки в ссылках не могут совпадать": matchLanguages,
+               "Азбуки в ссылках не могут совпадать": matchAlphabeths,
+            },
+            meta: {
+               id: {
+                  kind: 'hidden',
+               },
+               url: {
+                  kind: 'text',
+                  title: 'Ссылка',
+                  placeholder: 'Введи ссылка',
+                  display_scheme: '12-12-6-6',
+                  validations: {
+                     "Ссылка отсутствует": matchEmptyObject,
+                     "Неверный формат ссылки": [ "!", UrlRegexp ],
+                  }
+               },
+               language_code: {
+                  kind: 'select',
+                  title: 'Язык',
+                  display_scheme: '12-6-3-3',
+                  codeNames: {
+                     '': 'Избери язык...',
+                     ру: 'Русский',
+                     цс: 'Церковнославянский',
+                     сс: 'Старославянский',
+                     ук: 'Украинский',
+                     бл: 'Белорусский',
+                     мк: 'Македонский',
+                     сх: 'Сербохорватский',
+                     со: 'Словенский',
+                     бг: 'Болгарский',
+                     чх: 'Чешский',
+                     сл: 'Словацкий',
+                     по: 'Польский',
+                     кш: 'Кашубский',
+                     вл: 'Верхнелужийкий',
+                     нл: 'Нижнелужицкий',
+                     ар: 'Армянский',
+                     ив: 'Грузинский',
+                     рм: 'Румынский',
+                     гр: 'Греческий',
+                     ла: 'Латинский',
+                     ит: 'Итальянский',
+                     фр: 'Французский',
+                     ис: 'Испанский',
+                     не: 'Немецкий',
+                     ир: 'Ирландский',
+                     си: 'Староирландский',
+                     ан: 'Английский',
+                     ев: 'Иврит',
+                  },
+                  validations: {
+                     'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                     'Язык из списка должен быть выбран': matchEmptyObject,
+                  }
+               },
+               alphabeth_code: {
+                  kind: 'select',
+                  title: 'Азбука',
+                  display_scheme: '12-6-3-3',
+                  codeNames: {
+                     '': 'Избери азбуку...',
+                     ру: 'Пореформенная русская азбука',
+                     рп: 'Дореформенная русская азбука',
+                     цс: 'Церковнославянская кириллица',
+                     цр: 'Церковнославянская разметка (hip)',
+                     сс: 'Старославянкая кириллица',
+                     ук: 'Украинская азбука',
+                     ср: 'Сербская азбука (кириллица)',
+                     хр: 'Хорватская азубка (латиница)',
+                     со: 'Словнеская азбука',
+                     бг: 'Болгарская азбука',
+                     чх: 'Чешская азбука',
+                     сл: 'Словацкая азбука',
+                     по: 'Польская азбука',
+                     ар: 'Армянская азбука',
+                     ив: 'Грузинская азбука',
+                     рм: 'Румынская латиница',
+                     цу: 'Церковнославянская кириллица румынского извода',
+                     гр: 'Греческая азбука',
+                     ла: 'Латынь',
+                     ит: 'Итальянская азбука',
+                     фр: 'Французская азбука',
+                     ис: 'Испанская азбука',
+                     не: 'Немецкая азбука',
+                     ир: 'Ирландская азбука',
+                     си: 'Староирландская азбука',
+                     ан: 'Английская азбука',
+                     са: 'Среднеанглийская азбука',
+                     ра: 'Раннеанглийская азбука',
+                     ев: 'Еврейская азбука',
+                  },
+                  validations: {
+                     'Азбука из списка должна быть выбрана': matchEmptyObject,
+                  }
+               },
+            }
+         },
+         descriptions: {
+            kind: 'collection',
+            key_name: 'text',
+            title: 'Описания',
+            action: 'Добавь описание',
+            single: 'Описание',
+            placeholder: 'Введи описание',
+            display_scheme: '12-12-12-12',
+            meta: {
+               id: {
+                  kind: 'hidden',
+               },
+               text: {
+                  kind: 'tale',
+                  title: 'Описание',
+                  placeholder: 'Введи описание',
+                  display_scheme: '12-12-12-12',
+                  validations: {
+                     'Текст описания отсутствует': matchEmptyObject,
+                     'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
+                  }
+               },
+               language_code: {
+                  kind: 'select',
+                  title: 'Язык',
+                  display_scheme: '12-12-6-6',
+                  codeNames: {
+                     '': 'Избери язык...',
+                     ру: 'Русский',
+                     цс: 'Церковнославянский',
+                     сс: 'Старославянский',
+                     ук: 'Украинский',
+                     бл: 'Белорусский',
+                     мк: 'Македонский',
+                     сх: 'Сербохорватский',
+                     со: 'Словенский',
+                     бг: 'Болгарский',
+                     чх: 'Чешский',
+                     сл: 'Словацкий',
+                     по: 'Польский',
+                     кш: 'Кашубский',
+                     вл: 'Верхнелужийкий',
+                     нл: 'Нижнелужицкий',
+                     ар: 'Армянский',
+                     ив: 'Грузинский',
+                     рм: 'Румынский',
+                     гр: 'Греческий',
+                     ла: 'Латинский',
+                     ит: 'Итальянский',
+                     фр: 'Французский',
+                     ис: 'Испанский',
+                     не: 'Немецкий',
+                     ир: 'Ирландский',
+                     си: 'Староирландский',
+                     ан: 'Английский',
+                     ев: 'Иврит',
+                  },
+                  validations: {
+                     'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                     'Язык из списка должен быть выбран': matchEmptyObject,
+                  }
+               },
+               alphabeth_code: {
+                  kind: 'select',
+                  title: 'Азбука',
+                  display_scheme: '12-12-6-6',
+                  codeNames: {
+                     '': 'Избери азбуку...',
+                     ру: 'Пореформенная русская азбука',
+                     рп: 'Дореформенная русская азбука',
+                     цс: 'Церковнославянская кириллица',
+                     цр: 'Церковнославянская разметка (hip)',
+                     сс: 'Старославянкая кириллица',
+                     ук: 'Украинская азбука',
+                     ср: 'Сербская азбука (кириллица)',
+                     хр: 'Хорватская азубка (латиница)',
+                     со: 'Словнеская азбука',
+                     бг: 'Болгарская азбука',
+                     чх: 'Чешская азбука',
+                     сл: 'Словацкая азбука',
+                     по: 'Польская азбука',
+                     ар: 'Армянская азбука',
+                     ив: 'Грузинская азбука',
+                     рм: 'Румынская латиница',
+                     цу: 'Церковнославянская кириллица румынского извода',
+                     гр: 'Греческая азбука',
+                     ла: 'Латынь',
+                     ит: 'Итальянская азбука',
+                     фр: 'Французская азбука',
+                     ис: 'Испанская азбука',
+                     не: 'Немецкая азбука',
+                     ир: 'Ирландская азбука',
+                     си: 'Староирландская азбука',
+                     ан: 'Английская азбука',
+                     са: 'Среднеанглийская азбука',
+                     ра: 'Раннеанглийская азбука',
+                     ев: 'Еврейская азбука',
+                  },
+                  validations: {
+                     'Азбука из списка должна быть выбрана': matchEmptyObject,
+                  }
+               },
+            }
+         },
       },
    }
 
@@ -85,84 +505,5 @@ export default class MemoForm extends CommonForm {
          titles: [],
          links: [],
       }
-   }
-
-   renderContent() {
-      return [
-         <CalendaryField
-            key='calendaryId'
-            name='calendary_id'
-            humanized_name='calendary'
-            value={this.state.query.calendary_id}
-            humanized_value={this.state.query.calendary}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
-         <MemoryField
-            key='memoryId'
-            name='memory_id'
-            humanized_name='memory'
-            value={this.state.query.memory_id}
-            humanized_value={this.state.query.memory}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
-         <EventField
-            key='eventId'
-            name='event_id'
-            humanized_name='event'
-            filter_value={this.state.query.memory_id}
-            value={this.state.query.event_id}
-            humanized_value={this.state.query.event}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
-         <YearDateField
-            key='yearDate'
-            name='year_date'
-            value={this.state.query.year_date}
-            wrapperClassName='input-field col xl2 l2 m6 s12' />,
-         <MemoBindKindField
-            key='bindKind'
-            name='bind_kind'
-            value={this.state.query.bind_kind}
-            validations={this.props.meta.bind_kind.validations}
-            validation_context={this.state.query}
-            wrapperClassName='input-field col xl3 l3 m6 s12' />,
-         <DynamicField
-            key='bondToId'
-            pathname='short_memoes'
-            name='bond_to_id'
-            humanized_name='bond_to'
-            key_name='memo'
-            value_name='id'
-            filter={{with_event_id: this.state.query.event_id, with_calendary_id: this.state.query.calendary_id}}
-            title='Привязаный помин'
-            placeholder='Начни ввод даты привязаного помина...'
-            value={this.state.query.bond_to_id}
-            humanized_value={this.state.query.bond_to}
-            validations={this.props.meta.bond_to_id.validations}
-            validation_context={this.state.query}
-            wrapperClassName='input-field col xl4 l4 m6 s12' />,
-         <DateField
-            key='addDate'
-            name='add_date'
-            title='Пора добавления'
-            value={this.state.query.add_date}
-            wrapperClassName='input-field col xl3 l3 m6 s12' />,
-         <OrdersCollection
-            key='memo_orders'
-            name='memo_orders'
-            value={this.state.query.memo_orders}
-            validations={this.props.meta.memo_orders.validations}/>,
-         <TitlesCollection
-            key='titles'
-            name='titles'
-            value={this.state.query.titles}
-            validations={this.props.meta.titles.validations}/>,
-         <LinksCollection
-            key='links'
-            value={this.state.query.links} />,
-         <DescriptionsCollection
-            key='descriptions'
-            name='descriptions'
-            value={this.state.query.descriptions} />,
-         <ErrorSpan
-            appendClassName='col xl12 l12 m12 s12'
-            error={this.getErrorText(this.state.query)} />]
    }
 }

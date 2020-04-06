@@ -21,9 +21,9 @@ class Admin::OrdersController < Admin::CommonController
       params.require( :order ).permit(
          :id,
          slug_attributes: [:id, :text],
-         notes_attributes: [:id, :text, :language_code, :alphabeth_code],
-         tweets_attributes: [:id, :text, :language_code, :alphabeth_code],
-         descriptions_attributes: [:id, :text, :language_code, :alphabeth_code] ) ;end
+         notes_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy],
+         tweets_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy],
+         descriptions_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy] ) ;end
 
 
    def object_serializer

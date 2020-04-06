@@ -9,7 +9,7 @@ import Validation from 'Validation'
 import { valueToObject } from 'support'
 
 @mixin(Validation)
-export default class TextField extends Component {
+export default class TextArea extends Component {
    static defaultProps = {
       name: 'text',
       value: null,
@@ -38,6 +38,14 @@ export default class TextField extends Component {
       }
    }
 
+   componentDidUpdate() {
+      console.log('up', this.props )
+
+      if (this.props.textArea) {
+         M.textareaAutoResize(this.$input)
+      }
+   }
+
    componentWillUnmount() {
       if (this.counter) {
          this.counter.destroy()
@@ -62,9 +70,9 @@ export default class TextField extends Component {
       return (
          <div
             className={"input-field " + this.props.wrapperClassName}>
-            <input
+            <textarea
                type='text'
-               className={this.error && 'invalid'}
+               className={'materialize-textarea ' + (this.error && 'invalid' || '')}
                key={this.props.name}
                id={this.props.name}
                name={this.props.name}

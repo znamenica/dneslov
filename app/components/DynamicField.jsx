@@ -22,9 +22,7 @@ export default class DynamicField extends Component {
       subname: null,
       value: undefined,
       humanized_value: undefined,
-      filter: null,
-      filter_key: null,
-      filter_value: null,
+      context_names: null,
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -37,8 +35,7 @@ export default class DynamicField extends Component {
       value_name: PropTypes.string.isRequired,
       humanized_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      filter: PropTypes.object,
-      filter_key: PropTypes.string,
+      context_names: PropTypes.object,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -175,21 +172,12 @@ export default class DynamicField extends Component {
    }
 
    getDataFor(text) {
-      let data = { with_token: text }
+      let data = { t: text }
 
-      if (this.props.filter) {
-         Object.keys(this.props.filter).forEach((key) => {
-            console.log(data, this.props.filter)
-            if (this.props.filter[key]) {
-               data[key] = this.props.filter[key]
-            }
+      if (this.props.value_context) {
+         Object.entries(this.props.value_context).forEach(([key, value]) => {
+            data["with_" + key] = value
          })
-      }
-
-      if (this.props.filter_key) {
-         if (this.props.filter_key && this.props.filter_value) {
-            data[this.props.filter_key] = this.props.filter_value
-         }
       }
 
       this.triggered = text
@@ -243,7 +231,7 @@ export default class DynamicField extends Component {
 
       return (
          <div
-            className={this.props.wrapperClassName}>
+            className={"input-field " + this.props.wrapperClassName}>
             {!!this.props.value &&
                <div
                   className="chip">

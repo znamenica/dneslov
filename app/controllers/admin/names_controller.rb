@@ -2,9 +2,9 @@ class Admin::NamesController < Admin::CommonController
    has_scope :t, only: %i(index)
 
    def all
-      @names = model.with_token(params[ :t ])
+      @names = model.w(params[ :t ])
 
-      respond_to do |format|
+      espond_to do |format|
          format.json { render :index, json: @names.limit(500),
                                       locales: @locales,
                                       serializer: Admin::AutocompleteSerializer,

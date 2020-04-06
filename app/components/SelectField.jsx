@@ -5,10 +5,9 @@ import { FormSelect } from 'materialize-css'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
-import ValueToObject from 'mixins/ValueToObject'
+import { valueToObject } from 'support'
 
 @mixin(Validation)
-@mixin(ValueToObject)
 export default class SelectField extends Component {
    static defaultProps = {
       name: null,
@@ -42,7 +41,7 @@ export default class SelectField extends Component {
 
    // events
    onChange(e) {
-      let object = this.valueToObject(this.props.name, e.target.value),
+      let object = valueToObject(this.props.name, e.target.value),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
       document.dispatchEvent(ce)
@@ -54,7 +53,7 @@ export default class SelectField extends Component {
       return (
          <div
             ref={e => this.$parent = e}
-            className={this.props.wrapperClassName}>
+            className={"input-field " + this.props.wrapperClassName}>
             <select
                ref={e => this.$select = e}
                className={this.error && 'invalid'}
