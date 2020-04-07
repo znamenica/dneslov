@@ -3,28 +3,40 @@ import PropTypes from 'prop-types'
 import { mixin } from 'lodash-decorators'
 
 import SubmitButton from 'SubmitButton'
+import Form from 'Form'
 
-export default class CommonModal extends Component {
+export default class Modal extends Component {
    static defaultProps = {
       id: null,
       remoteName: null,
       remoteNames: null,
-      form: null,
+      meta: null,
       data: null,
       validations: {},
-      i18n: null,
    }
 
    static propTypes = {
       remoteName: PropTypes.string.isRequired,
       remoteNames: PropTypes.string.isRequired,
-      validations: PropTypes.object,
-      form: PropTypes.object.isRequired,
+      meta: PropTypes.object.isRequired,
       data: PropTypes.object.isRequired,
-      i18n: PropTypes.object.isRequired,
+      validations: PropTypes.object,
+   }
+
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         return {
+            prevProps: props,
+            data: props.data,
+         }
+      }
+
+      return null
    }
 
    //system
+   state = {}
+
    constructor() {
       super()
 
@@ -53,13 +65,13 @@ export default class CommonModal extends Component {
 
    // custom
    componentDidRender() {
-      if (this.props.data) {
+      if (this.state.data) {
          this.modal.open()
       }
    }
 
    onCloseClick() {
-      this.modal.close()
+      this.setState({ data: null })
    }
 
    onModalClosed() {
@@ -68,9 +80,7 @@ export default class CommonModal extends Component {
       document.dispatchEvent(ce)
    }
 
-   render() {
-      console.log(this.props)
-
+   renderModal() {
       return (
          <div className='enrighten'>
             <div
@@ -79,7 +89,9 @@ export default class CommonModal extends Component {
                ref={e => this.$modal = e}
                id='calendary-form-modal'>
                <div className='modal-content'>
-                  <this.props.form {...this.props.data} /></div>
+                  <Form
+                     meta={this.props.meta.form}
+                     data={this.state.data} /></div>
                <div className="modal-footer">
                   <div className="row">
                      <div className="col xl12 l12 m12 s12">
@@ -89,10 +101,21 @@ export default class CommonModal extends Component {
                                  type='button'
                                  className='btn close'
                                  onClick={this.onCloseClick.bind(this)} >
-                                 {this.props.i18n.close}</button>
+                                 {this.props.meta.close}</button>
                               <SubmitButton
-                                 title={this.props.data.id &&
-                                        this.props.i18n.update ||
-                                        this.props.i18n.create } /></div></div></div></div></div></div>)
+                                 title={this.state.data.id &&
+                                        this.props.meta.update ||
+                                        this.props.meta.create } /></div></div></div></div></div></div>)
+   }
+
+   render() {
+      console.log("[render] > props", this.props)
+
+      if (this.state.data) {
+         return this.renderModal()
+      }
+
+      this.modal.close()
+      return null
    }
 }

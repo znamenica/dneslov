@@ -1,35 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
-export default class NameRow extends Component {
-   static defaultProps = {
-      locales: [],
-      text: null,
-      language_code: null,
-      alphabeth_code: null,
-      root_id: null,
-      root: null,
-      bind_kind: null,
-      bond_to_id: null,
-      bond_to: null,
-      onEdit: null,
-      onRemove: null
-   }
-
-   static propTypes = {
-      locales: PropTypes.array.isRequired,
-      text: PropTypes.string.isRequired,
-      language_code: PropTypes.string.isRequired,
-      alphabeth_code: PropTypes.string.isRequired,
-      root_id: PropTypes.number,
-      root: PropTypes.string,
-      bind_kind: PropTypes.string.isRequired,
-      bond_to_id: PropTypes.number,
-      bond_to: PropTypes.string,
-      onEdit: PropTypes.func.isRequired,
-      onRemove: PropTypes.func.isRequired,
-   }
-
+export default class Row extends Component {
    edit() {
       this.props.onEdit(this.props.id)
    }
@@ -55,16 +27,22 @@ export default class NameRow extends Component {
               .addEventListener('click', this.remove.bind(this))
    }
 
+   default() {
+      return this.props.meta[this.props.default].title
+   }
+
+   t(title) {
+      return title.replace(/%default/, () => { return this.default() })
+   }
 
    render() {
+      console.log("[render] > props", this.props, )
+
       return (
          <tr>
-            <td>{this.props.text}</td>
-            <td>{this.props.language_code}</td>
-            <td>{this.props.alphabeth_code}</td>
-            <td>{this.props.bind_kind}</td>
-            <td>{this.props.bond_to}</td>
-            <td>{this.props.root}</td>
+            {Object.entries(this.props.meta).map(([name, element]) => {
+               return <td>{element.value && element.value(this.props) || this.props[name]}</td>
+            })}
             <td className='actions'>
                <i
                   className='small material-icons'
@@ -78,9 +56,9 @@ export default class NameRow extends Component {
                   className={'toast-wrapper id' + this.props.id}
                   key='toast'
                   ref={e => this.$toast = e} >
-                  <span>Точно ли удалить имя "{this.props.text}"?</span>
+                  <span>{this.t(this.props.remove.title)}</span>
                   <button
                      className="btn-flat toast-action"
                      onClick={this.remove.bind(this)}>
-                     Да</button></div>
+                     {this.props.remove.yes}</button></div>
                   </td></tr>)}}

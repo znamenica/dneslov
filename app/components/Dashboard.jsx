@@ -2,45 +2,31 @@ import { Component } from 'react'
 import GitHubLogin from 'react-github-login'
 import { merge } from 'merge-anything'
 
-import Calendaries from 'Calendaries'
-import Memories from 'Memories'
-import Names from 'Names'
-import Memoes from 'Memoes'
-import Orders from 'Orders'
+import { calendaryMeta } from 'calendaryMeta'
+import { memoryMeta } from 'memoryMeta'
+import { nameMeta } from 'nameMeta'
+import { memoMeta } from 'memoMeta'
+import { orderMeta } from 'orderMeta'
+import Records from 'Records'
 
-const Pages = {
-   'calendaries': {
-      object: Calendaries,
-      title: "Календари",
-   },
-   'memories': {
-      object: Memories,
-      title: "Памяти",
-   },
-   'names': {
-      object: Names,
-      title: "Имена",
-   },
-   'memoes': {
-      object: Memoes,
-      title: "Помины",
-   },
-   'orders': {
-      object: Orders,
-      title: "Чины",
-   }
+const Metas = {
+   'calendaries': calendaryMeta,
+   'memories': memoryMeta,
+   'names': nameMeta,
+   'memoes': memoMeta,
+   'orders': orderMeta,
 }
 
 export default class Dashboard extends Component {
-   state = merge({}, this.props, { form: null })
+   state = merge({}, this.props, { meta: null })
 
    // system
    static getDerivedStateFromProps(_, state) {
-      if (! state.form) {
+      if (! state.meta) {
          let parts = window.location.href.split("#")
 
          if (parts[1]) {
-            return { form: Pages[parts[1].object] }
+            return { meta: Metas[parts[1].object] }
          }
       }
 
@@ -62,8 +48,8 @@ export default class Dashboard extends Component {
    }
 
    // events
-   onClick(list, e) {
-      this.setState({ form: list })
+   onClick(meta) {
+      this.setState({ meta: meta })
    }
 
    onLoginSuccess(data) {
@@ -88,7 +74,7 @@ export default class Dashboard extends Component {
    }
 
    render() {
-      console.log("state", this.state)
+      console.log("state", this.state, Metas)
 
       return (
          [<header>
@@ -101,12 +87,12 @@ export default class Dashboard extends Component {
                         src="dneslov-title.png" /></a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        {Object.entries(Pages).map(([path, data]) =>
+                        {Object.entries(Metas).map(([path, meta]) =>
                            <li>
                               <a
                                  href={"#" + path}
-                                 onClick={this.onClick.bind(this, data.object)} >
-                                 {data.title}</a></li>)}
+                                 onClick={this.onClick.bind(this, meta)} >
+                                 {meta.title}</a></li>)}
                         <li>
                            <div
                               ref={e => this.$avatarSignIn = e}
@@ -148,6 +134,7 @@ export default class Dashboard extends Component {
             <div className='row'>
                <div className='col s12 m12 l12 xl12'>
                   <div id='page'>
-                     {this.state.form && this.state.login &&
-                        <this.state.form
+                     {this.state.meta && this.state.login &&
+                        <Records
+                           meta={this.state.meta}
                            locales={this.state.locales} />}</div></div></div></div></main>])}}

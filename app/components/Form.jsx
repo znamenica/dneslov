@@ -5,14 +5,16 @@ import { merge } from 'merge-anything'
 import * as Axios from 'axios'
 import { mixin } from 'lodash-decorators'
 
-import { matchCodes } from 'matchers'
 import Validation from 'Validation'
+import { matchCodes } from 'matchers'
 import { renderElement } from 'render'
 import ErrorSpan from 'ErrorSpan'
 
 @mixin(Validation)
-export default class CommonForm extends Component {
+export default class Form extends Component {
    static defaultProps = {
+      data: null,
+      meta: null,
       validations: {},
       updateOnChange: null
    }
@@ -30,7 +32,7 @@ export default class CommonForm extends Component {
       if (props !== state.prevProps) {
          return({
             prevProps: props,
-            query: CommonForm.deserializedHash(props),
+            query: Form.deserializedHash(props.data),
             error: ""
          })
       } else {
@@ -71,7 +73,7 @@ export default class CommonForm extends Component {
 
    // custom
    serializedQuery() {
-      return CommonForm.serializedHash(this.state.query)
+      return Form.serializedHash(this.state.query)
    }
 
    // events
@@ -182,7 +184,7 @@ export default class CommonForm extends Component {
             console.log("[deserializedHash] **", value[0], value[0] && value[0].constructor.name)
             if (value[0] instanceof Object) {
                result[key] = value.reduce((s, v, index) => {
-                  s[uuid()] = merge({ _pos: index }, CommonForm.deserializedHash(v))
+                  s[uuid()] = merge({ _pos: index }, Form.deserializedHash(v))
                   return s
                }, {})
             } else if (value[0]) {
@@ -192,7 +194,7 @@ export default class CommonForm extends Component {
             }
             break
          case 'Object':
-            result[key] = merge({ _pos: index }, CommonForm.deserializedHash(value))
+            result[key] = merge({ _pos: index }, Form.deserializedHash(value))
             break
          default:
             result[key] = value
@@ -208,7 +210,7 @@ export default class CommonForm extends Component {
    }
 
    render() {
-      console.log("[render] > state", this.state)
+      console.log("[render] > state", this.state, "from props", this.props)
 
       return (
          <form>

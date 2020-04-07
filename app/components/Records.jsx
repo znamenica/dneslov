@@ -2,31 +2,47 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactScrollPagination from '@majioa/react-scroll-pagination'
 import * as Axios from 'axios'
-
+import { merge } from 'merge-anything'
 import SearchField from 'SearchField'
-import CommonModal from 'CommonModal'
+
+import Modal from 'Modal'
+import Row from 'Row'
 
 export default class Records extends Component {
+   static defaultProps = {
+      records: {
+         list: [],
+         page: 0,
+         total: 0,
+      },
+   }
+
    static propTypes = {
-      keyName: PropTypes.string.isRequired,
-      keyNames: PropTypes.string.isRequired,
-      remoteNames: PropTypes.string.isRequired,
       object: PropTypes.object.isRequired,
    }
 
-   state = {
-      [this.props.keyNames]: this.props[this.props.keyNames].list,
-      page: this.props[this.props.keyNames].page,
-      total: this.props[this.props.keyNames].total,
-      query: {
-         p: this.props[this.props.keyNames].page,
-         q: this.props.tokens || [],
-      },
-      appended: 0,
-      current: null
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         return {
+            prevProps: props,
+            records: props.records?.list || [],
+            page: props.records?.page || 0,
+            total: props.records?.total || 0,
+            query: {
+               p: props.records?.page || 0,
+               q: props.tokens || null,
+            },
+            appended: 0,
+            current: null
+         }
+      }
+
+      return null
    }
 
    // system
+   state = {}
+
    constructor(props) {
       super(props)
 
@@ -47,26 +63,38 @@ export default class Records extends Component {
    }
 
    componentDidUpdate(nextProps) {
-      this.isRequesting = false
+      if (this.props != nextProps) {
+         this.submit()
+      }
+   }
+
+   shouldComponentUpdate(nextProps, nextState) {
+      console.debug("[shouldComponentUpdate] >> next:", nextState, "prev:", this.state)
+      return JSON.stringify(nextState.query) !== JSON.stringify(this.state.query) ||
+             nextState.current != this.state.current
    }
 
    // custom
    fetchNext() {
-      if ((this.state.total > this.state[this.props.keyNames].length) && ! this.isRequesting) {
-         console.log("FETCH NEXT FOR", this.state, this.state.total, this.state[this.props.keyNames].length)
+      console.log("[fetchNext] > state", this.state)
+      if ((this.state.total > this.state.records.length) && ! this.isRequesting) {
          this.submit(this.state.page + 1)
       }
    }
 
+   totalPages() {
+      return this.state.total != 0 && Math.round((this.state.total + 24) / 25) || 0
+   }
+
    onRecordUpdate(e) {
       let record = e.detail,
-          index = this.state[this.props.keyNames].findIndex((r) => { return r.id == record.id }),
-          records = this.state[this.props.keyNames].slice(),
+          index = this.state.records.findIndex((r) => { return r.id == record.id }),
+          records = this.state.records.slice(),
           total = this.state.total,
           appended = this.state.appended
 
-      console.log("[onRecordUpdate]", record)
-      console.log(index)
+      console.log("[onRecordUpdate]", record, index)
+
       if (index < 0) {
          records.unshift(record)
          total += 1
@@ -76,7 +104,7 @@ export default class Records extends Component {
       }
 
       this.setState({
-         [this.props.keyNames]: records,
+         records: records,
          total: total,
          appended: appended,
          current: null,
@@ -84,13 +112,13 @@ export default class Records extends Component {
    }
 
    onRecordEdit(id) {
-      let record = this.state[this.props.keyNames].find((r) => { return r.id == id })
+      let record = this.state.records.find((r) => { return r.id == id })
       this.setState({current: record})
    }
 
    onRecordRemove(id) {
       let request = {
-         url: '/' + this.props.remoteNames + '/' + id + '.json',
+         url: '/' + this.props.meta.remoteNames + '/' + id + '.json',
          method: 'delete'
       }
 
@@ -102,7 +130,7 @@ export default class Records extends Component {
    }
 
    onSuccessRemove(response) {
-      let record = response.data, records = this.state[this.props.keyNames].slice()
+      let record = response.data, records = this.state.records.slice()
 
       this.setState({
          records: records.filter((r) => { return r.id == record.id }),
@@ -111,11 +139,12 @@ export default class Records extends Component {
    }
 
    onSuccessLoad(response) {
-      let new_records, records = response.data
+      let new_records, new_page, new_state, records = response.data
 
-      console.log("SUCCESS", records)
-      if (records.page > 1) {
-         new_records = this.state[this.props.keyNames].slice()
+      console.log("[onSuccessLoad] > response", response)
+      console.log("[onSuccessLoad] > records", records)
+      if (records.page > 1 || !this.state.records) {
+         new_records = this.state.records.slice()
          if (this.state.appended) {
             let ids = new_records.map((c) => { return c.id })
             records.list.forEach((c) => {
@@ -123,37 +152,49 @@ export default class Records extends Component {
                   new_records.push(c)
                }
             })
+            new_page = response.config.params.p
          } else {
             new_records = new_records.concat(records.list)
+            new_page = response.config.params.p
          }
       } else {
          new_records = records.list
+         new_page = response.config.params.p
       }
 
-      this.setState({[this.props.keyNames]: new_records,
-                     page: records.page,
-                     total: records.total})
-      console.log("state", this.state)
+      new_state = {
+         records: new_records,
+         total: records.total,
+         page: new_page,
+         query: merge(this.state.query,
+                     {
+                        q: response.config.params.q,
+                        p: response.config.params.p
+                     }),
+      }
+
+      console.log("[onSuccessLoad] > state changes", new_state)
+      this.setState(new_state)
    }
 
-   submit(page = 1) {
-      let request = {
-         url: '/' + this.props.remoteNames +'.json',
-      }
+   submit(page = 1, tokens = null) {
+      let query = merge(this.state.query, { p: page, q: tokens }),
+          request = {
+            url: '/' + this.props.meta.remoteNames +'.json',
+          }
 
       this.isRequesting = true
-      this.state.query.p = page
 
-      console.log("Sending...", this.state.query)
+      console.log("[submit] Sending...", query)
 
-      Axios.get(request.url, { params: this.state.query })
+      Axios.get(request.url, { params: query } )
            .then(this.onSuccessLoad.bind(this))
+           .catch((error) => {})
+           .then(() => { this.isRequesting = false })
    }
 
    onSearchUpdate(tokens) {
-      this.state.query.q = tokens
-
-      this.submit(1)
+      this.submit(1, tokens)
    }
 
    isIcon(header) {
@@ -165,7 +206,7 @@ export default class Records extends Component {
    }
 
    newRecord() {
-      this.setState({ current: this.props.form.getCleanState() })
+      this.setState({ current: {} })
    }
 
    render() {
@@ -173,17 +214,16 @@ export default class Records extends Component {
 
       return [
          <div>
-            {this.state.current && <CommonModal
-               form={this.props.form}
-               i18n={this.props.i18n.form}
+            {this.state.current && <Modal
+               meta={this.props.meta}
                data={this.state.current} />}</div>,
-         <div className={this.props.keyNames + ' list'}>
+         <div className={this.props.meta.remoteNames + ' list'}>
             <div className="row">
                <form>
                   <div className="col xl3 l4 m6 s12">
                      <h4
                         className='title'>
-                        {this.props.i18n.title}</h4></div>
+                        {this.props.meta.title}</h4></div>
                   <div className='col xl9 l8 m6 s12'>
                      <SearchField
                         wrapperClassName=''
@@ -192,27 +232,30 @@ export default class Records extends Component {
                      <a
                         className="waves-effect waves-light btn modal-trigger"
                         onClick={this.newRecord.bind(this)} >
-                           {this.props.i18n.new}</a></div></form></div>
+                           {this.props.meta.new}</a></div></form></div>
             <hr />
             <table className='striped responsive-table'>
                <thead>
                   <tr>
-                     {this.props.i18n.headers.map((header) =>
+                     {Object.values(this.props.meta.row).map((header) =>
                         <th>
-                           {this.isIcon(header) &&
-                              <i className='tiny material-icons'>{header}</i>}
-                           {this.isTitle(header) &&
-                              header}</th>)}
+                           {this.isIcon(header.title) &&
+                              <i className='tiny material-icons'>{header.title}</i>}
+                           {this.isTitle(header.title) &&
+                              header.title}</th>)}
                      <th><i className='tiny material-icons'>near_me</i></th></tr></thead>
                <tbody>
-                  {this.state[this.props.keyNames].map((record) =>
-                     <this.props.row
-                        key={this.props.keyName + "-" + record.id}
+                  {this.state.records.map((record) =>
+                     <Row
+                        key={this.props.meta.remoteName + "-" + record.id}
+                        meta={this.props.meta.row}
+                        default={this.props.meta.default}
+                        remove={this.props.meta.remove}
                         locales={this.props.locales || []}
                         {...record}
                         onEdit={this.onRecordEdit.bind(this)}
                         onRemove={this.onRecordRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination
                excludeElement='header'
-               totalPages={this.state.total}
+               totalPages={this.totalPages()}
                fetchFunc={this.fetchNext.bind(this)} /></div>]}}
