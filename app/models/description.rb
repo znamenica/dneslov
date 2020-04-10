@@ -1,9 +1,9 @@
 class Description < ActiveRecord::Base
-   extend Language
-
-   belongs_to :describable, polymorphic: true
+   include Languageble
 
    has_alphabeth on: :text
+
+   belongs_to :describable, polymorphic: true
 
    scope :desc, -> { where(type: 'Description') }
    scope :title, -> { where(type: 'Title') }
@@ -23,4 +23,4 @@ class Description < ActiveRecord::Base
 
    before_create -> { self.type ||= 'Description' }
 
-   validates :text, :language_code, :alphabeth_code, presence: true ; end
+   validates :text, :language_code, :alphabeth_code, presence: true ;end

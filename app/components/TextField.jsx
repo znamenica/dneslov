@@ -47,7 +47,7 @@ export default class TextField extends Component {
 
    // events
    onChange(e) {
-      console.log("Change")
+      console.log("onChange <<<")
       let object = valueToObject(this.props.name, e.target.value),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
@@ -57,7 +57,7 @@ export default class TextField extends Component {
    }
 
    render() {
-      console.log(this.props, this.props.value)
+      console.log("[render] * props:", this.props)
      
       return (
          <div

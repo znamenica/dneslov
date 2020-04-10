@@ -18,7 +18,9 @@ Rails.application.routes.draw do
       resources :memoes, param: :id, except: :edit
       resources :names, param: :id, except: :edit
       resources :orders, param: :id, except: :edit
+      resources :subjects, param: :id, except: :edit
 
+      get '/short_subjects' => 'subjects#all'
       get '/short_orders' => 'orders#all'
       get '/short_calendaries' => 'calendaries#all'
       get '/short_memoes' => 'memoes#all'

@@ -7,6 +7,7 @@ import { memoryMeta } from 'memoryMeta'
 import { nameMeta } from 'nameMeta'
 import { memoMeta } from 'memoMeta'
 import { orderMeta } from 'orderMeta'
+import { subjectMeta } from 'subjectMeta'
 import Records from 'Records'
 
 const Metas = {
@@ -15,6 +16,7 @@ const Metas = {
    'names': nameMeta,
    'memoes': memoMeta,
    'orders': orderMeta,
+   'subjects': subjectMeta,
 }
 
 export default class Dashboard extends Component {
@@ -26,7 +28,10 @@ export default class Dashboard extends Component {
          let parts = window.location.href.split("#")
 
          if (parts[1]) {
-            return { meta: Metas[parts[1].object] }
+            return {
+               meta: Metas[parts[1].object],
+               page: parts[1].object
+            }
          }
       }
 
@@ -48,8 +53,8 @@ export default class Dashboard extends Component {
    }
 
    // events
-   onClick(meta) {
-      this.setState({ meta: meta })
+   onClick(meta, page) {
+      this.setState({ meta: meta, page: page })
    }
 
    onLoginSuccess(data) {
@@ -91,7 +96,7 @@ export default class Dashboard extends Component {
                            <li>
                               <a
                                  href={"#" + path}
-                                 onClick={this.onClick.bind(this, meta)} >
+                                 onClick={this.onClick.bind(this, meta, path)} >
                                  {meta.title}</a></li>)}
                         <li>
                            <div
@@ -136,5 +141,6 @@ export default class Dashboard extends Component {
                   <div id='page'>
                      {this.state.meta && this.state.login &&
                         <Records
+                           page={this.state.page}
                            meta={this.state.meta}
                            locales={this.state.locales} />}</div></div></div></div></main>])}}

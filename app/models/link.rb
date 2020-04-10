@@ -1,5 +1,5 @@
 class Link < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    has_alphabeth novalidate: true
 

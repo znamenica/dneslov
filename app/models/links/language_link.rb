@@ -1,4 +1,4 @@
 class LanguageLink < Link
-   validates :language_code, inclusion: { in: Language.language_list }
+   validates :language_code, inclusion: { in: Languageble.language_list }
    validates :alphabeth_code, inclusion: { in: proc { |l|
-      Language.alphabeth_list_for( l.language_code ) } } ; end
+      Languageble.alphabeth_list_for( l.language_code ) } } ; end

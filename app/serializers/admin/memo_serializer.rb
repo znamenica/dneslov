@@ -13,22 +13,29 @@ class Admin::MemoSerializer < ApplicationSerializer
       object.event.memory.short_name ;end
 
    def calendary
-      object.calendary.name_for(@instance_options[:locales]).text ;end
+      object.calendary.name_for( locales ).text ;end
 
    def event
-      [ object.event.kind_for(locales).text, object.event.type_number ].compact.join( "#" ) ;end
+      [ object.event.kind_for( locales ).text, object.event.type_number ].compact.join( "#" ) ;end
 
    def bond_to
       object.bond_to&.year_date ;end
 
    def memo_orders
-      ActiveModel::Serializer::CollectionSerializer.new(object.memo_orders, locales: @instance_options[:locales]) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.memo_orders,
+                                                        locales: locales) ;end
 
    def titles
-      ActiveModel::Serializer::CollectionSerializer.new(object.titles, locales: @instance_options[:locales]) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.titles,
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions, locales: @instance_options[:locales]) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def links
-      ActiveModel::Serializer::CollectionSerializer.new(object.links, locales: @instance_options[:locales]) ;end;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.links,
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end;end

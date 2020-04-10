@@ -6,12 +6,15 @@ class Admin::OrderSerializer < ApplicationSerializer
 
    def tweets
       ActiveModel::Serializer::CollectionSerializer.new(object.tweets,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def notes
       ActiveModel::Serializer::CollectionSerializer.new(object.notes,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def descriptions
       ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales) ;end;end
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end;end

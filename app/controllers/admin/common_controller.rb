@@ -9,7 +9,7 @@ class Admin::CommonController < ApplicationController
    before_action :set_locales
    before_action :new_object, only: %i(create)
    before_action :fetch_object, only: %i(show update destroy)
-   before_action :fetch_objects, only: %i(index)
+   before_action :fetch_objects, only: %i(all index)
    before_action :authorize!, except: %i(dashboard)
    layout 'admin'
 
@@ -21,6 +21,14 @@ class Admin::CommonController < ApplicationController
    has_scope :t, only: %i(index all)
    has_scope :q, only: %i(index)
 
+   def all
+      respond_to do |format|
+         format.json { render :index, json: @objects.limit(500),
+                                      locales: @locales,
+                                      serializer: Admin::AutocompleteSerializer,
+                                      total: @objects.count,
+                                      each_serializer: short_object_serializer } ;end;end
+
    # GET /<objects>/
    def index
       respond_to do |format|
@@ -30,6 +38,8 @@ class Admin::CommonController < ApplicationController
                                       page: @page,
                                       each_serializer: object_serializer }
          format.html { render :index } end;end
+
+
 
    # POST /<objects>/create
    def create
@@ -62,6 +72,22 @@ class Admin::CommonController < ApplicationController
 
    protected
 
+   def model
+     self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
+   end
+
+   def short_object_serializer
+     "Admin::Short#{model}Serializer".constantize
+   end
+
+   def object_serializer
+     "Admin::#{model}Serializer".constantize
+   end
+
+   def objects_serializer
+     "Admin::#{model.to_s.pluralize}Serializer".constantize
+   end
+
    def validate_session
       if session_lost?
          drop_session ;end;end
@@ -89,7 +115,7 @@ class Admin::CommonController < ApplicationController
       @object = model.new( permitted_params ) ;end
 
    def fetch_objects
-      @objects = apply_scopes( model ).q( params[ :q ] ).page( params[ :p ]) ;end
+      @objects = apply_scopes( model ).page( params[ :p ]) ;end
 
    def fetch_object
       if params[:slug]

@@ -6,16 +6,24 @@ class Admin::CalendarySerializer < CommonCalendarySerializer
      object.date; end
 
    def names
-      ActiveModel::Serializer::CollectionSerializer.new(object.names) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.names,
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def wikies
-      ActiveModel::Serializer::CollectionSerializer.new(object.wikies) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.wikies,
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end
 
    def links
-      ActiveModel::Serializer::CollectionSerializer.new(object.links) ;end
+      ActiveModel::Serializer::CollectionSerializer.new(object.links,
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end
 
    def slug
       SlugSerializer.new(object.slug) ;end;end

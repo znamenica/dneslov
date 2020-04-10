@@ -16,6 +16,7 @@ module Dneslov
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
     folders = %w(lib
+                 app/models/subject
                  app/models/events
                  app/models/cantoes
                  app/models/cantoes/canticles

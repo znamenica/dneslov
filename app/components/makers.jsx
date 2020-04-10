@@ -1,8 +1,8 @@
 const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Translation', 'Sanctification']
 
-export function makeTweet(props) {
+export function makeTweet(value, props) {
    let tweets = props.locales.map((locale) => {
-      return props.tweets.reduce((res, tweet) => {
+      return value.tweets.reduce((res, tweet) => {
          return res || locale === tweet.language_code && tweet.text }, null)
    }).filter((e) => { return e })
 
@@ -13,9 +13,9 @@ export function makeTweet(props) {
    }
 }
 
-export function makeNote(props) {
+export function makeNote(value, props) {
    let notes = props.locales.map((locale) => {
-      return props.notes.reduce((res, note) => {
+      return value.notes.reduce((res, note) => {
          return res || locale === note.language_code && note.text }, null)
    }).filter((e) => { return e })
 
@@ -26,34 +26,34 @@ export function makeNote(props) {
    }
 }
 
-export function makeName(props) {
+export function makeName(value, props) {
    let names = props.locales.map((locale) => {
-      return props.names.reduce((res, name) => {
+      return value.names.reduce((res, name) => {
          return res || locale === name.language_code && name.text }, null)
    }).filter((e) => { return e })
 
    return names[0] || ''
 }
 
-export function makeDate(props) {
+export function makeDate(value) {
    let dates = [...event_types].map((event_type) => {
-      return props.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)
+      return value.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)
    }).filter((e) => { return e })
 
    return dates[0] || ''
 }
 
-export function makeCouncil(props) {
-   if (props.council && props.council.length > 17) {
-      return props.council.slice(0, 17) + '...'
+export function makeCouncil(value) {
+   if (value.council && value.council.length > 17) {
+      return value.council.slice(0, 17) + '...'
    } else {
-      return props.council || ''
+      return value.council || ''
    }
 }
 
-export function makeDescription(props) {
+export function makeDescription(value, props) {
    let descriptions = props.locales.map((locale) => {
-      return props.descriptions.reduce((res, description) => {
+      return value.descriptions.reduce((res, description) => {
          return res || locale === description.language_code && description.text }, null)
    }).filter((e) => { return e })
 

@@ -6,26 +6,30 @@ class Admin::MemorySerializer < ApplicationSerializer
       SlugSerializer.new(object.slug) ;end
 
    def order
-     object.orders.first&.note_for(locales)&.text ;end
+      object.orders.first&.note_for(locales)&.text ;end
 
    def order_id
-     object.orders.first&.note_for(locales)&.id ;end
+      object.orders.first&.note_for(locales)&.id ;end
 
    def notes
       ActiveModel::Serializer::CollectionSerializer.new(object.notes,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def descriptions
       ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::DescriptionSerializer) ;end
 
    def wikies
       ActiveModel::Serializer::CollectionSerializer.new(object.wikies,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end
 
    def beings
       ActiveModel::Serializer::CollectionSerializer.new(object.beings,
-                                                        locales: locales) ;end
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end
 
    def events
       ActiveModel::Serializer::CollectionSerializer.new(object.events,
@@ -39,4 +43,5 @@ class Admin::MemorySerializer < ApplicationSerializer
 
    def paterics
       ActiveModel::Serializer::CollectionSerializer.new(object.paterics,
-                                                        locales: locales) ;end;end
+                                                        locales: locales,
+                                                        serializer: Admin::LinkSerializer) ;end;end

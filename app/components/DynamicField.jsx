@@ -76,6 +76,11 @@ export default class DynamicField extends Component {
       document.removeEventListener('keypress', this.onKeyDown)
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value ||
+             this.props.humanized_value !== nextProps.humanized_value
+   }
+
    //events
    onChange(e) {
       let humanized_value = e.target.value
@@ -172,7 +177,7 @@ export default class DynamicField extends Component {
    }
 
    getDataFor(text) {
-      let data = { t: text }
+      let data = merge(this.props.context_value || {}, { t: text })
 
       if (this.props.value_context) {
          Object.entries(this.props.value_context).forEach(([key, value]) => {
@@ -187,7 +192,7 @@ export default class DynamicField extends Component {
          url: '/' + this.props.pathname + '.json',
       }
 
-      console.log("[getDataFor] > load send" ,data, 'to /' + this.props.pathname + '.json')
+      console.log("[getDataFor] > load send", data, 'to /' + this.props.pathname + '.json')
       Axios.get(request.url, { params: request.data })
         .then(this.onLoadSuccess.bind(this))
         .catch(this.onLoadFailure.bind(this))
@@ -245,7 +250,7 @@ export default class DynamicField extends Component {
             {!this.props.value &&
                <input
                   type='text'
-                  className={this.error && 'invalid'}
+                  className={"dynamic " + (this.getErrorText(this.props.value) && 'invalid')}
                   ref={e => this.$input = e}
                   key={'input-' + this.props.name}
                   id={this.props.name}

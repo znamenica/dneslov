@@ -90,6 +90,8 @@ export default class Modal extends Component {
                id='calendary-form-modal'>
                <div className='modal-content'>
                   <Form
+                     remoteName={this.props.meta.remoteName}
+                     remoteNames={this.props.meta.remoteNames}
                      meta={this.props.meta.form}
                      data={this.state.data} /></div>
                <div className="modal-footer">

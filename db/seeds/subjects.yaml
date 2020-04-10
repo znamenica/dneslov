@@ -1,0 +1,1004 @@
+---
+- key: SubjectKind
+  kind: SubjectKind
+  names_attributes:
+   - text: Вид предмета
+     language_code: ру
+     alphabeth_code: РУ
+- key: EventKind
+  kind: SubjectKind
+  names_attributes:
+   - text: Вид события
+     language_code: ру
+     alphabeth_code: РУ
+- key: Language
+  kind: SubjectKind
+  names_attributes:
+   - text: Язык
+     language_code: ру
+     alphabeth_code: РУ
+- key: Alphabeth
+  kind: SubjectKind
+  names_attributes:
+   - text: Азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: NameBind
+  kind: SubjectKind
+  names_attributes:
+   - text: Привязка имени
+     language_code: ру
+     alphabeth_code: РУ
+- key: NameKind
+  kind: SubjectKind
+  names_attributes:
+   - text: Вид имена
+     language_code: ру
+     alphabeth_code: РУ
+- key: Tale
+  kind: EventKind
+  names_attributes:
+   - text: Беседа
+     language_code: ру
+     alphabeth_code: РУ
+- key: Battle
+  kind: EventKind
+  names_attributes:
+   - text: Битва
+     language_code: ру
+     alphabeth_code: РУ
+- key: Thanksgiving
+  kind: EventKind
+  names_attributes:
+   - text: Благодарение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Benediction
+  kind: EventKind
+  names_attributes:
+   - text: Благословение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Marriage
+  kind: EventKind
+  names_attributes:
+   - text: Брак
+     language_code: ру
+     alphabeth_code: РУ
+- key: Exaltation
+  kind: EventKind
+  names_attributes:
+   - text: Воздвижение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Apparation
+  kind: EventKind
+  names_attributes:
+   - text: Вид
+     language_code: ру
+     alphabeth_code: РУ
+- key: Ascension
+  kind: EventKind
+  names_attributes:
+   - text: Вознесение
+     language_code: ру
+     alphabeth_code: РУ
+- key: SoldierMemory
+  kind: EventKind
+  names_attributes:
+   - text: Воинская память
+     language_code: ру
+     alphabeth_code: РУ
+- key: Restoration
+  kind: EventKind
+  names_attributes:
+   - text: Восстановление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Resurrection
+  kind: EventKind
+  names_attributes:
+   - text: Воскресение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Entrance
+  kind: EventKind
+  names_attributes:
+   - text: Вход
+     language_code: ру
+     alphabeth_code: РУ
+- key: Deaconry
+  kind: EventKind
+  names_attributes:
+   - text: Дияконство
+     language_code: ру
+     alphabeth_code: РУ
+- key: Enheresment
+  kind: EventKind
+  names_attributes:
+   - text: Впадение в ересь
+     language_code: ру
+     alphabeth_code: РУ
+- key: Conception
+  kind: EventKind
+  names_attributes:
+   - text: Зачинание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Protection
+  kind: EventKind
+  names_attributes:
+   - text: Заступление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Conceiving
+  kind: EventKind
+  names_attributes:
+   - text: Зачатие
+     language_code: ру
+     alphabeth_code: РУ
+- key: Portent
+  kind: EventKind
+  names_attributes:
+   - text: Знамение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Deliverance
+  kind: EventKind
+  names_attributes:
+   - text: Избавление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Betraial
+  kind: EventKind
+  names_attributes:
+   - text: Измена
+     language_code: ру
+     alphabeth_code: РУ
+- key: Procession
+  kind: EventKind
+  names_attributes:
+   - text: Изнесение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Monasticry
+  kind: EventKind
+  names_attributes:
+   - text: Иночество
+     language_code: ру
+     alphabeth_code: РУ
+- key: Hypodeaconry
+  kind: EventKind
+  names_attributes:
+   - text: Иподьяконство
+     language_code: ру
+     alphabeth_code: РУ
+- key: Baptism
+  kind: EventKind
+  names_attributes:
+   - text: Крещение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Superstructure
+  kind: EventKind
+  names_attributes:
+   - text: Надстройка
+     language_code: ру
+     alphabeth_code: РУ
+- key: Writing
+  kind: EventKind
+  names_attributes:
+   - text: Написание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Learning
+  kind: EventKind
+  names_attributes:
+   - text: Научение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Numbness
+  kind: EventKind
+  names_attributes:
+   - text: Онемение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Deposition
+  kind: EventKind
+  names_attributes:
+   - text: Низложение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Sanctification
+  kind: EventKind
+  names_attributes:
+   - text: Освящение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Uncovering
+  kind: EventKind
+  names_attributes:
+   - text: Обретение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Circumcision
+  kind: EventKind
+  names_attributes:
+   - text: Обрезание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Revival
+  kind: EventKind
+  names_attributes:
+   - text: Оживление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Liberation
+  kind: EventKind
+  names_attributes:
+   - text: Освобождение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Renunciation
+  kind: EventKind
+  names_attributes:
+   - text: Отречение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Fall
+  kind: EventKind
+  names_attributes:
+   - text: Падение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Burial
+  kind: EventKind
+  names_attributes:
+   - text: Погребение
+     language_code: ру
+     alphabeth_code: РУ
+- key: GreatFire
+  kind: EventKind
+  names_attributes:
+   - text: Пожар
+     language_code: ру
+     alphabeth_code: РУ
+- key: Repentance
+  kind: EventKind
+  names_attributes:
+   - text: Покаяние
+     language_code: ру
+     alphabeth_code: РУ
+- key: Rest
+  kind: EventKind
+  names_attributes:
+   - text: Покой
+     language_code: ру
+     alphabeth_code: РУ
+- key: Placing
+  kind: EventKind
+  names_attributes:
+   - text: Положение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Veneration
+  kind: EventKind
+  names_attributes:
+   - text: Почитание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Primacy
+  kind: EventKind
+  names_attributes:
+   - text: Предстоятельство
+     language_code: ру
+     alphabeth_code: РУ
+- key: PuttingInAgain
+  kind: EventKind
+  names_attributes:
+   - text: Преложение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Teleportation
+  kind: EventKind
+  names_attributes:
+   - text: Премещение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Translation
+  kind: EventKind
+  names_attributes:
+   - text: Пренесение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Calling
+  kind: EventKind
+  names_attributes:
+   - text: Призвание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Captivity
+  kind: EventKind
+  names_attributes:
+   - text: Пленение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Adoration
+  kind: EventKind
+  names_attributes:
+   - text: Поклонение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Transfiguration
+  kind: EventKind
+  names_attributes:
+   - text: Преображение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Curse
+  kind: EventKind
+  names_attributes:
+   - text: Проклятие
+     language_code: ру
+     alphabeth_code: РУ
+- key: Preach
+  kind: EventKind
+  names_attributes:
+   - text: Проповедание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Prophecy
+  kind: EventKind
+  names_attributes:
+   - text: Пророчество
+     language_code: ру
+     alphabeth_code: РУ
+- key: Canonization
+  kind: EventKind
+  names_attributes:
+   - text: Прославление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Repose
+  kind: EventKind
+  names_attributes:
+   - text: Преставление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Throne
+  kind: EventKind
+  names_attributes:
+   - text: Интронизация
+     language_code: ру
+     alphabeth_code: РУ
+- key: Destruction
+  kind: EventKind
+  names_attributes:
+   - text: Разрушение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Schism
+  kind: EventKind
+  names_attributes:
+   - text: Уход в раскол
+     language_code: ру
+     alphabeth_code: РУ
+- key: Defrocking
+  kind: EventKind
+  names_attributes:
+   - text: Извержение из сана
+     language_code: ру
+     alphabeth_code: РУ
+- key: Decanonization
+  kind: EventKind
+  names_attributes:
+   - text: Деканонизация
+     language_code: ру
+     alphabeth_code: РУ
+- key: Nativity
+  kind: EventKind
+  names_attributes:
+   - text: Рождение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Frockbearing
+  kind: EventKind
+  names_attributes:
+   - text: Облечение в рясу
+     language_code: ру
+     alphabeth_code: РУ
+- key: Council
+  kind: EventKind
+  names_attributes:
+   - text: Собор
+     language_code: ру
+     alphabeth_code: РУ
+- key: Bishopry
+  kind: EventKind
+  names_attributes:
+   - text: Святительство
+     language_code: ру
+     alphabeth_code: РУ
+- key: Priestship
+  kind: EventKind
+  names_attributes:
+   - text: Священство
+     language_code: ру
+     alphabeth_code: РУ
+- key: Founding
+  kind: EventKind
+  names_attributes:
+   - text: Создание
+     language_code: ру
+     alphabeth_code: РУ
+- key: Hiddening
+  kind: EventKind
+  names_attributes:
+   - text: Сокрытие
+     language_code: ру
+     alphabeth_code: РУ
+- key: Phenomenon
+  kind: EventKind
+  names_attributes:
+   - text: Появление
+     language_code: ру
+     alphabeth_code: РУ
+- key: Meeting
+  kind: EventKind
+  names_attributes:
+   - text: Сретение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Passion
+  kind: EventKind
+  names_attributes:
+   - text: Страсти
+     language_code: ру
+     alphabeth_code: РУ
+- key: Schima
+  kind: EventKind
+  names_attributes:
+   - text: Схима
+     language_code: ру
+     alphabeth_code: РУ
+- key: Supper
+  kind: EventKind
+  names_attributes:
+   - text: Вечеря
+     language_code: ру
+     alphabeth_code: РУ
+- key: Sobriety
+  kind: EventKind
+  names_attributes:
+   - text: Трезвение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Labor
+  kind: EventKind
+  names_attributes:
+   - text: Труд
+     language_code: ру
+     alphabeth_code: РУ
+- key: Earthquake
+  kind: EventKind
+  names_attributes:
+   - text: Землетрясение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Assurance
+  kind: EventKind
+  names_attributes:
+   - text: Уверение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Loss
+  kind: EventKind
+  names_attributes:
+   - text: Утрата
+     language_code: ру
+     alphabeth_code: РУ
+- key: Glorification
+  kind: EventKind
+  names_attributes:
+   - text: Чин прославления
+     language_code: ру
+     alphabeth_code: РУ
+- key: Reader
+  kind: EventKind
+  names_attributes:
+   - text: Чтечество
+     language_code: ру
+     alphabeth_code: РУ
+- key: Miracle
+  kind: EventKind
+  names_attributes:
+   - text: Чудо
+     language_code: ру
+     alphabeth_code: РУ
+- key: Appearance
+  kind: EventKind
+  names_attributes:
+   - text: Явление
+     language_code: ру
+     alphabeth_code: РУ
+- key: ру
+  kind: Language
+  names_attributes:
+   - text: Русский
+     language_code: ру
+     alphabeth_code: РУ
+- key: цс
+  kind: Language
+  names_attributes:
+   - text: Церковнославянский
+     language_code: ру
+     alphabeth_code: РУ
+- key: сс
+  kind: Language
+  names_attributes:
+   - text: Старославянский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ук
+  kind: Language
+  names_attributes:
+   - text: Украинский
+     language_code: ру
+     alphabeth_code: РУ
+- key: бл
+  kind: Language
+  names_attributes:
+   - text: Белорусский
+     language_code: ру
+     alphabeth_code: РУ
+- key: мк
+  kind: Language
+  names_attributes:
+   - text: Македонский
+     language_code: ру
+     alphabeth_code: РУ
+- key: сх
+  kind: Language
+  names_attributes:
+   - text: Сербохорватский
+     language_code: ру
+     alphabeth_code: РУ
+- key: со
+  kind: Language
+  names_attributes:
+   - text: Словенский
+     language_code: ру
+     alphabeth_code: РУ
+- key: бг
+  kind: Language
+  names_attributes:
+   - text: Болгарский
+     language_code: ру
+     alphabeth_code: РУ
+- key: чх
+  kind: Language
+  names_attributes:
+   - text: Чешский
+     language_code: ру
+     alphabeth_code: РУ
+- key: сл
+  kind: Language
+  names_attributes:
+   - text: Словацкий
+     language_code: ру
+     alphabeth_code: РУ
+- key: по
+  kind: Language
+  names_attributes:
+   - text: Польский
+     language_code: ру
+     alphabeth_code: РУ
+- key: кш
+  kind: Language
+  names_attributes:
+   - text: Кашубский
+     language_code: ру
+     alphabeth_code: РУ
+- key: вл
+  kind: Language
+  names_attributes:
+   - text: Верхнелужийкий
+     language_code: ру
+     alphabeth_code: РУ
+- key: нл
+  kind: Language
+  names_attributes:
+   - text: Нижнелужицкий
+     language_code: ру
+     alphabeth_code: РУ
+- key: ар
+  kind: Language
+  names_attributes:
+   - text: Армянский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ив
+  kind: Language
+  names_attributes:
+   - text: Грузинский
+     language_code: ру
+     alphabeth_code: РУ
+- key: рм
+  kind: Language
+  names_attributes:
+   - text: Румынский
+     language_code: ру
+     alphabeth_code: РУ
+- key: гр
+  kind: Language
+  names_attributes:
+   - text: Греческий
+     language_code: ру
+     alphabeth_code: РУ
+- key: ла
+  kind: Language
+  names_attributes:
+   - text: Латинский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ит
+  kind: Language
+  names_attributes:
+   - text: Итальянский
+     language_code: ру
+     alphabeth_code: РУ
+- key: фр
+  kind: Language
+  names_attributes:
+   - text: Французский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ис
+  kind: Language
+  names_attributes:
+   - text: Испанский
+     language_code: ру
+     alphabeth_code: РУ
+- key: не
+  kind: Language
+  names_attributes:
+   - text: Немецкий
+     language_code: ру
+     alphabeth_code: РУ
+- key: ир
+  kind: Language
+  names_attributes:
+   - text: Ирландский
+     language_code: ру
+     alphabeth_code: РУ
+- key: си
+  kind: Language
+  names_attributes:
+   - text: Староирландский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ан
+  kind: Language
+  names_attributes:
+   - text: Английский
+     language_code: ру
+     alphabeth_code: РУ
+- key: ев
+  kind: Language
+  names_attributes:
+   - text: Иврит
+     language_code: ру
+     alphabeth_code: РУ
+- key: РУ
+  kind: Alphabeth
+  names_attributes:
+   - text: Пореформенная русская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: РП
+  kind: Alphabeth
+  names_attributes:
+   - text: Дореформенная русская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЦС
+  kind: Alphabeth
+  names_attributes:
+   - text: Церковнославянская кириллица
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЦР
+  kind: Alphabeth
+  names_attributes:
+   - text: Церковнославянская разметка хип-9
+     language_code: ру
+     alphabeth_code: РУ
+- key: СС
+  kind: Alphabeth
+  names_attributes:
+   - text: Старославянкая кириллица
+     language_code: ру
+     alphabeth_code: РУ
+- key: УК
+  kind: Alphabeth
+  names_attributes:
+   - text: Украинская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: СР
+  kind: Alphabeth
+  names_attributes:
+   - text: Сербская азбука (кириллица)
+     language_code: ру
+     alphabeth_code: РУ
+- key: ХР
+  kind: Alphabeth
+  names_attributes:
+   - text: Хорватская азубка (латиница)
+     language_code: ру
+     alphabeth_code: РУ
+- key: СО
+  kind: Alphabeth
+  names_attributes:
+   - text: Словнеская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: БГ
+  kind: Alphabeth
+  names_attributes:
+   - text: Болгарская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЧХ
+  kind: Alphabeth
+  names_attributes:
+   - text: Чешская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: СЛ
+  kind: Alphabeth
+  names_attributes:
+   - text: Словацкая азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ПО
+  kind: Alphabeth
+  names_attributes:
+   - text: Польская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: АР
+  kind: Alphabeth
+  names_attributes:
+   - text: Армянская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ИВ
+  kind: Alphabeth
+  names_attributes:
+   - text: Грузинская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: РМ
+  kind: Alphabeth
+  names_attributes:
+   - text: Румынская латиница
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЦУ
+  kind: Alphabeth
+  names_attributes:
+   - text: Церковнославянская кириллица румынского извода
+     language_code: ру
+     alphabeth_code: РУ
+- key: ГР
+  kind: Alphabeth
+  names_attributes:
+   - text: Греческая азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЛА
+  kind: Alphabeth
+  names_attributes:
+   - text: Латынь
+     language_code: ру
+     alphabeth_code: РУ
+- key: ИТ
+  kind: Alphabeth
+  names_attributes:
+   - text: Итальянская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ФР
+  kind: Alphabeth
+  names_attributes:
+   - text: Французская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ИС
+  kind: Alphabeth
+  names_attributes:
+   - text: Испанская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: НЕ
+  kind: Alphabeth
+  names_attributes:
+   - text: Немецкая азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ИР
+  kind: Alphabeth
+  names_attributes:
+   - text: Ирландская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: СИ
+  kind: Alphabeth
+  names_attributes:
+   - text: Староирландская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: АН
+  kind: Alphabeth
+  names_attributes:
+   - text: Английская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: СА
+  kind: Alphabeth
+  names_attributes:
+   - text: Среднеанглийская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: РА
+  kind: Alphabeth
+  names_attributes:
+   - text: Раннеанглийская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: ЕВ
+  kind: Alphabeth
+  names_attributes:
+   - text: Еврейская азбука
+     language_code: ру
+     alphabeth_code: РУ
+- key: несвязаное
+  kind: NameBind
+  names_attributes:
+   - text: Не связанное
+     language_code: ру
+     alphabeth_code: РУ
+- key: переводное
+  kind: NameBind
+  names_attributes:
+   - text: Переводное
+     language_code: ру
+     alphabeth_code: РУ
+- key: прилаженое
+  kind: NameBind
+  names_attributes:
+   - text: Прилаженое (Адаптация)
+     language_code: ру
+     alphabeth_code: РУ
+- key: переложеное
+  kind: NameBind
+  names_attributes:
+   - text: Переложеное (Транслитерация)
+     language_code: ру
+     alphabeth_code: РУ
+- key: уменьшительное
+  kind: NameBind
+  names_attributes:
+   - text: Уменьшительное
+     language_code: ру
+     alphabeth_code: РУ
+- key: подобное
+  kind: NameBind
+  names_attributes:
+   - text: Подобное (Синоним)
+     language_code: ру
+     alphabeth_code: РУ
+ 
+- key: наречёное
+  kind: NameKind
+  names_attributes:
+   - text: Наречённое
+     language_code: ру
+     alphabeth_code: РУ
+- key: самоданное
+  kind: NameKind
+  names_attributes:
+   - text: Самоданное
+     language_code: ру
+     alphabeth_code: РУ
+- key: крещенское
+  kind: NameKind
+  names_attributes:
+   - text: В крещении
+     language_code: ру
+     alphabeth_code: РУ
+- key: чернецкое
+  kind: NameKind
+  names_attributes:
+   - text: В рясофорстве
+     language_code: ру
+     alphabeth_code: РУ
+- key: иноческое
+  kind: NameKind
+  names_attributes:
+   - text: В иночестве
+     language_code: ру
+     alphabeth_code: РУ
+- key: схимное
+  kind: NameKind
+  names_attributes:
+   - text: В схиме
+     language_code: ру
+     alphabeth_code: РУ
+- key: отчество
+  kind: NameKind
+  names_attributes:
+   - text: Отчество
+     language_code: ру
+     alphabeth_code: РУ
+- key: отчество_принятое
+  kind: NameKind
+  names_attributes:
+   - text: Нареченное отчество
+     language_code: ру
+     alphabeth_code: РУ
+- key: кумство
+  kind: NameKind
+  names_attributes:
+   - text: По кумовству
+     language_code: ру
+     alphabeth_code: РУ
+- key: благословенное
+  kind: NameKind
+  names_attributes:
+   - text: В благословении
+     language_code: ру
+     alphabeth_code: РУ
+- key: покаянное
+  kind: NameKind
+  names_attributes:
+   - text: В покаянии
+     language_code: ру
+     alphabeth_code: РУ
+- key: отечья
+  kind: NameKind
+  names_attributes:
+   - text: Фамилия по отцу
+     language_code: ру
+     alphabeth_code: РУ
+- key: мужнина
+  kind: NameKind
+  names_attributes:
+   - text: Фамилия по мужу
+     language_code: ру
+     alphabeth_code: РУ
+- key: наречёная
+  kind: NameKind
+  names_attributes:
+   - text: В наречении
+     language_code: ру
+     alphabeth_code: РУ
+- key: самоданная
+  kind: NameKind
+  names_attributes:
+   - text: В самонаречении
+     language_code: ру
+     alphabeth_code: РУ
+- key: матерня
+  kind: NameKind
+  names_attributes:
+   - text: Фамилия по матери
+     language_code: ру
+     alphabeth_code: РУ
+- key: прозвание
+  kind: NameKind
+  names_attributes:
+   - text: Прозвание
+     language_code: ру
+     alphabeth_code: РУ

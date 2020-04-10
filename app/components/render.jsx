@@ -10,13 +10,15 @@ export function renderElement(element, meta) {
       let sub = meta[_name],
           name = sub.name || _name,
           new_name = [ element.name, name ].filter((x) => { return x }).join("."),
+          new_humanized_name = [ element.name, sub.humanized_name ].filter((x) => { return x }).join("."),
           value_context_names = [ sub.context_names ].flat().filter((x) => { return x }),
           value_context = value_context_names.reduce((res, context_name) => {
              res[context_name] = element.value[context_name]
              return res
-          }, {}),
+          }, sub.context_values || {}),
           res = merge(sub, { key: new_name,
                              name: new_name,
+                             humanized_name: new_humanized_name,
                              value: element.value[name],
                              humanized_value: element.value[sub.humanized_name],
                              value_context: value_context,

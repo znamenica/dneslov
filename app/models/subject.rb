@@ -1,19 +1,22 @@
-class Order < ActiveRecord::Base
-   has_one :slug, as: :sluggable, dependent: :destroy
-   has_many :notes, as: :describable, dependent: :delete_all, class_name: :Note
-   has_many :tweets, as: :describable, dependent: :delete_all, class_name: :Tweet
-   has_many :descriptions, -> { where( type: :Description ) }, as: :describable, dependent: :delete_all
-   has_many :memo_orders
-   has_many :memoes, through: :memo_orders
-   has_many :memories, through: :slug
+class Subject < ActiveRecord::Base
+   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json').to_s
 
+   attr_defaults meta: "{}"
+
+   has_many :names, as: :describable, dependent: :delete_all, class_name: :Appellation
+   has_many :descriptions, -> { where( type: :Description ) }, as: :describable, dependent: :delete_all
+
+   accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :tweets, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :slug, reject_if: :all_blank, allow_destroy: true
+
+   validates_presence_of :key, :kind
+   validates_uniqueness_of :key
+   validates :meta, json: { schema: JSON_SCHEMA }
 
    scope :with_token, -> text do
-      left_outer_joins(:slug).where( "slugs.text ~* ?", "\\m#{text}.*" ).distinct ;end
+      left_outer_joins(:names, :descriptions)
+     .where("descriptions.text ILIKE ?", "%#{text}%")
+     .distinct ;end
 
    scope :with_tokens, -> string_in do
       return self if string_in.blank?
@@ -29,14 +32,12 @@ class Order < ActiveRecord::Base
          rel.or(or_rel);end
       .distinct ;end
 
+   scope :with_kind, -> kind do
+      where(kind: kind) ;end
+
    singleton_class.send(:alias_method, :t, :with_token)
    singleton_class.send(:alias_method, :q, :with_tokens)
+   singleton_class.send(:alias_method, :k, :with_kind)
 
-   validates_presence_of :slug, :notes, :tweets
-
-   def tweet_for locales
-      tweets.where( language_code: locales ).first ;end
-
-   def note_for locales
-      notes.where( language_code: locales ).first ;end;end
-
+   def name_for language_codes
+     names.where( language_code: language_codes ).first&.text ;end;end

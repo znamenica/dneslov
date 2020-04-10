@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_23_144100) do
+ActiveRecord::Schema.define(version: 2020_04_09_214200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -216,6 +216,16 @@ ActiveRecord::Schema.define(version: 2020_03_23_144100) do
     t.integer "sluggable_id"
     t.index ["sluggable_type", "sluggable_id"], name: "index_slugs_on_sluggable_type_and_sluggable_id"
     t.index ["text"], name: "index_slugs_on_text", unique: true
+  end
+
+  create_table "subjects", id: :serial, force: :cascade do |t|
+    t.string "kind", null: false
+    t.string "key", null: false
+    t.jsonb "meta"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_subjects_on_key", unique: true
+    t.index ["kind"], name: "index_subjects_on_kind"
   end
 
 end

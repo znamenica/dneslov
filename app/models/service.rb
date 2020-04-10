@@ -1,5 +1,5 @@
 class Service < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    belongs_to :info, polymorphic: true
 

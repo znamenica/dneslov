@@ -1,7 +1,7 @@
 # bind_kind(string)  - kind of binding
 # bond_to_id(int)    - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    has_many :memories, through: :memory_names
    has_many :memory_names
@@ -45,4 +45,3 @@ class Name < ActiveRecord::Base
    def fill_root_id
       new_root_id = self.bond_to&.root_id || self.id
       self.update!(root_id: new_root_id) ;end;end
-

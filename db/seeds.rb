@@ -11,3 +11,8 @@
 if Order.all.blank?
    ::Tasks.import_orders
 end
+
+if Subject.all.blank?
+   data = YAML.load(IO.read(Rails.root.join('db/seeds/subjects.yaml')))
+   models = data.map { |attrs| Subject.create!(attrs) }
+end

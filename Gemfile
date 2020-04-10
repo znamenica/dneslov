@@ -42,6 +42,8 @@ gem 'has_scope', '>= 0.7.2'
 
 ## models
 gem 'validate_url'
+gem 'activerecord_json_validator'
+gem 'attribute-defaults'
 
 # view
 ## NPM packaging
@@ -66,6 +68,10 @@ gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
 
 ## orthodox
 gem 'when_easter'
+
+## data
+gem 'activerecord-import'
+gem "zero_downtime_migrations"
 
 group :development do
    gem 'capistrano', '~> 3.6'

@@ -25,6 +25,7 @@ export default class Records extends Component {
       if (props !== state.prevProps) {
          return {
             prevProps: props,
+            page: props.page,
             records: props.records?.list || [],
             page: props.records?.page || 0,
             total: props.records?.total || 0,
@@ -71,7 +72,8 @@ export default class Records extends Component {
    shouldComponentUpdate(nextProps, nextState) {
       console.debug("[shouldComponentUpdate] >> next:", nextState, "prev:", this.state)
       return JSON.stringify(nextState.query) !== JSON.stringify(this.state.query) ||
-             nextState.current != this.state.current
+             nextState.current != this.state.current ||
+             nextState.page != this.state.page
    }
 
    // custom
@@ -248,11 +250,11 @@ export default class Records extends Component {
                   {this.state.records.map((record) =>
                      <Row
                         key={this.props.meta.remoteName + "-" + record.id}
+                        value={record}
                         meta={this.props.meta.row}
                         default={this.props.meta.default}
                         remove={this.props.meta.remove}
                         locales={this.props.locales || []}
-                        {...record}
                         onEdit={this.onRecordEdit.bind(this)}
                         onRemove={this.onRecordRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination

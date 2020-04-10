@@ -16,7 +16,6 @@ export default class Form extends Component {
       data: null,
       meta: null,
       validations: {},
-      updateOnChange: null
    }
 
    static propTypes = {
@@ -121,7 +120,7 @@ export default class Form extends Component {
       let record = this.serializedQuery(),
           request = { data: {}},
           request_url_base = '/' + this.props.remoteNames,
-          id = this.props.id
+          id = this.state.query.id
 
       request.data[this.props.remoteName] = record
 

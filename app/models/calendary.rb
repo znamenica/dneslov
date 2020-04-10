@@ -1,10 +1,10 @@
 #licit[boolean]         - действительный календарь (не в разработке)
 class Calendary < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    belongs_to :place, optional: true
 
-   has_many :descriptions, -> { desc }, as: :describable, dependent: :delete_all
+   has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
    has_many :names, as: :describable, dependent: :delete_all, class_name: :Appellation
    has_many :wikies, as: :info, dependent: :delete_all, class_name: :WikiLink
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
@@ -48,8 +48,8 @@ class Calendary < ActiveRecord::Base
    accepts_nested_attributes_for :slug, reject_if: :all_blank, allow_destroy: true
 
    has_alphabeth
-   validates :language_code, inclusion: { in: Language.language_list }
-   validates :alphabeth_code, inclusion: { in: proc { |l| Language.alphabeth_list_for( l.language_code ) } }
+   validates :language_code, inclusion: { in: Languageble.language_list }
+   validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for( l.language_code ) } }
    validates :slug, :names, :date, presence: true
    validates :descriptions, :names, :wikies, :links, :place, associated: true
 

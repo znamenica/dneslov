@@ -1,101 +1,110 @@
 import { merge } from 'merge-anything'
 
+export function matchValidJson(text) {
+   try {
+      JSON.parse(text)
+      return false
+   } catch (e) {
+      return true
+   }
+}
+
 export function matchLetters(text, context) {
    let res = false
 
    console.debug("[matchLetters] > text:", text, "context:", context)
 
    switch (context.alphabeth_code) {
-   case 'ру':
+   case 'РУ':
       res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'цс':
+   case 'ЦС':
       res = ! text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
-   case 'рп':
+   case 'РП':
       res = ! text.match(/^[А-ЯЁІѢѲѴа-яёіѣѳѵ:,.!;\-\/*()0-9«»́–—\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'цр':
+   case 'ЦР':
       res = ! text.match(/^[А-ЯЁа-яё_<>:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'сс':
+   case 'СС':
       res = ! text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѾꙖа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѿꙗ.,;*\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ук':
+   case 'УК':
       res = ! text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́«»–—\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'бл':
+   case 'БЛ':
       res = ! text.match(/^[:,.()0-9«»–\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'мк':
+   case 'МК':
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ср':
+   case 'СР':
       res = ! text.match(/^[ЂЈ-ЋЏА-ИК-Шђј-ћа-ик-ш:,.!?\-\/()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'хр':
+   case 'ХР':
       res = ! text.match(/^[A-PR-VZČĆŽĐŠa-pr-vzčćžđš:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'со':
+   case 'СО':
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'бг':
+   case 'БГ':
       res = ! text.match(/^[А-ЪЬЮЯа-ъьюя:,.!?\-\/()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'чх':
+   case 'ЧХ':
       res = ! text.match(/^[A-PR-VX-ZÁÉĚÍÓÚŮÝČĎŇŘŠŤŽa-pr-vx-záéěíóúůýčďňřšťž:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TOOD
       break
-   case 'сл':
+   case 'СЛ':
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'по':
+   case 'ПО':
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ар':
+   case 'АР':
       res = ! text.match(/^[Ա-Ֆա-և:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'ив':
+   case 'ИВ':
       res = ! text.match(/^[ა-ჺჽა-ჺჽ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'рм':
+   case 'РМ':
       res = ! text.match(/^[A-ZĂÂÎȘȚa-zăâîșț:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'цу':
+   case 'ЦУ':
       res = ! text.match(/^[:,.\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'гр':
+   case 'ГР':
       res = ! text.match(/^[ͶͲΑ-ΫϏϒϓϔϘϚϜϠϞϴϷϹϺϾϿἈ-ἏἘ-ἝἨ-ἯἸ-ἿὈ-ὍὙ-ὟὨ-Ὧᾈ-ᾏᾘ-ᾟᾨ-ᾯᾸ-ᾼῈ-ῌῘ-ΊῨ-ῬῸ-ῼΩΆ-Ώά-ώϐϑϕ-ϗϙϛϝ-ϟϡ-ϳϵ-϶ϸϻϼᴦ-ᴪἀ-ἇἐ-ἕἠ-ἧἰ-ἷὀ-ὅὐ-ὗὠ-ὧὰ-ᾇᾐ-ᾗᾠ-ᾧᾰ-ᾷῂ-ῇῐ-ῗῠ-ῧῲ-ῷͻ-ͽͷΐά-ΰ«»'’"`,;;:.·˙©~\-\+\.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'ла':
+   case 'ЛА':
       res = ! text.match(/^[A-IK-TVX-ZÆa-ik-tvx-zæ:,.\-\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'ит':
+   case 'ИТ':
       res = ! text.match(/^[A-IL-VZa-il-vz:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'фр':
+   case 'ФР':
       res = ! text.match(/^[A-ZŒÆÇÀÂÎÏÛÙÜÉÈÊËÔŸÑa-zœæçàâîïûùüéèêëôÿñ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'ис':
+   case 'ИС':
       res = ! text.match(/^[A-ZÑÁÉÍÓÚÜÏa-zñáéíóúüï:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'не':
+   case 'НЕ':
       res = ! text.match(/^[A-ZÄÖÜẞa-zäöüßſ:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'ир':
+   case 'ИР':
       res = ! text.match(/^[A-IL-PR-Ua-il-pr-u:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'си':
+   case 'СИ':
       res = ! text.match(/^[:,.\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ан':
+   case 'АН':
       res = ! text.match(/^[A-Za-z:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/)
       break
-   case 'са':
+   case 'СА':
       res = ! text.match(/^[:,.\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ра':
+   case 'РА':
       res = ! text.match(/^[A-IL-PR-UW-YÆÐꝽÞǷĊĠĀĒĪŌŪa-il-pr-uw-yæðᵹſþƿċġāēīūō:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
-   case 'ев':
+   case 'ЕВ':
       res = ! text.match(/^[א-ת׳״שׁ-זּטּ-לּמּנּסּףּפּצּ-ﭏ֑-ׇ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!]+$/) //TODO
       break
    }
@@ -107,34 +116,36 @@ export function matchCodes(e_in, context) {
    let e = e_in || {}
 
    const language_tree = {
-      ру: ['рп', 'ру'],
-      цс: ['цс', 'рп', 'ру', 'цр' ],
-      сс: ['сс'],
-      ук: ['ук'],
-      бл: ['бл'],
-      мк: ['мк'],
-      сх: ['ср', 'хр'],
-      со: ['со'],
-      бг: ['бг'],
-      чх: ['чх'],
-      сл: ['сл'],
-      по: ['по'],
-      кш: ['кш'],
-      вл: ['вл'],
-      нл: ['нл'],
-      ар: ['ар'],
-      ив: ['ив'],
-      рм: ['рм', 'цу', 'цр'],
-      гр: ['гр'],
-      ла: ['ла'],
-      ит: ['ит'],
-      фр: ['фр'],
-      ис: ['ис'],
-      не: ['не'],
-      ир: ['ир'],
-      си: ['си'],
-      ан: ['ан', 'са', 'ра'],
+      ру: ['РП', 'РУ'],
+      цс: ['ЦС', 'РП', 'РУ', 'ЦР' ],
+      сс: ['СС'],
+      ук: ['УК'],
+      бл: ['БЛ'],
+      мк: ['МК'],
+      сх: ['СР', 'ХР'],
+      со: ['СО'],
+      бг: ['БГ'],
+      чх: ['ЧХ'],
+      сл: ['СЛ'],
+      по: ['ПО'],
+      кш: ['КШ'],
+      вл: ['ВЛ'],
+      нл: ['НЛ'],
+      ар: ['АР'],
+      ив: ['ИВ'],
+      рм: ['РМ', 'ЦУ', 'цр'],
+      гр: ['ГР'],
+      ла: ['ЛА'],
+      ит: ['ИТ'],
+      фр: ['ФР'],
+      ис: ['ИС'],
+      не: ['НЕ'],
+      ир: ['ИР'],
+      си: ['СИ'],
+      ан: ['АН', 'СА', 'РА'],
    }
+
+   console.debug("[matchCodes] > e:", e, "context:", context)
    if (e) {
       let alphabeth_codes = language_tree[context.language_code]
 

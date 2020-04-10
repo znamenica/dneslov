@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 
 export default class Row extends Component {
    edit() {
-      this.props.onEdit(this.props.id)
+      this.props.onEdit(this.props.value.id)
    }
 
    remove() {
-      let toast = document.querySelector('.toast-wrapper.id' + this.props.id).parentElement
+      let toast = document.querySelector('.toast-wrapper.id' + this.props.value.id).parentElement
 
       this.toast.dismiss()
       toast.remove()
-      this.props.onRemove(this.props.id)
+      this.props.onRemove(this.props.value.id)
    }
 
    removeQuery() {
@@ -36,12 +36,14 @@ export default class Row extends Component {
    }
 
    render() {
-      console.log("[render] > props", this.props, )
+      console.log("[render] * props", this.props)
 
       return (
          <tr>
             {Object.entries(this.props.meta).map(([name, element]) => {
-               return <td>{element.value && element.value(this.props) || this.props[name]}</td>
+               return <td>{element.value &&
+                           element.value(this.props.value, this.props) ||
+                           this.props.value[name]}</td>
             })}
             <td className='actions'>
                <i
@@ -53,7 +55,7 @@ export default class Row extends Component {
                   onClick={this.removeQuery.bind(this)}>
                   delete</i>
                <div
-                  className={'toast-wrapper id' + this.props.id}
+                  className={'toast-wrapper id' + this.props.value.id}
                   key='toast'
                   ref={e => this.$toast = e} >
                   <span>{this.t(this.props.remove.title)}</span>

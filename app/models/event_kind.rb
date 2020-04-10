@@ -1,5 +1,5 @@
 class EventKind < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    has_many :events, foreign_key: :type, primary_key: :kind
    

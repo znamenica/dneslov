@@ -1,5 +1,5 @@
 class Canto < ActiveRecord::Base
-   extend Language
+   include Languageble
 
    has_many :service_cantoes, inverse_of: :canto
    has_many :services, through: :service_cantoes
