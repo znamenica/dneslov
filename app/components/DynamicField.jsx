@@ -19,10 +19,8 @@ export default class DynamicField extends Component {
       value_name: null,
       name: 'text_id',
       humanized_name: 'text',
-      subname: null,
       value: undefined,
       humanized_value: undefined,
-      context_names: null,
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -35,7 +33,6 @@ export default class DynamicField extends Component {
       value_name: PropTypes.string.isRequired,
       humanized_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      context_names: PropTypes.object,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -56,7 +53,7 @@ export default class DynamicField extends Component {
 
    componentDidMount() {
       console.log("[componentDidMount] <<<")
-      console.log("[componentDidMount] > ", this.data, this.props.value)
+      console.log("[componentDidMount] * ", this.data, this.props.value)
       this.setup()
       document.addEventListener('keydown', this.onKeyDown)
    }
@@ -66,7 +63,7 @@ export default class DynamicField extends Component {
 
       if (this.$input) {
          this.setup()
-         this.autoPopup()
+         this.autoUpdate()
       }
    }
 
@@ -85,7 +82,7 @@ export default class DynamicField extends Component {
    onChange(e) {
       let humanized_value = e.target.value
 
-      console.log("[onChange] > update to", humanized_value)
+      console.log("[onChange] * update to", humanized_value)
       this.updateTo(humanized_value, false)
 
       if (!this.triggered || humanized_value &&
@@ -99,13 +96,13 @@ export default class DynamicField extends Component {
    }
 
    onSelectFromList(humanized_value, e) {
-      console.log("[onSelectFromList] > fix to:", humanized_value)
+      console.log("[onSelectFromList] * fix to:", humanized_value)
       this.updateTo(humanized_value)
    }
 
    onKeyDown(e) {
       if (e.key === "Enter" && e.target == this.$input) {
-         console.log("[onKeyDown] > fix to", this.$input.value)
+         console.log("[onKeyDown] * fix to", this.$input.value)
          e.preventDefault()
          if (this.data.list[this.$input.value]) {
             this.updateTo(this.$input.value)
@@ -117,7 +114,7 @@ export default class DynamicField extends Component {
       let object = this.valueToObject(this.props.name, null),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
-      console.log("[onChipAct] > unfix with", object)
+      console.log("[onChipAct] * unfix with", object)
       document.dispatchEvent(ce)
    }
 
@@ -142,35 +139,29 @@ export default class DynamicField extends Component {
    }
 
    //actions
-   autoPopup() {
-      console.log("[autoPopup] >", this.input)
+   autoUpdate() {
+      console.log("[autoUpdate] *", this.input)
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
 
+      console.debug("[autoUpdate] **", list)
       this.input.updateData(list)
-      this.input.open()
    }
 
    updateTo(humanized_value_in, autofix = true) {
       console.log("[updateTo] <<<", humanized_value_in, autofix)
       let ce, detail, value_detail = {}, value, humanized_value
 
-      if (this.props.subname) {
-         // TODO add text as variable subkey
-         value = {subvalue: this.data.list[humanized_value_in]}
-         humanized_value = {subvalue: humanized_value_in}
-      } else {
-         if (autofix || this.data.total == 1) {
-            value = this.data.list[humanized_value_in]
-         }
-         humanized_value = humanized_value_in
+      if (autofix || this.data.total == 1) {
+         value = this.data.list[humanized_value_in]
       }
+      humanized_value = humanized_value_in
 
       if (value) {
          value_detail = this.valueToObject(this.props.name, value)
       }
 
       detail = merge({}, this.valueToObject(this.props.humanized_name, humanized_value), value_detail)
-      console.log("[updateTo] >> detail", detail)
+      console.debug("[updateTo] ** detail", detail)
 
       ce = new CustomEvent('dneslov-update-path', merge({}, { detail: detail }))
       document.dispatchEvent(ce)
@@ -192,7 +183,7 @@ export default class DynamicField extends Component {
          url: '/' + this.props.pathname + '.json',
       }
 
-      console.log("[getDataFor] > load send", data, 'to /' + this.props.pathname + '.json')
+      console.log("[getDataFor] * load send", data, 'to /' + this.props.pathname + '.json')
       Axios.get(request.url, { params: request.data })
         .then(this.onLoadSuccess.bind(this))
         .catch(this.onLoadFailure.bind(this))
@@ -210,11 +201,12 @@ export default class DynamicField extends Component {
 
       this.storeDynamicData(dynamic_data)
 
-      console.log("[onLoadSuccess] >", dynamic_data, "for: ",  this.triggered, "with response:", response)
+      console.log("[onLoadSuccess] *", dynamic_data, "for: ",  this.triggered, "with response:", response)
 
       if (this.$input) {
-         console.log("[onLoadSuccess] > update autocomplete for", this.props.humanized_value)
-         this.autoPopup()
+         console.log("[onLoadSuccess] * update autocomplete for", this.props.humanized_value)
+         this.autoUpdate()
+         this.input.open()
          this.updateTo(this.props.humanized_value, false)
       }
    }
@@ -228,15 +220,22 @@ export default class DynamicField extends Component {
             return h
          }, {}),
       }
-      console.log("[storeDynamicData] > after store", this.data)
+      console.log("[storeDynamicData] * after store", this.data)
+   }
+
+   className() {
+      return [ "input-field",
+               this.props.wrapperClassName,
+               this.getErrorText(this.props.value) && 'invalid' ].
+         filter((x) => { return x }).join(" ")
    }
 
    render() {
-      console.log("[render] > props", this.props)
+      console.log("[render] * props", this.props)
 
       return (
          <div
-            className={"input-field " + this.props.wrapperClassName}>
+            className={this.className()}>
             {!!this.props.value &&
                <div
                   className="chip">

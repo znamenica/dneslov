@@ -85,12 +85,9 @@ export default class Form extends Component {
    }
 
    onSubmitSuccess(response) {
-      console.log("SUCCESS", response)
       let ce = new CustomEvent('dneslov-record-stored', { detail: response.data })
 
       document.dispatchEvent(ce)
-
-      this.setState({ query: {}, error: "" })
    }
 
    onSubmitError(error) {

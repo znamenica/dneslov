@@ -13,7 +13,6 @@ export default class TextField extends Component {
    static defaultProps = {
       name: 'text',
       value: null,
-      subname: null,
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -23,7 +22,6 @@ export default class TextField extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      value: PropTypes.string,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -45,9 +43,13 @@ export default class TextField extends Component {
       }
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    // events
    onChange(e) {
-      console.log("onChange <<<")
+      console.log("[onChange] <<<")
       let object = valueToObject(this.props.name, e.target.value),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
 
@@ -56,12 +58,19 @@ export default class TextField extends Component {
       console.log(e.target.value, object)
    }
 
+   className() {
+      return [ "input-field",
+               this.props.wrapperClassName,
+               this.getErrorText(this.props.value) && 'invalid' ].
+         filter((x) => { return x }).join(" ")
+   }
+
    render() {
       console.log("[render] * props:", this.props)
-     
+
       return (
          <div
-            className={"input-field " + this.props.wrapperClassName}>
+            className={this.className()}>
             <input
                type='text'
                className={this.error && 'invalid'}

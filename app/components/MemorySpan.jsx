@@ -90,7 +90,8 @@ export default class MemorySpan extends Component {
                <Chip
                   className='year-date'
                   text={this.props.year} /></div>
-            <div className='collapsible-body description'
-               onClick={this.onSpanClick.bind(this)} >
-               {this.props.description &&
-                  <ReactMarkdown source={this.props.description} />}</div></li>)}}
+            {this.props.description &&
+               <div
+                  className='collapsible-body description'
+                  onClick={this.onSpanClick.bind(this)} >
+                  <ReactMarkdown source={this.props.description} /></div>}</li>)}}

@@ -17,7 +17,7 @@ export const memoMeta = {
    row: {
       order: {
          title: 'Чин',
-         value: (value) => { return value.memo_orders[0].order },
+         value: (value) => { return value.memo_orders && value.memo_orders[0].order },
       },
       memory: {
          title: 'Память',

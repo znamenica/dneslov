@@ -82,15 +82,25 @@ export default class MemoriesForm extends Component {
    }
 
    static getPathFromState(state) {
-      let path = "/?" + Object.entries(state.query).reduce((line, [key, value]) => {
-            console.log("[getPathFromState] >", "key:", key, "value:", value, "query:", line)
+      let path = "/" + state.memory?.slug || "",
+          anchor = state.default_calendary_slug,
+          params = Object.entries(state.query).reduce((line, [key, value]) => {
+            console.log("[getPathFromState] *", "key:", key, "value:", value, "query:", line)
             if (value && value.length > 0) {
                let part = key + "=" + encodeURIComponent(value)
                return line && line + "&" + part || part
             } else {
                return line
             }
-         }, undefined)
+         }, "")
+
+      if (anchor) {
+         path += "#" + anchor
+      }
+
+      if (params) {
+         path += "?" + params
+      }
 
       return path
    }
@@ -99,8 +109,8 @@ export default class MemoriesForm extends Component {
       let json = JSON.stringify(value),
           hash = crypto.createHash('sha1').update(json).digest('hex')
 
-      console.log("[hashFromValue] > id:", hash)
-      console.log("[hashFromValue] > json string:", json)
+      console.log("[hashFromValue] * id:", hash)
+      console.log("[hashFromValue] * json string:", json)
       sessionStorage.setItem(hash, json)
 
       return hash
@@ -112,10 +122,10 @@ export default class MemoriesForm extends Component {
           path = MemoriesForm.getPathFromState(state)
 
       if (path === MemoriesForm.getPathFromState(this.state)) {
-         console.log("[updateState] > stable")
+         console.log("[updateState] * stable")
          history.replaceState({id: hash}, document.title)
       } else {
-         console.log("[updateState] > new")
+         console.log("[updateState] * new")
          history.pushState({id: hash}, document.title, path)
       }
 
@@ -186,7 +196,7 @@ export default class MemoriesForm extends Component {
 
    onFetchNext() {
       if (! this.isNextRequesting) {
-         console.log("[onFetchNext] > getting...")
+         console.log("[onFetchNext] * getting...")
          this.isNextRequesting = true
          this.submit({p: this.state.query.p + 1})
       }
@@ -210,7 +220,7 @@ export default class MemoriesForm extends Component {
    }
 
    onMemoriesLoadSuccess(response) {
-      console.log("[onMemoriesLoadSuccess] > response", response)
+      console.log("[onMemoriesLoadSuccess] * response", response)
 
       let state, memories = response.data
 
@@ -255,7 +265,7 @@ export default class MemoriesForm extends Component {
       let memory = response.data,
           state = merge({}, this.state, { memory: memory })
 
-      console.log("[onMemoryLoadSuccess] > memory:", memory)
+      console.log("[onMemoryLoadSuccess] * memory:", memory)
 
       history.pushState({},
                         'Днесловъ – ' + memory.short_name,
@@ -265,7 +275,7 @@ export default class MemoriesForm extends Component {
    }
 
    onPopState(e) {
-      console.log("[onPopState] > session:", e.state)
+      console.log("[onPopState] * session:", e.state)
 
       if (e.state) {
          this.state.query = JSON.parse(sessionStorage.getItem(e.state.id))
@@ -274,7 +284,7 @@ export default class MemoriesForm extends Component {
    }
 
    render() {
-      console.log("[render] > props:", this.props, "state:", this.state)
+      console.log("[render] * props:", this.props, "state:", this.state)
 
       return (
          [<header>

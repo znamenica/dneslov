@@ -23,14 +23,15 @@ export default class Dashboard extends Component {
    state = merge({}, this.props, { meta: null })
 
    // system
-   static getDerivedStateFromProps(_, state) {
-      if (! state.meta) {
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
          let parts = window.location.href.split("#")
 
          if (parts[1]) {
             return {
-               meta: Metas[parts[1].object],
-               page: parts[1].object
+               prevProps: props,
+               meta: Metas[parts[1]],
+               page: parts[1]
             }
          }
       }
@@ -79,7 +80,7 @@ export default class Dashboard extends Component {
    }
 
    render() {
-      console.log("state", this.state, Metas)
+      console.log("[Dashboard] * state", this.state)
 
       return (
          [<header>

@@ -69,7 +69,8 @@ export default class Memory extends Component {
       let parts = window.location.href.split("#"),
           cal = parts[1] && decodeURIComponent(parts[1])
 
-      return cal || props.selected_calendaries.reduce((cal, calendary_slug) => {
+      return cal || props.selected_calendaries &&
+         props.selected_calendaries.reduce((cal, calendary_slug) => {
             if (!cal) {
                cal = props.titles.reduce((cal, title) => {
                   if (!cal && title.calendary == calendary_slug) {
@@ -81,7 +82,7 @@ export default class Memory extends Component {
             }
 
             return cal
-         }, null)
+         }) || props.default_calendary_slug
    }
 
    static getTitle(props, cal) {

@@ -39,7 +39,7 @@ export const nameMeta = {
          name: 'text',
          title: 'Написание имени',
          placeholder: 'Введи написание имени',
-         display_scheme: '12-6-4-4',
+         display_scheme: '12-6-4-2',
          validations: {
             "Имя отсутствует": matchEmptyObject,
          },
@@ -47,7 +47,7 @@ export const nameMeta = {
       language_code: {
          kind: 'dynamic',
          title: 'Язык',
-         display_scheme: '12-6-4-1',
+         display_scheme: '12-6-4-2',
          pathname: 'short_subjects',
          humanized_name: 'language',
          context_value: { k: "Language" },
@@ -62,7 +62,7 @@ export const nameMeta = {
       alphabeth_code: {
          kind: 'dynamic',
          title: 'Азбука',
-         display_scheme: '12-6-4-1',
+         display_scheme: '12-6-4-2',
          pathname: 'short_subjects',
          humanized_name: 'alphabeth',
          context_value: { k: "Alphabeth" },
@@ -78,7 +78,7 @@ export const nameMeta = {
          kind: 'dynamic',
          title: 'Связаное имя',
          humanized_name: 'bond_to',
-         display_scheme: '12-6-4-3',
+         display_scheme: '12-6-4-2',
          placeholder: 'Начни ввод имени...',
          pathname: 'short_names',
          key_name: 'name',
@@ -92,7 +92,7 @@ export const nameMeta = {
       bind_kind: {
          humanized_name: 'bind_kind_name',
          kind: 'dynamic',
-         display_scheme: '12-6-4-1',
+         display_scheme: '12-6-4-2',
          title: 'Вид связки',
          placeholder: 'Начни ввод связки...',
          pathname: 'short_subjects',

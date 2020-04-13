@@ -20,14 +20,14 @@ class Name < ActiveRecord::Base
       return self if string_in.blank?
       # TODO fix the correctness of the query
       klass = self.model_name.name.constantize
-      string_in.split(/\//).reduce(self) do |rel, or_token|
-         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+      or_rel_tokens = string_in.split(/\//).map do |or_token|
+         # OR operation
+         or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
             and_rel = klass.with_token(and_token)
-            rel && rel.merge(and_rel) || and_rel ;end
-         # OR operation
-         rel.or(or_rel);end
-      .distinct ;end
+            rel && rel.merge(and_rel) || and_rel ;end;end
+      or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
+      self.merge(or_rel).distinct ;end
 
    singleton_class.send(:alias_method, :t, :with_token)
    singleton_class.send(:alias_method, :q, :with_tokens)

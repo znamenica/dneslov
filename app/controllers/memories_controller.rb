@@ -61,14 +61,14 @@ class MemoriesController < ApplicationController
       #TODO remove fixed julian gap
       13.days ;end
 
-   def default_calendary_slug
+   def default_calendary_slugs
       #TODO make automatic detection of calendary depended on the IP and country of request
-      'рпц' ;end
+      [ 'рпц' ] ;end
 
    def default
       if (params[ :c ].blank? and params[ :d ].blank? and params[ :q ].blank?)
          params[ :d ] ||= "#{is_julian_calendar? && 'ю' || "н"}#{_date.strftime("%d-%m-%Y")}"
-         params[ :c ] ||= [ default_calendary_slug ] ;end;end
+         params[ :c ] ||= default_calendary_slugs.join(",") ;end;end
 
    def set_locales
       @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)

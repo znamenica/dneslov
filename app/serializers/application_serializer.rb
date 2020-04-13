@@ -10,16 +10,19 @@ class ApplicationSerializer < ActiveModel::Serializer
    end
 
    def julian
-      @instance_options[:julian] ;end
+      @instance_options[ :julian ] ;end
 
    def date
-      @instance_options[:date].to_s ;end
+      @instance_options[ :date ].to_s ;end
 
    def locales
-      @instance_options[:locales] ;end
+      @instance_options[ :locales ] ;end
 
    def calendaries
-      @instance_options[:calendaries] ;end
+      @instance_options[ :calendaries ] ;end
+
+   def memos
+      @instance_options[ :memos ] ;end
 
    def color_by_slug slug
       slug = slug&.strip || ""

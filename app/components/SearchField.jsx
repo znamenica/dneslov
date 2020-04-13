@@ -13,9 +13,18 @@ export default class SearchField extends Component {
       onUpdate: PropTypes.func,
    }
 
-   state = {
-      with_text: this.props.with_text,
-      changed: false,
+   state = {}
+
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         return {
+            prevProps: props,
+            with_text: props.with_text || "",
+            changed: false,
+         }
+      }
+
+      return null
    }
 
    fireUpdate() {

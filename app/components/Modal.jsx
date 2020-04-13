@@ -7,12 +7,10 @@ import Form from 'Form'
 
 export default class Modal extends Component {
    static defaultProps = {
-      id: null,
       remoteName: null,
       remoteNames: null,
       meta: null,
       data: null,
-      validations: {},
    }
 
    static propTypes = {
@@ -20,7 +18,6 @@ export default class Modal extends Component {
       remoteNames: PropTypes.string.isRequired,
       meta: PropTypes.object.isRequired,
       data: PropTypes.object.isRequired,
-      validations: PropTypes.object,
    }
 
    static getDerivedStateFromProps(props, state) {
@@ -37,26 +34,12 @@ export default class Modal extends Component {
    //system
    state = {}
 
-   constructor() {
-      super()
-
-      this.onCloseClick = this.onCloseClick.bind(this)
-   }
-
    componentDidMount() {
-      document.addEventListener('dneslov-record-stored', this.onCloseClick)
-
-      this.modal = M.Modal.init(this.$modal, {
-         onCloseEnd: this.onModalClosed.bind(this)
-      })
-
       this.componentDidRender()
    }
 
    componentWillUnmount() {
-      document.removeEventListener('dneslov-record-stored', this.onCloseClick)
-
-      this.modal.destroy()
+      this.modal?.destroy()
    }
 
     componentDidUpdate() {
@@ -66,18 +49,28 @@ export default class Modal extends Component {
    // custom
    componentDidRender() {
       if (this.state.data) {
+         this.modal = M.Modal.init(this.$modal, {
+            onCloseEnd: this.onModalClosed.bind(this)
+         })
          this.modal.open()
       }
-   }
-
-   onCloseClick() {
-      this.setState({ data: null })
    }
 
    onModalClosed() {
       let ce = new CustomEvent('dneslov-modal-close', {})
 
       document.dispatchEvent(ce)
+   }
+
+   onCloseClick() {
+      this.modal?.close()
+   }
+
+   renderBlank() {
+      this.modal?.close()
+      this.modal?.destroy()
+
+      return null
    }
 
    renderModal() {
@@ -111,13 +104,12 @@ export default class Modal extends Component {
    }
 
    render() {
-      console.log("[render] > props", this.props)
+      console.log("[render] * props:", this.props, "state:", this.state)
 
       if (this.state.data) {
          return this.renderModal()
+      } else {
+         return this.renderBlank()
       }
-
-      this.modal.close()
-      return null
    }
 }

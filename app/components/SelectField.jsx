@@ -39,6 +39,10 @@ export default class SelectField extends Component {
       this.select.destroy()
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    // events
    onChange(e) {
       let object = valueToObject(this.props.name, e.target.value),
@@ -47,13 +51,20 @@ export default class SelectField extends Component {
       document.dispatchEvent(ce)
    }
 
+   className() {
+      return [ "input-field",
+               this.props.wrapperClassName,
+               this.getErrorText(this.props.value) && 'invalid' ].
+         filter((x) => { return x }).join(" ")
+   }
+
    render() {
       console.log(this.props)
 
       return (
          <div
             ref={e => this.$parent = e}
-            className={"input-field " + this.props.wrapperClassName}>
+            className={this.className()}>
             <select
                ref={e => this.$select = e}
                className={this.error && 'invalid'}

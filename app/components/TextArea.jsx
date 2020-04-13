@@ -13,7 +13,6 @@ export default class TextArea extends Component {
    static defaultProps = {
       name: 'text',
       value: null,
-      subname: null,
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -53,6 +52,10 @@ export default class TextArea extends Component {
       }
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    // events
    onChange(e) {
       console.log("[onChange] <<<")
@@ -64,12 +67,19 @@ export default class TextArea extends Component {
       console.log(e.target.value, object)
    }
 
+   className() {
+      return [ "input-field",
+               this.props.wrapperClassName,
+               this.getErrorText(this.props.value) && 'invalid' ].
+         filter((x) => { return x }).join(" ")
+   }
+
    render() {
       console.log("[render] * props:", this.props)
-     
+
       return (
          <div
-            className={"input-field " + this.props.wrapperClassName}>
+            className={this.className()}>
             <textarea
                type='text'
                className={'materialize-textarea ' + (this.error && 'invalid' || '')}

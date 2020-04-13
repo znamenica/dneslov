@@ -2,6 +2,11 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 export default class Row extends Component {
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
+   // custom
    edit() {
       this.props.onEdit(this.props.value.id)
    }

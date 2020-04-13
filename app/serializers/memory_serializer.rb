@@ -44,7 +44,9 @@ class MemorySerializer < CommonMemorySerializer
          } ;end;end
 
    def events
-      ActiveModel::Serializer::CollectionSerializer.new(object.events.usual, locales: locales) ;end
+      ActiveModel::Serializer::CollectionSerializer.new( object.events.memoed,
+                                                         locales: locales,
+                                                         memos: object.memos ) ;end
 
    def troparion
       if troparion = object.troparions_for( locales ).first

@@ -18,6 +18,10 @@ export default class BooleanBox extends Component {
       wrapperClassName: PropTypes.string.isRequired,
    }
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    onCheck(e) {
       let object = this.valueToObject(this.props.name, e.target.checked),
           ce = new CustomEvent('dneslov-update-path', { detail: object })
@@ -26,7 +30,7 @@ export default class BooleanBox extends Component {
    }
 
    render() {
-      console.log(this.props)
+      console.log("[render]", this.props)
 
       return (
          <div

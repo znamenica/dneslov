@@ -31,7 +31,7 @@ export default class Records extends Component {
             total: props.records?.total || 0,
             query: {
                p: props.records?.page || 0,
-               q: props.tokens || null,
+               q: null,
             },
             appended: 0,
             current: null
@@ -105,15 +105,18 @@ export default class Records extends Component {
          records[index] = record
       }
 
-      this.setState({
-         records: records,
-         total: total,
-         appended: appended,
-         current: null,
-      })
+      let state = {
+            records: records,
+            total: total,
+            appended: appended,
+          },
+          ce = new CustomEvent('dneslov-modal-close', { detail: state })
+
+      document.dispatchEvent(ce)
    }
 
    onRecordEdit(id) {
+      console.log("[onRecordEdit] <<< ")
       let record = this.state.records.find((r) => { return r.id == id })
       this.setState({current: record})
    }
@@ -127,8 +130,9 @@ export default class Records extends Component {
       Axios(request).then(this.onSuccessRemove.bind(this))
    }
 
-   onModalClose() {
-      this.setState({current: null})
+   onModalClose(e) {
+      console.log("[onModalClose] <<< ", e)
+      this.setState(merge({ current: null }, e.detail || {}))
    }
 
    onSuccessRemove(response) {
@@ -175,11 +179,14 @@ export default class Records extends Component {
                      }),
       }
 
-      console.log("[onSuccessLoad] > state changes", new_state)
-      this.setState(new_state)
+      console.log("[onSuccessLoad] > ", response.config.url)
+      if (response.config.url === '/' + this.props.meta.remoteNames + '.json') {
+         console.log("[onSuccessLoad] > state changes", new_state)
+         this.setState(new_state)
+      }
    }
 
-   submit(page = 1, tokens = null) {
+   submit(page = 1, tokens = this.state.query.q) {
       let query = merge(this.state.query, { p: page, q: tokens }),
           request = {
             url: '/' + this.props.meta.remoteNames +'.json',
@@ -212,13 +219,13 @@ export default class Records extends Component {
    }
 
    render() {
-      console.log("[render] > props:", this.props, "state:", this.state)
+      console.log("[render] * props:", this.props, "state:", this.state)
 
       return [
          <div>
-            {this.state.current && <Modal
+            <Modal
                meta={this.props.meta}
-               data={this.state.current} />}</div>,
+               data={this.state.current} /></div>,
          <div className={this.props.meta.remoteNames + ' list'}>
             <div className="row">
                <form>

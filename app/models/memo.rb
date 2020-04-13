@@ -58,30 +58,25 @@ class Memo < ActiveRecord::Base
       where( year_date: result ) ;end
 
    scope :with_token, -> text do
-      #SELECT  DISTINCT  "memoes".* FROM "memoes","events","descriptions","calendaries" WHERE (("descriptions"."describable_id" = "memoes"."id" AND "descriptions"."describable_type" = 'Memo') OR ("memoes"."calendary_id" = "descriptions"."describable_id" AND "descriptions"."describable_type" = 'Calendary') OR ("memoes"."event_id" = "events"."id" AND "events"."memory_id" = "descriptions"."describable_id" AND "descriptions"."describable_type" = 'Memory')) AND descriptions.text ILIKE '%Азарьин%'; TODO + names
-      #
-#                                      merge(Calendary.with_token(text)).or(
-#            left_outer_joins(:memory).merge(Memory.with_token(text)))))) ;end
-      left_outer_joins(:descriptions, :memory)
-         .where("descriptions.text ILIKE ?", "%#{text}%").or(
-          where("memoes.add_date ILIKE ?", "%#{text}%").or(
-          where("memoes.year_date ILIKE ?", "%#{text}%").or(
-          where("memories.short_name ILIKE ?", "%#{text}%")))) ;end
+      left_outer_joins( :descriptions, :titles, :memory ).
+         where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
+         where( "titles_memoes.text ~* ?", "\\m#{text}.*" ).or(
+         where( "memories.short_name ~* ?", "\\m#{text}.*" ).or(
+         where( "memoes.add_date ~* ?", "\\m#{text}.*" ).or(
+         where( "memoes.year_date ~* ?", "\\m#{text}.*" ))))) end
 
    scope :with_tokens, -> string_in do
       return self if string_in.blank?
       # TODO fix the correctness of the query
       klass = self.model_name.name.constantize
-      rel_in = left_outer_joins( :memory, :descriptions ).where( 'FALSE' )
-      string_in.split(/\//).reduce(rel_in) do |rel, or_token|
-         or_rel = or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
+      or_rel_tokens = string_in.split(/\//).map do |or_token|
+         # OR operation
+         or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
             and_rel = klass.with_token(and_token)
-            rel && rel.merge(and_rel) || and_rel ;end
-         # OR operation
-         rel.or(or_rel);end
-      .distinct ;end
-
+            rel && rel.merge(and_rel) || and_rel ;end;end
+      or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
+      self.merge(or_rel).distinct ;end
 
    scope :with_event_id, -> (event_id) do
       where(event_id: event_id) ;end
@@ -158,6 +153,12 @@ class Memo < ActiveRecord::Base
       else
          self.year_date ;end;end
 
+   def titles_for language_code
+      titles.where( language_code: language_code ) ;end
+
+   def descriptions_for language_code
+      descriptions.where( language_code: language_code ) ;end
+
    def link_for language_code
       links.where(language_code: language_code).first ;end
 
@@ -165,7 +166,7 @@ class Memo < ActiveRecord::Base
       self.calendary = Calendary.includes(:slug).where(slugs: { text: value }).first ;end
 
    def title_for language_code
-      titles.where(language_code: language_code).first ;end
+      titles_for( language_code ).first ;end
 
    def description_for language_code
-      descriptions.where(language_code: language_code).first ;end;end
+      descriptions_for( language_code ).first ;end;end

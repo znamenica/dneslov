@@ -131,7 +131,7 @@ body {
       .collection-item {
          &.memory, &.event, &.description {
             min-height: auto;
-            padding: 3px 0 0 0;
+            padding: 0;
             line-height: inherit;
             background-color: $book;
             color: $dark;
@@ -140,11 +140,12 @@ body {
                padding: 0 1rem 0 1rem;
                line-height: 300%;
                background-color: $book;
-               //min-height: 3rem;
+               min-height: 3.3em;
                display: block;
 
                &:only-child {
                   cursor: default;
+                  background-color: #f8f8f8;
                }
             }
 
@@ -163,6 +164,9 @@ body {
                   margin-bottom: 0px;
                }
 
+               .container {
+                  width: 100%;
+               }
             }
          }
 

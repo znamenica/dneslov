@@ -27,8 +27,8 @@ export default class Collection extends Component {
       title: PropTypes.string.isRequired,
       action: PropTypes.string.isRequired,
       meta: PropTypes.object.isRequired,
-      validations: PropTypes.object.isRequired,
-      validation_context: PropTypes.object.isRequired,
+      validations: PropTypes.object,
+      validation_context: PropTypes.object,
       wrapperClassName: PropTypes.string.isRequired,
    }
 
@@ -45,6 +45,10 @@ export default class Collection extends Component {
 
    // system
    state = {}
+
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
 
    // events
    onAddItem() {
@@ -87,11 +91,17 @@ export default class Collection extends Component {
                {!element.value._destroy && renderElement(element, this.props.meta)}</div></div>)
    }
 
+   className() {
+      return [ this.props.wrapperClassName,
+               this.getErrorText(this.state.value) && 'invalid' ].
+         filter((x) => { return x }).join(" ")
+   }
+
    render() {
       console.log("[render] > state:", this.state, "from props:", this.props)
 
       return (
-         <div className={this.props.wrapperClassName}>
+         <div className={this.className()}>
             <div className='row'>
                <h5>{this.props.title}</h5>
                <div id={this.props.name}>

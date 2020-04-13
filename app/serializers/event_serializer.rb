@@ -1,8 +1,14 @@
 class EventSerializer < ApplicationSerializer
-   attributes :id, :kind_name, :happened_at, :description, :place, :troparion, :kontakion
+   attributes :id, :yeardate, :kind_name, :title, :happened_at, :description, :place, :troparion, :kontakion
+
+   def yeardate
+     object.yeardate_for( locales, memos ) ;end
 
    def kind_name
       object.kind_for( locales )&.text ;end
+
+   def title
+      object.title_for( locales )&.text ;end
 
    def description
       object.description_for( locales )&.text ;end

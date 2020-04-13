@@ -1,20 +1,4 @@
 class Admin::MemoriesController < Admin::CommonController
-   has_scope :d, only: %i(index), allow_blank: false, type: :array do |_, scope, value|
-      scope.d(*value) ;end
-   has_scope :q, only: %i(index), type: :array
-   has_scope :c, only: %i(index), type: :array
-
-   def all
-      @memories = model.t(params[:t])
-
-      respond_to do |format|
-         format.json { render :index, json: @memories.limit(500),
-                                      locales: @locales,
-                                      serializer: Admin::AutocompleteSerializer,
-                                      total: @memories.count,
-                                      each_serializer: Admin::ShortMemorySerializer }
-      end;end
-
    def icons
       @icons = model.icons.t(params[:t])
 
@@ -23,13 +7,9 @@ class Admin::MemoriesController < Admin::CommonController
                                       locales: @locales,
                                       serializer: Admin::AutocompleteSerializer,
                                       total: @icons.count,
-                                      each_serializer: Admin::ShortMemorySerializer }
-      end;end
+                                      each_serializer: Admin::ShortMemorySerializer } end;end
 
    protected
-
-   def model
-      Memory ;end
 
    def permitted_params
       params.require( :memory ).permit(
@@ -43,10 +23,4 @@ class Admin::MemoriesController < Admin::CommonController
          beings_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          paterics_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          notes_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy],
-         descriptions_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy] ) ;end
-
-   def object_serializer
-      Admin::MemorySerializer ;end
-
-   def objects_serializer
-      MemoriesSerializer ;end;end
+         descriptions_attributes: [:id, :text, :language_code, :alphabeth_code, :_destroy] ) ;end;end

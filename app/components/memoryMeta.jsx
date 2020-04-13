@@ -459,7 +459,7 @@ export const memoryMeta = {
                kind: 'dynamic',
                title: 'Вид события',
                placeholder: 'Начни ввод наименования вида события...',
-               display_scheme: '12-6-4-4',
+               display_scheme: '12-6-4-2',
                pathname: 'short_subjects',
                humanized_name: 'type_name',
                context_value: { k: "EventKind" },
@@ -473,14 +473,14 @@ export const memoryMeta = {
                kind: 'text',
                title: 'Случилось в...',
                placeholder: 'Введи пору',
-               display_scheme: '12-6-3-3',
+               display_scheme: '12-6-3-2',
                validations: {
                   'Время должно быть задано':  matchEmptyObject
                }
             },
             place_id: {
                kind: 'dynamic',
-               display_scheme: '12-4-5-5',
+               display_scheme: '12-4-5-3',
                title: 'Место происшествия',
                pathname: 'short_places',
                humanized_name: 'place',
@@ -491,7 +491,7 @@ export const memoryMeta = {
             },
             item_id: {
                kind: 'dynamic',
-               display_scheme: '12-4-6-6',
+               display_scheme: '12-4-6-2',
                title: 'Предмет',
                pathname: 'short_items',
                humanized_name: 'item',

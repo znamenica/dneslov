@@ -31,6 +31,8 @@ export default class EventSpans extends Component {
                      happened_at={event.happened_at}
                      kind_name={event.kind_name}
                      place={event.place}
+                     yeardate={event.yeardate}
+                     title={event.title}
                      description={event.description}
                      troparion={event.troparion}
                      kontakion={event.kontakion} />)}</ul></div>)}}

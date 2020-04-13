@@ -55,6 +55,8 @@ class Event < ActiveRecord::Base
    has_many :memos, dependent: :delete_all
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :kinds, foreign_key: :kind, primary_key: :type, class_name: :EventKind
+   has_many :calendaries, -> { distinct }, through: :memos
+   has_many :titles, -> { distinct }, through: :memos
 
    belongs_to :memory
    belongs_to :place, optional: true
@@ -66,6 +68,7 @@ class Event < ActiveRecord::Base
 
    scope :notice, -> { where(type: NOTICE) }
    scope :usual, -> { where(type: USUAL) }
+   scope :memoed, -> { joins( :memos ).distinct }
    scope :with_token, -> text do
       left_outer_joins(:kinds).where("type ILIKE ?", "%#{text}%").or(where(type_number: text.to_i).or(where("event_kinds.text ILIKE ?", "%#{text}%"))) ;end
    scope :with_memory_id, -> memory_id do
@@ -79,6 +82,12 @@ class Event < ActiveRecord::Base
    singleton_class.send(:alias_method, :mid, :with_memory_id)
 
    validates_presence_of :kinds, :type
+
+   def title_for language_code
+      titles.where(language_code: language_code).first ;end
+
+   def memo_in_calendary calendary
+      memos.where( calendary_id: calendary ) ;end
 
    def kind_for language_code
       kinds.where(language_code: language_code).first ;end
