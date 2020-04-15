@@ -1,1 +1,0 @@
-class Sobriety < Event ;end

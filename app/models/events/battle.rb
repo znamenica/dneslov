@@ -1,1 +1,0 @@
-class Battle < Event ;end

@@ -1,1 +1,0 @@
-class Baptism < Event ;end

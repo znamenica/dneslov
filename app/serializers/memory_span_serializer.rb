@@ -7,17 +7,6 @@ class MemorySpanSerializer < CommonMemorySerializer
    def default_name_in_calendary
       calendaries && memo && memo.title_for( locales )&.text ;end
 
-   def titles
-      @titles ||= (
-         titles = memo.titles_for( locales )
-
-         if locales.include?(:ру)
-            titles |= [ Title.new(text: object.short_name) ] ;end
-
-         ActiveModel::Serializer::CollectionSerializer.new(titles,
-            serializer: TitleSerializer,
-            locales: locales)) ;end
-
    def names
       MemoryNamesSerializer.new(object.memory_names, locales: locales) ;end
 
@@ -29,9 +18,10 @@ class MemorySpanSerializer < CommonMemorySerializer
       slug_path( slug ) ;end
 
    def descriptions
+      memo &&
       ActiveModel::Serializer::CollectionSerializer.new(memo.descriptions_for( locales ),
          serializer: DescriptionWithCalendarySerializer,
-         locales: locales) ;end
+         locales: locales) || [];end
 
    def description
       calendaries && memo && memo.description_for( locales )&.text || super ;end
@@ -39,5 +29,6 @@ class MemorySpanSerializer < CommonMemorySerializer
    protected
 
    def memo
-      @memo ||= calendaries &&
-         object.memos.in_calendaries( calendaries ).with_date( date, julian ).first ;end;end
+      @memo ||= object.memos.in_calendaries( calendaries )
+                            .with_date( date, julian )
+                            .first ;end;end

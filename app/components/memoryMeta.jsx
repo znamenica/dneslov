@@ -455,13 +455,13 @@ export const memoryMeta = {
             id: {
                kind: 'hidden',
             },
-            type: {
+            kind: {
                kind: 'dynamic',
                title: 'Вид события',
                placeholder: 'Начни ввод наименования вида события...',
                display_scheme: '12-6-4-2',
                pathname: 'short_subjects',
-               humanized_name: 'type_name',
+               humanized_name: 'kind_name',
                context_value: { k: "EventKind" },
                key_name: 'name',
                value_name: 'key',
@@ -504,7 +504,58 @@ export const memoryMeta = {
                kind: 'text',
                title: 'Имя связанной личности...',
                placeholder: 'Введи имя',
-               display_scheme: '12-4-6-6',
+               display_scheme: '12-4-6-3',
+            },
+            titles: {
+               kind: 'collection',
+               title: "Наименования события",
+               action: "Добавь наименование",
+               display_scheme: '12-12-12-12',
+               meta: {
+                  id: {
+                     kind: 'hidden',
+                  },
+                  text: {
+                     kind: 'text',
+                     name: 'text',
+                     title: 'Написание наименования',
+                     placeholder: 'Введи написание наименования',
+                     display_scheme: '12-6-4-6',
+                     validations: {
+                        "Имя отсутствует": matchEmptyObject,
+                     },
+                  },
+                  language_code: {
+                     kind: 'dynamic',
+                     title: 'Язык',
+                     display_scheme: '12-6-4-3',
+                     pathname: 'short_subjects',
+                     humanized_name: 'language',
+                     context_value: { k: "Language" },
+                     key_name: 'name',
+                     value_name: 'key',
+                     placeholder: 'Начни ввод наименования языка...',
+                     validations: {
+                        'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                        'Язык из списка должен быть выбран': matchEmptyObject,
+                     }
+                  },
+                  alphabeth_code: {
+                     kind: 'dynamic',
+                     title: 'Азбука',
+                     display_scheme: '12-6-4-3',
+                     pathname: 'short_subjects',
+                     humanized_name: 'alphabeth',
+                     context_value: { k: "Alphabeth" },
+                     key_name: 'name',
+                     value_name: 'key',
+                     placeholder: 'Начни ввод наименования азбуки...',
+                     validations: {
+                        'Избранная азбука не соотвествует избранному языку': matchCodes,
+                        'Азбука из списка должна быть выбрана': matchEmptyObject,
+                     }
+                  },
+               }
             }
          }
       },

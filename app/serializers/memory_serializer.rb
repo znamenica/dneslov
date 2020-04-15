@@ -1,5 +1,5 @@
 class MemorySerializer < CommonMemorySerializer
-   attributes :names, :beings, :wikies, :paterics, :memos, :icons, :events, :troparion, :kontakion
+   attributes :names, :beings, :wikies, :paterics, :icons, :events, :troparion, :kontakion
 
    def link_text link
       /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
@@ -28,12 +28,6 @@ class MemorySerializer < CommonMemorySerializer
    def paterics
       links_json( object.paterics_for( locales )) ;end
 
-   def memos
-      MemoedCalendariesSerializer.new(object.memos,
-                                      locales: locales,
-                                      julian: julian,
-                                      date: date) ;end
-
    def icons
       #TODO remove `where` when be ready
       object.valid_icon_links.where("url !~ 'azbyka'").map.with_index do | icon, index |
@@ -44,9 +38,11 @@ class MemorySerializer < CommonMemorySerializer
          } ;end;end
 
    def events
-      ActiveModel::Serializer::CollectionSerializer.new( object.events.memoed,
+     ActiveModel::Serializer::CollectionSerializer.new( object.events.memoed,
                                                          locales: locales,
-                                                         memos: object.memos ) ;end
+                                                         date: date,
+                                                         julian: julian,
+                                                         calendary_slugs: calendary_slugs ) ;end
 
    def troparion
       if troparion = object.troparions_for( locales ).first

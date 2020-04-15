@@ -1,17 +1,21 @@
 class EventSerializer < ApplicationSerializer
    attributes :id, :yeardate, :kind_name, :title, :happened_at, :description, :place, :troparion, :kontakion
+   #TODO
+   def is_general
+     Event::NOTICE.include?(object.kind) ;end
 
    def yeardate
-     object.yeardate_for( locales, memos ) ;end
+     object.year_date_for( calendary_slugs, date, julian ) ;end
 
    def kind_name
-      object.kind_for( locales )&.text ;end
+      object.kind_name_for( locales )&.text ;end
 
    def title
       object.title_for( locales )&.text ;end
 
    def description
-      object.description_for( locales )&.text ;end
+      if !is_general
+         object.memo_description_for( locales, calendary_slugs )&.text ;end;end
 
    def place
       object.place&.description_for( locales )&.text ;end

@@ -3,6 +3,7 @@ import Chip from 'Chip'
 
 export default class EventSpan extends Component {
    static defaultProps = {
+      date: null,
       happened_at: null,
       kind_name: null,
       title: null,
@@ -11,20 +12,36 @@ export default class EventSpan extends Component {
       description: null,
       troparion: null,
       kontakion: null,
+      wrapperYearDateClass: "",
    }
 
    hasData() {
       return this.props.description || this.props.troparion || this.props.kontakion
    }
 
+   classNameForItem() {
+      return 'collection-item event ' + (this.props.active && "active" || "")
+   }
+
+   classNameForYearDate() {
+      return 'year-date ' + (this.props.active && "nearby" || "")
+   }
+
+   onSpanHeaderClick(e) {
+      e.preventDefault()
+      e.stopPropagation()
+   }
+
    render() {
-      console.log("Event span props", this.props)
+      console.log("[render] * props", this.props)
 
       return (
-         <li className='collection-item event'>
-            <div className='collapsible-header'>
+         <li className={this.classNameForItem()}>
+            <div
+               className='collapsible-header'
+               onClick={this.onSpanHeaderClick.bind(this)} >
                {this.props.yeardate && <Chip
-                  className='year-date'
+                  className={this.classNameForYearDate()}
                   text={this.props.yeardate} />}
                <span>
                   {this.props.title || this.props.kind_name}</span>
@@ -55,4 +72,6 @@ export default class EventSpan extends Component {
                            <div className='col s12 title'>
                               {this.props.kontakion.title}</div>
                            <div className='col s12'>
-                              {this.props.kontakion.text}</div></div>}</div></div>}</li>)}}
+                              {this.props.kontakion.text}</div></div>}</div></div>}</li>)
+   }
+}

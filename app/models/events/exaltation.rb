@@ -1,1 +1,0 @@
-class Exaltation < Event ;end

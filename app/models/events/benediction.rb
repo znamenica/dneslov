@@ -1,1 +1,0 @@
-class Benediction < Event ;end

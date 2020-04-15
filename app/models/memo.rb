@@ -27,15 +27,15 @@ class Memo < ActiveRecord::Base
    has_one :order, through: :memo_order
    has_one :memory, through: :event
 
-   #enum bind_kind: [ 'несвязаный', 'навечерие', 'предпразднество', 'попразднество' ]
-
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
    scope :in_calendaries, -> calendaries_in do
+      return self if calendaries_in.blank?
+
       # TODO make single embedded select or after fix rails bug use merge
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
-      calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).pluck( :sluggable_id )
-      where( calendary_id: calendary_ids ) ;end
+      calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).select( :sluggable_id )
+      where( calendary_id: calendary_ids ) end
 
    scope :with_date, -> (date_in, julian = false) do
       return self if date_in.blank?

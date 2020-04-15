@@ -45,8 +45,13 @@ export default class MemorySpan extends Component {
       e.preventDefault()
    }
 
-   onSpanClick(e) {
+   onSpanBodyClick(e) {
       this.props.onLoadRequest(this.props.slug)
+   }
+
+   onSpanHeaderClick(e) {
+      e.preventDefault()
+      e.stopPropagation()
    }
 
    onLoadImageError() {
@@ -63,16 +68,22 @@ export default class MemorySpan extends Component {
       return !this.hasNoImage()
    }
 
+   linkToMemory() {
+      return this.props.url
+   }
+
    render() {
       console.log("[render] > props:", this.props, "state:", this.state)
 
       return (
          <li className='collection-item avatar memory'>
-            <div className='collapsible-header'>
+            <div
+               className='collapsible-header'
+               onClick={this.onSpanHeaderClick.bind(this)} >
                <a
                   ref={e => this.$avatar = e}
                   key='avatar'
-                  href={this.props.url + "#" + this.props.default_calendary_slug} >
+                  href={this.linkToMemory()} >
                   {this.hasImage() &&
                      <img
                         className='circle z-depth-1'
@@ -93,5 +104,5 @@ export default class MemorySpan extends Component {
             {this.props.description &&
                <div
                   className='collapsible-body description'
-                  onClick={this.onSpanClick.bind(this)} >
+                  onClick={this.onSpanBodyClick.bind(this)} >
                   <ReactMarkdown source={this.props.description} /></div>}</li>)}}

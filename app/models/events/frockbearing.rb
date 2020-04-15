@@ -1,1 +1,0 @@
-class Frockbearing < Event ;end

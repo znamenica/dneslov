@@ -1,1 +1,0 @@
-class Throne < Event ;end

@@ -1,1 +1,0 @@
-class Dedication < Event ;end

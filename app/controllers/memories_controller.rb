@@ -1,8 +1,9 @@
 class MemoriesController < ApplicationController
-   before_action :default, only: %i(index), if: :is_html?
+   before_action :default, only: %i(index show)
    before_action :set_locales, :set_date, :set_calendary_cloud, :set_julian
    before_action :set_memory, only: %i(show)
-   before_action :set_query, :set_calendary_slugs, :set_page, only: %i(index)
+   before_action :set_query, :set_page, only: %i(index)
+   before_action :set_calendary_slugs, only: %i(index show)
 
    has_scope :d, only: %i(index) do |_, scope, value|
       if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
@@ -36,7 +37,11 @@ class MemoriesController < ApplicationController
    # GET /memories/1.json
    def show
       respond_to do |format|
-         format.json { render :show, json: @memory, locales: @locales }
+         format.json { render :show, json: @memory,
+                                     date: @date,
+                                     calendary_slugs: @calendary_slugs,
+                                     julian: @julian,
+                                     locales: @locales }
          format.html { render :show } ;end;end
 
    protected
@@ -66,7 +71,7 @@ class MemoriesController < ApplicationController
       [ 'рпц' ] ;end
 
    def default
-      if (params[ :c ].blank? and params[ :d ].blank? and params[ :q ].blank?)
+      if !(params[ :c ] || params[ :d ] || params[ :q ])
          params[ :d ] ||= "#{is_julian_calendar? && 'ю' || "н"}#{_date.strftime("%d-%m-%Y")}"
          params[ :c ] ||= default_calendary_slugs.join(",") ;end;end
 
@@ -82,7 +87,7 @@ class MemoriesController < ApplicationController
    def set_date
       @date ||= (
          if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ params[ :d ]
-            _date ;end);end
+            Date.parse(date) ;end);end
 
    def set_calendary_slugs
       @calendary_slugs =

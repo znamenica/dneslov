@@ -1,1 +1,0 @@
-class Deaconry < Event ;end

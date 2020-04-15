@@ -1,1 +1,0 @@
-class Reader < Event ;end

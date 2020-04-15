@@ -1,1 +1,0 @@
-class Preach < Event ;end

@@ -1,1 +1,0 @@
-class Rest < Event ;end

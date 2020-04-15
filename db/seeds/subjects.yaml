@@ -521,6 +521,24 @@
    - text: Явление
      language_code: ру
      alphabeth_code: РУ
+- key: Incarnation
+  kind: EventKind
+  names_attributes:
+   - text: Воплощение
+     language_code: ру
+     alphabeth_code: РУ
+- key: Genum
+  kind: EventKind
+  names_attributes:
+   - text: Род
+     language_code: ру
+     alphabeth_code: РУ
+- key: Annunciation
+  kind: EventKind
+  names_attributes:
+   - text: Благовещение
+     language_code: ру
+     alphabeth_code: РУ
 - key: ру
   kind: Language
   names_attributes:

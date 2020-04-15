@@ -1,1 +1,0 @@
-class Teleportation < Event ;end

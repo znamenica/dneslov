@@ -9,8 +9,9 @@ import Description from 'Description'
 
 export default class Memory extends Component {
    static defaultProps = {
-      slug: null,
       short_name: null,
+      slug: null,
+      date: null,
       titles: [],
       descriptions: [],
       names: [],
@@ -18,12 +19,12 @@ export default class Memory extends Component {
       beings: [],
       wikies: [],
       paterics: [],
-      memos: [],
       icons: [],
       events: [],
       troparion: null,
       kontakion: null,
       selected_calendaries: [],
+      default_calendary_slug: null
    }
 
    state = {}
@@ -32,9 +33,11 @@ export default class Memory extends Component {
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
          let cal = Memory.calculateDefaultCalendary(props)
+
          return {
             calendary_slug: cal,
             title: Memory.getTitle(props, cal),
+            msDate: props.date && (new Date(Date.parse(props.date.split(".").reverse().join("-")))).getTime(),
             prevProps: props
          }
       }
@@ -42,34 +45,8 @@ export default class Memory extends Component {
       return null
    }
 
-   mapGroupedMemoesByDate(func) {
-      let hash = this.props.memos.reduce((hash, memo) => {
-         if (!hash[memo.date]) {
-            hash[memo.date] = []
-         }
-
-         hash[memo.date] = hash[memo.date].concat({
-            event: memo.event,
-            calendary: memo.calendary,
-            url: memo.url,
-         })
-
-         return hash
-      }, {})
-
-      console.log('HASH', hash)
-
-      return Object.entries(hash).map((value) => {
-         console.log('KV', value[0], value[1])
-         return func(value[0], value[1])
-      })
-   }
-
    static calculateDefaultCalendary(props) {
-      let parts = window.location.href.split("#"),
-          cal = parts[1] && decodeURIComponent(parts[1])
-
-      return cal || props.selected_calendaries &&
+      return props.selected_calendaries &&
          props.selected_calendaries.reduce((cal, calendary_slug) => {
             if (!cal) {
                cal = props.titles.reduce((cal, title) => {
@@ -82,7 +59,7 @@ export default class Memory extends Component {
             }
 
             return cal
-         }) || props.default_calendary_slug
+         }, props.default_calendary_slug) || props.default_calendary_slug
    }
 
    static getTitle(props, cal) {
@@ -155,35 +132,6 @@ export default class Memory extends Component {
                <Description
                   descriptions={this.props.descriptions}
                   calendary_slug={this.state.calendary_slug} />}
-            {this.props.memos.length > 0 &&
-               <div className='col s12'>
-                  <div className='row'>
-                     <div className='col s12 title'>
-                        Даты</div>
-                     <div className='col s12'>
-                        <div
-                           className='dates'>
-                           {this.mapGroupedMemoesByDate((memo, events) =>
-                              <div
-                                 className='date fixed-action-btn'>
-                                    <Chip
-                                       key={'memo-' + memo}
-                                       text={memo} />
-                                 <ul>
-                                    {events.map((event) =>
-                                       <li>
-                                          <Chip
-                                             key={'event-' + event.event}>
-                                             <span>
-                                                {event.event}</span>
-                                             <span>
-                                                -</span>
-                                             <span>
-                                                {event.url &&
-                                                   <a
-                                                      href={event.url}>
-                                                      {event.calendary}</a>}
-                                                {!event.url && event.calendary}</span></Chip></li>)}</ul></div>)}</div></div></div></div>}
             {this.props.icons.length > 0 &&
                <Carousel
                   images={this.props.icons} />}
@@ -208,4 +156,5 @@ export default class Memory extends Component {
                         События</div>
                      <div className='col s12'>
                         <EventSpans
+                           msDate={this.state.msDate}
                            events={this.props.events} /></div></div></div>}</div>)}}

@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import { merge } from 'merge-anything'
 import * as Axios from 'axios'
-import crypto from 'crypto'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -11,10 +10,10 @@ import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
 import Intro from 'Intro'
+import { getCalendariesString, getDateString, hashFromValue, getPathFromState, parseDateString, parseCalendariesString } from 'support'
 
 export default class MemoriesForm extends Component {
    static defaultProps = {
-      date: '',
       measure: "юлианский",
       calendaries_used: [],
       calendaries_cloud: [],
@@ -39,89 +38,28 @@ export default class MemoriesForm extends Component {
                memoriesTotal: props.memories.total,
                memory: props.memory,
                query: {
-                  c: MemoriesForm.getCalendariesString(props),
-                  d: MemoriesForm.getDateString(props),
+                  c: getCalendariesString(props),
+                  d: getDateString(props),
                   q: props.query,
                   p: props.memories.page,
                }
              }
 
-         history.pushState({id: MemoriesForm.hashFromValue(state.query)},
+         history.pushState({id: hashFromValue(state.query)},
                            'Днеслов',
-                           MemoriesForm.getPathFromState(state))
+                           getPathFromState(state))
          return state
       }
 
       return null
    }
 
-   static getCalendariesString(props) {
-      let c_a = props.calendaries_used && props.calendaries_used.slice()
-
-      return c_a && c_a.join(",") || null
-   }
-
-   static getDateString(props) {
-      return props.date && (props.measure == "юлианский" && "ю" || "н") + props.date || null
-   }
-
-   static parseCalendariesString(string) {
-      return string && string.split(",") || null
-   }
-
-   static parseDateString(string) {
-      if (string) {
-         console.log(string)
-         let r = string.match(/([юн])?([0-9\-\.]+)/)
-         if (r) {
-            return r.slice(2,3).reverse()
-         }
-      }
-
-      return null
-   }
-
-   static getPathFromState(state) {
-      let path = "/" + state.memory?.slug || "",
-          anchor = state.default_calendary_slug,
-          params = Object.entries(state.query).reduce((line, [key, value]) => {
-            console.log("[getPathFromState] *", "key:", key, "value:", value, "query:", line)
-            if (value && value.length > 0) {
-               let part = key + "=" + encodeURIComponent(value)
-               return line && line + "&" + part || part
-            } else {
-               return line
-            }
-         }, "")
-
-      if (anchor) {
-         path += "#" + anchor
-      }
-
-      if (params) {
-         path += "?" + params
-      }
-
-      return path
-   }
-
-   static hashFromValue(value) {
-      let json = JSON.stringify(value),
-          hash = crypto.createHash('sha1').update(json).digest('hex')
-
-      console.log("[hashFromValue] * id:", hash)
-      console.log("[hashFromValue] * json string:", json)
-      sessionStorage.setItem(hash, json)
-
-      return hash
-   }
-
    updateState(state) {
       console.log("[updateState] <<< state", state)
-      let hash = MemoriesForm.hashFromValue(state.query),
-          path = MemoriesForm.getPathFromState(state)
+      let hash = hashFromValue(state.query),
+          path = getPathFromState(state)
 
-      if (path === MemoriesForm.getPathFromState(this.state)) {
+      if (path === getPathFromState(this.state)) {
          console.log("[updateState] * stable")
          history.replaceState({id: hash}, document.title)
       } else {
@@ -252,11 +190,15 @@ export default class MemoriesForm extends Component {
    onLoadRequest(slug) {
       let request = {
          url: '/' + slug + '.json',
+         data: {
+            c: this.state.query.c,
+            d: this.state.query.d
+         }
       }
 
       document.body.classList.add('in-progress')
 
-      Axios.get(request.url)
+      Axios.get(request.url, { params: request.data })
         .then(this.onMemoryLoadSuccess.bind(this))
         .catch(this.onMemoriesLoadFailure.bind(this))
    }
@@ -269,7 +211,7 @@ export default class MemoriesForm extends Component {
 
       history.pushState({},
                         'Днесловъ – ' + memory.short_name,
-                        '/' + memory.slug + '#' + this.state.default_calendary_slug)
+                        getPathFromState(state))
       document.body.classList.remove('in-progress')
       this.updateState(state)
    }
@@ -316,7 +258,9 @@ export default class MemoriesForm extends Component {
                         {this.state.memory &&
                            <Memory
                               key='memory'
-                              selected_calendaries={this.state.query.c}
+                              date={parseDateString(this.state.query.d)?.pop()}
+                              default_calendary_slug={this.state.default_calendary_slug}
+                              selected_calendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
                         {! this.state.memory &&
                            <div>
@@ -326,14 +270,14 @@ export default class MemoriesForm extends Component {
                                     with_text={this.state.query.q}
                                     onUpdate={this.onSearchUpdate.bind(this)} /></div>
                               <SearchConditions
-                                 date={MemoriesForm.parseDateString(this.state.query.d)}
+                                 date={parseDateString(this.state.query.d)}
                                  calendaries={this.calendariesUsed()}
                                  query={this.state.query.q || ""}
                                  onAct={this.onSearchAct.bind(this)} />
                               <MemorySpans
                                  memories={this.state.memories}
                                  total_memories={this.state.memoriesTotal}
-                                 calendaries_cloud={MemoriesForm.parseCalendariesString(this.state.query.c)}
+                                 calendaries_cloud={parseCalendariesString(this.state.query.c)}
                                  default_calendary_slug={this.state.default_calendary_slug}
                                  onLoadRequest={this.onLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}

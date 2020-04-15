@@ -1,1 +1,0 @@
-class Renunciation < Event ;end

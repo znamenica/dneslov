@@ -1,1 +1,0 @@
-class Protection < Event ;end

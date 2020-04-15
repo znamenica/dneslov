@@ -1,1 +1,0 @@
-class Primacy < Event ;end

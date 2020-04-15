@@ -24,6 +24,9 @@ class ApplicationSerializer < ActiveModel::Serializer
    def memos
       @instance_options[ :memos ] ;end
 
+   def calendary_slugs
+      @instance_options[ :calendary_slugs ] ;end
+
    def color_by_slug slug
       slug = slug&.strip || ""
       coeff = 3.0 / ( POSES.size - 1 )

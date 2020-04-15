@@ -1,1 +1,0 @@
-class Appearance < Event ;end

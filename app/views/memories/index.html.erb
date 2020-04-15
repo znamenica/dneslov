@@ -1,4 +1,4 @@
-<%= react_component 'MemoriesForm', date: @date&.strftime("%d.%m.%Y"),
+<%= react_component 'MemoriesForm', date: !@date.blank? && @date.strftime("%d.%m.%Y"),
                                     memories: MemoriesSerializer.new(@memories,
                                                     total: @memories.total_count,
                                                     page: @page,

@@ -1,1 +1,0 @@
-class Transferal < Event ;end

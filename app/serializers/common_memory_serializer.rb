@@ -7,9 +7,7 @@ class CommonMemorySerializer < ApplicationSerializer
    def titles
       @titles ||= (
          titles = object.all_titles_for( locales )
-
-         if locales.include?(:ру)
-            titles |= [ Title.new(text: object.short_name) ] ;end
+         titles |= [ Title.new(text: object.short_name) ]
 
          ActiveModel::Serializer::CollectionSerializer.new(titles,
             serializer: TitleSerializer,

@@ -40,7 +40,7 @@ class Memory < ActiveRecord::Base
 
    scope :with_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
-         where("descriptions.text ILIKE ? OR names.text ILIKE ?", "%#{text}%", "%#{text}%")).distinct ;end
+         where("descriptions.text ~* ? OR names.text ~* ?", "\\m#{text}.*", "\\m#{text}.*")).distinct ;end
 
    scope :with_tokens, -> string_in do
       return self if string_in.blank?
@@ -78,7 +78,7 @@ class Memory < ActiveRecord::Base
    def set_base_year
       types = %w(Resurrection Repose Writing Appearance Translation Sanctification)
 
-      event = self.events.to_a.sort_by { |x| (types.index(x.type) || 100) }.first
+      event = self.events.to_a.sort_by { |x| (types.index(x.kind) || 100) }.first
 
       return unless event
 
@@ -137,7 +137,7 @@ class Memory < ActiveRecord::Base
    def filtered_events
       types = %w(Repose Appearance Miracle Writing Founding Canonization)
       # TODO optimize sort to SQL order
-      events.where(type: types).sort_by { |e| types.index( e.type ) } ;end
+      events.where(kind: types).sort_by { |e| types.index( e.kind ) } ;end
 
    def troparions text_present = true
       relation = Troparion.joins( :services ).where( services: { id: services.pluck( :id ) } )

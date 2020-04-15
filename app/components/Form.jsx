@@ -91,9 +91,11 @@ export default class Form extends Component {
    }
 
    onSubmitError(error) {
+      console.log("[onSubmitError] <<<", error)
       let error_text
 
       if (error.response.responseJSON) {
+         console.log("[onSubmitError] * response json", error.response.responseJSON)
          let errors = []
 
          Object.entries(error.response.responseJSON).forEach(([key, value]) => {
@@ -102,9 +104,11 @@ export default class Form extends Component {
 
          error_text = errors.join(", ")
       } else if (error.response.responseText) {
-         error_text = error.response.responseText
+         console.log("[onSubmitError] * response text", error.response.responseText)
+         error_text = JSON.stringify(error.response.responseText)
       } else {
-         error_text = error.response.statusText + ": " + error.response.data
+         console.log("[onSubmitError] * response data", error.response.data)
+         error_text = error.response.statusText + ": " + JSON.stringify(error.response.data)
       }
 
       this.setState({ error: error_text })
@@ -146,7 +150,9 @@ export default class Form extends Component {
          case 'Array':
             subkey = Object.keys(value)[0]
             if (subkey && subkey.match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
-               result[key + '_attributes'] = Object.values(value)
+               result[key + '_attributes'] = Object.values(value).map((v) => {
+                  return value && value.constructor.name === "Object" && this.serializedHash(v) || v
+               })
             } else {
                result[key + '_attributes'] = value
             }
@@ -154,7 +160,9 @@ export default class Form extends Component {
          case 'Object':
             subkey = Object.keys(value)[0]
             if (subkey && subkey.match(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)) {
-               result[key + '_attributes'] = Object.values(value)
+               result[key + '_attributes'] = Object.values(value).map((v) => {
+                  return value && value.constructor.name === "Object" && this.serializedHash(v) || v
+               })
             } else {
                result[key + '_attributes'] = this.serializedHash(value)
             }
@@ -214,6 +222,7 @@ export default class Form extends Component {
                {renderElement({value: this.state.query}, this.props.meta)}</div>
             <div className='row'>
                <ErrorSpan
+                  appendClassName='form'
                   error={this.state.error} /></div></form>)
    }
 }

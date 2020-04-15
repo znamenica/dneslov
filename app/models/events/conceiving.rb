@@ -1,1 +1,0 @@
-class Conceiving < Event ;end

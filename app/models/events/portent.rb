@@ -1,1 +1,0 @@
-class Portent < Event ;end

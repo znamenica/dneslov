@@ -1,1 +1,0 @@
-class Meeting < Event ;end

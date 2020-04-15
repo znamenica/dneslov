@@ -1,1 +1,0 @@
-class Deliverance < Event ;end

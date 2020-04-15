@@ -17,8 +17,9 @@ class Admin::MemoriesController < Admin::CommonController
          slug_attributes: [:id, :text],
          memory_names_attributes: [:id, :name_id, :state, :feasible, :ored, :_destroy],
          events_attributes: [
-            :id, :happened_at, :type, :person_name, :type_number,
-            :about_string, :tezo_string, :council, :place_id, :item_id, :_destroy ],
+            :id, :happened_at, :kind, :person_name, :type_number,
+            :about_string, :tezo_string, :council, :place_id, :item_id, :_destroy,
+            titles_attributes: [ :id, :text, :language_code, :alphabeth_code, :_destroy ]],
          wikies_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          beings_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          paterics_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],

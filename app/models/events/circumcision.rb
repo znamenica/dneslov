@@ -1,1 +1,0 @@
-class Circumcision < Event ;end

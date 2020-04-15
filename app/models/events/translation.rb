@@ -1,1 +1,0 @@
-class Translation < Event ;end

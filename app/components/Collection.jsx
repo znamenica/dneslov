@@ -53,7 +53,8 @@ export default class Collection extends Component {
    // events
    onAddItem() {
       let key = uuid(),
-          detail = { [this.props.name]: { [key]: { _id: key, _pos: this.state.value.length } } },
+          value = { [key]: { _id: key, _pos: this.state.value.length }},
+          detail = valueToObject(this.props.name, value),
           e = new CustomEvent('dneslov-update-path', { detail: detail })
 
       document.dispatchEvent(e)

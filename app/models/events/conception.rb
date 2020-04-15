@@ -1,1 +1,0 @@
-class Conception < Event ;end

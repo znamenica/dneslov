@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_214200) do
+ActiveRecord::Schema.define(version: 2020_04_14_164300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_214200) do
   create_table "events", id: :serial, force: :cascade do |t|
     t.string "happened_at"
     t.integer "memory_id", null: false
-    t.string "type", null: false
+    t.string "kind", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "place_id"
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2020_04_09_214200) do
     t.string "tezo_string"
     t.string "order"
     t.string "council"
-    t.index ["type", "memory_id", "item_id"], name: "index_events_on_item_id_and_type_and_memory_id"
+    t.index ["kind", "memory_id", "item_id"], name: "index_events_on_item_id_and_type_and_memory_id"
   end
 
   create_table "item_types", id: :serial, force: :cascade do |t|

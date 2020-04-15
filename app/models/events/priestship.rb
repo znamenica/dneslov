@@ -1,1 +1,0 @@
-class Priestship < Event ;end

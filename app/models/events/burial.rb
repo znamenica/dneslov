@@ -1,1 +1,0 @@
-class Burial < Event ;end

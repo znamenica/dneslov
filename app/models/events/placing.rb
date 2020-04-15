@@ -1,1 +1,0 @@
-class Placing < Event ;end

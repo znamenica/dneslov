@@ -1919,6 +1919,13 @@ html {
             display: none;
          }
       }
+
+      ul:not(.browser-default) {
+         min-height: 50px;
+         &:empty {
+            min-height: auto;
+         }
+      }
    }
 
    .fake-input-field {
@@ -2008,6 +2015,10 @@ html {
       &.year-date {
          padding: 0 5px 0 5px;
          background-color: #f8f8f8 !important;
+      }
+
+      &.year-date.nearby {
+         border: 1px solid #88c5eb;;
       }
 
       &.date {

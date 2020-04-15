@@ -1,1 +1,0 @@
-class Phenomenon < Event ;end

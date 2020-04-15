@@ -4,7 +4,6 @@ module UloginAuth
    def ulogin
       token = ''
       http_host = ''
-      binding.pry
       response = Excon.get('http://ulogin.ru/token.php', token: token, host: http_host)
 
       user = JSON.decode(response, true);

@@ -1,1 +1,0 @@
-class Restoration < Event ;end

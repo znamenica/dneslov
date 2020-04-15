@@ -1,1 +1,0 @@
-class Hiddening < Event ;end

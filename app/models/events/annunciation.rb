@@ -1,1 +1,0 @@
-class Annunciation < Event ;end

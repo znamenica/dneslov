@@ -1,1 +1,0 @@
-class Assurance < Event ;end
