@@ -38,6 +38,12 @@ export class Intro extends Component {
             datestamp: '20171213185700',
          },
          {
+            element: '.calendary .pmu-instance > .pmu-days .pmu-button:first-child',
+            intro: 'В поле дня для юлианского календаря, дата вверху означает юлианскую дату, а под ней новоюлианскую. Для новоюлианского календаря показывается только новоюлианская дата.',
+            position: 'right',
+            datestamp: '20200418000400',
+         },
+         {
             element: '.calendary .pmu-instance .pmu-days .pmu-today',
             intro: 'Кружком светлобирюзового цвета выделен нынешний день. Нынешний день начинается в 16:00 по местному времени',
             position: 'right',

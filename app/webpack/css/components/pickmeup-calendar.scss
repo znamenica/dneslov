@@ -44,6 +44,25 @@ html {
                   width: 1.8em !important;
                }
 
+               .pmu-date-double {
+                  position: relative;
+
+                  .pmu-date-self {
+                     position: absolute;
+                     top: -3px;
+                     left: 0;
+                     width: 100%;
+                  }
+
+                  .pmu-date-usual {
+                     position: absolute;
+                     top: 12px;
+                     font-size: 8px;
+                     left: 0;
+                     width: 100%;
+                  }
+               }
+
                .pmu-not-in-month {
                   color: #717171;
                }

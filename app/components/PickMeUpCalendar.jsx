@@ -46,6 +46,7 @@ export default class PickMeUpCalendar extends Component {
       this.onYesterdayClick = this.onYesterdayClick.bind(this)
       this.onTomorrowClick = this.onTomorrowClick.bind(this)
       this.onChangeStyle = this.onChangeStyle.bind(this)
+      this.uprenderCalendar = this.uprenderCalendar.bind(this)
    }
 
    setState(value) {
@@ -57,6 +58,55 @@ export default class PickMeUpCalendar extends Component {
       console.log("state", this.state)
    }
 
+   componentDidMount() {
+      let settings = merge({}, this.props.pickmeup, {
+         date: this.selectedString(), // plus 9 hours
+         current: this.getToday(),
+         calendar_gap: this.recalculateGap.bind(this),
+         render: this.onPickmeupRender.bind(this),
+      })
+
+      this.$calendar.addEventListener('pickmeup-fill', this.uprenderCalendar)
+
+      this.pmu = Pickmeup(this.$calendar, settings)
+      this.pmu.show()
+
+      let cal = document.querySelector('.pickmeup') //.remove()
+      let instance = cal.querySelector('.pmu-instance')
+      let styles = document.querySelector('.style-select') //.remove()
+      let nextprev = document.querySelector('.next-prev') //.remove()
+
+      instance.append(nextprev)
+      instance.prepend(styles)
+      this.$calendar.append(cal)
+      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange)
+      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
+         el.addEventListener('click', this.onYesterdayClick)
+      })
+      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
+         el.addEventListener('click', this.onTomorrowClick)
+      })
+      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
+         el.addEventListener('click', this.onChangeStyle)
+      })
+   }
+
+   componentWillUnmount() {
+      this.$calendar.remove()
+      this.$calendar.removeEventListener('pickmeup-fill', this.uprenderCalendar)
+      this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange)
+      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
+         el.removeEventListener('click', this.onYesterdayClick)
+      })
+      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
+         el.removeEventListener('click', this.onTomorrowClick)
+      })
+      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
+         removeEventListener('click', this.onChangeStyle)
+      })
+   }
+
+   // specific
    selectedString() {
       let selected = this.getToday()
 
@@ -84,54 +134,43 @@ export default class PickMeUpCalendar extends Component {
       return today
    }
 
-   componentDidMount() {
-      let settings = merge({}, this.props.pickmeup, {
-         date: this.selectedString(), // plus 9 hours
-         current: this.getToday(),
-         calendar_gap: this.recalculateGap.bind(this),
-         render: this.onPickmeupRender.bind(this),
-      })
+   getOrigDate(dDate) {
+      return new Date(dDate - this.recalculateGap() * 24*60*60*1000).getDate()
+   }
 
-      this.pmu = Pickmeup(this.$calendar, settings)
-      this.pmu.show()
+   // events
+   uprenderCalendar() {
+      let doubleDates = this.$calendar.querySelectorAll('.pmu-date-double')
 
-      let cal = document.querySelector('.pickmeup') //.remove()
-      let instance = cal.querySelector('.pmu-instance')
-      let styles = document.querySelector('.style-select') //.remove()
-      let nextprev = document.querySelector('.next-prev') //.remove()
+      doubleDates.forEach((dDate) => {
+         let dates = dDate.className.split(" ").reduce((dates, klass) => {
+            if (dates) {
+               return dates
+            }
 
-      instance.append(nextprev)
-      instance.prepend(styles)
+            const regEx = /(\d+)-(\d+)/
+            let match = klass.match(regEx)
+            if (match) {
+               return [ match[1], match[2] ]
+            }
 
-      this.$calendar.append(cal)
-      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange)
-      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
-         el.addEventListener('click', this.onYesterdayClick)
-      })
-      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
-         el.addEventListener('click', this.onTomorrowClick)
-      })
-      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         el.addEventListener('click', this.onChangeStyle)
+            return null
+         }, null)
+
+         dDate.innerHTML = "&nbsp;<span class='pmu-date-self'>" + dates[0] +
+                           "</span><span class='pmu-date-usual'>" + dates[1] + "</span>"
       })
    }
 
-   componentWillUnmount() {
-      this.$calendar.remove()
-      this.$calendar.removeEventListener('pickmeup-change', this.onPickmeupChange)
-      this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
-         el.removeEventListener('click', this.onYesterdayClick)
-      })
-      this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
-         el.removeEventListener('click', this.onTomorrowClick)
-      })
-      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         removeEventListener('click', this.onChangeStyle)
-      })
-   }
+   onPickmeupRender(date) {
+      let renderObject = { today : this.getToday() }
 
-   onPickmeupRender() {
-      return { today : this.getToday() }
+      if (this.isJulian()) {
+         let dateClass = "pmu-date-" + date.getDate() + "-" + this.getOrigDate(date)
+         renderObject = Object.assign({}, { class_name: 'pmu-date-double ' + dateClass }, renderObject)
+      }
+
+      return renderObject
    }
 
    onPickmeupChange(e) {
