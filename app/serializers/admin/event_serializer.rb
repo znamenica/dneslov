@@ -9,7 +9,7 @@ class Admin::EventSerializer < ApplicationSerializer
 
 
    def kind_name
-      Subject.where( key: object.kind ).first&.name_for( locales ) ;end
+      object.kind&.names&.for( locales )&.text ;end
 
    def place
       object.place&.description_for( locales )&.text ;end

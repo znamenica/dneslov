@@ -1,9 +1,8 @@
-# kind[string]   наименование класса события
+# kind_code[string]   наименование класса события
 # memory_id[int] id памяти, событие которой произошло
 # place_id[int]  id места, где произошло событие
 # item_id[int]   id предмета, к которому применяется событие
 #    t.string "happened_at"
-#    t.string "kind", null: false
 #    t.string "person_name"
 #    t.integer "type_number"
 #    t.string "order"
@@ -55,7 +54,7 @@ class Event < ActiveRecord::Base
    belongs_to :memory
    belongs_to :place, optional: true
    belongs_to :item, optional: true
-   belongs_to :subject, primary_key: :key, foreign_key: :kind
+   belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
 
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs
@@ -66,13 +65,13 @@ class Event < ActiveRecord::Base
    has_many :calendaries, -> { distinct }, through: :memos
    has_many :titles, -> { title }, as: :describable, class_name: :Description do
       def with_default this
-        self.or( Appellation.merge( this.subject.names ))
+        self.or( Appellation.merge( this.kind.names ))
            .order( :describable_type ).distinct ;end;end
 
-   has_many :default_titles, -> { distinct }, through: :subject, source: :names, class_name: :Appellation
+   has_many :default_titles, -> { distinct }, through: :kind, source: :names, class_name: :Appellation
    has_many :all_titles, ->(this) do
       where( describable_type: "Event", describable_id: this.id, kind: "Title" )
-        .or( Appellation.merge(this.subject.names) )
+        .or( Appellation.merge(this.kind.names) )
      .order( :describable_type )
    end, primary_key: nil, class_name: :Description
 
@@ -80,12 +79,12 @@ class Event < ActiveRecord::Base
    # czin: has_one/many
    default_scope -> { order(:created_at) }
 
-   scope :notice, -> { where(kind: NOTICE) }
-   scope :usual, -> { where(kind: USUAL) }
+   scope :notice, -> { where(kind_code: NOTICE) }
+   scope :usual, -> { where(kind_code: USUAL) }
    scope :memoed, -> { joins( :memos ).distinct }
    scope :with_token, -> text do
-      left_outer_joins( :subject, :titles ).
-         where("events.kind ~* ?", "\\m#{text}.*").or(
+      left_outer_joins( :kind, :titles ).
+         where("events.kind_code ~* ?", "\\m#{text}.*").or(
          where(type_number: text.to_i).or(
          where("descriptions.text ~* ?", "\\m#{text}.*"))) ;end
    scope :with_memory_id, -> memory_id do
@@ -99,7 +98,7 @@ class Event < ActiveRecord::Base
    singleton_class.send(:alias_method, :t, :with_token)
    singleton_class.send(:alias_method, :mid, :with_memory_id)
 
-   validates_presence_of :subject, :kind
+   validates_presence_of :kind
 
    def year_date_for calendary_slugs, date_in, julian
       return nil if date_in.blank?
@@ -118,13 +117,10 @@ class Event < ActiveRecord::Base
          year_date ;end;end
 
    def title_for language_code
-     titles.with_default(self).where(language_code: language_code).first ;end
+     titles.with_default( self ).where( language_code: language_code ).first ;end
 
    def memo_in_calendary calendary
       memos.where( calendary_id: calendary ) ;end
-
-   def kind_name_for language_code
-      subject.names.where( language_code: language_code ).first ;end
 
    def memo_description_for language_code, calendary_slugs
       memos.for(calendary_slugs).first&.description_for( language_code ) ;end

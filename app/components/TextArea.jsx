@@ -35,14 +35,18 @@ export default class TextArea extends Component {
       if (this.props.data && this.props.data['length']) {
          this.counter = CharacterCounter.init(this.$input)
       }
+
+      this.componentDidRender()
    }
 
    componentDidUpdate() {
-      console.debug("[componentDidUpdate] **", this.props )
+      this.componentDidRender()
+   }
 
-      if (this.props.textArea) {
-         M.textareaAutoResize(this.$input)
-      }
+   componentDidRender() {
+      console.debug("[componentDidRender] <<<")
+
+      M.textareaAutoResize(this.$input)
    }
 
    componentWillUnmount() {

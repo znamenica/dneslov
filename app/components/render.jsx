@@ -1,5 +1,6 @@
 import { merge } from 'merge-anything'
 
+import CatchWrapper from 'CatchWrapper'
 import { kindToKlass } from 'formsLib'
 import { displaySchemeToWrapperClass } from 'support'
 
@@ -25,10 +26,10 @@ export function renderElement(element, meta) {
                              validation_context: element.value,
                              wrapperClassName: displaySchemeToWrapperClass(sub.display_scheme) })
 
-      console.debug("[renderElement] > result object", res)
 
       self.klass = kindToKlass(sub['kind'])
-      return <self.klass {...res} />
+      console.debug("[renderElement] > result object", res, "klass:", self.klass)
+      return <CatchWrapper><self.klass {...res} /></CatchWrapper>
    })
 
    console.debug("[renderElement] >>>", rendered)

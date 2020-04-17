@@ -9,10 +9,10 @@ export function matchValidJson(text) {
    }
 }
 
-export function matchLetters(text, context) {
-   let res = false
+export function matchLetters(textIn, context) {
+   let res = false, text = textIn || ""
 
-   console.debug("[matchLetters] > text:", text, "context:", context)
+   console.debug("[matchLetters] ** text:", text, "context:", context)
 
    switch (context.alphabeth_code) {
    case 'РУ':
@@ -112,8 +112,8 @@ export function matchLetters(text, context) {
    return res
 }
 
-export function matchCodes(e_in, context) {
-   let e = e_in || {}
+export function matchCodes(eIn, context) {
+   let e = eIn || {}
 
    const language_tree = {
       ру: ['РП', 'РУ'],
@@ -145,7 +145,7 @@ export function matchCodes(e_in, context) {
       ан: ['АН', 'СА', 'РА'],
    }
 
-   console.debug("[matchCodes] > e:", e, "context:", context)
+   console.debug("[matchCodes] ** e:", e, "context:", context)
    if (e) {
       let alphabeth_codes = language_tree[context.language_code]
 
@@ -155,10 +155,10 @@ export function matchCodes(e_in, context) {
    }
 }
 
-export function matchLanguages(hash) {
-   let languages = []
+export function matchLanguages(objectIn) {
+   let languages = [], object = objectIn || {}
 
-   Object.entries(hash || {}).forEach(([key, value]) => {
+   Object.entries(object).forEach(([key, value]) => {
       languages.push(value.language_code)
    })
 
@@ -166,10 +166,10 @@ export function matchLanguages(hash) {
    return false
 }
 
-export function matchAlphabeths(hash) {
-   let alphabeths = []
+export function matchAlphabeths(objectIn) {
+   let alphabeths = [], object = objectIn || {}
 
-   Object.entries(hash || {}).forEach(([key, value]) => {
+   Object.entries(object).forEach(([key, value]) => {
       alphabeths.push(value.alphabeth_code)
    })
 
@@ -184,7 +184,7 @@ export function matchEmptyCollection(value, context) {
 export function matchEmptyObject(value, context) {
    let res = false
 
-   console.debug("[matchEmptyObject] >", value)
+   console.debug("[matchEmptyObject] ** value:", value)
 
    if (value === null || value === undefined) {
       res = true

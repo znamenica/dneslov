@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_14_164300) do
+ActiveRecord::Schema.define(version: 2020_04_17_170000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -64,21 +64,10 @@ ActiveRecord::Schema.define(version: 2020_04_14_164300) do
     t.index ["describable_id", "describable_type", "alphabeth_code"], name: "describable_id_type_alphabeth_code_index"
   end
 
-  create_table "event_kinds", id: :serial, force: :cascade do |t|
-    t.string "kind"
-    t.string "text"
-    t.string "alphabeth_code"
-    t.string "language_code"
-    t.index ["kind", "alphabeth_code"], name: "index_event_kinds_on_kind_and_alphabeth_code", unique: true
-    t.index ["kind"], name: "index_event_kinds_on_kind"
-    t.index ["text", "alphabeth_code", "language_code"], name: "index_event_kinds_on_text_and_alphabeth_code_and_language_code"
-    t.index ["text"], name: "index_event_kinds_on_text"
-  end
-
   create_table "events", id: :serial, force: :cascade do |t|
     t.string "happened_at"
     t.integer "memory_id", null: false
-    t.string "kind", null: false
+    t.string "kind_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "place_id"
@@ -89,7 +78,7 @@ ActiveRecord::Schema.define(version: 2020_04_14_164300) do
     t.string "tezo_string"
     t.string "order"
     t.string "council"
-    t.index ["kind", "memory_id", "item_id"], name: "index_events_on_item_id_and_type_and_memory_id"
+    t.index ["kind_code", "memory_id", "item_id"], name: "index_events_on_item_id_and_type_and_memory_id"
   end
 
   create_table "item_types", id: :serial, force: :cascade do |t|
@@ -153,12 +142,11 @@ ActiveRecord::Schema.define(version: 2020_04_14_164300) do
   create_table "memory_names", id: :serial, force: :cascade do |t|
     t.integer "memory_id", null: false
     t.integer "name_id", null: false
-    t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "mode"
     t.boolean "feasible", default: false, null: false
-    t.index ["memory_id", "name_id", "state"], name: "index_memory_names_on_memory_id_and_name_id_and_state", unique: true
+    t.string "state_code", null: false
   end
 
   create_table "names", id: :serial, force: :cascade do |t|
@@ -169,8 +157,8 @@ ActiveRecord::Schema.define(version: 2020_04_14_164300) do
     t.integer "bond_to_id"
     t.string "alphabeth_code", null: false
     t.integer "root_id"
-    t.string "bind_kind", null: false
-    t.index ["bond_to_id", "bind_kind"], name: "index_names_on_bond_to_id_and_bind_kind"
+    t.string "bind_kind_code", null: false
+    t.index ["bond_to_id", "bind_kind_code"], name: "index_names_on_bond_to_id_and_bind_kind_code"
     t.index ["root_id"], name: "index_names_on_root_id"
     t.index ["text", "alphabeth_code"], name: "index_names_on_text_and_alphabeth_code", unique: true
   end
@@ -219,13 +207,13 @@ ActiveRecord::Schema.define(version: 2020_04_14_164300) do
   end
 
   create_table "subjects", id: :serial, force: :cascade do |t|
-    t.string "kind", null: false
+    t.string "kind_code", null: false
     t.string "key", null: false
     t.jsonb "meta"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_subjects_on_key", unique: true
-    t.index ["kind"], name: "index_subjects_on_kind"
+    t.index ["kind_code"], name: "index_subjects_on_kind_code"
   end
 
 end

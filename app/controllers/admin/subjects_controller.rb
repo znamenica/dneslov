@@ -5,6 +5,6 @@ class Admin::SubjectsController < Admin::CommonController
 
    def permitted_params
       params.require( :subject )
-            .permit( :id, :key, :meta, :kind,
+            .permit( :id, :key, :meta, :kind_code,
                      names_attributes: %i(id text language_code alphabeth_code _destroy),
                      descriptions_attributes: %i(id text language_code alphabeth_code _destroy) ) ;end;end

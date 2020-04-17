@@ -164,7 +164,7 @@ module Languageble
          end ;end;end
 
    def language_for locales
-      language.name_for( locales ) ;end
+      language.names.for( locales ) ;end
 
    def alphabeth_for locales
-     alphabeth.name_for( locales ) ;end;end
+      alphabeth.names.for( locales ) ;end;end

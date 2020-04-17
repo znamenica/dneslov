@@ -1,8 +1,8 @@
 class Admin::MemoryNameSerializer < ApplicationSerializer
-   attributes :id, :feasible, :name_id, :name, :state, :state_name, :mode
+   attributes :id, :feasible, :name_id, :name, :state_code, :state_name, :mode
 
    def state_name
-      Subject.where( key: object.state ).first&.name_for( locales ) ;end
+      object.state&.names&.for( locales )&.text ;end
 
    def name
-      object.name.text ;end;end
+     "#{object.name.text} (#{object.name.language.names.for( locales )&.text})" ;end;end

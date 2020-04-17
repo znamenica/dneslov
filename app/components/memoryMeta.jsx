@@ -412,7 +412,7 @@ export const memoryMeta = {
                   'Имя должно быть задано':  matchEmptyObject,
                }
             },
-            state: {
+            state_code: {
                kind: 'dynamic',
                title: 'Род имени',
                placeholder: 'Начни ввод наименования рода имени...',

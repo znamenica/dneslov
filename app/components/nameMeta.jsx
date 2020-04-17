@@ -23,7 +23,7 @@ export const nameMeta = {
       alphabeth_code: {
          title: 'Азбука',
       },
-      bind_kind: {
+      bind_kind_name: {
          title: 'Связка',
       },
       bond_to: {
@@ -89,14 +89,14 @@ export const nameMeta = {
             },
          }
       },
-      bind_kind: {
+      bind_kind_code: {
          humanized_name: 'bind_kind_name',
          kind: 'dynamic',
          display_scheme: '12-6-4-2',
          title: 'Вид связки',
          placeholder: 'Начни ввод связки...',
          pathname: 'short_subjects',
-         context_value: { k: "BindKind" },
+         context_value: { k: "NameBind" },
          key_name: 'name',
          value_name: 'key',
          validations: {

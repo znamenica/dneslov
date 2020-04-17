@@ -1,12 +1,12 @@
 class Admin::SubjectSerializer < ApplicationSerializer
-   attributes :id, :key, :meta, :kind, :kind_name, :names, :descriptions
+   attributes :id, :key, :meta, :kind_code, :kind_name, :names, :descriptions
 
    def meta
-     object.meta.to_json
+      object.meta.to_json
    end
 
    def kind_name
-      Subject.find_by( key: object.kind )&.name_for( locales )
+      object.kind.names.for( locales )&.text
    end
 
    def names
