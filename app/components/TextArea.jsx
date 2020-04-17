@@ -96,7 +96,7 @@ export default class TextArea extends Component {
                data-length={this.props.data && this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label
-               className='active'
+               className='active textarea'
                htmlFor={this.props.name}>
                {this.props.title}
                <ErrorSpan

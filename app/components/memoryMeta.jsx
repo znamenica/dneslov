@@ -54,7 +54,7 @@ export const memoryMeta = {
                title: 'Жетон',
                placeholder: 'Введи имя жетона',
                data: {length: '6'},
-               display_scheme: '12-4-2-2',
+               display_scheme: '12-3-2-2',
                validations: {
                   "Слишком большое имя жетона": /^.{7,}$/,
                   "Жетон отсутствует": matchEmptyObject,
@@ -76,7 +76,7 @@ export const memoryMeta = {
       },
       base_year: {
          kind: 'text',
-         display_scheme: '12-6-3-3',
+         display_scheme: '12-3-3-3',
          title: 'Опорный год',
          placeholder: 'Введи опорный год',
          data: {length: '5'},
@@ -480,7 +480,7 @@ export const memoryMeta = {
             },
             place_id: {
                kind: 'dynamic',
-               display_scheme: '12-4-5-3',
+               display_scheme: '12-12-5-3',
                title: 'Место происшествия',
                pathname: 'short_places',
                humanized_name: 'place',
@@ -491,7 +491,7 @@ export const memoryMeta = {
             },
             item_id: {
                kind: 'dynamic',
-               display_scheme: '12-4-6-2',
+               display_scheme: '12-6-6-2',
                title: 'Предмет',
                pathname: 'short_items',
                humanized_name: 'item',
@@ -504,7 +504,7 @@ export const memoryMeta = {
                kind: 'text',
                title: 'Имя связанной личности...',
                placeholder: 'Введи имя',
-               display_scheme: '12-4-6-3',
+               display_scheme: '12-6-6-3',
             },
             titles: {
                kind: 'collection',

@@ -1820,26 +1820,16 @@ html {
    }
 
    .col.input-field {
-      min-height: 4em;
+      min-height: 3.5rem;
 
       & > .material-icons {
          padding-top: 10px;
       }
 
+      // fixed dynamic field
       & > .chip {
-         margin-top: 1.1em;
-         margin-bottom: 1.1em;
+         margin-top: 0.7rem;
          width: -webkit-fill-available;
-      }
-
-      // defaunlt color of form labels
-      /* label color */
-      label {
-         color: #000;
-
-         &:not(.label-icon).active {
-            height: 4.2rem;
-         }
       }
 
       .invalid + label.active:after {
@@ -1848,6 +1838,10 @@ html {
 
       input[type=text]:not(.browser-default):not([readonly]) {
          /* label focus color */
+         height: 2rem;
+         padding: .8rem 0 0 0;
+         font-size: 1rem;
+
          &:focus + label {
             color: $soft_blue;
          }
@@ -1880,21 +1874,46 @@ html {
          }
       }
 
-      .select-wrapper + label {
-         height: 3.5rem;
+      textarea.materialize-textarea {
+         min-height: 2.7rem;
+         height: 2.7rem;
+         padding: 0.9rem 0 .4rem 0;
+         font-size: 1rem;
+      }
+
+      [type="checkbox"] + span:not(.lever) {
+         margin-top: .1rem;
+      }
+
+      // select input field
+      .select-wrapper {
+
+         input.select-dropdown {
+            font-size: 1rem;
+            height: 2rem;
+            padding: .8rem 0 0 0;
+
+            & + label {
+               height: 2.7rem;
+            }
+         }
+
+         .caret {
+            top: 3px;
+         }
+
+         select {
+            display: block;
+            height: 0;
+            width: 0;
+            padding: 0;
+            border: none;
+         }
       }
 
       /* icon prefix focus color */
       .prefix.active {
          color: $soft_blue;
-      }
-
-      select {
-         display: block;
-         height: 0;
-         width: 0;
-         padding: 0;
-         border: none;
       }
 
       input[type="search"] {
@@ -1908,16 +1927,46 @@ html {
          }
       }
 
-      .error {
-         @extend .error;
-         transform: translateY(9px);
-         position: absolute;
-         top: 100%;
-         left: 0;
+      // default color of form labels
+      /* label color */
+      label {
+         color: #555;
+         width: 125%;
 
-         &:empty {
-            display: none;
+         &:not(.label-icon).active {
+            height: calc(125% - 0.25rem); // NOTE due to 1.25x radio when autoresize textarea
          }
+
+         &:not(.label-icon).active.textarea {
+            height: calc(125% - 0.6rem); // NOTE due to 1.25x radio when autoresize textarea
+         }
+
+         // TODO required to fix npm-pipeline-rails or move to webpacker
+         //&:has(+ .character-counter) {
+         // width: calc(120% - 25px);
+         //}
+
+         // error block under the field
+         .error {
+            @extend .error;
+            transform: translateY(9px);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            word-break: break-word;
+            white-space: normal;
+            line-height: normal;
+            font-size: 1em;
+
+            &:empty {
+               display: none;
+            }
+         }
+
+      }
+
+      [type="checkbox"] + span:not(.lever) {
+         color: #000;
       }
 
       ul:not(.browser-default) {
@@ -1925,6 +1974,13 @@ html {
          &:empty {
             min-height: auto;
          }
+      }
+
+      .character-counter {
+         font-size: .75em;
+         top: calc(125% - 22px);
+         right: 10px;
+         position: absolute;
       }
    }
 
