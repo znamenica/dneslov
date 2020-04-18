@@ -11,4 +11,4 @@ import Dashboard from 'Dashboard'
 
 document.addEventListener('DOMContentLoaded', () => {
    mountComponents({ Dashboard })
-})
+}, { passive: true })

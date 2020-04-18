@@ -7,4 +7,4 @@ import About from 'About'
 
 document.addEventListener('DOMContentLoaded', () => {
    mountComponents({ About })
-})
+}, { passive: true })

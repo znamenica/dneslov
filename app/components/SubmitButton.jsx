@@ -22,7 +22,7 @@ export default class SubmitButton extends Component {
    }
 
    componentDidMount() {
-      document.addEventListener('dneslov-form-valid', this.onFormValidChanged)
+      document.addEventListener('dneslov-form-valid', this.onFormValidChanged, { passive: true })
    }
 
    componentWillUnmount() {

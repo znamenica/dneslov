@@ -12,4 +12,4 @@ import { mountComponents } from 'react-rails-ujs/src/react-rails-ujs'
 import MemoriesForm from 'MemoriesForm'
 document.addEventListener('DOMContentLoaded', () => {
    mountComponents({ MemoriesForm })
-})
+}, { passive: true })

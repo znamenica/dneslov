@@ -27,10 +27,10 @@ export default class IconLoryModal extends Component {
    }
 
    componentDidMount() {
-      this.$lory.addEventListener('after.lory.init', this.loryResize)
-      this.$lory.addEventListener('on.lory.resize', this.loryResize)
-      this.$lory.addEventListener('after.lory.slide', this.onLorySlideFrom)
-      document.addEventListener('click', this.onDocumentClick)
+      this.$lory.addEventListener('after.lory.init', this.loryResize, { passive: true })
+      this.$lory.addEventListener('on.lory.resize', this.loryResize, { passive: true })
+      this.$lory.addEventListener('after.lory.slide', this.onLorySlideFrom, { passive: true })
+      document.addEventListener('click', this.onDocumentClick, { passive: true })
    }
 
    componentWillUnmount() {

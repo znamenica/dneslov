@@ -66,7 +66,7 @@ export default class PickMeUpCalendar extends Component {
          render: this.onPickmeupRender.bind(this),
       })
 
-      this.$calendar.addEventListener('pickmeup-fill', this.uprenderCalendar)
+      this.$calendar.addEventListener('pickmeup-fill', this.uprenderCalendar, { passive: true })
 
       this.pmu = Pickmeup(this.$calendar, settings)
       this.pmu.show()
@@ -79,7 +79,7 @@ export default class PickMeUpCalendar extends Component {
       instance.append(nextprev)
       instance.prepend(styles)
       this.$calendar.append(cal)
-      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange)
+      this.$calendar.addEventListener('pickmeup-change', this.onPickmeupChange, { passive: true })
       this.$calendar.querySelectorAll('.pmu-yesterday').forEach((el) => {
          el.addEventListener('click', this.onYesterdayClick)
       })
@@ -87,7 +87,7 @@ export default class PickMeUpCalendar extends Component {
          el.addEventListener('click', this.onTomorrowClick)
       })
       this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         el.addEventListener('click', this.onChangeStyle)
+         el.addEventListener('click', this.onChangeStyle, { passive: true })
       })
    }
 

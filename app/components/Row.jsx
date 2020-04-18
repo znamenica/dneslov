@@ -29,7 +29,7 @@ export default class Row extends Component {
       this.toast = M.toast(toast)
 
       document.querySelector('.toast.rounded > .toast-action')
-              .addEventListener('click', this.remove.bind(this))
+              .addEventListener('click', this.remove.bind(this), { passive: true })
    }
 
    default() {

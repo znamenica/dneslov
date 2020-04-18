@@ -9,4 +9,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
       return send.apply(this, arguments)
    };
-})
+}, { passive: true })

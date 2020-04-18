@@ -58,7 +58,7 @@ export default class Carousel extends Component {
          this.carousel = M.Carousel.init(this.$carousel, {});
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
             console.log("CAROUSEL", img)
-            img.addEventListener('click', this.onIconClick)
+            img.addEventListener('click', this.onIconClick, { passive: true })
          })
       }
    }

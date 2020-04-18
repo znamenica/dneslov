@@ -53,8 +53,8 @@ export default class Records extends Component {
 
    componentDidMount() {
       this.submit()
-      document.addEventListener('dneslov-record-stored', this.onRecordUpdate)
-      document.addEventListener('dneslov-modal-close', this.onModalClose)
+      document.addEventListener('dneslov-record-stored', this.onRecordUpdate, { passive: true })
+      document.addEventListener('dneslov-modal-close', this.onModalClose, { passive: true })
    }
 
    componentWillUnmount() {

@@ -49,7 +49,7 @@ export default class Form extends Component {
 
    componentDidMount() {
       console.log("[componentDidMount] <<<")
-      document.addEventListener('dneslov-update-path', this.onChildChanged)
+      document.addEventListener('dneslov-update-path', this.onChildChanged, { passive: true })
       document.addEventListener('dneslov-record-submit', this.onSubmit)
    }
 

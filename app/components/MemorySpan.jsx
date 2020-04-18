@@ -81,7 +81,9 @@ export default class MemorySpan extends Component {
       console.log("[render] > props:", this.props, "state:", this.state)
 
       return (
-         <li className='collection-item avatar memory'>
+         <li
+            key={this.props.default_name_in_calendary}
+            className='collection-item avatar memory'>
             <div
                className='collapsible-header'
                ref={e => this.$header = e} >
