@@ -41,7 +41,8 @@ html {
                   border-radius: 50%;
                   margin-left: 1px;
                   margin-right: 1px;
-                  width: 1.8em !important;
+                  width: 1.84em;
+                  height: 1.84em;
                }
 
                .pmu-date-double {
@@ -49,6 +50,7 @@ html {
 
                   .pmu-date-self {
                      position: absolute;
+                     line-height: initial;
                      top: -3px;
                      left: 0;
                      width: 100%;
@@ -56,8 +58,9 @@ html {
 
                   .pmu-date-usual {
                      position: absolute;
-                     top: 12px;
-                     font-size: 8px;
+                     line-height: initial;
+                     top: 0.8rem;
+                     font-size: 0.55em;
                      left: 0;
                      width: 100%;
                   }
@@ -87,7 +90,7 @@ html {
                div {
                   margin-left: 1px;
                   margin-right: 1px;
-                  width: 1.8em !important;
+                  width: 1.84em !important;
                }
             }
 

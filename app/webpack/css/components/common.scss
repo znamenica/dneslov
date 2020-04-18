@@ -796,7 +796,7 @@
 
 //#####
 
-@media only screen and (max-width: 500px) and (max-resolution: 40dpcm) {
+@media only screen and (max-width: 650px) and (max-resolution: 40dpcm) {
    body {
       main, header, footer {
          line-height: 1.4;
@@ -830,7 +830,7 @@
    @include s
 }
 
-@media only screen and (min-width: 500px) and (max-width: 900px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 650px) and (max-width: 1000px) and (max-resolution: 40dpcm) {
    body {
       line-height: 1.4;
       font-size: 12.5px;
@@ -862,7 +862,7 @@
    @include m
 }
 
-@media only screen and (min-width: 900px) and (max-width: 1400px) and (max-resolution: 40dpcm) {
+@media only screen and (min-width: 1000px) and (max-width: 1400px) and (max-resolution: 40dpcm) {
    body {
       line-height: 1.4;
       font-size: 14px;
