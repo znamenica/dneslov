@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '2.5.5'
+ruby '2.7.0'
 
 gem 'rails', '~> 5.2.4', '>= 5.2.4.2'
 gem 'pg'
@@ -83,6 +83,9 @@ group :development do
    gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.7.0'
    gem 'pattern_generator', '>= 0.1.0'
+   # deploy
+   gem 'ed25519', '~> 1.2'
+   gem 'bcrypt_pbkdf', '~> 1.0'
    # gem 'bullet' # gives exception
 end
 

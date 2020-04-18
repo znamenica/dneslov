@@ -1,9 +1,9 @@
 # config valid only for current version of Capistrano
-lock "3.9.1"
+lock "3.11.2"
 
-set :user, 'ubuntu'
+set :user, 'majioa'
 set :application, "dneslov"
-set :deploy_user, 'ubuntu'
+set :deploy_user, 'majioa'
 
 set :repo_url, "git@github.com:znamenica/dneslov.git"
 
@@ -64,7 +64,7 @@ set :nginx_roles, :web
 set :nginx_static_dir, "public"
 
 set :rvm_type, :user                      # Defaults to: :auto
-set :rvm_ruby_version, '2.3.4@dneslov'    # Defaults to: 'default'
+set :rvm_ruby_version, '2.7.0@dneslov --create'    # Defaults to: 'default'
 # set :rvm_custom_path, '~/.rvm'          # only needed if not detected
 set :rvm_roles, [:app, :web]
 
