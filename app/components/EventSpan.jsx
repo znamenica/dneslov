@@ -15,6 +15,22 @@ export default class EventSpan extends Component {
       wrapperYearDateClass: "",
    }
 
+   // system
+   constructor(props) {
+      super(props)
+
+      this.onSpanHeaderClick = this.onSpanHeaderClick.bind(this)
+   }
+
+   componentDidMount() {
+      this.$header.addEventListener('click', this.onSpanHeaderClick)
+   }
+
+   componentWillUnmount() {
+      this.$header.removeEventListener('click', this.onSpanHeaderClick)
+   }
+
+   // custom
    hasData() {
       return this.props.description || this.props.troparion || this.props.kontakion
    }
@@ -28,8 +44,10 @@ export default class EventSpan extends Component {
    }
 
    onSpanHeaderClick(e) {
-      e.preventDefault()
-      e.stopPropagation()
+      if (!this.hasData()) {
+         e.preventDefault()
+         e.stopPropagation()
+      }
    }
 
    render() {
@@ -39,7 +57,7 @@ export default class EventSpan extends Component {
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
-               onClick={this.onSpanHeaderClick.bind(this)} >
+               ref={e => this.$header = e} >
                {this.props.yeardate && <Chip
                   className={this.classNameForYearDate()}
                   text={this.props.yeardate} />}

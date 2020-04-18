@@ -28,14 +28,17 @@ export default class MemorySpan extends Component {
       super(props)
 
       this.onAvatarClick = this.onAvatarClick.bind(this)
+      this.onSpanHeaderClick = this.onSpanHeaderClick.bind(this)
    }
 
    componentDidMount() {
       this.$avatar.addEventListener('click', this.onAvatarClick)
+      this.$header.addEventListener('click', this.onSpanHeaderClick)
    }
 
    componentWillUnmount() {
       this.$avatar.removeEventListener('click', this.onAvatarClick)
+      this.$header.removeEventListener('click', this.onSpanHeaderClick)
    }
 
    // events
@@ -50,12 +53,14 @@ export default class MemorySpan extends Component {
    }
 
    onSpanHeaderClick(e) {
-      e.preventDefault()
-      e.stopPropagation()
+      if (!this.props.description) {
+         e.preventDefault()
+         e.stopPropagation()
+      }
    }
 
    onLoadImageError() {
-      console.log("ERROR")
+      console.warn("[onLoadImageError] ** image load error")
       this.setState({ icon_url: null })
    }
 
@@ -79,7 +84,7 @@ export default class MemorySpan extends Component {
          <li className='collection-item avatar memory'>
             <div
                className='collapsible-header'
-               onClick={this.onSpanHeaderClick.bind(this)} >
+               ref={e => this.$header = e} >
                <a
                   ref={e => this.$avatar = e}
                   key='avatar'
