@@ -57,6 +57,7 @@ export default class EventSpan extends Component {
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
+               key={'header-' + this.props.yeardate + '-' + this.props.happened_at}
                ref={e => this.$header = e} >
                {this.props.yeardate && <Chip
                   className={this.classNameForYearDate()}

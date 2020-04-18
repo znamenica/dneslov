@@ -82,10 +82,10 @@ export default class MemorySpan extends Component {
 
       return (
          <li
-            key={this.props.default_name_in_calendary}
             className='collection-item avatar memory'>
             <div
                className='collapsible-header'
+               key={'header-' + this.props.slug}
                ref={e => this.$header = e} >
                <a
                   ref={e => this.$avatar = e}
