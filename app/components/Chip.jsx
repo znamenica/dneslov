@@ -35,10 +35,19 @@ export default class Chip extends Component {
       return null
    }
 
-   onAct(e) {
-      e.stopPropagation()
-      this.setState({ action: null })
-      this.props.onAct(this.props.data)
+   // system
+   constructor(props) {
+      super(props)
+
+      this.onLinkClick = this.onLinkClick.bind(this)
+   }
+
+   componentDidMount() {
+      this.$link.addEventListener('click', this.onLinkClick)
+   }
+
+   componentWillUnmount() {
+      this.$link.removeEventListener('click', this.onLinkClick)
    }
 
    className() {
@@ -71,9 +80,26 @@ export default class Chip extends Component {
       return !this.props.children && !this.props.url
    }
 
+   // handlers
+   onLinkClick(e) {
+      if (e.target.href) {
+          e.stopPropagation()
+          e.preventDefault()
+          window.open(e.target.href, '_blank')
+      }
+   }
+
+   onAct(e) {
+      e.stopPropagation()
+      this.setState({ action: null })
+      this.props.onAct(this.props.data)
+   }
+
    render() {
       return (
          <div
+            key={this.props.text + ' link'}
+            ref={e => this.$link = e}
             className={this.className()}
             style={{ backgroundColor: '#' + this.props.color }} >
             {this.props.children}

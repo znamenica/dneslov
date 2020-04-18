@@ -69,7 +69,7 @@ export default class Memory extends Component {
    }
 
    render() {
-      console.log("[render] > props", this.props, "state: ", this.state)
+      console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='row'>
@@ -81,7 +81,7 @@ export default class Memory extends Component {
                         text={this.props.order.slug} />
                      <Name
                         short_name={this.state.title}
-                        default_name_in_calendary={this.state.title}
+                        default_name_in_calendary={this.state.title || this.props.short_name}
                         names={this.props.names} />
                      <Chip
                         className='year-date'

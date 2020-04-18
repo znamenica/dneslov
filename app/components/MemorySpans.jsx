@@ -19,7 +19,7 @@ export default class MemorySpans extends Component {
    }
 
    componentWillUnmount() {
-      this.collapsible.destroy()
+      this.collapsible?.destroy()
    }
 
    // props
@@ -65,7 +65,7 @@ export default class MemorySpans extends Component {
       var cal = this.calculateDefaultCalendaryIn(memory.titles),
           title = memory.titles.find((title) => { return title.calendary == cal })
 
-      return title.text
+      return memory.default_name_in_calendary || title.text
    }
 
    render() {

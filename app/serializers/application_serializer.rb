@@ -9,23 +9,8 @@ class ApplicationSerializer < ActiveModel::Serializer
       I18n.t(full_link, options)
    end
 
-   def julian
-      @instance_options[ :julian ] ;end
-
    def date
       @instance_options[ :date ].to_s ;end
-
-   def locales
-      @instance_options[ :locales ] ;end
-
-   def calendaries
-      @instance_options[ :calendaries ] ;end
-
-   def memos
-      @instance_options[ :memos ] ;end
-
-   def calendary_slugs
-      @instance_options[ :calendary_slugs ] ;end
 
    def color_by_slug slug
       slug = slug&.strip || ""
@@ -37,4 +22,13 @@ class ApplicationSerializer < ActiveModel::Serializer
       [a[0...a.size/2], a[a.size/2...a.size]].transpose.flatten.join ;end
 
    def slug
-      object.slug.text ;end;end
+      object.slug.text ;end
+
+   protected
+
+   def method_missing(method, *_)
+      if (instance_options.keys.include?(method))
+         @instance_options[method]
+      else
+         super
+      end;end;end

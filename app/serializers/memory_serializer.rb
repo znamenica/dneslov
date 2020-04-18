@@ -42,6 +42,7 @@ class MemorySerializer < CommonMemorySerializer
                                                          locales: locales,
                                                          date: date,
                                                          julian: julian,
+                                                         default_description_ids: default_description_ids,
                                                          calendary_slugs: calendary_slugs ) ;end
 
    def troparion
@@ -60,4 +61,10 @@ class MemorySerializer < CommonMemorySerializer
             t 'kontakion_with_tone', tone: kontakion.tone
          else
             t 'kontakion' ;end
-         { title: title, text: kontakion.text } ;end;end;end
+         { title: title, text: kontakion.text } ;end;end
+
+
+   protected
+
+   def default_description_ids
+      object.all_descriptions_for( locales ).pluck(:id) end;end

@@ -1,4 +1,6 @@
 import { Component } from 'react'
+import ReactMarkdown from 'react-markdown'
+
 import Chip from 'Chip'
 
 export default class EventSpan extends Component {
@@ -78,8 +80,8 @@ export default class EventSpan extends Component {
                         <div className='row'>
                            <div className='col s12 title'>
                               Описание</div>
-                           <div className='col s12'>
-                              {this.props.description}</div></div>}
+                           <div className='col s12 description'>
+                              <ReactMarkdown source={this.props.description} /></div></div>}
                   {this.props.troparion &&
                         <div className='row'>
                            <div className='col s12 title'>
