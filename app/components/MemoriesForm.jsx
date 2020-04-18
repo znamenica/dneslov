@@ -10,7 +10,7 @@ import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
 import Intro from 'Intro'
-import { getCalendariesString, getDateString, hashFromValue, getPathFromState, parseDateString, parseCalendariesString } from 'support'
+import { getCalendariesString, getDateString, getPathsFromState, getTitleFromState, parseDateString, parseCalendariesString } from 'support'
 
 export default class MemoriesForm extends Component {
    static defaultProps = {
@@ -30,10 +30,11 @@ export default class MemoriesForm extends Component {
 
    // system
    static getDerivedStateFromProps(props, state) {
+      console.debug("[getDerivedStateFromProps] <<<", { props: props, state: state })
+
       if (props !== state.prevProps) {
          let state = {
                prevProps: props,
-               default_calendary_slug: props.calendaries_cloud[0].slug,
                memories: props.memories.list,
                memoriesTotal: props.memories.total,
                memory: props.memory,
@@ -45,9 +46,9 @@ export default class MemoriesForm extends Component {
                }
              }
 
-         history.pushState({id: hashFromValue(state.query)},
-                           'Днеслов',
-                           getPathFromState(state))
+         document.title = getTitleFromState(state)
+         let [ path, json_path ] = getPathsFromState(state)
+         history.replaceState({ query: state.query, path: json_path }, document.title, path)
          return state
       }
 
@@ -55,17 +56,12 @@ export default class MemoriesForm extends Component {
    }
 
    updateState(state) {
-      console.log("[updateState] <<< state", state)
-      let hash = hashFromValue(state.query),
-          path = getPathFromState(state)
+      console.debug("[updateState] <<<", { state: state })
+      let [ path, json_path ] = getPathsFromState(state)
 
-      if (path === getPathFromState(this.state)) {
-         console.log("[updateState] * stable")
-         history.replaceState({id: hash}, document.title)
-      } else {
-         console.log("[updateState] * new")
-         history.pushState({id: hash}, document.title, path)
-      }
+      console.log("[updateState] * replace with", path)
+      document.title = getTitleFromState(state)
+      history.replaceState({ query: state.query, path: json_path }, document.title, path)
 
       this.setState(state)
    }
@@ -78,7 +74,7 @@ export default class MemoriesForm extends Component {
       window.onpopstate = null
    }
 
-   // custom
+   // props
    calendariesUsed() {
       return this.state.query.c && this.state.query.c.split(",").map((slug) => {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
@@ -87,17 +83,21 @@ export default class MemoriesForm extends Component {
       })
    }
 
+   defaultCalendarySlug() {
+      return this.props.calendaries_cloud[0].slug
+   }
+
+   // handlers
    onCloudAct(data) {
       let c = (this.state.query.c || "").split(",").filter(c => {
          c.length == 0
       }).concat([ data.slug ]).join(",")
 
-      this.submit({c: c, p: 1})
+      this.pushSubmit(merge(this.state.query, {c: c, p: 1}))
    }
 
    onSearchAct(data) {
       let query = merge({}, this.state.query)
-         console.log(data, query, query.q)
 
       if (data.date) {
          query.d = null
@@ -111,122 +111,125 @@ export default class MemoriesForm extends Component {
             query.c = tokens.join(",")
          }
       } else if (data.token) {
-         console.log(query.q)
+         console.debug("[onSearchAct] **", {q: query.q})
          let tokens = query.q.split("/"),
              index = tokens.indexOf(data.token)
 
-         console.log(tokens, index, tokens.splice(index, 1))
+         console.debug("[onSearchAct] **", tokens, index, tokens.splice(index, 1))
          query.q = tokens.splice(index, 1).join("/")
       }
 
-      this.submit(merge(query, {p: 1}))
+      this.pushSubmit(merge(query, {p: 1}))
    }
 
    onSearchUpdate(query) {
-      this.submit({q: query, p: 1})
+      this.pushSubmit(merge(this.state.query, {q: query, p: 1}))
    }
 
    onCalendarUpdate(value) {
       let d = (value['with_date'][1] == 'julian' && 'ю' || 'н') +  value['with_date'][0]
 
-      this.submit({d: d, p: 1})
+      this.pushSubmit(merge(this.state.query, {d: d, p: 1}))
    }
 
    onFetchNext() {
       if (! this.isNextRequesting) {
          console.log("[onFetchNext] * getting...")
          this.isNextRequesting = true
-         this.submit({p: this.state.query.p + 1})
+         this.submit(merge(this.state.query, {p: this.state.query.p + 1}))
       }
    }
 
-   submit(query_in) {
-      let query = merge(this.state.query, query_in)
+   onMemoryLoadRequest(slug) {
+      let url = '/' + slug + '.json',
+          data = { c: this.state.query.c, d: this.state.query.d }
 
-      console.log("Sending...", query)
+      this.pushSubmit(data, url)
+   }
 
-      let request = {
-         data: query,
-         url: '/index.json',
+   onPopState(e) {
+      console.debug("[onPopState] <<<", { e: e })
+
+      if (e.state) {
+         this.submit(e.state.query, e.state.path)
       }
+   }
+
+   // remote data processing
+   pushSubmit(query, path) {
+      console.debug("[pushSubmit] <<< ", { query: query, path: path })
+      let [ cpath, json_cpath ] = getPathsFromState(this.state)
+      history.pushState({ query: this.state.query, path: json_cpath }, document.title, cpath)
+
+      this.submit(query, path)
+   }
+
+   submit(query, path) {
+      console.debug("[submit] <<< ", { query: query, path: path })
+
+      let url = path || '/index.json',
+          request = {
+            data: query,
+            url: url,
+          }
 
       document.body.classList.add('in-progress')
-
       Axios.get(request.url, { params: request.data })
-        .then(this.onMemoriesLoadSuccess.bind(this))
-        .catch(this.onMemoriesLoadFailure.bind(this))
+        .then(this.onLoadSuccess.bind(this))
+        .catch(this.onLoadFailure.bind(this))
    }
 
-   onMemoriesLoadSuccess(response) {
-      console.log("[onMemoriesLoadSuccess] * response", response)
+   onLoadSuccess(response) {
+      console.debug("[onLoadSuccess] <<< response", response)
 
-      let state, memories = response.data
+      if (response.config.url.match(/index.json/)) {
+         this.memoriesParse(response.data, response.config)
+      } else {
+         this.memoryParse(response.data, response.config)
+      }
+   }
+
+   onLoadFailure(response) {
+      console.debug("[onLoadFailure] <<< response", response)
+
+      history.go(1)
+      document.body.classList.remove('in-progress')
+      this.isNextRequesting = false
+   }
+
+   memoriesParse(memories, config) {
+      let state
 
       if (memories.page > 1) {
          let newMemories = this.state.memories.concat(memories.list)
-         state = merge({}, this.state, {
+         state = merge(this.state, {
             memories: newMemories,
             memoriesTotal: memories.total,
             memory: null})
       } else {
-         state = merge({}, this.state, {
+         state = merge(this.state, {
             memories: memories.list,
             memoriesTotal: memories.total,
             memory: null})
       }
 
       document.body.classList.remove('in-progress')
-      this.updateState(merge(state, {query: response.config.params}))
+      this.updateState(merge(state, {query: config.params}))
       this.isNextRequesting = false
    }
 
-   onMemoriesLoadFailure(response) {
-      console.log("[onMemoriesLoadFailure] <<< response", response)
+   memoryParse(memory, config) {
+      let state = merge(this.state,
+                        { memory: memory,
+                          memories: null,
+                          query: config.params })
 
-      document.body.classList.remove('in-progress')
-      this.isNextRequesting = false
-   }
-
-   onLoadRequest(slug) {
-      let request = {
-         url: '/' + slug + '.json',
-         data: {
-            c: this.state.query.c,
-            d: this.state.query.d
-         }
-      }
-
-      document.body.classList.add('in-progress')
-
-      Axios.get(request.url, { params: request.data })
-        .then(this.onMemoryLoadSuccess.bind(this))
-        .catch(this.onMemoriesLoadFailure.bind(this))
-   }
-
-   onMemoryLoadSuccess(response) {
-      let memory = response.data,
-          state = merge({}, this.state, { memory: memory })
-
-      console.log("[onMemoryLoadSuccess] * memory:", memory)
-
-      history.pushState({},
-                        'Днесловъ – ' + memory.short_name,
-                        getPathFromState(state))
       document.body.classList.remove('in-progress')
       this.updateState(state)
    }
 
-   onPopState(e) {
-      console.log("[onPopState] * session:", e.state)
-
-      if (e.state) {
-         this.state.query = JSON.parse(sessionStorage.getItem(e.state.id))
-         this.submit(merge(this.state.query, {p: 1}))
-      }
-   }
-
    render() {
-      console.log("[render] * props:", this.props, "state:", this.state)
+      console.log("[render] * ", { props: this.props, state: this.state})
 
       return (
          [<header>
@@ -258,8 +261,8 @@ export default class MemoriesForm extends Component {
                         {this.state.memory &&
                            <Memory
                               key='memory'
-                              date={parseDateString(this.state.query.d)?.pop()}
-                              default_calendary_slug={this.state.default_calendary_slug}
+                              date={parseDateString(this.state.query.d).pop()}
+                              default_calendary_slug={this.defaultCalendarySlug()}
                               selected_calendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
                         {! this.state.memory &&
@@ -270,7 +273,7 @@ export default class MemoriesForm extends Component {
                                     with_text={this.state.query.q}
                                     onUpdate={this.onSearchUpdate.bind(this)} /></div>
                               <SearchConditions
-                                 date={parseDateString(this.state.query.d)}
+                                 date={parseDateString(this.state.query.d).pop()}
                                  calendaries={this.calendariesUsed()}
                                  query={this.state.query.q || ""}
                                  onAct={this.onSearchAct.bind(this)} />
@@ -278,6 +281,6 @@ export default class MemoriesForm extends Component {
                                  memories={this.state.memories}
                                  total_memories={this.state.memoriesTotal}
                                  calendaries_cloud={parseCalendariesString(this.state.query.c)}
-                                 default_calendary_slug={this.state.default_calendary_slug}
-                                 onLoadRequest={this.onLoadRequest.bind(this)}
+                                 default_calendary_slug={this.defaultCalendarySlug()}
+                                 onLoadRequest={this.onMemoryLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}

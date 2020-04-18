@@ -29,7 +29,7 @@ export default class SearchConditions extends Component {
    }
 
    render() {
-      console.log("[render] > props", this.props)
+      console.log("[render] * props", this.props)
 
       return (
          <div className='row'>

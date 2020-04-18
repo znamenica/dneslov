@@ -1,8 +1,8 @@
-import crypto from 'crypto'
-
 const wrapperLetters = ['s', 'm', 'l', 'xl' ]
 
 export function yearDateFromDate(date_in) {
+   console.debug("[yearDateFromDate] <<<", date_in)
+
    let date, yearDate
 
    if (!date_in) {
@@ -12,10 +12,10 @@ export function yearDateFromDate(date_in) {
    } else if (date_in.constructor.name == "Integer") {
       date = new Date(date)
    } else if (date_in.constructor.name == "String") {
-      let date_tmp = date_in.split(".").reverse().join("-")
-      date = new Date(Date.parse(date_tmp))
+      //let date_tmp = date_in.split(".").reverse().join("-")
+      //date = new Date(Date.parse(date_tmp))
    } else {
-      date = new Date(Date.parse(date_in))
+      date = date_in && new Date(Date.parse(date_in))
    }
 
    let f = new Intl.DateTimeFormat('ru-RU', {month: "2-digit", day: "2-digit"})
@@ -49,11 +49,13 @@ export function parseDateString(string) {
       }
    }
 
-   return null
+   return []
 }
 
-export function getPathFromState(state) {
+export function getPathsFromState(state) {
    let path = "/" + (state.memory?.slug || ""),
+       json_path = (path === '/' && 'index' || path) + '.json',
+       args = "",
        anchor = null,
        params = Object.entries(state.query).reduce((line, [key, value]) => {
          console.log("[getPathFromState] *", "key:", key, "value:", value, "query:", line)
@@ -66,25 +68,22 @@ export function getPathFromState(state) {
       }, "")
 
    if (anchor) {
-      path += "#" + anchor
+      args += "#" + anchor
    }
 
    if (params) {
-      path += "?" + params
+      args += "?" + params
    }
 
-   return path
+   return [ path + args, json_path + args ]
 }
 
-export function hashFromValue(value) {
-   let json = JSON.stringify(value),
-       hash = crypto.createHash('sha1').update(json).digest('hex')
+export function getTitleFromState(state) {
+   let [ date, style ] = parseDateString(state.query.d),
+       cals = "[ " + state.query.c + " ]",
+       data = [ "Днеслов", state.memory?.short_name, date, style, cals ]
 
-   console.log("[hashFromValue] * id:", hash)
-   console.log("[hashFromValue] * json string:", json)
-   sessionStorage.setItem(hash, json)
-
-   return hash
+   return data.filter((e) => { return e}).join(" / ")
 }
 
 export function yeardateToMs(yeardate, msDateIn) {

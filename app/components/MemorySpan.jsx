@@ -43,9 +43,9 @@ export default class MemorySpan extends Component {
 
    // events
    onAvatarClick(e) {
-      this.props.onLoadRequest(this.props.slug)
       e.stopPropagation()
       e.preventDefault()
+      this.props.onLoadRequest(this.props.slug)
    }
 
    onSpanBodyClick(e) {
