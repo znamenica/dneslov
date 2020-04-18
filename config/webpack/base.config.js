@@ -49,7 +49,7 @@ module.exports = {
             loader: 'ignore-loader'
          },
          {
-            test: /\.(sa|sc|c)ss$/,
+            test: /\.(sa|sc)ss$/,
             use: [
                {
                   loader: MiniCssExtractPlugin.loader,
@@ -64,6 +64,14 @@ module.exports = {
                'css-loader',
                'postcss-loader',
                'sass-loader',
+            ],
+         },
+         {
+            test: /\.css$/,
+            use: [
+               'style-loader',
+               { loader: 'css-loader', options: { importLoaders: 1 } },
+               'postcss-loader'
             ],
          },
          {
