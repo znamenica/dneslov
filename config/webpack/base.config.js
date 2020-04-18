@@ -54,24 +54,27 @@ module.exports = {
                {
                   loader: MiniCssExtractPlugin.loader,
                   options: {
-                     // you can specify a publicPath here
-                     // by default it uses publicPath in webpackOptions.output
-                     // publicPath: '../',
                      hmr: DEBUG,
                      reloadAll: true,
                   },
                },
-               'css-loader',
-               'postcss-loader',
-               'sass-loader',
+               { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
+               { loader: 'postcss-loader', options: { options: {}, } },
+               { loader: 'sass-loader', options: { sourceMap: true } },
             ],
          },
          {
             test: /\.css$/,
             use: [
-               'style-loader',
-               { loader: 'css-loader', options: { importLoaders: 1 } },
-               'postcss-loader'
+               {
+                  loader: MiniCssExtractPlugin.loader,
+                  options: {
+                     hmr: DEBUG,
+                     reloadAll: true,
+                  },
+               },
+               { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
+               { loader: 'postcss-loader', options: { options: {}, } },
             ],
          },
          {
