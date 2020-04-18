@@ -39,10 +39,10 @@ module Dneslov
     config.npm.install = ['yarn']
 
     # Command to build production assets
-    config.npm.build = ['npm run build']
+    config.npm.build = ['yarn run build']
 
     # Command to start a file watcher
-    config.npm.watch = ['npm run start']
+    config.npm.watch = ['yarn run start']
 
     config.npm.install_on_asset_precompile = true
 

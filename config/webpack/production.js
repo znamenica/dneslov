@@ -23,10 +23,10 @@ module.exports = merge(sharedConfig, {
             use: [{
                loader: 'babel-loader',
                options: {
-                  cacheDirectory: true,
                   babelrc: false,
                   configFile: false,
                   compact: false,
+                  cacheDirectory: true,
                   ignore: [ /cjs/, /node_modules/ ],
                   presets: [
                      [
@@ -40,33 +40,39 @@ module.exports = merge(sharedConfig, {
                            "useBuiltIns": "usage"
                         },
                      ],
-                     "@babel/preset-react",
+                     [
+                        "@babel/preset-react",
+                        {
+                           runtime: "classic"
+                        }
+                     ]
                   ],
                   plugins: [
                      [ "@babel/transform-runtime", { //automatically polyfilling but +30K
                         helpers: false,
                         regenerator: true,
                      }],
-                     "@babel/plugin-syntax-dynamic-import",
-                     [
-                        "@babel/plugin-proposal-class-properties",
-                        {
-                           "spec": true
-                        }
-                     ],
                      [
                         "@babel/plugin-proposal-decorators",
                         {
                            "legacy": true,
                         }
                      ],
-                     "transform-react-remove-prop-types",//didnt pillout the import of PropTypes
-                     "transform-react-constant-elements",//+0.01K
-                     "transform-react-inline-elements", //+0.5K
-                     "transform-react-pure-class-to-function", //+0*/
-                     'transform-es2015-destructuring',
-                     'transform-object-rest-spread',
-                     'transform-async-to-generator',
+                     [
+                        "@babel/plugin-proposal-class-properties",
+                        {
+                           "spec": true
+                        }
+                     ],
+                     '@babel/plugin-proposal-logical-assignment-operators',
+                     '@babel/plugin-syntax-dynamic-import',
+                     '@babel/plugin-transform-react-jsx-source',
+                     '@babel/plugin-transform-react-jsx-self',
+                     '@babel/plugin-transform-react-constant-elements',
+                     '@babel/plugin-transform-react-inline-elements',
+                     '@babel/plugin-transform-destructuring',
+                     '@babel/plugin-transform-async-to-generator',
+                     'transform-react-pure-class-to-function',
                      'transform-es3-modules-literals',
                   ],
                },
