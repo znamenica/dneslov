@@ -19,7 +19,7 @@ export const subjectMeta = {
       key: {
          title: 'Ключ',
       },
-      kind: {
+      kind_name: {
          title: 'Вид',
       },
       name: {
@@ -41,7 +41,7 @@ export const subjectMeta = {
             "Имя отсутствует": matchEmptyObject,
          }
       },
-      kind: {
+      kind_code: {
          kind: 'dynamic',
          display_scheme: '12-6-6-6',
          title: 'Вид',
