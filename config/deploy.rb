@@ -62,8 +62,8 @@ namespace :deploy do
    after 'deploy:updating', 'deploy:symlink:custom'
    #before 'deploy:setup_config', 'nginx:remove_default_vhost'
    #after 'deploy:setup_config', 'nginx:reload'
-   after 'deploy:publishing', 'deploy:restart'
-   #before 'nginx:restart', 'nginx:site:enable'
-   #before 'nginx:site:enable', 'nginx:site:add'
-   #before 'deploy:restart', 'nginx:restart'
+   after 'deploy:publishing', 'nginx:site:add'
+   after 'nginx:site:add', 'nginx:site:enable'
+   after 'nginx:site:enable', 'nginx:restart'
+   after 'nginx:restart', 'deploy:restart'
 end

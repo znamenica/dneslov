@@ -14,6 +14,12 @@ set :nginx_domains, "dneslov.com localhost"
 set :nginx_read_timeout, 60
 set :app_server_socket, "#{shared_path}/tmp/sockets/puma.sock"
 
+set :nginx_use_ssl, true
+set :nginx_ssl_certificate_path, '/etc/nginx/ssl'
+set :nginx_ssl_certificate, 'dneslov.crt'
+set :nginx_ssl_certificate_key_path, '/etc/nginx/ssl'
+set :nginx_ssl_certificate_key, 'dneslov.key'
+
 # role-based syntax
 # ==================
 
