@@ -70,6 +70,7 @@
     "custom-event-polyfill": "^0.3.0",
     "intro.js": "^2.9.3",
     "intro.js-react": "^0.2.0",
+    "kind-of": "^6.0.3",
     "lodash": "^4.17.15",
     "lodash-decorators": "^6.0.1",
     "lory.js": "git+https://github.com/majioa/lory.git#devel",
