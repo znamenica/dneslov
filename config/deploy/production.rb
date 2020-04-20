@@ -3,11 +3,16 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "185.133.42.61", port: "222", user: "majioa", roles: %w{app db web}, primary: true
+server "dneslov", port: "222", user: "www-data", roles: %w{app db web}, primary: true
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
+set :pty, true
 
+# nginx
+set :nginx_domains, "dneslov.com localhost"
+set :nginx_read_timeout, 60
+set :app_server_socket, "#{shared_path}/tmp/sockets/puma.sock"
 
 # role-based syntax
 # ==================
