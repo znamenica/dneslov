@@ -110,10 +110,10 @@ class Memory < ActiveRecord::Base
       unscoped.joins( :slug ).where( slugs: { text: slug } ).first ;end
 
    def all_titles_for language_code
-      Description.title.all_by_memory(self).with_lang(language_code) ;end
+      Description.title.all_by_memory(self).first_in_calendary.with_lang(language_code) ;end
 
    def all_descriptions_for language_code
-      Description.desc.all_by_memory(self).with_lang(language_code) ;end
+      Description.desc.all_by_memory(self).first_in_calendary.with_lang(language_code) ;end
 
    def description_for language_code
       descriptions.with_lang(language_code).first ;end

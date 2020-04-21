@@ -15,6 +15,10 @@ class Memo < ActiveRecord::Base
    belongs_to :calendary
    belongs_to :event
    belongs_to :bond_to, class_name: :Memo
+   has_one :calendary_slug, through: :calendary, source: :slug, class_name: :Slug
+   has_one :memo_order
+   has_one :order, through: :memo_order
+   has_one :memory, through: :event
 
    has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
    has_many :services, as: :info, inverse_of: :info
@@ -23,9 +27,6 @@ class Memo < ActiveRecord::Base
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
    has_many :memo_orders, dependent: :destroy
    has_many :orders, through: :memo_orders
-   has_one :memo_order
-   has_one :order, through: :memo_order
-   has_one :memory, through: :event
 
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
@@ -36,6 +37,12 @@ class Memo < ActiveRecord::Base
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
       calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).select( :sluggable_id )
       where( calendary_id: calendary_ids ) end
+
+   scope :first_in_calendary, -> do
+      sql = self.joins(:calendary_slug, :memory)
+                .select('row_number() OVER (PARTITION BY slugs.text, memories.id)')
+      self.unscope(:where, :order)
+          .joins("INNER JOIN (#{sql.to_sql}) AS tmp ON tmp.row_number = 1 AND tmp.id = memoes.id") end
 
    scope :with_date, -> (date_in, julian = false) do
       return self if date_in.blank?

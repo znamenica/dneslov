@@ -79,7 +79,10 @@ export default class Description extends Component {
                                     text='Общее описание' />
                               }
                            </div>
-                           <div className="collapsible-body description">
-                              <ReactMarkdown source={description.text} /></div></li>)}</ul></div></div></div>)
+                           <div className="collapsible-body">
+                              <div className='container'>
+                                 <div className='row'>
+                                    <div className='col s12 description'>
+                                       <ReactMarkdown source={description.text} /></div></div></div></div></li>)}</ul></div></div></div>)
    }
 }

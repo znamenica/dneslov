@@ -4,6 +4,7 @@ class Description < ActiveRecord::Base
    has_alphabeth on: :text
 
    belongs_to :describable, polymorphic: true
+   belongs_to :memo, foreign_key: :describable_id, foreign_type: :describable_type, class_name: :Memo
 
    scope :desc, -> { where(type: 'Description') }
    scope :title, -> { where(type: 'Title') }
@@ -21,6 +22,10 @@ class Description < ActiveRecord::Base
       self.where(describable_type: "Memo",
                  describable_id: ids) ;end
 
-   before_create -> { self.type ||= 'Description' }
+   scope :first_in_calendary, -> do
+      ids = Memo.select(:id).notice.first_in_calendary
+
+      self.where(describable_type: "Memo",
+                 describable_id: ids) ;end
 
    validates :text, :language_code, :alphabeth_code, presence: true ;end
