@@ -73,7 +73,7 @@
     "kind-of": "^6.0.3",
     "lodash": "^4.17.15",
     "lodash-decorators": "^6.0.1",
-    "lory.js": "git+https://github.com/majioa/lory.git#devel",
+    "lory.js": "^2.5.3",
     "materialize-css": "^1.0.0",
     "merge-anything": "^3.0.3",
     "pickmeup": "git+https://git@github.com/majioa/PickMeUp.git#devel",

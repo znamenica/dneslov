@@ -5371,9 +5371,10 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-"lory.js@git+https://github.com/majioa/lory.git#devel":
-  version "0.0.0-semantic-release"
-  resolved "git+https://github.com/majioa/lory.git#85a98ea743f676851e69efda344e7782f1045f8a"
+lory.js@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/lory.js/-/lory.js-2.5.3.tgz#157d6bcf64105d56b1fdad763940e79912db19b4"
+  integrity sha512-9FKuaeLtSKupM9BNmcCY0W31yhloZv2vEMD/v0hnwsdajqzb8bQacD5ZxZw+WUD0dRAXM+qx65Vk1m++4qkcsQ==
 
 loud-rejection@^1.0.0:
   version "1.6.0"

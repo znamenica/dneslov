@@ -43,11 +43,9 @@ export default class Carousel extends Component {
       }
    }
 
-   onLorySlideFrom(e) {
-      let index = parseInt(e.detail.currentSlide)
-
+   onLorySlideFrom(index) {
       if (index >= 0 && this.carousel) {
-         this.carousel.set(e.detail.currentSlide)
+         this.carousel.set(index)
       }
    }
 
