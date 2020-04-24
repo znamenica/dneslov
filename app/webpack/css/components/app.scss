@@ -233,4 +233,18 @@ body {
          display: block;
       }
    }
+
+   .introjs-tooltipReferenceLayer {
+      .begin {
+         left: 20px !important;
+      }
+
+      .introjs-button {
+         font-size: 0.8rem;
+      }
+
+      .introjs-donebutton {
+         color: black;
+      }
+   }
 }

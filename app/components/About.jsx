@@ -3,13 +3,14 @@ import { Component } from 'react'
 export default class About extends Component {
    static defaultProps = {
       done: [
+         'Версия',
          'Полнотекстовый поиск по календарю',
          'Выборка памятей по дате',
          'Выборка памятей по календарю',
          'Ссылки на сторонние календари и статьи о празднике или святом',
          'Иконы праздника или святого',
          'Краткое описание праздника или подвига святого',
-         'Тропари и кондаци святому или празднику',
+         'Тропари и кондаки святому или празднику',
          'Удобная выборка дат',
          'Поддержка календарей: календарь РПЦ',
          'Поддержка браузеров: Firefox, Chrome (для компьютера и android)',
@@ -49,13 +50,15 @@ export default class About extends Component {
                            <tr>
                               <td><h5>Текущие особенности календаря</h5></td>
                               <td></td></tr>
-                           {this.props.done.map((r) =>
+                           {this.props.done.map((r, index) =>
                               <tr>
                                  <td>{r}</td>
                                  <td>
-                                    <i
-                                       className='small material-icons green'>
-                                       done</i>
+                                    {index == 0 &&
+                                       "1.1" ||
+                                       <i
+                                          className='small material-icons green'>
+                                          done</i>}
                                  </td>
                               </tr>)}
                            <tr>

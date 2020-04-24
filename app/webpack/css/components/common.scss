@@ -821,8 +821,8 @@
             line-height: 64px;
          }
 
-         .moon {
-            border-bottom-color: aqua;
+         nav .moon {
+            background-color: aqua;
          }
       }
    }
@@ -854,8 +854,8 @@
          line-height: 64px;
       }
 
-      .moon {
-         border-bottom-color: CadetBlue;
+      nav .moon {
+         background-color: CadetBlue;
       }
    }
 
@@ -890,8 +890,8 @@
          line-height: 64px;
       }
 
-      .moon {
-         border-bottom-color: CornflowerBlue;
+      nav .moon {
+         background-color: CornflowerBlue;
       }
    }
 
@@ -926,8 +926,8 @@
          line-height: 64px;
       }
 
-      .moon {
-         border-bottom-color: blue;
+      nav .moon {
+         background-color: blue;
       }
    }
 
@@ -962,8 +962,8 @@
          line-height: 64px;
       }
 
-      .moon {
-         border-bottom-color: DarkBlue;
+      nav .moon {
+         background-color: #b9d9e6;
       }
    }
 
@@ -999,8 +999,8 @@
          line-height: 80px;
       }
 
-      .moon {
-         border-bottom-color: LawnGreen;
+      nav .moon {
+         background-color: LawnGreen;
       }
    }
 
@@ -1035,8 +1035,8 @@
          line-height: 80px;
       }
 
-      .moon {
-         border-bottom-color: Chartreuse;
+      nav .moon {
+         background-color: Chartreuse;
       }
    }
 
@@ -1071,8 +1071,8 @@
          line-height: 80px;
       }
 
-      .moon {
-         border-bottom-color: MediumSeaGreen;
+      nav .moon {
+         background-color: MediumSeaGreen;
       }
    }
 
@@ -1107,8 +1107,8 @@
          line-height: 80px;
       }
 
-      .moon {
-         border-bottom-color: ForestGreen;
+      nav .moon {
+         background-color: ForestGreen;
       }
    }
 
@@ -1143,8 +1143,8 @@
          line-height: 80px;
       }
 
-      .moon {
-         border-bottom-color: DarkGreen;
+      nav .moon {
+         background-color: DarkGreen;
       }
    }
 
@@ -1179,8 +1179,8 @@
          line-height: 150px;
       }
 
-      .moon {
-         border-bottom-color: HotPink;
+      nav .moon {
+         background-color: HotPink;
       }
    }
 
@@ -1215,8 +1215,8 @@
          line-height: 110px;
       }
 
-      .moon {
-         border-bottom-color: magenta;
+      nav .moon {
+         background-color: magenta;
       }
    }
 
@@ -1251,8 +1251,8 @@
          line-height: 110px;
       }
 
-      .moon {
-         border-bottom-color: red;
+      nav .moon {
+         background-color: red;
       }
    }
 
@@ -1287,8 +1287,8 @@
          line-height: 110px;
       }
 
-      .moon {
-         border-bottom-color: BlueViolet;
+      nav .moon {
+         background-color: DeepSkyBlue;
       }
    }
 
@@ -1323,8 +1323,8 @@
          line-height: 110px;
       }
 
-      .moon {
-         border-bottom-color: DarkMagenta;
+      nav .moon {
+         background-color: DarkMagenta;
       }
    }
 
@@ -1359,8 +1359,8 @@
          line-height: 128px;
       }
 
-      .moon {
-         border-bottom-color: AntiqueWhite;
+      nav .moon {
+         background-color: AntiqueWhite;
       }
    }
 
@@ -1395,8 +1395,8 @@
          line-height: 145px;
       }
 
-      .moon {
-         border-bottom-color: BurlyWood;
+      nav .moon {
+         background-color: BurlyWood;
       }
    }
 
@@ -1431,8 +1431,8 @@
          line-height: 155px;
       }
 
-      .moon {
-         border-bottom-color: Gold;
+      nav .moon {
+         background-color: Gold;
       }
    }
 
@@ -1467,8 +1467,8 @@
          line-height: 165px;
       }
 
-      .moon {
-         border-bottom-color: Chocolate;
+      nav .moon {
+         background-color: Chocolate;
       }
    }
 
@@ -1503,8 +1503,8 @@
          line-height: 180px;
       }
 
-      .moon {
-         border-bottom-color: Brown;
+      nav .moon {
+         background-color: Brown;
       }
    }
 
@@ -1539,8 +1539,8 @@
          line-height: 200px;
       }
 
-      .moon {
-         border-bottom-color: yellow;
+      nav .moon {
+         background-color: yellow;
       }
    }
 
@@ -1575,8 +1575,8 @@
          line-height: 200px;
       }
 
-      .moon {
-         border-bottom-color: DarkOrange;
+      nav .moon {
+         background-color: DarkOrange;
       }
    }
 
@@ -1706,22 +1706,28 @@ html {
       display: none;
    }
 
-   .moon {
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(30px, -30px) rotate(0.125turn);
-      width: 0px;
-      height: 0px;
-      border: 30px solid transparent;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      background: none;
+   nav .moon {
+      //position: absolute;
+      //top: 0;
+      //right: 0;
+      //transform: translate(30px, -30px) rotate(0.125turn);
+      //width: 0px;
+      //height: 0px;
+      //border: 30px solid transparent;
+      //border-bottom-left-radius: 30px;
+      //border-bottom-right-radius: 30px;
+      //background: none;
 
-      //background: $mooncolor;
-      //background: #a8aeb3;
-      box-shadow: 0 0 20px #24b4ff,
-      inset 0 0 1vw #fff
+      ////background: nav .mooncolor;
+      ////background: #a8aeb3;
+      //box-shadow: 0 0 20px #24b4ff,
+      //inset 0 0 1vw #fff
+
+      top: -2px;
+      right: 5px;
+      position: relative;
+      max-height: 56px;
+      pointer-events: none;
    }
 
    header, main, footer {
@@ -2105,6 +2111,28 @@ html {
          text-overflow: ellipsis;
          margin-left: 3px;
          margin-right: 3px;
+      }
+   }
+
+   body {
+      .progress {
+         display: none;
+      }
+
+      &.in-progress {
+         .progress {
+            position: absolute;
+            bottom: 1rem;
+            width: 50%;
+            left: 25%;
+            display: block;
+         }
+      }
+   }
+
+   body > span {
+      & > h2, & > h4, & > h5 {
+         text-align: center;
       }
    }
 }

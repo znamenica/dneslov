@@ -241,8 +241,15 @@ export default class MemoriesForm extends Component {
                      alt="Днеслов">
                      <img
                         src="dneslov-title.png" /></a>
-                  <div className="right">
-                     <div className='moon' /></div></div></nav></header>,
+                  <ul id="nav-mobile" className="right hide-on-med-and-down">
+                     <li>
+                        <a
+                           href={"/about"}>
+                           {"О проекте..."}</a></li>
+                     <div className='moon btn-floating btn-large'>
+                        <i
+                           className="material-icons">
+                           brightness_4</i></div></ul></div></nav></header>,
          <main>
             <div className='container'>
                <div className='row'>
@@ -283,4 +290,6 @@ export default class MemoriesForm extends Component {
                                  calendaries_cloud={parseCalendariesString(this.state.query.c)}
                                  default_calendary_slug={this.defaultCalendarySlug()}
                                  onLoadRequest={this.onMemoryLoadRequest.bind(this)}
-                                 onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>])}}
+                                 onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>,
+         <div className="progress">
+            <div className="indeterminate"></div></div> ])}}

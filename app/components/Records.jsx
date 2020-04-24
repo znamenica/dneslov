@@ -180,6 +180,8 @@ export default class Records extends Component {
       }
 
       console.log("[onSuccessLoad] > ", response.config.url)
+      document.body.classList.remove('in-progress')
+
       if (response.config.url === '/' + this.props.meta.remoteNames + '.json') {
          console.log("[onSuccessLoad] > state changes", new_state)
          this.setState(new_state)
@@ -195,11 +197,15 @@ export default class Records extends Component {
       this.isRequesting = true
 
       console.log("[submit] Sending...", query)
+      document.body.classList.add('in-progress')
 
       Axios.get(request.url, { params: query } )
            .then(this.onSuccessLoad.bind(this))
            .catch((error) => {})
-           .then(() => { this.isRequesting = false })
+           .then(() => {
+               document.body.classList.remove('in-progress')
+               this.isRequesting = false
+           })
    }
 
    onSearchUpdate(tokens) {

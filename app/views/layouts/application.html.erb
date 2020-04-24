@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= [ 'Днеслов', @memory&.short_name ].compact.join(' – ') %></title>
+  <title><%= [ 'Днеслов', @memory&.short_name ].compact.join(' / ') %></title>
   <link rel="yandex-tableau-widget" href="/manifest.json" />
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -27,5 +27,6 @@
 </head>
 <body>
   <%= yield %>
+  <%= render partial: 'shared/nojs' %>
 </body>
 </html>

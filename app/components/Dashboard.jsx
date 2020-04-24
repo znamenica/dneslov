@@ -135,13 +135,15 @@ export default class Dashboard extends Component {
                               className="material-icons">
                               perm_identity</i></GitHubLogin></div>}
                   </div></nav></header>,
-      <main key='main'>
-         <div className='container admin'>
-            <div className='row'>
-               <div className='col s12 m12 l12 xl12'>
-                  <div id='page'>
-                     {this.state.meta && this.state.login &&
-                        <Records
-                           page={this.state.page}
-                           meta={this.state.meta}
-                           locales={this.state.locales} />}</div></div></div></div></main>])}}
+         <main key='main'>
+            <div className='container admin'>
+               <div className='row'>
+                  <div className='col s12 m12 l12 xl12'>
+                     <div id='page'>
+                        {this.state.meta && this.state.login &&
+                           <Records
+                              page={this.state.page}
+                              meta={this.state.meta}
+                              locales={this.state.locales} />}</div></div></div></div></main>,
+         <div className="progress">
+            <div className="indeterminate"></div></div> ])}}
