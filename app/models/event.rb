@@ -98,7 +98,7 @@ class Event < ActiveRecord::Base
    singleton_class.send(:alias_method, :t, :with_token)
    singleton_class.send(:alias_method, :mid, :with_memory_id)
 
-   validates_presence_of :kind
+   validates_presence_of :kind, :kind_code
 
    def year_date_for calendary_slugs, date_in, julian
       return nil if date_in.blank?

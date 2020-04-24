@@ -37,7 +37,7 @@ class Name < ActiveRecord::Base
    validates_presence_of :bond_to_id, if: :bond?
    validates_absence_of :bond_to_id, unless: :bond?
 
-   before_validation -> { self.bind_kind_code ||= 'несвязаное' }
+   before_validation -> { self.bind_kind_code ||= 'несвязаное' }, on: :create
    after_save :fill_root_id, on: :create, unless: :root_id?
 
    def bond?

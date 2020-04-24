@@ -4,7 +4,7 @@ require 'when_easter'
 # year_date[string]     - дата в году постоянная или перемещаемая, когда память отмечается
 # event_id[int]         - ссылка на событие
 # calendary_id[int]     - ссылка на календарь
-# bind_kind[string]     - тип привязки к опорному помину(может быть не привязан)
+# bind_kind_code[string]     - тип привязки к опорному помину(может быть не привязан)
 # bond_to_id[int]       - ссылка на опорный помин, если nil, помин первичный
 #
 class Memo < ActiveRecord::Base
@@ -109,7 +109,7 @@ class Memo < ActiveRecord::Base
    validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])(%[0-6])?|[+-]\d{1,3})\z/ }
 
    before_validation :fix_year_date
-   before_create -> { self.bind_kind ||= 'несвязаный' }
+   before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
 
    def fix_year_date
       self.year_date =

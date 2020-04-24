@@ -1,12 +1,12 @@
 module MacrosSupport
    ALPHABETH_MATHCES = {
-      /румынск/ => :рм,
-      /украинск/ => :ук,
-      /сербск/ => :ср,
-      /иверск/ => :ив,
-      /английск/ => :ан,
-      /греческ/ => :гр,
-      /русск/ => :ру,
+      /румынск/ => :РМ,
+      /украинск/ => :УК,
+      /сербск/ => :СР,
+      /иверск/ => :ИВ,
+      /английск/ => :АН,
+      /греческ/ => :ГР,
+      /русск/ => :РУ,
    }
 
    LANGUAGE_MATHCES = {
@@ -112,6 +112,7 @@ module MacrosSupport
       if model.is_a?( Symbol )
          syms = args.select { |x| x.is_a?(Symbol) }
          object = FactoryBot.build( model, *syms, new_attrs )
+         #  binding.pry
          object.save
          object
       else

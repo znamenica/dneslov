@@ -1,6 +1,6 @@
 FactoryBot.define do
    factory :memory_name do
-      state { :наречёное }
+      state_code { :наречёное }
       feasible { true }
 
       association :memory, factory: :memory

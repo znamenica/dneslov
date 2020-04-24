@@ -1,6 +1,10 @@
 # language: ru
 @model @link
 Функционал: Модель ссылки
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть событие "Canonization"
 
    @language
    Сценарий: Проверка полей модели ссылки
@@ -37,7 +41,7 @@
       Допустим есть память "Василий Памятливый"
 
       Если создадим новую вики ссылку с полями:
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | language_code    | ру                    |
         | url              | http://www.wiki.ru    |
         | info:memory      | ^Василий Памятливый   |
@@ -48,7 +52,7 @@
       Допустим есть память "Василий Памятливый"
 
       Если попробуем создать новую вики ссылку с полями:
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | language_code    | ру                    |
         | url              | httr://recource.ru    |
         | info:memory      | ^Василий Памятливый   |
@@ -60,7 +64,7 @@
 
       Если попробуем создать новую вики ссылку с полями:
         | language_code    | ру                    |
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | url              | file:///recource.ru   |
         | info:memory      | ^Василий Памятливый   |
       То увидим сообщение ссылки об ошибке:
@@ -71,7 +75,7 @@
 
       Если попробуем создать новую вики ссылку с полями:
         | language_code    | ру                    |
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | url              | httpe/r/recource.ruw  |
         | info:memory      | ^Василий Памятливый   |
       То увидим сообщение ссылки об ошибке:
@@ -87,7 +91,7 @@
 
       Если создадим новое описание с полями:
         | language_code    | ру                    |
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | text             | Мурмур                |
         | describable:link | ^http://www.wiki.ru   |
       То русская иконная ссылка "http://www.wiki.ru" будет действительной
@@ -100,7 +104,7 @@
       Если попробуем создать новую иконную ссылку "http://www.wiki.ru" с неверным описанием
       То увидим сообщение ссылки об ошибке:
          """
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "ру"
+         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
          Descriptions is invalid
          """
       И ссылки "http://www.wiki.ru" не будет

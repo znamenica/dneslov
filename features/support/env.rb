@@ -7,11 +7,9 @@
 require 'pry'
 require 'rack'
 require 'rack/test'
-require 'database_cleaner'
 require 'database_cleaner/cucumber'
-require 'rspec/expectations'
 require 'cucumber/rails'
-
+require 'rspec/expectations'
 require 'shoulda-matchers'
 require 'factory_bot'
 require 'faker'
@@ -24,9 +22,11 @@ World( Rack::Test::Methods )
 
 Shoulda::Matchers.configure do |config|
    config.integrate do |with|
-      with.test_framework :rspec_exp
+      with.test_framework :cucumber
       with.library :active_model
       with.library :active_record ;end;end
+
+
 
 Around do |_scenario, block|
    DatabaseCleaner.cleaning( &block ) ;end

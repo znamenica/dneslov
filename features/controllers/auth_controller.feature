@@ -10,7 +10,7 @@
          """
          ---
            :id: 1000
-           :alphabeth_code: :ру
+           :alphabeth_code: :РУ
            :language_code: :ру
            :text: Валентин
          """

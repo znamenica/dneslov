@@ -3,7 +3,7 @@ FactoryBot.define do
      date { Faker::Date.forward(days: 23) }
       author_name { Faker::Superhero.name }
       language_code { :ру }
-      alphabeth_code { :ру }
+      alphabeth_code { :РУ }
 
       transient do
          slug { nil }

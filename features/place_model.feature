@@ -1,6 +1,10 @@
 # language: ru
 @model @place
 Функционал: Модель места
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть событие "Canonization"
 
    @language
    Сценарий: Проверка полей модели места
@@ -33,7 +37,7 @@
       То увидим сообщение места об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "ру"
+         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
          """
       И места не будет
 

@@ -1,12 +1,12 @@
 Допустим(/^есть русское личное имя (.*)$/) do |name|
    find_or_create( Name, { text: name }, language_code: :ру,
-      alphabeth_code: :ру ) ; end
+      alphabeth_code: :РУ ) ; end
 
 Допустим(/^имя (.*) относится к памяти "(.*)"$/) do |nametext, short_name|
    memory = Memory.where( short_name: short_name ).first
    name = Name.where( text: nametext ).first
    if !memory.names.include? name
-      mn = MemoryName.new(name: name, state: :наречёное)
+      mn = MemoryName.new(name: name, state_code: :наречёное)
       memory.memory_names << mn ; end ; end
 
 Допустим(/^применим входные данные модели имени:$/) do |string|

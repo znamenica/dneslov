@@ -1,6 +1,10 @@
 # language: ru
 @model @item_type
 Функционал: Модель типа предмета
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть событие "Canonization"
 
    @language
    Сценарий: Проверка полей модели типа предмета
@@ -33,6 +37,6 @@
       То увидим сообщение типа предмета об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "ру"
+         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
          """
       И типа предмета не будет

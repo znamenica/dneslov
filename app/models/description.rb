@@ -28,4 +28,6 @@ class Description < ActiveRecord::Base
       self.where(describable_type: "Memo",
                  describable_id: ids) ;end
 
-   validates :text, :language_code, :alphabeth_code, presence: true ;end
+   validates :text, :language_code, :alphabeth_code, presence: true
+
+   before_save -> { self.type ||= 'Description' }, on: :create end

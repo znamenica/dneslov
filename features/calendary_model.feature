@@ -1,6 +1,9 @@
 # language: ru
 @model @calendary
 Функционал: Модель календаря
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
 
    @language
    Сценарий: Проверка полей модели календаря
@@ -47,7 +50,7 @@
    @language
    Сценарий: Неверный язык календаря
       Если попробуем создать новый календарь с полями:
-        | alphabeth_code   | рр        |
+        | alphabeth_code   | РР        |
         | language_code    | уу        |
         | author_name      | Василий   |
         | slug             | клнд      |
@@ -66,7 +69,7 @@
    @language
    Сценарий: Неверный алфавит календаря
       Если попробуем создать новый календарь с полями:
-        | alphabeth_code   | уу        |
+        | alphabeth_code   | УУ        |
         | language_code    | ру        |
         | author_name      | Василий   |
         | slug             | клнд      |
@@ -87,6 +90,6 @@
       То увидим сообщение календаря об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "ру"
+         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
          """
       И календаря "клнд" не будет

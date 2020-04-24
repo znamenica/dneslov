@@ -1,6 +1,10 @@
 # language: ru
 @model @canto
 Функционал: Модель песнопения
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть событие "Canonization"
 
    @language
    Сценарий: Проверка полей модели песмы
@@ -50,7 +54,7 @@
    @language
    Сценарий: Недействительная запись песмы при неверном тексте
       Допустим попробуем создать песму с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Тропаря текстJ  |
         | type             | ---\n...        |
@@ -59,9 +63,9 @@
       То русских песм не будет
       И увидим сообщение песмы об ошибке:
          """
-         Text contains invalid char(s) "J" for the specified alphabeth "ру"
-         Prosomeion_title contains invalid char(s) "W" for the specified alphabeth "ру"
-         Title contains invalid char(s) "R" for the specified alphabeth "ру"
+         Text contains invalid char(s) "J" for the specified alphabeth "РУ"
+         Prosomeion_title contains invalid char(s) "W" for the specified alphabeth "РУ"
+         Title contains invalid char(s) "R" for the specified alphabeth "РУ"
          Type can't be blank
          """
 
@@ -69,7 +73,7 @@
    @tone @chant
    Сценарий: Недействительная запись песнопения при неверном гласе
       Допустим попробуем создать песнопение с полями:
-        | alphabeth_code | ру             |
+        | alphabeth_code | РУ             |
         | language_code  | ру             |
         | text           | Тропаря текст  |
         | tone           | 9              |
@@ -85,7 +89,7 @@
    @tone @canticle
    Сценарий: Недействительная запись спевны при неверном гласе
       Допустим попробуем создать спевну с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Тропаря текст   |
         | tone             | 9               |
@@ -103,20 +107,20 @@
    Сценарий: Действительная запись песнопения
       Допустим есть память "Василий Памятливый"
       И создадим новое песнопение с полями:
-        | alphabeth_code   | ру                 |
+        | alphabeth_code   | РУ                 |
         | language_code    | ру                 |
         | text             | Василию песнопение |
         | tone             | 8                  |
         | prosomeion_title | Василию подобен    |
         | type             | Troparion          |
-        | title            | Тропаря титул   |
+        | title            | Тропаря титул      |
       То русское песнопенье "Василию песнопение" будет существовать
 
 
    @tone @canticle
    Сценарий: Недействительная запись спевны при заполненном подобне
       Допустим попробуем создать спевну с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Спевны текст    |
         | tone             | 1               |
@@ -133,7 +137,7 @@
    @language @chant
    Сценарий: Недействительная запись песнопения при несоотвествии языка её имени
       Допустим попробуем создать песнопение с полями:
-        | alphabeth_code | гр                   |
+        | alphabeth_code | ГР                   |
         | language_code  | гр                   |
         | text           | Василию песнопение   |
         | type           | Troparion            |
@@ -141,8 +145,8 @@
       То греческого песнопения "Василию песнопение" не будет
       И увидим сообщение песнопение об ошибке:
          """
-         Text contains invalid char(s) "Ваеилнопсю" for the specified alphabeth "гр"
-         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "гр"
+         Text contains invalid char(s) "Ваеилнопсю" for the specified alphabeth "ГР"
+         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "ГР"
          """
 
    @chant
@@ -163,7 +167,7 @@
    Сценарий: Действительная запись моления
       Допустим есть память "Василий Памятливый"
       И создадим новое моление с полями:
-        | alphabeth_code   | ру                    |
+        | alphabeth_code   | РУ                    |
         | language_code    | ру                    |
         | text             | Василию величание     |
         | prosomeion_title | ---\n...              |
@@ -175,7 +179,7 @@
    @language @orison
    Сценарий: Недействительная запись моления при несоотвествии языка её имени
       Допустим попробуем создать моление с полями:
-        | alphabeth_code   | гр                 |
+        | alphabeth_code   | ГР                 |
         | language_code    | гр                 |
         | text             | Василию величание  |
         | prosomeion_title | ---\n...           |
@@ -184,6 +188,6 @@
       То греческого моления "Василию величание" не будет
       И увидим сообщение моление об ошибке:
          """
-         Text contains invalid char(s) "Вавеилнсчю" for the specified alphabeth "гр"
-         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "гр"
+         Text contains invalid char(s) "Вавеилнсчю" for the specified alphabeth "ГР"
+         Title contains invalid char(s) "Таилопртуя" for the specified alphabeth "ГР"
          """

@@ -1,12 +1,16 @@
 # language: ru
 @validator @language
 Функционал: Валидатор языка
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть событие "Canonization"
 
    @description
    Сценарий: Проверка валидатора языка в описании
-      Допустим есть память "Василий Памятливый"
+      И есть память "Василий Памятливый"
       Если создадим новое описание с полями:
-        | alphabeth_code      | ру                    |
+        | alphabeth_code      | РУ                    |
         | language_code       | ру                    |
         | text                | Мурмур                |
         | describable:memory  | ^Василий Памятливый   |
@@ -14,10 +18,26 @@
 
 
    @description
+   Сценарий: Недействительное описание с текстом не соотвестствующим алфавиту
+      Допустим есть память "Василий Памятливый"
+      Если попробуем создать описание с полями:
+        | alphabeth_code      | РУ                    |
+        | language_code       | ру                    |
+        | text                | Vasja                 |
+        | describable:memory  | ^Василий Памятливый   |
+      То русского описания с текстом "Vasja" не будет
+      И греческого описания не будет
+      И увидим сообщение описания об ошибке:
+         """
+         Text contains invalid char(s) "ajs" for the specified alphabeth "РУ"
+         """
+
+
+   @description
    Сценарий: Недействительное описание с языком не соотвестствующим алфавиту
       Допустим есть память "Василий Памятливый"
       Если попробуем создать описание с полями:
-        | alphabeth_code      | гр                    |
+        | alphabeth_code      | ГР                    |
         | language_code       | ру                    |
         | text                | Вася                  |
         | describable:memory  | ^Василий Памятливый   |
@@ -26,7 +46,7 @@
       И увидим сообщение описания об ошибке:
          """
          Alphabeth_code is not included in the list
-         Text contains invalid char(s) "Вася" for the specified alphabeth "гр"
+         Text contains invalid char(s) "Вася" for the specified alphabeth "ГР"
          """
 
 
@@ -34,7 +54,7 @@
    Сценарий: Недействительное описание с языком не соотвестствующим алфавиту
       Допустим есть память "Василий Памятливый"
       Если попробуем создать описание с полями:
-        | alphabeth_code      | ру                    |
+        | alphabeth_code      | РУ                    |
         | language_code       | гр                    |
         | text                | Вася                  |
         | describable:memory  | ^Василий Памятливый   |

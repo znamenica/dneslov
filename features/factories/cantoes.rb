@@ -3,7 +3,7 @@ FactoryBot.define do
       text { Faker::Lorem.paragraph }
       prosomeion_title { Faker::Lorem.word }
       language_code { :ан }
-      alphabeth_code { :ан }
+      alphabeth_code { :АН }
       tone { 1 }
       type { 'Canto' }
       title { Faker::Lorem.word }

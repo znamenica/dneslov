@@ -101,13 +101,14 @@ group :development, :test do
    gem 'faker'
    gem 'ffaker'
    gem 'bundler-audit'
+   gem 'faraday', '~> 1.0'
 end
 
 group :test do
    gem 'cucumber-rails', '>= 1.8.0', require: nil
-   gem 'shoulda-matchers', github: 'majioa/shoulda-matchers', branch: 'allow_to_use_the_matchers_with_just_rspec_expectations_gem'
+   gem 'shoulda-matchers', '~> 4.0'
    gem 'rspec-expectations'
-   gem 'rspec-wait'
+   #gem 'rspec-wait'
    gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
    gem "launchy"

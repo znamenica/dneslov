@@ -41,7 +41,7 @@ class Subject < ActiveRecord::Base
    accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
-   validates_presence_of :key, :kind
+   validates_presence_of :key, :kind_code
    validates_uniqueness_of :key
    validates :meta, json: { schema: JSON_SCHEMA } ;end
 

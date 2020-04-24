@@ -1,11 +1,16 @@
 # language: ru
 @model @chant
 Функционал: Модель имени
+   Предыстория:
+    * есть язык "ру"
+    * есть алфавит "РУ"
+    * есть виды имени "наречёное, отчество, отечья"
+    * есть виды связки имени "несвязаное, переводное"
 
    @language
    Сценарий: Проверка полей модели имени
       Допустим есть модель личного имени
-      И свойство "text" личного имени не могут быть пустыми
+      И свойство "text" личного имени не может быть пустым
       И имя имеет столбцы "bond_to_id, root_id" рода "целый"
       И имя имеет рода "строка" следущие столбцы:
          | столбец            |
@@ -24,7 +29,7 @@
    @language
    Сценарий: Действительная запись личного имени
       Допустим создадим новое личное имя с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Вася            |
       То русское личное имя "Вася" будет существовать
@@ -35,27 +40,27 @@
          """
          ---
          - &2
-           :alphabeth_code: :ру
+           :alphabeth_code: :РУ
            :language_code: :ру
            :text: Валентин
          - &1
-           :alphabeth_code: :ру
+           :alphabeth_code: :РУ
            :language_code: :ру
            :text: Алексей
-         - :alphabeth_code: :ср
+         - :alphabeth_code: :СР
            :language_code: :сх
            :text: Бранко
-           :bind_kind: переводное
+           :bind_kind_code: переводное
            :bond_to: *1
-         - :alphabeth_code: :гр
+         - :alphabeth_code: :ГР
            :language_code: :гр
            :text: Αλέξιος
-           :bind_kind: переводное
+           :bind_kind_code: переводное
            :bond_to: *1
-         - :alphabeth_code: :ан
+         - :alphabeth_code: :АН
            :language_code: :ан
            :text: Valentin
-           :bind_kind: переводное
+           :bind_kind_code: переводное
            :bond_to: *2
          """
       То будут существовать русские личные имена "Валентин, Алексей"
@@ -70,7 +75,7 @@
 
    Сценарий: Действительная запись отчества
       Допустим создадим новое отчество с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Василич         |
       То русское отчество "Василич" будет существовать
@@ -78,7 +83,7 @@
 
    Сценарий: Действительная запись фамилии
       Допустим создадим новую фамилию с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Васильев        |
       То русская фамилия "Васильев" будет существовать
@@ -87,24 +92,24 @@
    @language
    Сценарий: Недействительная запись личного имени при несоотвествии языка символам
       Допустим попробуем создать личное имя с полями:
-        | alphabeth_code   | гр              |
+        | alphabeth_code   | ГР              |
         | language_code    | гр              |
         | text             | Вася            |
       То греческого личного имени "Вася" не будет
       И увидим сообщение личного имени об ошибке:
          """
-         Text contains invalid char(s) "Вася" for the specified alphabeth "гр"
+         Text contains invalid char(s) "Вася" for the specified alphabeth "ГР"
          """
 
 
    @language
    Сценарий: Недействительная запись личного имени при небуквенных символах
       Допустим попробуем создать личное имя с полями:
-        | alphabeth_code   | ру              |
+        | alphabeth_code   | РУ              |
         | language_code    | ру              |
         | text             | Вася.ййцйц      |
       То русского личного имени "Вася.ййцйц" не будет
       И увидим сообщение личного имени об ошибке:
          """
-         Text contains invalid char(s) "." for the specified alphabeth "ру"
+         Text contains invalid char(s) "." for the specified alphabeth "РУ"
          """
