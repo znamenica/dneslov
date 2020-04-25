@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.11.2"
+lock "3.13.0"
 
 set :user, 'majioa'
 set :application, "dneslov"
