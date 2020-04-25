@@ -2,7 +2,6 @@ class CreateServiceMagnifications < ActiveRecord::Migration[4.2]
    def change
       create_table :service_magnifications do |t|
          t.belongs_to  :service, null: false
-         t.belongs_to  :magnification, null: false ;end
+         t.belongs_to  :magnification, null: false
 
-      add_index :service_magnifications, [ :service_id, :magnification_id ],
-         unique: true, name: :service_magnifications_index ;end ;end
+         t.index %i(service_id magnification_id), unique: true end;end;end

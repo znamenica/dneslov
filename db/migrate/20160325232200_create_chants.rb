@@ -7,6 +7,5 @@ class CreateChants < ActiveRecord::Migration[4.2]
          t.integer :tone
 
          t.string  :type
-         t.timestamps null: false ;end
-
-      add_index :chants, [ :text, :language_code ], unique: true ;end ;end
+         t.timestamps null: false
+         t.index %i(text language_code), unique: true end;end;end

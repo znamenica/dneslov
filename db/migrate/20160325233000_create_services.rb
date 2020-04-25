@@ -6,6 +6,6 @@ class CreateServices < ActiveRecord::Migration[4.2]
          t.belongs_to :memory, null: false
 
          t.string  :type
-         t.timestamps null: false ;end
+         t.timestamps null: false
 
-      add_index :services, [ :name, :language_code ], unique: true ;end ;end
+         t.index %i(name language_code), unique: true end;end;end

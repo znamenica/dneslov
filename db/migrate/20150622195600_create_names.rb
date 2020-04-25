@@ -5,6 +5,5 @@ class CreateNames < ActiveRecord::Migration[4.2]
          t.string :type, null: false, default: ''
          t.integer :language_code, null: false
          t.timestamps null: false
-      end
 
-      add_index :names, [ :text, :type, :language_code ], unique: true ;end;end
+         t.index %i(text type language_code), unique: true end;end;end

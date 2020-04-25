@@ -6,7 +6,6 @@ class CreateMentions < ActiveRecord::Migration[4.2]
          t.string :year_date, null: false
          t.string :add_date
 
-         t.timestamps null: false ;end
+         t.timestamps null: false
 
-      add_index :mentions, [:calendary_id, :event_id, :year_date],
-         name: :dated_calendary_event_index, unique: true ;end ;end
+         t.index %i(calendary_id event_id year_date), unique: true end;end;end

@@ -2,7 +2,6 @@ class CreateCantoMemories < ActiveRecord::Migration[4.2]
    def change
       create_table :canto_memories do |t|
          t.belongs_to :canto, null: false
-         t.belongs_to :memory, null: false ;end
+         t.belongs_to :memory, null: false
 
-      add_index :canto_memories, [ :canto_id, :memory_id ],
-         unique: true, name: :canto_memories_index ;end ;end
+         t.index %i(canto_id memory_id), unique: true end;end;end

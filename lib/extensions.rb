@@ -10,4 +10,4 @@ module ActiveRecord::QueryMethods
 
 class Object
    def to_query key = nil
-      "#{URI.encode(key.to_param)}=#{URI.encode(to_param.to_s)}" ;end;end
+      "#{Addressable::URI.encode(key.to_param)}=#{Addressable::URI.encode(to_param.to_s)}" ;end;end

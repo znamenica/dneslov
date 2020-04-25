@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_170000) do
   create_table "canto_memories", id: :serial, force: :cascade do |t|
     t.integer "canto_id", null: false
     t.integer "memory_id", null: false
-    t.index ["canto_id", "memory_id"], name: "canto_memories_index", unique: true
+    t.index ["canto_id", "memory_id"], name: "index_canto_memories_on_canto_id_and_memory_id", unique: true
   end
 
   create_table "cantoes", id: :serial, force: :cascade do |t|

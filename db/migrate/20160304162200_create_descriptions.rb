@@ -6,9 +6,6 @@ class CreateDescriptions < ActiveRecord::Migration[4.2]
          t.belongs_to :memory, null: false
 
          t.timestamps null: false
-      end
 
-      add_index :descriptions, [ :memory_id, :language_code ], unique: true
-   end
-end
+         t.index %i(memory_id language_code), unique: true end;end;end
 

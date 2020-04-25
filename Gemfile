@@ -108,9 +108,8 @@ end
 group :test do
    gem 'cucumber-rails', '>= 1.8.0', require: nil
    gem 'shoulda-matchers', '~> 4.0'
-   gem 'shoulda-matchers-cucumber', '~> 1.0', github: 'majioa/shoulda-matchers-cucumber'
+   gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
-   #gem 'rspec-wait'
    gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
    gem "launchy"

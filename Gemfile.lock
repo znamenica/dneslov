@@ -4,15 +4,6 @@ GIT
   specs:
     rdoba (0.9.3)
 
-GIT
-  remote: https://github.com/majioa/shoulda-matchers-cucumber.git
-  revision: 3a837bbe9a29cabfca7bff5e98b4582a71616420
-  specs:
-    shoulda-matchers-cucumber (1.0.0)
-      cucumber (~> 3.0)
-      rspec-expectations (~> 3.0)
-      shoulda-matchers (>= 3.0.0, < 5.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -296,6 +287,10 @@ GEM
       rdoc (>= 5.0)
     shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
+    shoulda-matchers-cucumber (1.0.0)
+      cucumber (~> 3.0)
+      rspec-expectations (~> 3.0)
+      shoulda-matchers (>= 3.0.0, < 5.0.0)
     simplecov (0.18.5)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -400,7 +395,7 @@ DEPENDENCIES
   ruby-prof
   sdoc (~> 1.0.0)
   shoulda-matchers (~> 4.0)
-  shoulda-matchers-cucumber (~> 1.0)!
+  shoulda-matchers-cucumber (~> 1.0)
   simplecov (>= 0.17.1)
   spring
   spring-commands-cucumber

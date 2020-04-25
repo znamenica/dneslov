@@ -6,6 +6,6 @@ class CreateEvents < ActiveRecord::Migration[4.2]
          t.belongs_to :memory, null: false
 
          t.string :type, null: false
-         t.timestamps null: false ;end
+         t.timestamps null: false
 
-      add_index :events, [ :subject, :type, :memory_id ] ;end ;end
+         t.index %i(subject type memory_id) end;end;end
