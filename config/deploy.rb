@@ -51,7 +51,7 @@ set :nginx_roles, :web
 set :nginx_static_dir, "public"
 
 set :rvm_type, :user                      # Defaults to: :auto
-set :rvm_ruby_version, '2.7.0@dneslov --create'    # Defaults to: 'default'
+set :rvm_ruby_version, '2.7.1@dneslov --create'    # Defaults to: 'default'
 # set :rvm_custom_path, '~/.rvm'          # only needed if not detected
 set :rvm_roles, [:app, :web]
 
