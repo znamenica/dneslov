@@ -44,6 +44,7 @@ gem 'has_scope', '>= 0.7.2'
 gem 'validate_url'
 gem 'activerecord_json_validator'
 gem 'attribute-defaults'
+gem 'addressable'
 
 # view
 ## NPM packaging
@@ -107,6 +108,7 @@ end
 group :test do
    gem 'cucumber-rails', '>= 1.8.0', require: nil
    gem 'shoulda-matchers', '~> 4.0'
+   gem 'shoulda-matchers-cucumber', '~> 1.0', github: 'majioa/shoulda-matchers-cucumber'
    gem 'rspec-expectations'
    #gem 'rspec-wait'
    gem 'simplecov', '>= 0.17.1'

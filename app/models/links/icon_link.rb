@@ -15,11 +15,11 @@ class IconLink < Link
       descriptions.where(language_code: language_code).first ;end
    
    def accessible_image
-      response = Excon.get(url && URI.encode(url))
+      response = Excon.get(url && Addressable::URI.encode(url))
 
       if response.status.eql?(301)
          new_url = response[:headers]["Location"]
-         response = Excon.get(URI.encode(new_url)) ;end
+         response = Excon.get(Addressable::URI.encode(new_url)) ;end
 
       if not response.status.eql?(200)
          raise Excon::Error::Socket ;end
