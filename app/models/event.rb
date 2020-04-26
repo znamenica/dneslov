@@ -90,8 +90,8 @@ class Event < ActiveRecord::Base
    scope :with_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
 
-   accepts_nested_attributes_for :place
-   accepts_nested_attributes_for :coordinate
+   accepts_nested_attributes_for :place, reject_if: :all_blank
+   accepts_nested_attributes_for :coordinate, reject_if: :all_blank
    accepts_nested_attributes_for :item, reject_if: :all_blank
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
 

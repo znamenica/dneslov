@@ -10,7 +10,7 @@ class Order < ActiveRecord::Base
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :tweets, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :slug, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :slug, reject_if: :all_blank
 
    scope :with_token, -> text do
       left_outer_joins( :slug, :descriptions, :notes, :tweets ).

@@ -6,7 +6,7 @@ class Place < ActiveRecord::Base
 
    singleton_class.send(:alias_method, :t, :with_token)
 
-   accepts_nested_attributes_for :descriptions
+   accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
    validates :descriptions, presence: true
    validates :descriptions, associated: true

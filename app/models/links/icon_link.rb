@@ -5,7 +5,7 @@ class IconLink < Link
 
    has_many :descriptions, as: :describable, dependent: :destroy
 
-   accepts_nested_attributes_for :descriptions, reject_if: :all_blank
+   accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
    # validates :url, format: { with: /\.(?i-mx:jpg|png)\z/ } # TODO
    validates :descriptions, associated: true

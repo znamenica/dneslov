@@ -98,8 +98,8 @@ class Memo < ActiveRecord::Base
    singleton_class.send(:alias_method, :d, :with_date)
    singleton_class.send(:alias_method, :c, :in_calendaries)
 
-   accepts_nested_attributes_for :service_links, reject_if: :all_blank
-   accepts_nested_attributes_for :services, reject_if: :all_blank
+   accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true

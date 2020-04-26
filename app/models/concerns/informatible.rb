@@ -9,9 +9,9 @@ module Informatible
       base.has_many :service_links, as: :info, inverse_of: :info, dependent: :destroy #ЧИНЬ превод во services
       base.has_many :services, as: :info, inverse_of: :info, dependent: :destroy
 
-      base.accepts_nested_attributes_for :descriptions, reject_if: :all_blank
-      base.accepts_nested_attributes_for :wikies, reject_if: :all_blank
-      base.accepts_nested_attributes_for :beings, reject_if: :all_blank
-      base.accepts_nested_attributes_for :icon_links, reject_if: :all_blank
-      base.accepts_nested_attributes_for :service_links, reject_if: :all_blank
-      base.accepts_nested_attributes_for :services, reject_if: :all_blank ;end ;end
+      base.accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
+      base.accepts_nested_attributes_for :wikies, reject_if: :all_blank, allow_destroy: true
+      base.accepts_nested_attributes_for :beings, reject_if: :all_blank, allow_destroy: true
+      base.accepts_nested_attributes_for :icon_links, reject_if: :all_blank, allow_destroy: true
+      base.accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
+      base.accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true ;end ;end

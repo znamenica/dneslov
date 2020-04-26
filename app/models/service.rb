@@ -11,9 +11,9 @@ class Service < ActiveRecord::Base
 
    has_alphabeth on: :name
 
-   accepts_nested_attributes_for :cantoes
-   accepts_nested_attributes_for :chants
-   accepts_nested_attributes_for :orisons
-   accepts_nested_attributes_for :canticles
+   accepts_nested_attributes_for :cantoes, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :chants, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :orisons, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :canticles, reject_if: :all_blank, allow_destroy: true
 
    validates :name, :language_code, :info, presence: true ;end

@@ -60,14 +60,14 @@ class Memory < ActiveRecord::Base
    singleton_class.send(:alias_method, :d, :with_date)
    singleton_class.send(:alias_method, :c, :in_calendaries)
 
-   accepts_nested_attributes_for :memory_names, reject_if: :all_blank
-   accepts_nested_attributes_for :paterics, reject_if: :all_blank
-   accepts_nested_attributes_for :events, reject_if: :all_blank
-   accepts_nested_attributes_for :memos, reject_if: :all_blank
-   accepts_nested_attributes_for :photo_links, reject_if: :all_blank
-   accepts_nested_attributes_for :covers_to, reject_if: :all_blank
+   accepts_nested_attributes_for :memory_names, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :paterics, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :events, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :memos, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :photo_links, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :covers_to, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank
-   accepts_nested_attributes_for :notes, reject_if: :all_blank
 
    validates_presence_of :short_name, :events
    validates :base_year, format: { with: /\A-?\d+\z/ }
