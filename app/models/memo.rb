@@ -15,6 +15,8 @@ class Memo < ActiveRecord::Base
    belongs_to :calendary
    belongs_to :event
    belongs_to :bond_to, class_name: :Memo
+   belongs_to :bind_kind, primary_key: :key, foreign_key: :bind_kind_code, class_name: :Subject
+
    has_one :calendary_slug, through: :calendary, source: :slug, class_name: :Slug
    has_one :memo_order
    has_one :order, through: :memo_order

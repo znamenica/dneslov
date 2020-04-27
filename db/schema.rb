@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_170000) do
+ActiveRecord::Schema.define(version: 2020_04_27_224500) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "btree_gin"
   enable_extension "plpgsql"
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
@@ -31,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_170000) do
   create_table "canto_memories", id: :serial, force: :cascade do |t|
     t.integer "canto_id", null: false
     t.integer "memory_id", null: false
-    t.index ["canto_id", "memory_id"], name: "index_canto_memories_on_canto_id_and_memory_id", unique: true
+    t.index ["canto_id", "memory_id"], name: "canto_memories_index", unique: true
   end
 
   create_table "cantoes", id: :serial, force: :cascade do |t|
@@ -115,11 +114,11 @@ ActiveRecord::Schema.define(version: 2020_04_17_170000) do
     t.string "add_date"
     t.string "year_date"
     t.integer "calendary_id", null: false
-    t.string "bind_kind", null: false
+    t.string "bind_kind_code", null: false
     t.integer "bond_to_id"
     t.integer "event_id", null: false
     t.index ["add_date"], name: "index_memoes_on_add_date"
-    t.index ["bond_to_id", "bind_kind"], name: "index_memoes_on_bond_to_id_and_bind_kind"
+    t.index ["bond_to_id", "bind_kind_code"], name: "index_memoes_on_bond_to_id_and_bind_kind_code"
     t.index ["calendary_id", "event_id", "year_date"], name: "index_memoes_on_calendary_id_and_event_id_and_year_date", unique: true
     t.index ["calendary_id", "year_date"], name: "index_memoes_on_calendary_id_and_year_date"
     t.index ["year_date"], name: "index_memoes_on_year_date"

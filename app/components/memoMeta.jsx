@@ -95,7 +95,7 @@ export const memoMeta = {
             "Цифры должны быть введены обязательно": /^[\-+\.]+$/,
          }
       },
-      bind_kind: {
+      bind_kind_code: {
          kind: 'select',
          title: 'Вид привязки к помину',
          codeNames: {

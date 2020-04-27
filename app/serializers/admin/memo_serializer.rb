@@ -1,5 +1,5 @@
 class Admin::MemoSerializer < ApplicationSerializer
-   attributes :id, :year_date, :add_date, :calendary_id, :calendary, :event_id, :event, :bind_kind,
+   attributes :id, :year_date, :add_date, :calendary_id, :calendary, :event_id, :event, :bind_kind_code,
               :bond_to_id, :bond_to, :memory, :memory_id, :descriptions, :links, :titles, :memo_orders
 
    def year_date
