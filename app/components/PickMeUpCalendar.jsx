@@ -249,13 +249,9 @@ export default class PickMeUpCalendar extends Component {
                         Новоюлианский</label></nav>
                <nav className='next-prev'>
                   <div
-                     className='pmu-yesterday pmu-button'>◀</div>
+                     className='pmu-yesterday pmu-button'>◀ Вчера</div>
                   <div
-                     className='pmu-yesterday pmu-left pmu-button'>Вчера</div>
-                  <div
-                     className='pmu-tomorrow pmu-right pmu-button'>Завтра</div>
-                  <div
-                     className='pmu-tomorrow pmu-button'>▶</div></nav></div>
+                     className='pmu-tomorrow pmu-button'>Завтра ▶</div></nav></div>
             <div
                id='calendar'
                key='calendar'

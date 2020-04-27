@@ -1,6 +1,8 @@
 html {
    .introjs-tooltip {
       max-width: fit-content;
+      max-width: -moz-fit-content;
+      min-width: 15rem;
 
       .introjs-button {
          font-size: inherit;
@@ -8,13 +10,19 @@ html {
    }
 
    .run-intro {
-      bottom: 45px;
-      right: 24px;
-      position: fixed;
-      z-index: 1003;
+      &.btn-floating.btn-large {
+         bottom: 2rem;
+         right: 2rem;
+         width: 3rem;
+         height: 3rem;
 
-      i {
-         font-size: 24px !important;
+         position: fixed;
+         z-index: 1003;
+
+         i {
+            font-size: 2rem !important;
+            line-height: 3rem;
+         }
       }
    }
 }
