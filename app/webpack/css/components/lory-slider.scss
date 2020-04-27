@@ -58,7 +58,7 @@ html {
                   font-family: "Source Sans Pro", sans;
                   position: relative;
                   text-align: center;
-                  margin-right: 12px;
+                  margin-right: 1rem;
                   height: inherit;
 
                   img.icon {
@@ -69,12 +69,9 @@ html {
                   }
 
                   img {
-                     margin-top: 8px;
-                     margin-bottom: 8px;
-                     margin-left: 8px;
-                     margin-right: 8px;
+                     margin: 0.7rem;
                      background: rgba(255, 255, 255, 1) none repeat scroll 0 0;
-                     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3)
+                     box-shadow: 0 0.7rem 0.8rem 0.1rem rgba(0, 0, 0, 0.14), 0 0.2rem 1.15rem 0.15rem rgba(0, 0, 0, 0.12), 0 0.3rem 0.3rem -0.2rem rgba(0, 0, 0, 0.3)
                   }
 
                }
@@ -88,23 +85,23 @@ html {
          .modal-action {
             background: rgba(0, 0, 0, 0.3);
             position: absolute;
-            bottom: 1em;
+            bottom: 1rem;
             display: block;
             cursor: pointer;
-            right: 1em;
+            right: 1rem;
             color: #DEB3AA;
          }
 
          .prev, .next {
             position: absolute;
             top: 50%;
-            margin-top: -25px;
+            margin-top: -2rem;
             display: block;
             cursor: pointer;
             background: rgba(0, 0, 0, 0.3);
 
             svg {
-               width: 25px;
+               width: 2rem;
             }
 
             &.disabled {

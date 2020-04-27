@@ -1,0 +1,289 @@
+@import "defines";
+@import "smlxl";
+
+@media only screen and (max-width: 600px) and (max-resolution: 40dpcm) {
+   body {
+      //font-size: 0.8rem;
+
+      main, header, footer {
+         line-height: 1.4;
+
+         nav .moon {
+            background-color: aqua;
+         }
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1000px) and (max-resolution: 40dpcm) {
+   body {
+      nav .moon {
+         background-color: CadetBlue;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1250px) and (max-resolution: 40dpcm) {
+   body {
+      //line-height: 1.4;
+      //font-size: 1rem;
+
+      nav .moon {
+         background-color: CornflowerBlue;
+      }
+   }
+
+   @include m
+}
+
+@media only screen and (min-width: 1250px) and (max-width: 1800px) and (max-resolution: 40dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 1.1rem;
+
+      nav .moon {
+         background-color: blue;
+      }
+   }
+
+   @include l
+}
+
+@media only screen and (min-width: 1800px) and (max-resolution: 40dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 1.3rem;
+
+      nav .moon {
+         background-color: #b9d9e6;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 650px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 1.5rem;
+
+      nav .moon {
+         background-color: LawnGreen;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 650px) and (max-width: 1000px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 1.7rem;
+
+      nav .moon {
+         background-color: Chartreuse;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1500px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 1.9rem;
+
+      nav .moon {
+         background-color: MediumSeaGreen;
+      }
+   }
+
+   @include m
+}
+
+@media only screen and (min-width: 1500px) and (max-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 2rem;
+
+      nav .moon {
+         background-color: ForestGreen;
+      }
+   }
+
+   @include l
+}
+
+@media only screen and (min-width: 2200px) and (min-resolution: 40dpcm) and (max-resolution: 55dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 2.5rem;
+
+      nav .moon {
+         background-color: DarkGreen;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 1000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+   body {
+      //line-height: 1.2;
+      //font-size: 2.6rem;
+
+      nav .moon {
+         background-color: HotPink;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1400px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 36px;
+
+      nav .moon {
+         background-color: magenta;
+      }
+   }
+
+   @include m
+}
+
+@media only screen and (min-width: 1400px) and (max-width: 2200px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+   body {
+      //line-height: 1.25;
+      //font-size: 39px;
+
+      nav .moon {
+         background-color: red;
+      }
+   }
+
+   @include l
+}
+
+@media only screen and (min-width: 2200px) and (max-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+   body {
+      //line-height: 1.2;
+      //font-size: 43px;
+
+      nav .moon {
+         background-color: DeepSkyBlue;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (min-width: 3000px) and (min-resolution: 55dpcm) and (max-resolution: 80dpcm) {
+   body {
+      //line-height: 1.2;
+      //font-size: 48px;
+
+      nav .moon {
+         background-color: DarkMagenta;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 1200px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   body {
+      //line-height: 1.15;
+      //font-size: 50px;
+
+      nav .moon {
+         background-color: AntiqueWhite;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 2000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   body {
+      //line-height: 1.15;
+      //font-size: 54px;
+
+      nav .moon {
+         background-color: BurlyWood;
+      }
+   }
+
+   @include m
+}
+
+@media only screen and (min-width: 2000px) and (max-width: 3000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   body {
+      //line-height: 1.15;
+      //font-size: 59px;
+
+      nav .moon {
+         background-color: Gold;
+      }
+   }
+
+  @include l
+}
+
+@media only screen and (min-width: 3000px) and (max-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   body {
+      //line-height: 1.15;
+      //font-size: 64px;
+
+      nav .moon {
+         background-color: Chocolate;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (min-width: 4000px) and (min-resolution: 80dpcm) and (max-resolution: 120dpcm) {
+   body {
+      //line-height: 1.15;
+      //font-size: 70px;
+
+      nav .moon {
+         background-color: Brown;
+      }
+   }
+
+   @include xl
+}
+
+@media only screen and (max-width: 3000px) and (min-resolution: 120dpcm) {
+   body {
+      //line-height: 1.1;
+      //font-size: 75px;
+
+      nav .moon {
+         background-color: yellow;
+      }
+   }
+
+   @include s
+}
+
+@media only screen and (min-width: 3000px) and (min-resolution: 120dpcm) {
+   body {
+      //line-height: 1.1;
+      //font-size: 85px;
+
+      nav .moon {
+         background-color: DarkOrange;
+      }
+   }
+
+   @include l
+}
+

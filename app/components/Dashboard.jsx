@@ -92,7 +92,7 @@ export default class Dashboard extends Component {
                      <img
                         src="dneslov-title.png" /></a>
                   {this.state.login &&
-                     <ul id="nav-mobile" className="right hide-on-med-and-down">
+                     <ul id="nav-mobile" className="right">
                         {Object.entries(Metas).map(([path, meta]) =>
                            <li>
                               <a
@@ -103,7 +103,7 @@ export default class Dashboard extends Component {
                            <div
                               ref={e => this.$avatarSignIn = e}
                               key='avatarSignIn'
-                              className='sign-in circle'>
+                              className='sign-in circle signed'>
                               <img
                                  id='avatar'
                                  className='circle z-depth-1 responsive-img'
