@@ -95,7 +95,7 @@ class MemoriesController < ApplicationController
          Slug.for_calendary.where( text: params[ :c ] ).pluck( :text ) ;end;end
 
    def set_calendary_cloud
-      @calendary_cloud ||= Calendary.licit ;end
+      @calendary_cloud ||= Calendary.licit_with(params[ :c ]) ;end
 
    def set_julian
       @julian ||= is_julian_calendar? ;end

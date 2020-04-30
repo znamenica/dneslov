@@ -12,10 +12,16 @@ class Calendary < ActiveRecord::Base
    has_one :slug, as: :sluggable
 
    scope :licit, -> { where( licit: true ) }
+   scope :licit_with, ->(c) do
+      if c.blank?
+         self.licit
+      else
+         self.left_outer_joins(:slug).licit.or(self.by_slugs(c)) end;end
    # scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
    scope :named_as, -> name { joins( :names ).where( names: { text: name } ) }
    scope :described_as, -> name { joins( :descriptions ).where( descriptions: { text: name } ) }
    scope :by_slugs, -> slugs do
+      return self if slugs.blank?
       # TODO add correct sort by slugs pos
       select("calendaries.*, slugs.*").from("slugs, calendaries").where( "slugs.sluggable_id = calendaries.id AND slugs.sluggable_type = 'Calendary' AND slugs.text IN (?)", [slugs].flatten).reorder("slugs.text") ;end
 

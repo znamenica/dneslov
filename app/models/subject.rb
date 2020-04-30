@@ -14,9 +14,9 @@ class Subject < ActiveRecord::Base
          where( language_code: language_codes ).first ;end;end
 
    scope :with_token, -> text do
-      left_outer_joins(:names, :descriptions)
-     .where("descriptions.text ILIKE ?", "%#{text}%")
-     .distinct ;end
+      self.left_outer_joins(:names, :descriptions)
+          .where("descriptions.text ~* ?", "\\m#{text}.*")
+          .distinct ;end
 
    scope :with_tokens, -> string_in do
       return self if string_in.blank?

@@ -173,7 +173,6 @@ export const memoMeta = {
       },
       titles: {
          kind: 'collection',
-         key_name: 'text',
          title: 'Заголовки',
          action: 'Добавь заголовок',
          single: 'Заголовок',
@@ -232,7 +231,6 @@ export const memoMeta = {
       },
       links: {
          kind: 'collection',
-         key_name: 'url',
          title: 'Ссылки',
          action: 'Добавь ссылку',
          single: 'Ссылка',
@@ -290,7 +288,6 @@ export const memoMeta = {
       },
       descriptions: {
          kind: 'collection',
-         key_name: 'text',
          title: 'Описания',
          action: 'Добавь описание',
          single: 'Описание',

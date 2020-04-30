@@ -16,7 +16,7 @@ export default class CalendariesCloud extends Component {
    isCalendaryUsed(calendary) {
       return this.props.calendaries_used &&
          this.props.calendaries_used.reduce((used, c) => {
-         return used || (c.slug == calendary.slug)
+         return used || c && (c.slug == calendary.slug)
       }, null)
    }
 

@@ -80,11 +80,13 @@ export default class MemoriesForm extends Component {
          return this.props.calendaries_cloud.reduce((c, calendary) => {
             return c || calendary.slug == slug && calendary || null
          }, null)
-      })
+      }).filter((x) => {return x})
    }
 
    defaultCalendarySlug() {
-      return this.props.calendaries_cloud[0].slug
+      return this.props.calendaries_used &&
+             this.props.calendaries_used[0] ||
+             this.props.calendaries_cloud[0].slug
    }
 
    // handlers
