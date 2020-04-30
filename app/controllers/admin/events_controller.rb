@@ -1,5 +1,5 @@
 class Admin::EventsController < Admin::CommonController
-   has_scope :mid, only: %i(index all)
+   has_scope :with_memory_id, only: %i(index all)
 
    protected
 

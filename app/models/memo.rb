@@ -32,6 +32,7 @@ class Memo < ActiveRecord::Base
 
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
+   scope :licit_with, ->(c) { self.left_outer_joins(:slug).licit.or(self.in_calendaries(c)) }
    scope :in_calendaries, -> calendaries_in do
       return self if calendaries_in.blank?
 
