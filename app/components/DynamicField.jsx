@@ -52,14 +52,14 @@ export default class DynamicField extends Component {
    }
 
    componentDidMount() {
-      console.log("[componentDidMount] <<<")
+      console.debug("[componentDidMount] <<<")
       console.log("[componentDidMount] * ", this.data, this.props.value)
       this.setup()
       document.addEventListener('keydown', this.onKeyDown)
    }
 
    componentDidUpdate() {
-      console.log("[componentDidUpdate] <<<")
+      console.debug("[componentDidUpdate] <<<")
 
       if (this.$input) {
          this.setup()
@@ -68,7 +68,7 @@ export default class DynamicField extends Component {
    }
 
    componentWillUnmount() {
-      console.log("[componentWillUnmount] <<<")
+      console.debug("[componentWillUnmount] <<<")
       this.destroy()
       document.removeEventListener('keypress', this.onKeyDown)
    }
@@ -85,10 +85,14 @@ export default class DynamicField extends Component {
       console.log("[onChange] * update to", humanized_value)
       this.updateTo(humanized_value, false)
 
+      console.debug("[onChange] ** analyzing:", this.triggered,
+         humanized_value, this.data, this.data && this.data.total,
+         this.data && Object.keys(this.data.list).length)
+
       if (!this.triggered || humanized_value &&
           (!humanized_value.includes(this.triggered) &&
            !this.triggered.includes(humanized_value) ||
-           this.data && (this.data.total > this.data.list.length &&
+           this.data && (this.data.total > Object.keys(this.data.list).length &&
             humanized_value.includes(this.triggered) ||
             this.triggered.includes(humanized_value)))) {
          this.getDataFor(humanized_value)
@@ -168,6 +172,7 @@ export default class DynamicField extends Component {
    }
 
    getDataFor(text) {
+      console.debug("[getDataFor] <<<")
       let data = merge(this.props.context_value || {}, { t: text })
 
       if (this.props.value_context) {
@@ -190,12 +195,12 @@ export default class DynamicField extends Component {
    }
 
    onLoadFailure() {
-      console.log("[onLoadFailure] <<<")
+      console.debug("[onLoadFailure] <<<")
       this.triggered = undefined
    }
 
    onLoadSuccess(response) {
-      console.log("[onLoadSuccess] <<<")
+      console.debug("[onLoadSuccess] <<<")
 
       var dynamic_data = response.data
 
@@ -212,7 +217,7 @@ export default class DynamicField extends Component {
    }
 
    storeDynamicData(dynamic_data) {
-      console.log("[storeDynamicData] <<<", dynamic_data)
+      console.debug("[storeDynamicData] <<<", dynamic_data)
       this.data = {
          total: dynamic_data.total,
          list: dynamic_data.list.reduce((h, x) => {

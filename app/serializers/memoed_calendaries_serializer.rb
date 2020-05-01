@@ -25,7 +25,11 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
          memo_s.serializable_hash(adapter_opts, options, adapter_instance) ;end;end
 
    def primary_memoes
-      object.primary.licit.joins(:event).merge(Event.usual).map do |memo| #TODO remove `merge`
+      object.primary
+            .licit_with(calendary_slugs)
+            .joins(:event)
+            .merge(Event.usual)
+            .map do |memo| #TODO remove `merge`
          yield( MemoSpanSerializer.new( memo,
                                         locales: locales,
                                         julian: julian,

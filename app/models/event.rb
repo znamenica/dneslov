@@ -84,9 +84,12 @@ class Event < ActiveRecord::Base
    scope :memoed, -> { joins( :memos ).distinct }
    scope :with_token, -> text do
       left_outer_joins( :kind, :titles ).
+         merge(Subject.with_token(text)).
          where("events.kind_code ~* ?", "\\m#{text}.*").or(
          where(type_number: text.to_i).or(
-         where("descriptions.text ~* ?", "\\m#{text}.*"))) ;end
+         where("descriptions.text ~* ?", "\\m#{text}.*").or(
+         where("names_subjects.text ~* ?", "\\m#{text}.*").or(
+         where("descriptions_subjects.text ~* ?", "\\m#{text}.*"))))) ;end
    scope :with_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
 

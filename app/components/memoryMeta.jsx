@@ -388,7 +388,6 @@ export const memoryMeta = {
       },
       memory_names: {
          kind: 'collection',
-         key_name: 'url',
          title: "Имена",
          action: "Добавь имя",
          display_scheme: '12-12-12-12',

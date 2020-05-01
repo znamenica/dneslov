@@ -1,9 +1,15 @@
 class Admin::CalendarySerializer < CommonCalendarySerializer
-   attributes :id, :slug, :language_code, :alphabeth_code, :author_name, :date, :council, :licit,
+   attributes :id, :slug, :language_code, :language, :alphabeth_code, :alphabeth, :author_name, :date, :council, :licit,
               :names, :descriptions, :wikies, :links
 
    def date
      object.date; end
+
+   def language
+      object.language_for( locales )&.text ;end
+
+   def alphabeth
+      object.alphabeth_for( locales )&.text ;end
 
    def names
       ActiveModel::Serializer::CollectionSerializer.new(object.names,

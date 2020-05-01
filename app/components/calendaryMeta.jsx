@@ -1,5 +1,6 @@
 import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
 import { makeName } from 'makers'
+import UrlRegexp from 'UrlRegexp'
 
 export const calendaryMeta = {
    default: 'name',
@@ -225,15 +226,14 @@ export const calendaryMeta = {
             id: {
                kind: 'hidden',
             },
-            text: {
+            url: {
                kind: 'text',
                title: 'Имя',
                placeholder: 'Введи имя',
-               name: 'text',
                display_scheme: '12-12-6-6',
                validations: {
-                  'Текст имени отсутствует': matchEmptyObject,
-                  'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
+                  "Ссылка отсутствует": matchEmptyObject,
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
                }
             },
             language_code: {
@@ -282,15 +282,14 @@ export const calendaryMeta = {
             id: {
                kind: 'hidden',
             },
-            text: {
+            url: {
                kind: 'text',
                title: 'Имя',
                placeholder: 'Введи имя',
-               name: 'text',
                display_scheme: '12-12-6-6',
                validations: {
-                  'Текст имени отсутствует': matchEmptyObject,
-                  'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
+                  "Ссылка отсутствует": matchEmptyObject,
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
                }
             },
             language_code: {
@@ -338,6 +337,9 @@ export const calendaryMeta = {
          title: 'Пора',
          display_scheme: '12-4-3-3',
          placeholder: 'Введи пору написания',
+         validations: {
+            "Дата отсутствует": matchEmptyObject,
+         }
       },
       council: {
          kind: 'text',

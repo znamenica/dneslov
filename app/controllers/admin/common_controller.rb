@@ -26,7 +26,7 @@ class Admin::CommonController < ApplicationController
          format.json { render :index, json: @objects.limit(500),
                                       locales: @locales,
                                       serializer: Admin::AutocompleteSerializer,
-                                      total: @objects.count,
+                                      total: @objects.total_count,
                                       each_serializer: short_object_serializer } ;end;end
 
    # GET /<objects>/
