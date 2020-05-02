@@ -8,6 +8,18 @@ class AlphabethValidator < ActiveModel::EachValidator
    CSLAV_CAPITAL = 'А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊ'
    CSLAV_STROKE = 'а-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ'
    CSLAV_ACCENT = '̀́̓̔҃҇҈҉꙽'
+   KSLAV_CAPITAL = 'А-ЯѠҨЪѪꙘѢԘԐЄѦІѴꙊꙎꙚꙈЅҐЈꙆԪ'
+   KSLAV_STROKE = 'а-яѡҩъѫꙙѣԙԑєѧіѵꙋꙏꙛꙉѕґјꙇԫ'
+   KSLAV_ACCENT = '̀́̓̔҃҇҈҉꙽҃҄҇꙽҃҄҇꙽'
+   KLSLAV_CAPITAL = 'A-PR-WYZĘŲǪŠČŽŚŹĆĽŔŤÍÒÈÅĐŻŃ'
+   KLSLAV_STROKE = 'a-pr-wyzęųǫščžśźćľŕťíòèåđżń'
+   KLSLAV_ACCENT = '́̃̋̈'
+   MSLAV_CAPITAL = 'А-ЬЄЮѢЂЈ'
+   MSLAV_STROKE = 'а-ьюєѣђј'
+   MSLAV_ACCENT = '̀́̓̔҃҇҈҉꙽'
+   MLSLAV_CAPITAL = 'A-PR-WYZĘŲǪŠČŽŚŹĆĽŔŤÍÒÈÅĐŻŃƖ'
+   MLSLAV_STROKE = 'a-pr-wyzęųǫščžśźćľŕťíòèåđżńɩ'
+   MLSLAV_ACCENT = '́̃̋̈'
    HIP_CAPITAL = 'А-ЯЁA-Z'
    HIP_STROKE = 'а-яёa-z'
    SERBIAN_CAPITAL = 'ЂЈ-ЋЏА-ИК-Ш'
@@ -54,6 +66,8 @@ class AlphabethValidator < ActiveModel::EachValidator
    HIP_SYNTAX = ' 0-9\(\[\{\/\'\+\.\:\!"=~@#\$%\^&\*_\)\]\}\\\\`\-,;?\|'
    MODIFIED_RUSSIAN_SYNTAX = ' \(\)\.,:;\!\/\-«»—\?0-9†IVXLCDM©–№\'\[\]&^'
    CSLAV_SYNTAX = ' \(\)\.,:;'
+   KSLAV_SYNTAX = ' \(\)\.,:;·⁖჻᛭⁘⁙'
+   MSLAV_SYNTAX = ' \(\)\.,:;·⁖჻᛭⁘⁙'
    SERBIAN_SYNTAX = ' \(\)\.,\!:;“”\/0-9'
    GREEK_SYNTAX = ' \(\)0-9~\+\(\)\-\.,;;:.·˙\!«»\'’"`©\/' # TODO last 4 to fix and merge
    BULGARIAN_SYNTAX = ' \(\)\.,0-9'
@@ -77,12 +91,14 @@ class AlphabethValidator < ActiveModel::EachValidator
 
    UPCHAR = RUSSIAN_CAPITAL + MODIFIED_RUSSIAN_CAPITAL + CSLAV_CAPITAL + SERBIAN_CAPITAL + GREEK_CAPITAL +
       ENGLISH_CAPITAL + LATIN_CAPITAL + CZECH_CAPITAL + ARMENIAN_CAPITAL +
-      ROMANIAN_CAPITAL + OLD_ENGLISH_CAPITAL + IVERIAN_CAPITAL + GERMAN_CAPITAL + UKRAINIAN_CAPITAL + MIDDLE_ENGLISH_CAPITAL
+      ROMANIAN_CAPITAL + OLD_ENGLISH_CAPITAL + IVERIAN_CAPITAL + GERMAN_CAPITAL + UKRAINIAN_CAPITAL + MIDDLE_ENGLISH_CAPITAL +
+      MSLAV_CAPITAL + KSLAV_CAPITAL + MLSLAV_CAPITAL + KLSLAV_CAPITAL
    DOWNCHAR = RUSSIAN_STROKE + MODIFIED_RUSSIAN_STROKE + CSLAV_STROKE + SERBIAN_STROKE + GREEK_STROKE +
       ENGLISH_STROKE + LATIN_STROKE + CZECH_STROKE + ARMENIAN_STROKE +
       IVERIAN_STROKE + ROMANIAN_STROKE + OLD_ENGLISH_STROKE + GERMAN_STROKE + UKRAINIAN_STROKE + MIDDLE_ENGLISH_STROKE +
-      HEBREW_STROKE
-   ACCENT = GREEK_ACCENT + RUSSIAN_ACCENT + CSLAV_ACCENT + FRENCH_ACCENT + HEBREW_ACCENT
+      HEBREW_STROKE + MSLAV_STROKE + KSLAV_STROKE + MLSLAV_STROKE + KLSLAV_STROKE
+   ACCENT = GREEK_ACCENT + RUSSIAN_ACCENT + CSLAV_ACCENT + FRENCH_ACCENT + HEBREW_ACCENT + MSLAV_ACCENT + KSLAV_ACCENT +
+      MLSLAV_ACCENT + KLSLAV_ACCENT
    CHAR = DOWNCHAR + UPCHAR
 
    # TODO уравнять с LANGUAGE_TREE.alphabeths
@@ -110,6 +126,10 @@ class AlphabethValidator < ActiveModel::EachValidator
       :ИС => SPANISH_SYNTAX,
       :НЕ => GERMAN_SYNTAX,
       :ЕВ => HEBREW_SYNTAX,
+      :МСК => MSLAV_SYNTAX,
+      :МСЛ => MSLAV_SYNTAX,
+      :КМСК => KSLAV_SYNTAX,
+      :КМСЛ => KSLAV_SYNTAX,
       # ЧИНЬ: СС, СЦ, ЦР, МК, СО, СЛ, ПО, КШ, ВЛ, НЛ, ЦУ
    }
 
@@ -137,6 +157,10 @@ class AlphabethValidator < ActiveModel::EachValidator
       :ИС => "#{SPANISH_CAPITAL}#{SPANISH_STROKE}#{SPECIFIC_SYNTAX}",
       :НЕ => "#{GERMAN_CAPITAL}#{GERMAN_STROKE}#{SPECIFIC_SYNTAX}",
       :ЕВ => "#{HEBREW_STROKE}#{HEBREW_ACCENT}#{SPECIFIC_SYNTAX}",
+      :МСК => "#{MSLAV_CAPITAL}#{MSLAV_STROKE}#{MSLAV_ACCENT}#{SPECIFIC_SYNTAX}",
+      :МСЛ => "#{MLSLAV_CAPITAL}#{MLSLAV_STROKE}#{MLSLAV_ACCENT}#{SPECIFIC_SYNTAX}",
+      :КМСК => "#{KSLAV_CAPITAL}#{KSLAV_STROKE}#{KSLAV_ACCENT}#{SPECIFIC_SYNTAX}",
+      :КМСЛ => "#{KLSLAV_CAPITAL}#{KLSLAV_STROKE}#{KLSLAV_ACCENT}#{SPECIFIC_SYNTAX}",
    }
 
    def plain_options
