@@ -454,7 +454,7 @@ export const memoryMeta = {
             id: {
                kind: 'hidden',
             },
-            kind: {
+            kind_code: {
                kind: 'dynamic',
                title: 'Вид события',
                placeholder: 'Начни ввод наименования вида события...',
