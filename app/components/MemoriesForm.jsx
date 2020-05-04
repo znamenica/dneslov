@@ -91,9 +91,7 @@ export default class MemoriesForm extends Component {
 
    // handlers
    onCloudAct(data) {
-      let c = (this.state.query.c || "").split(",").filter(c => {
-         c.length == 0
-      }).concat([ data.slug ]).join(",")
+      let c = (this.state.query.c || "").split(",").filter(c => c).concat([ data.slug ]).join(",")
 
       this.pushSubmit(merge(this.state.query, {c: c, p: 1}))
    }
