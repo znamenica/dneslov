@@ -55,16 +55,15 @@ export const orderMeta = {
             }
          }
       },
-      notes: {
+      tweets: {
          kind: 'collection',
-         title: "Имена",
-         action: "Добавь имя",
+         title: "Сокращение",
+         action: "Добавь сокращение",
          display_scheme: '12-12-12-12',
          validations: {
-            'Минимум одно имя должно быть задано':  matchEmptyCollection,
-            'Языки в именах не могут совпадать': matchLanguages,
-            'Азбуки в именах не могут совпадать': matchAlphabeths,
-
+            "Должно быть задано как минимум одно сокращение": matchEmptyObject,
+            "Языки в сокращеньях не могут совпадать": matchLanguages,
+            "Азбуки в сокращеньях не могут совпадать": matchAlphabeths,
          },
          meta: {
             id: {
@@ -72,14 +71,12 @@ export const orderMeta = {
             },
             text: {
                kind: 'text',
-               title: 'Имя',
-               placeholder: 'Введи имя',
-               name: 'text',
+               title: 'Краткое имя',
+               placeholder: 'Введи краткое имя',
                display_scheme: '12-12-6-6',
                validations: {
-                  "Имя отсутствует": matchEmptyObject,
-                  "Все слова должны начинаться либо с заглавной буквы, либо с цифры": /(^[^0-9А-ЯЁ]|\s[^0-9А-ЯЁа-яё])/g,
-                  'Имя содержит знаки вне перечня избранной азбуки': matchLetters,
+                  "Краткое имя отсутствует": matchEmptyObject,
+                  'Краткое имя содержит знаки вне перечня избранной азбуки': matchLetters,
                }
             },
             language_code: {
@@ -114,15 +111,17 @@ export const orderMeta = {
             },
          }
       },
-      tweets: {
+      titles: {
          kind: 'collection',
-         title: "Краткие имена",
-         action: "Добавь краткое имя",
+         title: "Заглавок",
+         action: "Добавь заглавок",
          display_scheme: '12-12-12-12',
+         name: 'notes',
          validations: {
-            "Должно быть задано как минимум одно короткое имя": matchEmptyObject,
-            "Языки в коротких именах не могут совпадать": matchLanguages,
-            "Азбуки в коротких именах не могут совпадать": matchAlphabeths,
+            'Минимум один заглавок должно быть задано':  matchEmptyCollection,
+            'Языки в заглавках не могут совпадать': matchLanguages,
+            'Азбуки в заглавках не могут совпадать': matchAlphabeths,
+
          },
          meta: {
             id: {
@@ -130,13 +129,13 @@ export const orderMeta = {
             },
             text: {
                kind: 'text',
-               title: 'Краткое имя',
-               placeholder: 'Введи краткое имя',
+               title: 'Имя',
+               placeholder: 'Введи имя',
+               name: 'text',
                display_scheme: '12-12-6-6',
                validations: {
-                  "Краткое имя отсутствует": matchEmptyObject,
-                  "В кратком имени допустимы только русские кириллические буквы, цифры и пробел": /[^А-Яа-яЁё0-9 ]/,
-                  'Краткое имя содержит знаки вне перечня избранной азбуки': matchLetters,
+                  "Имя отсутствует": matchEmptyObject,
+                  'Имя содержит знаки вне перечня избранной азбуки': matchLetters,
                }
             },
             language_code: {

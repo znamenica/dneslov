@@ -92,7 +92,7 @@ class MemoriesController < ApplicationController
    def set_calendary_slugs
       @calendary_slugs =
       if params[ :c ].present?
-         Slug.for_calendary.where( text: params[ :c ] ).pluck( :text ) ;end;end
+         Slug.for_calendary.where( text: params[ :c ].split(",") ).pluck( :text ) ;end;end
 
    def set_calendary_cloud
       @calendary_cloud ||= Calendary.licit_with(params[ :c ]) ;end

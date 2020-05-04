@@ -1,5 +1,5 @@
 class Admin::EventSerializer < ApplicationSerializer
-   attributes :id, :kind, :kind_name, :place_id, :item_id, :happened_at, :about_string,
+   attributes :id, :kind_code, :kind_name, :place_id, :item_id, :happened_at, :about_string,
               :tezo_string, :order, :council, :place, :item, :person_name, :titles
 
    def titles
