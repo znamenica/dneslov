@@ -7,7 +7,7 @@ end
 
 ruby '2.7.1'
 
-gem 'rails', '~> 5.2.4', '>= 5.2.4.2'
+gem 'rails', '~> 5.2.4', '>= 5.2.4.3'
 gem 'pg'
 #NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
@@ -41,9 +41,9 @@ gem "figaro"
 gem 'has_scope', '>= 0.7.2'
 
 ## models
-gem 'validate_url'
-gem 'activerecord_json_validator'
-gem 'attribute-defaults'
+gem 'validate_url', '>= 1.0.8'
+gem 'activerecord_json_validator', '>= 1.3.0'
+gem 'attribute-defaults', '>= 0.9.0'
 gem 'addressable'
 
 # view
@@ -51,7 +51,7 @@ gem 'addressable'
 gem 'npm-pipeline-rails', '>= 1.8.1'
 
 ## pagination
-gem 'kaminari', '>= 1.1.1'
+gem 'kaminari', '>= 1.2.0'
 
 ## decoration/serialization
 gem 'active_model_serializers', '>= 0.10.10'
@@ -61,7 +61,7 @@ gem 'excon', '~> 0.71.0'
 gem 'jwt'
 
 ## authorization
-gem 'pundit'
+gem 'pundit', '>= 2.1.0'
 
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
@@ -71,8 +71,8 @@ gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
 gem 'when_easter'
 
 ## data
-gem 'activerecord-import'
-gem "zero_downtime_migrations"
+gem 'activerecord-import', '>= 1.0.4'
+gem "zero_downtime_migrations", ">= 0.0.7"
 
 group :development do
    gem 'capistrano', '~> 3.6'
@@ -108,9 +108,9 @@ group :development, :test do
 end
 
 group :test do
-   gem 'cucumber-rails', '>= 1.8.0', require: nil
-   gem 'shoulda-matchers', '~> 4.0'
-   gem 'shoulda-matchers-cucumber', '~> 1.0'
+   gem 'cucumber-rails', '>= 2.0.0', require: nil
+   gem 'shoulda-matchers', '~> 4.3', '>= 4.3.0'
+   gem 'shoulda-matchers-cucumber', '~> 1.0', '>= 1.0.0'
    gem 'rspec-expectations'
    gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
@@ -118,7 +118,7 @@ group :test do
    gem "capybara"
    gem 'capybara-webkit', '>= 1.15.1'
    gem "email_spec"
-   gem 'travis', '>= 1.8.10'
+   gem 'travis', '>= 1.9.0'
 end
 
 group :production do
