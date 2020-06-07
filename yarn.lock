@@ -7464,9 +7464,10 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-"pickmeup@git+https://git@github.com/majioa/PickMeUp.git#devel":
-  version "3.0.8"
-  resolved "git+https://git@github.com/majioa/PickMeUp.git#2933f7f702adeca992e4a602835787c22599c2be"
+pickmeup@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/pickmeup/-/pickmeup-3.2.1.tgz#bb7df7e9ff6ed6219298e5a74ccfcf38e3454c22"
+  integrity sha512-qd5tia6V+XNtRMZMVPfRqlY9dXIbS/SzPozAGaZfE7soYeBjlj5/EDiAoqz8bK1aJvzs3US5eyv0/gC/g2fkZQ==
 
 picomatch@^2.0.4, picomatch@^2.0.5:
   version "2.2.1"
