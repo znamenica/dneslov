@@ -85,7 +85,7 @@
     "react-github-login": "git+https://git@github.com/majioa/react-github-login.git#devel",
     "react-markdown": "^4.0.4",
     "react-rails-ujs": "^1.1.0",
-    "uuid": "^3.1.0",
+    "uuid": "^3.4.0",
     "velocity-animate": "^1.5.1",
     "snyk": "^1.316.1"
   },
