@@ -108,14 +108,14 @@ group :development, :test do
 end
 
 group :test do
-   gem 'cucumber-rails', '>= 1.8.0', require: nil
+   gem 'cucumber-rails', '>= 2.0.0', require: nil
    gem 'shoulda-matchers', '~> 4.0'
    gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
    gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
    gem "launchy"
-   gem "capybara"
+   gem "capybara", ">= 3.32.1"
    gem 'capybara-webkit', '>= 1.15.1'
    gem "email_spec"
    gem 'travis', '>= 1.8.10'
