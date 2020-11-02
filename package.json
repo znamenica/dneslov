@@ -51,7 +51,7 @@
     "postcss-loader": "^3.0.0",
     "precss": "~2.0.0",
     "prop-types": "^15.6.0",
-    "resolve-url-loader": "~2.1.0",
+    "resolve-url-loader": "^3.1.2",
     "sass-loader": "~6.0.6",
     "style-loader": "0.13.1",
     "terser-webpack-plugin": "^2.2.3",
@@ -85,9 +85,9 @@
     "react-github-login": "git+https://git@github.com/majioa/react-github-login.git#devel",
     "react-markdown": "^4.0.4",
     "react-rails-ujs": "^1.1.0",
+    "snyk": "^1.316.1",
     "uuid": "^3.4.0",
-    "velocity-animate": "^1.5.1",
-    "snyk": "^1.316.1"
+    "velocity-animate": "^1.5.1"
   },
   "repository": {
     "type": "git",
