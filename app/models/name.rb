@@ -38,6 +38,7 @@ class Name < ActiveRecord::Base
    validates_absence_of :bond_to_id, unless: :bond?
 
    before_validation -> { self.bind_kind_code ||= 'несвязаное' }, on: :create
+   before_save -> { self.text = self.text.strip }
    after_save :fill_root_id, on: :create, unless: :root_id?
 
    def bond?
