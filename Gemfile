@@ -87,7 +87,7 @@ group :development do
    # deploy
    gem 'ed25519', '~> 1.2'
    gem 'bcrypt_pbkdf', '~> 1.0'
-   # gem 'bullet' # gives exception
+   gem 'bullet'
 end
 
 group :development, :test do

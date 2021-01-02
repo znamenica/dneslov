@@ -36,4 +36,14 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.web_console.whitelisted_ips = '192.168.123.128/24'
+
+  config.middleware.use Rack::RubyProf, path: './tmp/profile'
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+    Bullet.skip_html_injection = false
+  end
 end

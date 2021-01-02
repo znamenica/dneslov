@@ -11,7 +11,7 @@ class MemorySpanSerializer < CommonMemorySerializer
       MemoryNamesSerializer.new(object.memory_names, locales: locales) ;end
 
    def icon_url
-      #TODO remove `where` when be ready
+      #TODO LINK trash: remove `where` when be ready
       object.valid_icon_links.where("url !~ 'azbyka'").first&.url ;end
 
    def url

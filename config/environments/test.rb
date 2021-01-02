@@ -38,4 +38,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   #
   config.i18n.default_locale = :en
+
+  config.middleware.use Rack::RubyProf, path: './tmp/profile'
 end
