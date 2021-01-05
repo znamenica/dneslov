@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@majioa/react-scroll-pagination": "^0.2.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
     "intro.js": "^2.9.3",
