@@ -1,4 +1,4 @@
-<%= react_component 'Memories', memories: MemoriesSerializer.new( @objects,
+<%= react_component 'Memories', memories: Admin::MemoriesSerializer.new( @objects,
                                                                   total: @objects.total_count,
                                                                   page: @page,
                                                                   locales: @locales,

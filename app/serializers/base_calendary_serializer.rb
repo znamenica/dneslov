@@ -1,14 +1,17 @@
 class BaseCalendarySerializer < CommonCalendarySerializer
-   attributes :name, :url, :color, :slug
+   attributes :title, :url, :color, :slug, :description
 
-   def name
-      object.name_for( locales )&.text ;end
+   def title
+      object._title ;end
+
+   def description
+      object._description ;end
 
    def url
-      object.links.first&.url ;end
+      object._url ;end
 
    def slug
-      object.slug.text ;end
+      object._slug ;end
 
    def color
       color_by_slug( slug ) ;end;end

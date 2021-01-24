@@ -1,39 +1,19 @@
 class EventSerializer < ApplicationSerializer
-   attributes :id, :yeardate, :kind, :title, :happened_at, :description, :place, :troparion, :kontakion
-   #TODO
-   def is_default_description
-     default_description_ids.include?( object.memo_description_for( locales, calendary_slugs )&.id ) ;end
+   attributes :memoes, :kind_code, :title, :happened_at, :description, :place, :cantoes
 
-   def yeardate
-      object.year_date_for( calendary_slugs, date, julian ) ;end
+   def cantoes
+      object._cantoes ;end
 
-   def kind
-      object.kind.names.for( locales )&.text ;end
+   def memoes
+      object._memoes.map do |yd|
+         yd.merge( 'yd_parsed' => Event.year_date_for( yd[ 'year_date' ], date, julian )) ;end;end
 
    def title
-      object.title_for( locales )&.text ;end
+      object._title ;end
 
    def description
-      if !is_default_description
-         object.memo_description_for( locales, calendary_slugs )&.text ;end;end
+      object._description ;end
 
    def place
-      object.place&.description_for( locales )&.text ;end
-
-   def troparion
-      if troparion = object.troparions_for( locales ).first
-         title =
-         if troparion.tone.present?
-            t 'troparion_with_tone', tone: troparion.tone
-         else
-            t 'troparion' ;end
-         { title: title, text: troparion.text } ;end;end
-
-   def kontakion
-      if kontakion = object.kontakions_for( locales ).first
-         title =
-         if kontakion.tone.present?
-            t 'kontakion_with_tone', tone: kontakion.tone
-         else
-            t 'kontakion' ;end
-         { title: title, text: kontakion.text } ;end;end;end
+      if object._place['id'].present?
+         object._place end;end;end

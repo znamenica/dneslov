@@ -45,5 +45,5 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
     Bullet.skip_html_injection = false
-  end
+  end if defined?(Bullet)
 end

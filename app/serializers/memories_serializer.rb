@@ -1,1 +1,0 @@
-class MemoriesSerializer < PagedCollectionSerializer ;end

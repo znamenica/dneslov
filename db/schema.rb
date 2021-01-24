@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_224500) do
+ActiveRecord::Schema.define(version: 2021_01_09_210800) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "btree_gin"
   enable_extension "plpgsql"
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
@@ -100,6 +101,13 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.datetime "updated_at", null: false
     t.string "alphabeth_code"
     t.string "info_type", null: false
+    t.index ["alphabeth_code"], name: "index_links_on_alphabeth_code"
+    t.index ["info_id"], name: "index_links_on_info_id"
+    t.index ["info_type", "info_id"], name: "index_links_on_info_type_and_info_id"
+    t.index ["info_type"], name: "index_links_on_info_type"
+    t.index ["language_code"], name: "index_links_on_language_code"
+    t.index ["type"], name: "index_links_on_type"
+    t.index ["url"], name: "index_links_on_url"
   end
 
   create_table "memo_orders", force: :cascade do |t|
@@ -146,6 +154,9 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.integer "mode"
     t.boolean "feasible", default: false, null: false
     t.string "state_code", null: false
+    t.index ["memory_id", "name_id"], name: "index_memory_names_on_memory_id_and_name_id", unique: true
+    t.index ["memory_id"], name: "index_memory_names_on_memory_id"
+    t.index ["name_id"], name: "index_memory_names_on_name_id"
   end
 
   create_table "names", id: :serial, force: :cascade do |t|
@@ -173,7 +184,9 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
   create_table "service_cantoes", id: :serial, force: :cascade do |t|
     t.integer "service_id", null: false
     t.integer "canto_id", null: false
+    t.index ["canto_id"], name: "index_service_cantoes_on_canto_id"
     t.index ["service_id", "canto_id"], name: "index_service_cantoes_on_service_id_and_canto_id", unique: true
+    t.index ["service_id"], name: "index_service_cantoes_on_service_id"
   end
 
   create_table "services", id: :serial, force: :cascade do |t|
@@ -194,7 +207,22 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "info_type", null: false
     t.string "ref_title"
     t.integer "tone"
+    t.index ["alphabeth_code"], name: "index_services_on_alphabeth_code"
+    t.index ["apostle"], name: "index_services_on_apostle"
+    t.index ["author"], name: "index_services_on_author"
+    t.index ["description"], name: "index_services_on_description"
+    t.index ["gospel"], name: "index_services_on_gospel"
+    t.index ["info_id"], name: "index_services_on_info_id"
+    t.index ["info_type", "info_id"], name: "index_services_on_info_type_and_info_id"
+    t.index ["info_type"], name: "index_services_on_info_type"
+    t.index ["language_code"], name: "index_services_on_language_code"
     t.index ["name", "alphabeth_code"], name: "index_services_on_name_and_alphabeth_code", unique: true
+    t.index ["name"], name: "index_services_on_name"
+    t.index ["ref_title"], name: "index_services_on_ref_title"
+    t.index ["source"], name: "index_services_on_source"
+    t.index ["text_format"], name: "index_services_on_text_format"
+    t.index ["tone"], name: "index_services_on_tone"
+    t.index ["type"], name: "index_services_on_type"
   end
 
   create_table "slugs", id: :serial, force: :cascade do |t|

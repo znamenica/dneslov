@@ -9,7 +9,4 @@ class Place < ActiveRecord::Base
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
    validates :descriptions, presence: true
-   validates :descriptions, associated: true
-
-   def description_for language_code
-      descriptions.where(language_code: language_code).first ;end;end
+   validates :descriptions, associated: true ;end

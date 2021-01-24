@@ -84,15 +84,19 @@ export default class MemorySpans extends Component {
                      <MemorySpan
                         key={memory.slug}
                         slug={memory.slug}
-                        short_name={this.short_name}
-                        default_name_in_calendary={this.titleFirst(memory)}
+                        title={memory.title}
                         default_calendary_slug={this.props.default_calendary_slug}
                         url={memory.url}
-                        icon_url={memory.icon_url}
-                        year={memory.year}
-                        order={memory.order}
-                        description={this.descriptionFirst(memory)}
-                        names={memory.names}
+                        thumb_url={memory.thumb_url}
+                        happened_at={memory.happened_at}
+                        orders={memory.orders}
+                        description={memory.description}
+                        add_date={memory.add_date}
+                        year_date={memory.year_date}
+                        happened_at={memory.happened_at}
+                        bind_kind_code={memory.bind_kind_code}
+                        calendary_slug={memory.calendary_slug}
+                        event_title={memory.event_title}
                         onLoadRequest={this.props.onLoadRequest} />)}
                   <ReactScrollPagination
                      excludeElement='header'

@@ -9,20 +9,12 @@ import Description from 'Description'
 
 export default class Memory extends Component {
    static defaultProps = {
-      short_name: null,
       slug: null,
-      date: null,
-      titles: [],
-      descriptions: [],
+      short_name: null,
       names: [],
-      councils: [],
-      beings: [],
-      wikies: [],
-      paterics: [],
-      icons: [],
+      links: [],
       events: [],
-      troparion: null,
-      kontakion: null,
+      cantoes: [],
       selected_calendaries: [],
       default_calendary_slug: null
    }
@@ -63,9 +55,10 @@ export default class Memory extends Component {
    }
 
    static getTitle(props, cal) {
-      let title = props.titles.reduce((title, t) => { return t.calendary == cal && cal || title })
+      //let title = props.titles.reduce((title, t) => { return t.calendary == cal && cal || title })
 
-      return title && title.text
+      //return title && title.text || props.short_name
+      return props.short_name
    }
 
    render() {
@@ -77,24 +70,15 @@ export default class Memory extends Component {
                <div className='row'>
                   <div className='col s12'>
                      <Chip
-                        color={this.props.order.color}
-                        text={this.props.order.slug} />
+                        color={this.getOrderColor()}
+                        text={this.getOrderSlug()} />
                      <Name
                         short_name={this.state.title}
-                        default_name_in_calendary={this.state.title || this.props.short_name}
+                        default_name_in_calendary={this.state.title}
                         names={this.props.names} />
                      <Chip
                         className='year-date'
-                        text={this.props.year} /></div></div></div>
-            {false && this.props.councils.length > 0 && //TODO
-               <div className='col s12'>
-                  <div className='row'>
-                     <div className='col s12'>
-                        {this.props.councils.map((council) =>
-                           <Chip
-                              key={council.slug}
-                              url={council.url}
-                              text={council.slug} />)}</div></div></div>}
+                        text={this.getYearDate()} /></div></div></div>
             {this.props.beings.length > 0 &&
                <div className='col s12'>
                   <div className='row'>

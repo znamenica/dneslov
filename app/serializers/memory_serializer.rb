@@ -1,70 +1,29 @@
-class MemorySerializer < CommonMemorySerializer
-   attributes :names, :beings, :wikies, :paterics, :icons, :events, :troparion, :kontakion
+class MemorySerializer < ApplicationSerializer
+   attributes :names, :links, :events, :cantoes, :short_name, :slug
 
-   def link_text link
-      /https?:\/\/(?<domains>[a-zA-Z0-9_\.-]+)\.[\w]+\// =~ link
-      domains.split(".").sort_by { |d| d.size }.last ;end
-
-   def links_json links
-      ( links || [] ).map.with_index do | link, index |
-         {
-            id: index,
-            text: link_text( link.url ),
-            url: link.url,
-         } ;end;end
-
-   def memos_present?
-      object.memos.includes(:calendary).any? { | memo | memo.calendary } ;end
+   def slug
+      object._slug ;end
 
    def names
-      MemoryNamesSerializer.new(object.memory_names, locales: locales) ;end
+      object._names ;end
 
-   def beings
-      links_json( object.beings_for( locales )) ;end
-
-   def wikies
-      links_json( object.wikies_for( locales )) ;end
-
-   def paterics
-      links_json( object.paterics_for( locales )) ;end
-
-   def icons
-      #TODO remove `where` when be ready
-      object.valid_icon_links.where("url !~ 'azbyka'").map.with_index do | icon, index |
-         {
-            id: index,
-            description: icon.description_for( locales )&.text,
-            url: icon.url,
-         } ;end;end
+   def links
+      object._links ;end
 
    def events
-     ActiveModel::Serializer::CollectionSerializer.new( object.events.memoed,
+      query = object.events
+                    .memoed
+                    .with_cantoes(locales)
+                    .with_memoes(locales)
+                    .with_place(locales)
+                    .with_title(locales)
+                    .with_description(locales)
+
+      ActiveModel::Serializer::CollectionSerializer.new( query,
                                                          locales: locales,
                                                          date: date,
                                                          julian: julian,
-                                                         default_description_ids: default_description_ids,
                                                          calendary_slugs: calendary_slugs ) ;end
 
-   def troparion
-      if troparion = object.troparions_for( locales ).first
-         title =
-         if troparion.tone.present?
-            t 'troparion_with_tone', tone: troparion.tone
-         else
-            t 'troparion' ;end
-         { title: title, text: troparion.text } ;end;end
-
-   def kontakion
-      if kontakion = object.kontakions_for( locales ).first
-         title =
-         if kontakion.tone.present?
-            t 'kontakion_with_tone', tone: kontakion.tone
-         else
-            t 'kontakion' ;end
-         { title: title, text: kontakion.text } ;end;end
-
-
-   protected
-
-   def default_description_ids
-      object.all_descriptions_for( locales ).pluck(:id) end;end
+   def cantoes
+      object._cantoes ;end;end
