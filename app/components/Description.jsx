@@ -1,15 +1,18 @@
 import { Component } from 'react'
+import { mixin } from 'lodash-decorators'
 import ReactDOM from 'react-dom'
 import ReactMarkdown from 'react-markdown'
 import PropTypes from 'prop-types'
 import M from 'materialize-css'
 
 import Chip from 'Chip'
+import GetSlugColor from 'mixins/GetSlugColor'
 
+@mixin(GetSlugColor)
 export default class Description extends Component {
    static defaultProps = {
-      descriptions: [],
-      calendary_slug: null,
+      describedMemoes: [],
+      defaultCalendarySlug: null,
    }
 
    // system
@@ -28,25 +31,19 @@ export default class Description extends Component {
 
    // props
    isPresent() {
-      return this.props.descriptions.length > 0
+      return this.props.describedMemoes.length > 0
    }
 
-   activeClassFor(description) {
-      if (description.calendary) {
-         if (description.calendary.slug == this.props.calendary_slug) {
-            return "active"
-         }
-      } else {
-         if (!this.props.calendary_slug) {
-            return "active"
-         }
+   activeClassFor(memo) {
+      if (memo.calendary_slug == this.props.defaultCalendarySlug) {
+         return "active"
       }
 
       return ""
    }
 
    render() {
-      console.log("[render] > props", this.props)
+      console.log("[render] > this.props", this.props)
 
       return (
          <div className='col s12'>
@@ -58,31 +55,22 @@ export default class Description extends Component {
                      key='description-list'
                      ref={e => this.$collapsible = e}
                      className='collapsible collection popout'>
-                     {this.props.descriptions.map((description) =>
+                     {this.props.describedMemoes.map((memo) =>
                         <li
-                           className={"collection-item description " + this.activeClassFor(description)}>
+                           className={"collection-item description " + this.activeClassFor(memo)}>
                            <div
-                              className={"collapsible-header " + this.activeClassFor(description)}>
-                              {description.calendary &&
-                                 <Chip
-                                    key={description.calendary.slug + '-description-slug'}
-                                    data={{slug: description.calendary.slug}}
-                                    className='calendary'
-                                    text={description.calendary.name}
-                                    color={description.calendary.color}
-                                    url={description.calendary.url} />
-                              }
-                              {!description.calendary &&
-                                 <Chip
-                                    key='memory-description'
-                                    className='calendary'
-                                    text='Общее описание' />
-                              }
-                           </div>
+                              className={"collapsible-header " + this.activeClassFor(memo)}>
+                              <Chip
+                                 key={memo.calendary_slug + '-description-slug'}
+                                 data={{slug: memo.calendary_slug}}
+                                 className='calendary'
+                                 text={memo.calendary_title}
+                                 color={this.getSlugColor(memo.calendary_slug)}
+                                 url={memo.calendary_url} /></div>
                            <div className="collapsible-body">
                               <div className='container'>
                                  <div className='row'>
                                     <div className='col s12 description'>
-                                       <ReactMarkdown source={description.text} /></div></div></div></div></li>)}</ul></div></div></div>)
+                                       <ReactMarkdown source={memo.description} /></div></div></div></div></li>)}</ul></div></div></div>)
    }
 }

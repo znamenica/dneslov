@@ -61,12 +61,25 @@ class Memory < ActiveRecord::Base
 
    scope :with_names, -> (language_code) do
       language_codes = [ language_code ].flatten
-      selector = "COALESCE((SELECT jsonb_agg(names)
-                              FROM names
-                   LEFT OUTER JOIN memory_names
-                                ON memory_names.memory_id = memories.id
-                             WHERE names.id = memory_names.name_id
-                               AND names.language_code IN ('#{language_codes.join("', '")}')), '{}'::jsonb) AS _names"
+      selector = "COALESCE((
+                        WITH __names AS (
+                      SELECT names.alphabeth_code AS alphabeth_code,
+                             names.language_code AS language_code,
+                             names.bind_kind_code AS bind_kind_code,
+                             names.text AS text,
+                             memory_names.state_code AS state_code,
+                             memory_names.mode AS mode,
+                             memory_names.feasible AS feasible
+                        FROM memory_names
+             LEFT OUTER JOIN names
+                          ON names.id = memory_names.name_id
+                         AND names.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE memory_names.memory_id = memories.id
+                         AND memory_names.id IS NOT NULL
+                    GROUP BY text, mode, feasible, state_code, bind_kind_code,
+                             language_code, alphabeth_code)
+                      SELECT jsonb_agg(__names)
+                        FROM __names), '[]'::jsonb) AS _names"
 
       select(selector).group(:id) ;end
 
@@ -74,7 +87,7 @@ class Memory < ActiveRecord::Base
       selector = "COALESCE((SELECT jsonb_agg(links)
                               FROM links
                              WHERE links.info_id = memories.id
-                               AND links.info_type = 'Memory'), '{}'::jsonb) AS _links"
+                               AND links.info_type = 'Memory'), '[]'::jsonb) AS _links"
 
       select(selector).group(:id) ;end
 
@@ -92,7 +105,7 @@ class Memory < ActiveRecord::Base
                     LEFT OUTER JOIN service_cantoes
                                  ON service_cantoes.service_id = services.id
                               WHERE cantoes.id = service_cantoes.canto_id
-                                AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '{}'::jsonb) AS _cantoes"
+                                AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _cantoes"
 
       select(selector).group(:id) ;end
 

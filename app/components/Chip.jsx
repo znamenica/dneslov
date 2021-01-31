@@ -96,6 +96,8 @@ export default class Chip extends Component {
    }
 
    render() {
+      console.debug("[render] **", { 'this.props': this.props, 'this.state': this.state })
+
       return (
          <div
             key={this.props.text + ' link'}

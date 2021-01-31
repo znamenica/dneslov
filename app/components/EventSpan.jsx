@@ -5,19 +5,61 @@ import Chip from 'Chip'
 
 export default class EventSpan extends Component {
    static defaultProps = {
-      date: null,
-      happened_at: null,
-      kind_name: null,
-      title: null,
-      yeardate: null,
-      place: null,
-      description: null,
-      troparion: null,
-      kontakion: null,
+      happenedAt: null,
+      kindName: null,
+      place: {},
+      titles: [],
+      cantoes: [],
+      memoes: [],
+      defaultCalendarySlug: null,
+      describedMemoIds: [],
+
+      active: null,
       wrapperYearDateClass: "",
    }
 
+   static types = [ "Subject", "Event" ]
+
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         let memo = EventSpan.getMemo(props)
+
+         return {
+            prevProps: props,
+            yearDate: memo ? memo.yd_parsed : null,
+            title: EventSpan.getTitle(props),
+            describedMemoes: EventSpan.getDescribedMemoes(props),
+         }
+      }
+
+      return null
+   }
+
+   static getDescribedMemoes(props) {
+      let dMs = props.memoes.filter((m) => {
+         return m.description && !props.describedMemoIds.includes(m.id)
+      })
+
+      return dMs
+   }
+
+   static getMemo(props) {
+      let titles = props.memoes.sort((x, y) => {
+         return x.calendary_slug == props.defaultCalendarySlug ? -1 : 0
+      })
+
+      return titles[0]
+   }
+
+   static getTitle(props) {
+      let titles = props.titles.sortByArray(this.types, "type")
+
+      return titles[0].text
+   }
+
    // system
+   state = {}
+
    constructor(props) {
       super(props)
 
@@ -34,7 +76,7 @@ export default class EventSpan extends Component {
 
    // custom
    hasData() {
-      return this.props.description || this.props.troparion || this.props.kontakion
+      return this.props.cantoes.length > 0 || this.hasDescription()
    }
 
    classNameForItem() {
@@ -42,7 +84,13 @@ export default class EventSpan extends Component {
    }
 
    classNameForYearDate() {
-      return 'year-date ' + (this.props.active && "nearby" || "")
+      return 'year-date right ' + (this.props.active && "nearby" || "")
+   }
+
+   hasDescription() {
+      let memo = this.state.describedMemoes[0]
+
+      return memo && memo.description
    }
 
    onSpanHeaderClick(e) {
@@ -53,46 +101,40 @@ export default class EventSpan extends Component {
    }
 
    render() {
-      console.log("[render] * props", this.props)
+      console.log("[render] * this.props", this.props)
 
       return (
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
-               key={'header-' + this.props.yeardate + '-' + this.props.happened_at}
+               key={'event-span-' + this.state.yearDate + '-' + this.props.happenedAt}
                ref={e => this.$header = e} >
-               {this.props.yeardate && <Chip
-                  className={this.classNameForYearDate()}
-                  text={this.props.yeardate} />}
                <span>
-                  {this.props.title || this.props.kind_name}</span>
+                  {this.state.title}</span>
                <Chip
-                  className='year-date'
-                  text={this.props.happened_at} />
+                  className='happened-at'
+                  text={this.props.happenedAt} />
                {this.props.place &&
                   <Chip
                      className='place'
-                     text={this.props.place} />}</div>
+                     text={this.props.place.name} />}
+               {this.state.yearDate && <Chip
+                  className={this.classNameForYearDate()}
+                  text={this.state.yearDate} />}</div>
             {this.hasData() &&
                <div className='collapsible-body'>
                   <div className="container">
-                  {this.props.description &&
+                  {this.hasDescription() &&
                         <div className='row'>
-                           <div className='col s12 title'>
-                              Описание</div>
                            <div className='col s12 description'>
-                              <ReactMarkdown source={this.props.description} /></div></div>}
-                  {this.props.troparion &&
+                              <ReactMarkdown source={this.state.describedMemoes[0].description} /></div></div>}
+               {this.props.cantoes > 0 &&
+                  <div className='col s12'>
+                     {this.props.cantoes.map((canto) =>
                         <div className='row'>
                            <div className='col s12 title'>
-                              {this.props.troparion.title}</div>
+                              {canto.title}</div>
                            <div className='col s12'>
-                              {this.props.troparion.text}</div></div>}
-                  {this.props.kontakion &&
-                        <div className='row'>
-                           <div className='col s12 title'>
-                              {this.props.kontakion.title}</div>
-                           <div className='col s12'>
-                              {this.props.kontakion.text}</div></div>}</div></div>}</li>)
+                              {canto.text}</div></div>)}</div>}</div></div>}</li>)
    }
 }

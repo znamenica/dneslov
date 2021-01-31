@@ -16,7 +16,7 @@ class MemorySerializer < ApplicationSerializer
                     .with_cantoes(locales)
                     .with_memoes(locales)
                     .with_place(locales)
-                    .with_title(locales)
+                    .with_titles(locales)
                     .with_description(locales)
 
       ActiveModel::Serializer::CollectionSerializer.new( query,

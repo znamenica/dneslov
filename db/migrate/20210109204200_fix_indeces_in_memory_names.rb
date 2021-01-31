@@ -17,4 +17,5 @@ class FixIndecesInMemoryNames < ActiveRecord::Migration[5.2]
       change_table :memory_names do |t|
          t.index %i(memory_id)
          t.index %i(name_id)
+         t.index %i(memory_id id)
          t.index %i(memory_id name_id), unique: true ;end;end;end

@@ -50,12 +50,12 @@ export default class Carousel extends Component {
    }
 
    stateChanged() {
-         console.log("LOADED", this.state.loadCounter)
+         console.debug("LOADED", this.state.loadCounter)
       if (this.state.loadCounter == this.props.images.length) {
-         console.log("CAROUSEL COMPLETED")
+         console.debug("CAROUSEL COMPLETED")
          this.carousel = M.Carousel.init(this.$carousel, {});
          Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
-            console.log("CAROUSEL", img)
+            console.debug("CAROUSEL", img)
             img.addEventListener('click', this.onIconClick, { passive: true })
          })
       }
@@ -66,7 +66,7 @@ export default class Carousel extends Component {
    }
 
    render() {
-      console.log("CARU", this.props)
+      console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='col xl12 l12 m12 s12'>
@@ -74,13 +74,13 @@ export default class Carousel extends Component {
                key='carousel'
                className='carousel compact'
                ref={e => this.$carousel = e} >
-               {this.props.images.map((image) =>
+               {this.props.images.map((image, index) =>
                   <img
-                     key={image.id}
+                     key={'image-' + image.id}
                      className='carousel-item'
                      alt={image.description}
                      src={image.url}
-                     data-index={image.id}
+                     data-index={index}
                      onLoad={this.onImageCompleted.bind(this)}
                      onError={this.onImageCompleted.bind(this)} />)}</div>
             <IconLoryModal

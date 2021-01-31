@@ -34,17 +34,6 @@ class ConvertOrders < ActiveRecord::Migration[5.2]
                      AND events.id = memoes.event_id"
             ].each { |q| Order.connection.execute(q) }
          end
-
-         dir.down do
-            add_foreign_key :rpms, :srpms, on_delete: :cascade
-
-            Order.connection.execute <<-SQL
-                  DELETE FROM rpms
-                        USING packages
-                        WHERE packages.id = rpms.package_id
-                          AND packages.type = 'Package::Built'
-            SQL
-         end
       end
 
       remove_column :orders, :order, :string
