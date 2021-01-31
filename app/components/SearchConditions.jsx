@@ -51,7 +51,7 @@ export default class SearchConditions extends Component {
                      key={calendary.slug}
                      data={{slug: calendary.slug}}
                      className='calendary'
-                     text={calendary.name}
+                     text={calendary.title}
                      action='remove'
                      onAct={this.onChipAct.bind(this)} />)}
                {this.query().map((token, index) =>

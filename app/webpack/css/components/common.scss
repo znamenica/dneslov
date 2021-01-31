@@ -524,9 +524,12 @@ html {
       border-radius: 2rem;
       padding: 0 0.8rem;
 
-      &.year-date {
+      &.year-date, &.happened-at {
          padding: 0 0.4rem 0 0.4rem;
          background-color: #f8f8f8 !important;
+         &.right {
+            margin-top: 0.5rem;
+         }
       }
 
       &.year-date.nearby {

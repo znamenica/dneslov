@@ -4,16 +4,40 @@ import PropTypes from 'prop-types'
 export default class Name extends Component {
    static defaultProps = {
       names: [],
+      klugs: [],
       short_name: null,
-      default_name_in_calendary: null,
+      defaultNameInCalendary: null,
    }
 
    static propTypes = {
       names: PropTypes.array.isRequired,
    }
 
-   getFirstName() {
-      let names = [
+   static getDerivedStateFromProps(props, state) {
+      if (props !== state.prevProps) {
+         return {
+            prevProps: props,
+            fullName: Name.generateFullName(props),
+         }
+      }
+
+      return null
+   }
+
+   static generateFullName(props) {
+      //return 
+      let fullName = [
+         this.getFirstName(props),
+         this.getNickName(props),
+         this.getLastName(props),
+         this.getFeatName(props)
+      ].compact()
+
+      return fullName.isPresent && fullName.slice(0, 2).join(" ") || props.defaultNameInCalendary
+   }
+
+   static getFirstName(props) {
+      let preprios = [
          'благословенное',
          'схимное',
          'иноческое',
@@ -23,37 +47,40 @@ export default class Name extends Component {
          'самоданное',
          'наречёное' ]
 
-      return this.getNameFor(names)
+      let prios = this.priorities.reduce((pp, prio) => {
+         let _prios = props.klugs.reduce((p, nameKlug) => {
+            return p.isBlank && prio['klugs'].includes(nameKlug) && prio['states'] || p
+         }, [])
+
+         return _prios.concat(pp)
+      }, preprios).uniq()
+
+      let names = this.getNamesFor(prios, props.names)
+      //console.log("QQQQQQQQQQQQQ1", prios, names)
+
+      return names.isPresent() && (names[0] && names[0].text + (names[1] && " (" + names[1].text + ")" || ""))
    }
 
-   getNickName() {
-      let names = [
+   static getNickName(props) {
+      let prios = [
          'прозвание' ]
 
-      return this.getNameFor(names)
-   }
-    
-   getPatronymicName() {
-      let names = [
-         'отчество_принятое',
-         'отчество' ]
-
-      return this.getNameFor(names)
+      return this.getNameFor(prios, props.names)
    }
 
-   getLastName() {
-      let names = [
+   static getLastName(props) {
+      let prios = [
          'мужнина',
          'наречёная',
          'самоданная',
          'отечья',
          'матерня', ]
 
-      return this.getNameFor(names)
+      return this.getNameFor(prios, props.names)
    }
 
-   getFeatName() {
-      let names = [
+   static getFeatName(props) {
+      let prios = [
          'подвига_святительства',
          'подвига҆_отшельничества',
          'подвига_пастырства',
@@ -67,42 +94,55 @@ export default class Name extends Component {
          'подвига_страстотерпчества',
          'подвига_исповедничества', ]
 
-      return this.getNameFor(names)
+      return this.getNameFor(prios, props.names)
    }
 
-   getNameFor(names) {
-      let name = this.props.names.find((name) => {
-         return names.find((n) => { return n == name.state })})
+   static priorities = [
+      {
+         klugs: ['свщмч', 'свмчр', 'прав', 'правж', 'сщпр', 'муч', 'муц', 'мучр', 'муцр', 'вмч', 'вмц', 'смчр', 'блж', 'блжц', 'блгв', 'блгвц', 'бср', 'испв', 'стц', 'стца', 'сщстц', 'испв', 'иср', 'исц', 'ицр', 'свщисп', 'свщиср'],
+         states: [ 'покаянное', 'крещенское' ],
+      },
+      {
+         klugs: ['прпжн', 'прпк', 'прпп', 'прпмч', 'прмчр', 'прпмц', 'прмцр', 'блпр', 'мчсвт', 'мчсвтр', 'стцсвт', 'прстц', 'прстца', 'прписп', 'прписр', 'прписц', 'прпицр', 'исвт', 'иссвтр', 'прпст', 'прпсж', 'свтл', 'прпсвт'],
+         states: [ 'схимное', 'иноческое', 'чернецкое' ],
+      },
+      {
+         klugs: ['прор', 'апс'],
+         states: [ 'наречёное' ],
+      },
+      {
+         klugs: ['рапс', 'рапж'],
+         states: [ 'наречёное', 'покаянное', 'крещенское' ],
+      }
+   ]
 
-      return name && name.name
+   static getNamesFor(prios, names_in) {
+      let names = prios.map((prio) => {
+      //console.log("WWWWEEEE", prio, names_in)
+         return names_in.find((name) => { 
+      //console.log("WWWWEEEE", prio, name)
+            return prio == name.state_code })
+      }).compact()
+
+      //console.log("WWWWWWWWWWWwww", names, prios)
+
+      return names
    }
 
-   hasName() {
-      return this.props.names.reduce((s, name) => { return s || name.state }, false)
+   static getNameFor(prios, props) {
+      let names = this.getNamesFor(prios, props)
+
+      return names.isPresent() && names[0] && names[0].text
    }
+
+   state = {}
 
    render() {
+      console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
+
       return (
-         <span>
-            {this.props.default_name_in_calendary &&
-               <span
-                  className='name short'>
-               {this.props.default_name_in_calendary}</span>}
-            {!this.props.default_name_in_calendary && this.hasName() &&
-               [
-                  <span
-                     className='name first'>
-                     {this.getFirstName()}</span>,
-                  <span
-                     className='name nick'>
-                     {this.getNickName()}</span>,
-                  <span
-                     className='name last'>
-                     {this.getLastName()}</span>,
-                  <span
-                     className='name feat'>
-                     {this.getFeatName()}</span>]}
-            {!this.props.default_name_in_calendary && !this.hasName() &&
-               <span
-                  className='name short'>
-                  {this.props.short_name}</span>}</span>)}}
+         <span
+            className='name'>
+               {this.state.fullName}</span>
+      )
+   }}

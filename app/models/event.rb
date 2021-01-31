@@ -51,6 +51,12 @@ class Event < ActiveRecord::Base
       'Appearance',
    ]
 
+   SORT = [
+      'Genum',
+      'Nativity',
+      'Resurrection',
+   ]
+
    belongs_to :memory
    belongs_to :place, optional: true
    belongs_to :item, optional: true
@@ -64,7 +70,7 @@ class Event < ActiveRecord::Base
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :calendaries, -> { distinct }, through: :memos
    has_many :titles, -> { title }, as: :describable, class_name: :Description do
-      def with_default this
+      def by_default this
         self.or( Appellation.merge( this.kind.names ))
            .order( :describable_type ).distinct ;end;end
 
@@ -82,32 +88,172 @@ class Event < ActiveRecord::Base
    scope :notice, -> { where(kind_code: NOTICE) }
    scope :usual, -> { where(kind_code: USUAL) }
    scope :memoed, -> { joins( :memos ).distinct }
-   scope :with_token, -> text do
+   scope :by_token, -> text do
       left_outer_joins( :kind, :titles ).
-         merge(Subject.with_token(text)).
+         merge(Subject.by_token(text)).
          where("events.kind_code ~* ?", "\\m#{text}.*").or(
          where(type_number: text.to_i).or(
          where("descriptions.text ~* ?", "\\m#{text}.*").or(
          where("names_subjects.text ~* ?", "\\m#{text}.*").or(
          where("descriptions_subjects.text ~* ?", "\\m#{text}.*"))))) ;end
-   scope :with_memory_id, -> memory_id do
+   scope :by_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
+
+   scope :with_description, -> language_code do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'events.*'
+      end
+      selector << 'descriptions.text AS _description'
+      language_codes = [ language_code ].flatten
+      join = "LEFT OUTER JOIN descriptions ON descriptions.describable_id = events.id
+                          AND descriptions.describable_type = 'Event'
+                          AND descriptions.type = 'Description'
+                          AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('_description') ;end
+
+   scope :with_titles, -> language_code do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'events.*'
+      end
+      language_codes = [ language_code ].flatten
+
+      selector = "COALESCE((WITH __titles AS (
+                       SELECT DISTINCT ON(titles.id)
+                              titles.id AS id,
+                              titles.describable_type AS type,
+                              titles.text AS text
+                         FROM descriptions AS titles
+              LEFT OUTER JOIN subjects AS event_kinds
+                           ON event_kinds.kind_code = 'EventKind'
+                          AND event_kinds.key = events.kind_code
+                        WHERE titles.id IS NOT NULL
+                          AND (titles.describable_id = events.id
+                          AND titles.describable_type = 'Event'
+                          AND titles.type = 'Title'
+                           OR titles.describable_id = event_kinds.id
+                          AND titles.describable_type = 'Subject'
+                          AND titles.type = 'Appellation')
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')
+                     GROUP BY titles.id, titles.describable_type, titles.text)
+                       SELECT jsonb_agg(__titles)
+                         FROM __titles), '[]'::jsonb) AS _titles"
+
+      # binding.pry
+      select(selector).group( :id ) ;end
+
+   scope :with_place, -> language_code do
+      language_codes = [ language_code ].flatten
+      selector = "jsonb_build_object('id', places.id, 'name', place_descriptions.text) AS _place"
+      join = "LEFT OUTER JOIN places
+                           ON events.place_id = places.id
+                          AND places.id IS NOT NULL
+              LEFT OUTER JOIN descriptions AS place_descriptions
+                           ON place_descriptions.describable_id = places.id
+                          AND place_descriptions.describable_type = 'Place'
+                          AND place_descriptions.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector).group(:id, 'places.id', 'place_descriptions.text') ;end
+
+   scope :with_memoes, -> (language_code) do
+      language_codes = [ language_code ].flatten
+      selector = "COALESCE((WITH __memoes AS (
+                       SELECT memoes.id AS id,
+                              memoes.year_date AS year_date,
+                              jsonb_object_agg(DISTINCT memo_slugs.text,
+                                                        order_titles_memoes.text) AS orders,
+                              memo_titles.text AS title,
+                              memo_descriptions.text AS description,
+                              memo_links.url AS url,
+                              calendary_links.url AS calendary_url,
+                              calendary_slugs.text AS calendary_slug,
+                              calendary_titles.text AS calendary_title
+                         FROM memoes
+              LEFT OUTER JOIN slugs AS calendary_slugs
+                           ON calendary_slugs.sluggable_id = memoes.calendary_id
+                          AND calendary_slugs.sluggable_type = 'Calendary'
+              LEFT OUTER JOIN links AS calendary_links
+                           ON calendary_links.info_id = memoes.id
+                          AND calendary_links.info_type = 'Calendary'
+              LEFT OUTER JOIN descriptions AS memo_titles
+                           ON memo_titles.describable_id = memoes.id
+                          AND memo_titles.describable_type = 'Memo'
+                          AND memo_titles.type = 'Title'
+                          AND memo_titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN descriptions AS memo_descriptions
+                           ON memo_descriptions.describable_id = memoes.id
+                          AND memo_descriptions.describable_type = 'Memo'
+                          AND memo_descriptions.type = 'Description'
+                          AND memo_descriptions.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN links AS memo_links
+                           ON memo_links.info_id = memoes.id
+                          AND memo_links.info_type = 'Memo'
+              LEFT OUTER JOIN descriptions AS calendary_titles
+                           ON calendary_titles.describable_id = memoes.calendary_id
+                          AND calendary_titles.describable_type = 'Calendary'
+                          AND calendary_titles.type = 'Appellation'
+                          AND calendary_titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN memo_orders
+                           ON memo_orders.memo_id = memoes.id
+              LEFT OUTER JOIN orders
+                           ON orders.id = memo_orders.order_id
+              LEFT OUTER JOIN slugs AS memo_slugs
+                           ON memo_slugs.sluggable_id = orders.id
+                          AND memo_slugs.sluggable_type = 'Order'
+              LEFT OUTER JOIN memo_orders AS memo_orders_memoes_join
+                           ON memo_orders_memoes_join.memo_id = memoes.id
+              LEFT OUTER JOIN orders AS orders_memoes_join
+                           ON orders_memoes_join.id = memo_orders_memoes_join.order_id
+              LEFT OUTER JOIN descriptions AS order_titles_memoes
+                           ON order_titles_memoes.describable_id = orders_memoes_join.id
+                          AND order_titles_memoes.describable_type = 'Order'
+                          AND order_titles_memoes.type IN ('Tweet')
+                          AND order_titles_memoes.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE memoes.event_id = events.id
+                          AND memoes.bond_to_id IS NULL
+                          AND memoes.id IS NOT NULL
+                     GROUP BY memoes.id, year_date, title, description, calendary_slug,
+                              calendary_title, calendary_url, memo_links.url)
+                       SELECT jsonb_agg(__memoes)
+                         FROM __memoes), '[]'::jsonb) AS _memoes"
+
+      #binding.pry
+      select(selector).group(:id) ;end
+
+   scope :with_cantoes, -> (language_code) do
+      language_codes = [ language_code ].flatten
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'events.*'
+      end
+      selector << "COALESCE((SELECT jsonb_agg(cantoes)
+                               FROM cantoes
+                    LEFT OUTER JOIN services
+                                 ON services.info_id = events.id
+                                AND services.info_type = 'Event'
+                    LEFT OUTER JOIN service_cantoes
+                                 ON service_cantoes.service_id = services.id
+                              WHERE cantoes.id = service_cantoes.canto_id
+                                AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _cantoes"
+
+      select(selector).group(:id) ;end
 
    accepts_nested_attributes_for :place, reject_if: :all_blank
    accepts_nested_attributes_for :coordinate, reject_if: :all_blank
    accepts_nested_attributes_for :item, reject_if: :all_blank
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
 
-   singleton_class.send(:alias_method, :t, :with_token)
-   singleton_class.send(:alias_method, :mid, :with_memory_id)
+   singleton_class.send(:alias_method, :t, :by_token)
+   singleton_class.send(:alias_method, :mid, :by_memory_id)
 
    validates_presence_of :kind, :kind_code
 
-   def year_date_for calendary_slugs, date_in, julian
+   def self.year_date_for year_date, date_in, julian
       return nil if date_in.blank?
 
       date = date_in.is_a?(Time) && date_in || Time.parse(date_in)
-      year_date = memos.for(calendary_slugs).first&.year_date
       if /(?<day>\d+)\.(?<month>\d+)%(?<weekday>\d+)$/ =~ year_date
          base_date = Date.parse("#{date.year}-#{month}-#{day}")
          base_offset = weekday.to_i - base_date.wday

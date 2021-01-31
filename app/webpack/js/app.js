@@ -1,6 +1,7 @@
 // TODO blow out all the requires in fawour of imports
 require('./behaviors/polifill')
 require('./behaviors/ajax')
+require('./behaviors/ext')
 require('classlist-polyfill')
 require('custom-event-polyfill')
 

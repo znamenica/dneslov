@@ -19,13 +19,26 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      @memories = apply_scopes(Memory).page(params[ :p ])
+      @memoes = apply_scopes(Memo).with_base_year
+                                  .with_slug
+                                  .with_description(@locales)
+                                  .with_title(@locales)
+                                  .with_calendary_slug
+                                  .with_date
+                                  .with_thumb_url
+                                  .with_bond_to_title(@locales)
+                                  .with_event_title(@locales)
+                                  .with_orders(@locales)
+                                  .with_event
+                                  .distinct_by('_base_year', '_slug')
+                                  .group(:id)
+                                  .page(params[ :p ])
 
       respond_to do |format|
-         format.json { render json: @memories,
-                              serializer: MemoriesSerializer,
-                              each_serializer: MemorySpanSerializer,
-                              total: @memories.total_count,
+         format.json { render json: @memoes,
+                              serializer: MemoSpansSerializer,
+                              each_serializer: MemoSpanSerializer,
+                              total: @memoes.total_size,
                               page: @page,
                               date: @date,
                               julian: @julian,
@@ -95,10 +108,20 @@ class MemoriesController < ApplicationController
          Slug.for_calendary.where( text: params[ :c ].split(",") ).pluck( :text ) ;end;end
 
    def set_calendary_cloud
-      @calendary_cloud ||= Calendary.licit_with(params[ :c ]) ;end
+      @calendary_cloud ||=
+         Calendary.licit_with(params[ :c ])
+                  .with_title(@locales)
+                  .with_description(@locales)
+                  .with_url
+                  .with_slug ;end
 
    def set_julian
       @julian ||= is_julian_calendar? ;end
 
    def set_memory
-      @memory ||= Memory.by_slug(params[ :slug ]) || raise(ActiveRecord::RecordNotFound) ;end;end
+      @memory ||= Memory.by_slug(params[ :slug ])
+                        .with_cantoes( @locales )
+                        .with_names( @locales )
+                        .with_links
+                        .with_slug
+                        .first || raise( ActiveRecord::RecordNotFound ) ;end;end

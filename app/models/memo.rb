@@ -21,14 +21,20 @@ class Memo < ActiveRecord::Base
    has_one :memo_order
    has_one :order, through: :memo_order
    has_one :memory, through: :event
+   has_one :slug, through: :memory
+   has_one :thumb_link, through: :memory, source: :thumb_links
 
+   has_many :memo_orders, dependent: :destroy
+   has_many :orders, through: :memo_orders
+   has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
+   has_many :order_titles, through: :orders, source: :tweets
+   has_many :bond_memo_titles, through: :bond_to, source: :titles
+   has_many :event_titles, through: :event, source: :titles
    has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
    has_many :services, as: :info, inverse_of: :info
    has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
    has_many :titles, -> { title }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
-   has_many :memo_orders, dependent: :destroy
-   has_many :orders, through: :memo_orders
 
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
@@ -47,7 +53,7 @@ class Memo < ActiveRecord::Base
       self.unscope(:where, :order)
           .joins("INNER JOIN (#{sql.to_sql}) AS tmp ON tmp.row_number = 1 AND tmp.id = memoes.id") end
 
-   scope :with_date, -> (date_in, julian = false) do
+   scope :by_date, -> (date_in, julian = false) do
       return self if date_in.blank?
 
       date = date_in.is_a?(Date) && date_in || Date.parse(date_in)
@@ -67,7 +73,7 @@ class Memo < ActiveRecord::Base
 
       where( year_date: result ) ;end
 
-   scope :with_token, -> text do
+   scope :by_token, -> text do
       left_outer_joins( :descriptions, :titles, :memory ).
          where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
          where( "titles_memoes.text ~* ?", "\\m#{text}.*" ).or(
@@ -75,7 +81,7 @@ class Memo < ActiveRecord::Base
          where( "memoes.add_date ~* ?", "\\m#{text}.*" ).or(
          where( "memoes.year_date ~* ?", "\\m#{text}.*" ))))) end
 
-   scope :with_tokens, -> string_in do
+   scope :by_tokens, -> string_in do
       return self if string_in.blank?
       # TODO fix the correctness of the query
       klass = self.model_name.name.constantize
@@ -83,23 +89,121 @@ class Memo < ActiveRecord::Base
          # OR operation
          or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
-            and_rel = klass.with_token(and_token)
+            and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
 
-   scope :with_event_id, -> (event_id) do
+   scope :by_event_id, -> (event_id) do
       where(event_id: event_id) ;end
 
-   scope :with_calendary_id, -> (calendary_id) do
+   scope :by_calendary_id, -> (calendary_id) do
       where(calendary_id: calendary_id) ;end
 
    scope :notice, -> { joins(:event).merge(Event.notice) }
 
-   singleton_class.send(:alias_method, :t, :with_token)
-   singleton_class.send(:alias_method, :q, :with_tokens)
-   singleton_class.send(:alias_method, :d, :with_date)
+   singleton_class.send(:alias_method, :t, :by_token)
+   singleton_class.send(:alias_method, :q, :by_tokens)
+   singleton_class.send(:alias_method, :d, :by_date)
    singleton_class.send(:alias_method, :c, :in_calendaries)
+
+   scope :distinct_by, -> *args do
+      _selector = self.select_values.dup
+      if _selector.empty?
+        _selector << "DISTINCT ON (#{args.join(', ')}) memoes.*"
+      else
+         selector = _selector.uniq
+         selector.unshift( "DISTINCT ON (#{args.join(', ')}) " + selector.shift )
+      end
+
+      self.select_values = selector
+      self ;end
+
+   scope :with_event, -> do
+      selector = 'order_table.order_no AS _event_code'
+      list = Event::SORT.map.with_index {|x, i| "('#{x}', #{i})" }
+      join = "LEFT OUTER JOIN (VALUES #{list.join(", ")})
+              AS order_table (event_kind_code, order_no)
+              ON order_table.event_kind_code = events.kind_code"
+
+      joins(:event, join).select(selector).group('_event_code').order('_event_code') ;end
+
+   scope :with_base_year, -> do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'memoes.*'
+      end
+      selector << 'memories.base_year AS _base_year'
+
+
+      joins(:memory).select(selector).group('_base_year').order('_base_year') ;end
+
+   scope :with_date, -> do
+      selector = 'events.happened_at AS _happened_at'
+
+      joins(:event).select(selector).group('_happened_at') ;end
+
+   scope :with_thumb_url, -> do
+      selector = 'links.url AS _thumb_url'
+
+      left_outer_joins(:thumb_link).select(selector).group('_thumb_url') ;end
+
+   scope :with_bond_to_title, -> language_code do
+      selector = 'bond_memo_titles_memoes.text AS _bond_to_title'
+
+      left_outer_joins(:bond_memo_titles).select(selector).group('_bond_to_title') ;end
+
+   scope :with_event_title, -> language_code do
+      selector = 'event_titles_memoes.text AS _event_title'
+
+      left_outer_joins(:event_titles).select(selector).group('_event_title') ;end
+
+   scope :with_calendary_slug, -> do
+      selector = 'calendary_slugs_memoes.text AS _calendary_slug'
+
+      left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug') ;end
+
+   scope :with_orders, -> language_code do
+      selector = 'jsonb_object_agg(DISTINCT slugs_memoes.text, order_titles_memoes.text) AS _orders'
+
+      left_outer_joins(:slugs, :order_titles).select(selector) ;end
+
+   scope :with_slug, -> do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'memoes.*'
+      end
+      selector << 'slugs.text AS _slug'
+
+      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug') ;end
+
+   scope :with_description, -> language_code do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'memoes.*'
+      end
+      selector << 'descriptions.text AS _description'
+      language_codes = [ language_code ].flatten
+      join = "LEFT OUTER JOIN descriptions ON descriptions.describable_id = memoes.id
+                          AND descriptions.describable_type = 'Memo'
+                          AND descriptions.type = 'Description'
+                          AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('_description') ;end
+
+   scope :with_title, -> language_code do
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'memoes.*'
+      end
+      selector << 'titles.text AS _title'
+      language_codes = [ language_code ].flatten
+      join = "LEFT OUTER JOIN descriptions AS titles ON titles.describable_id = memoes.id
+                          AND titles.describable_type = 'Memo'
+                          AND titles.type = 'Title'
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('_title') ;end
 
    accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true
@@ -162,6 +266,14 @@ class Memo < ActiveRecord::Base
          "#{date.strftime("%1d.%m")}%#{daynum}"
       else
          self.year_date ;end;end
+
+   class << self
+      def total_size
+         #TODO optimize
+         unlimited = self.except(:limit, :offset)
+         unlimited[0] && unlimited.size
+      end
+   end
 
    def titles_for language_code
       titles.where( language_code: language_code ) ;end

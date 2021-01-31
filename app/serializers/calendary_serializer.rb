@@ -1,6 +1,7 @@
 class CalendarySerializer < BaseCalendarySerializer
-   attributes :dates
+   #attributes :dates
 
-   def dates
-      memos = @instance_options[ :memos ] || object.memos
-      MemosSerializer.new( memos, locales: locales ) ;end;end
+   #def dates
+   #   memos = @instance_options[ :memos ] || object.memos
+   #   MemosSerializer.new( memos, locales: locales ) ;end;end
+end

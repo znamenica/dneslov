@@ -7,20 +7,22 @@ import Name from 'Name'
 export default class MemorySpan extends Component {
    static defaultProps = {
       slug: null,
-      short_name: null,
-      default_name_in_calendary: null,
       default_calendary_slug: null,
-      url: null,
-      icon_url: null,
-      year: null,
-      order: null,
+      thumb_url: null,
+      happened_at: null,
+      orders: {},
       description: null,
-      names: [],
+      title: null,
+      add_date: null,
+      year_date: null,
+      bind_kind_code: null,
+      calendary_slug: null,
+      event_title: null,
       onLoadRequest: null,
    }
 
    state = {
-      icon_url: this.props.icon_url
+      thumb_url: this.props.thumb_url
    }
 
    // system
@@ -61,12 +63,12 @@ export default class MemorySpan extends Component {
 
    onLoadImageError() {
       console.warn("[onLoadImageError] ** image load error")
-      this.setState({ icon_url: null })
+      this.setState({ thumb_url: null })
    }
 
    // props
    hasNoImage() {
-      return !this.state.icon_url
+      return !this.state.thumb_url
    }
 
    hasImage() {
@@ -74,7 +76,7 @@ export default class MemorySpan extends Component {
    }
 
    linkToMemory() {
-      return this.props.url
+      return "/" + this.props.slug
    }
 
    render() {
@@ -95,19 +97,18 @@ export default class MemorySpan extends Component {
                      <img
                         className='circle z-depth-1'
                         onError={this.onLoadImageError.bind(this)}
-                        src={this.state.icon_url} />}
+                        src={this.state.thumb_url} />}
                   {this.hasNoImage() &&
                      <i className='material-icons circle terracota z-depth-1'>perm_identity</i>}</a>
                <Chip
-                  color={this.props.order.color}
-                  text={this.props.order.slug} />
-               <Name
-                  short_name={this.props.short_name}
-                  default_name_in_calendary={this.props.default_name_in_calendary}
-                  names={this.props.names} />
+                  color={'gray'}
+                  text={Object.values(this.props.orders)[0]} />
+               <span
+                  className='name short'>
+                  {this.props.title}</span>
                <Chip
                   className='year-date'
-                  text={this.props.year} /></div>
+                  text={this.props.happened_at} /></div>
             {this.props.description &&
                <div
                   className='collapsible-body description'

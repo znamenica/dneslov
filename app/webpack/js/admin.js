@@ -1,6 +1,7 @@
 // TODO blow out all the requires in fawour of imports
 require('./behaviors/polifill')
 require('./behaviors/ajax')
+require('./behaviors/ext')
 
 // http://stackoverflow.com/a/30652110/873870
 function requireAll (r) { r.keys().forEach(r) }

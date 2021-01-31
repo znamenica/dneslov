@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_224500) do
+ActiveRecord::Schema.define(version: 2021_01_31_010100) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "btree_gin"
   enable_extension "plpgsql"
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
@@ -46,7 +47,14 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "author"
     t.string "description"
     t.string "ref_title"
+    t.index ["author"], name: "index_cantoes_on_author"
+    t.index ["id", "language_code"], name: "index_cantoes_on_id_and_language_code"
+    t.index ["language_code", "alphabeth_code"], name: "index_cantoes_on_language_code_and_alphabeth_code"
+    t.index ["prosomeion_title"], name: "index_cantoes_on_prosomeion_title"
     t.index ["title", "language_code"], name: "index_cantoes_on_title_and_language_code"
+    t.index ["title"], name: "index_cantoes_on_title", unique: true
+    t.index ["tone"], name: "index_cantoes_on_tone"
+    t.index ["type"], name: "index_cantoes_on_type"
   end
 
   create_table "descriptions", id: :serial, force: :cascade do |t|
@@ -59,8 +67,16 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "type"
     t.text "text"
     t.index "md5(text)", name: "descriptions_text_index"
+    t.index ["alphabeth_code"], name: "index_descriptions_on_alphabeth_code"
     t.index ["describable_id", "describable_type", "alphabeth_code", "language_code", "type"], name: "describable_alphabeth_language_type_index", unique: true
     t.index ["describable_id", "describable_type", "alphabeth_code"], name: "describable_id_type_alphabeth_code_index"
+    t.index ["describable_id", "describable_type"], name: "index_descriptions_on_describable_id_and_describable_type"
+    t.index ["id", "language_code", "type", "describable_id", "describable_type"], name: "index_on_id_language_code_type_and_describables"
+    t.index ["id", "type", "describable_id", "describable_type"], name: "index_on_id_type_and_describables"
+    t.index ["language_code", "alphabeth_code", "type", "describable_id", "describable_type"], name: "index_on_language_code_alphabeth_code_type_and_describables"
+    t.index ["language_code", "type", "describable_id", "describable_type"], name: "index_on_language_code_type_and_describables"
+    t.index ["language_code"], name: "index_descriptions_on_language_code"
+    t.index ["type"], name: "index_descriptions_on_type"
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
@@ -77,7 +93,18 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "tezo_string"
     t.string "order"
     t.string "council"
+    t.index ["about_string"], name: "index_events_on_about_string"
+    t.index ["council"], name: "index_events_on_council"
+    t.index ["happened_at"], name: "index_events_on_happened_at"
+    t.index ["item_id"], name: "index_events_on_item_id"
     t.index ["kind_code", "memory_id", "item_id"], name: "index_events_on_item_id_and_type_and_memory_id"
+    t.index ["kind_code"], name: "index_events_on_kind_code"
+    t.index ["memory_id"], name: "index_events_on_memory_id"
+    t.index ["order"], name: "index_events_on_order"
+    t.index ["person_name"], name: "index_events_on_person_name"
+    t.index ["place_id"], name: "index_events_on_place_id"
+    t.index ["tezo_string"], name: "index_events_on_tezo_string"
+    t.index ["type_number"], name: "index_events_on_type_number"
   end
 
   create_table "item_types", id: :serial, force: :cascade do |t|
@@ -100,6 +127,13 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.datetime "updated_at", null: false
     t.string "alphabeth_code"
     t.string "info_type", null: false
+    t.index ["alphabeth_code"], name: "index_links_on_alphabeth_code"
+    t.index ["info_id"], name: "index_links_on_info_id"
+    t.index ["info_type", "info_id"], name: "index_links_on_info_type_and_info_id"
+    t.index ["info_type"], name: "index_links_on_info_type"
+    t.index ["language_code"], name: "index_links_on_language_code"
+    t.index ["type"], name: "index_links_on_type"
+    t.index ["url"], name: "index_links_on_url"
   end
 
   create_table "memo_orders", force: :cascade do |t|
@@ -118,9 +152,14 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.integer "bond_to_id"
     t.integer "event_id", null: false
     t.index ["add_date"], name: "index_memoes_on_add_date"
+    t.index ["bind_kind_code"], name: "index_memoes_on_bind_kind_code"
     t.index ["bond_to_id", "bind_kind_code"], name: "index_memoes_on_bond_to_id_and_bind_kind_code"
+    t.index ["bond_to_id"], name: "index_memoes_on_bond_to_id"
     t.index ["calendary_id", "event_id", "year_date"], name: "index_memoes_on_calendary_id_and_event_id_and_year_date", unique: true
     t.index ["calendary_id", "year_date"], name: "index_memoes_on_calendary_id_and_year_date"
+    t.index ["calendary_id"], name: "index_memoes_on_calendary_id"
+    t.index ["event_id", "bond_to_id", "id"], name: "index_memoes_on_event_id_and_bond_to_id_and_id"
+    t.index ["event_id"], name: "index_memoes_on_event_id"
     t.index ["year_date"], name: "index_memoes_on_year_date"
   end
 
@@ -146,6 +185,10 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.integer "mode"
     t.boolean "feasible", default: false, null: false
     t.string "state_code", null: false
+    t.index ["memory_id", "id"], name: "index_memory_names_on_memory_id_and_id"
+    t.index ["memory_id", "name_id"], name: "index_memory_names_on_memory_id_and_name_id", unique: true
+    t.index ["memory_id"], name: "index_memory_names_on_memory_id"
+    t.index ["name_id"], name: "index_memory_names_on_name_id"
   end
 
   create_table "names", id: :serial, force: :cascade do |t|
@@ -157,7 +200,10 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "alphabeth_code", null: false
     t.integer "root_id"
     t.string "bind_kind_code", null: false
+    t.index ["alphabeth_code"], name: "index_names_on_alphabeth_code"
     t.index ["bond_to_id", "bind_kind_code"], name: "index_names_on_bond_to_id_and_bind_kind_code"
+    t.index ["id", "language_code"], name: "index_names_on_id_and_language_code"
+    t.index ["language_code", "alphabeth_code"], name: "index_names_on_language_code_and_alphabeth_code"
     t.index ["root_id"], name: "index_names_on_root_id"
     t.index ["text", "alphabeth_code"], name: "index_names_on_text_and_alphabeth_code", unique: true
   end
@@ -173,7 +219,9 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
   create_table "service_cantoes", id: :serial, force: :cascade do |t|
     t.integer "service_id", null: false
     t.integer "canto_id", null: false
+    t.index ["canto_id"], name: "index_service_cantoes_on_canto_id"
     t.index ["service_id", "canto_id"], name: "index_service_cantoes_on_service_id_and_canto_id", unique: true
+    t.index ["service_id"], name: "index_service_cantoes_on_service_id"
   end
 
   create_table "services", id: :serial, force: :cascade do |t|
@@ -194,7 +242,22 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.string "info_type", null: false
     t.string "ref_title"
     t.integer "tone"
+    t.index ["alphabeth_code"], name: "index_services_on_alphabeth_code"
+    t.index ["apostle"], name: "index_services_on_apostle"
+    t.index ["author"], name: "index_services_on_author"
+    t.index ["description"], name: "index_services_on_description"
+    t.index ["gospel"], name: "index_services_on_gospel"
+    t.index ["info_id"], name: "index_services_on_info_id"
+    t.index ["info_type", "info_id"], name: "index_services_on_info_type_and_info_id"
+    t.index ["info_type"], name: "index_services_on_info_type"
+    t.index ["language_code"], name: "index_services_on_language_code"
     t.index ["name", "alphabeth_code"], name: "index_services_on_name_and_alphabeth_code", unique: true
+    t.index ["name"], name: "index_services_on_name"
+    t.index ["ref_title"], name: "index_services_on_ref_title"
+    t.index ["source"], name: "index_services_on_source"
+    t.index ["text_format"], name: "index_services_on_text_format"
+    t.index ["tone"], name: "index_services_on_tone"
+    t.index ["type"], name: "index_services_on_type"
   end
 
   create_table "slugs", id: :serial, force: :cascade do |t|
@@ -212,7 +275,11 @@ ActiveRecord::Schema.define(version: 2020_04_27_224500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_subjects_on_key", unique: true
+    t.index ["kind_code", "key", "id"], name: "index_subjects_on_kind_code_and_key_and_id"
+    t.index ["kind_code", "key"], name: "index_subjects_on_kind_code_and_key"
     t.index ["kind_code"], name: "index_subjects_on_kind_code"
   end
 
+  add_foreign_key "service_cantoes", "cantoes", on_delete: :cascade
+  add_foreign_key "service_cantoes", "services", on_delete: :cascade
 end

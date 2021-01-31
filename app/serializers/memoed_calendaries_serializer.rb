@@ -30,7 +30,7 @@ class MemoedCalendariesSerializer < ActiveModel::Serializer::CollectionSerialize
             .joins(:event)
             .merge(Event.usual)
             .map do |memo| #TODO remove `merge`
-         yield( MemoSpanSerializer.new( memo,
+         yield( MemoPrespanSerializer.new( memo,
                                         locales: locales,
                                         julian: julian,
                                         date: date )) end;end
