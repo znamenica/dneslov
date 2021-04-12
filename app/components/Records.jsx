@@ -70,7 +70,7 @@ export default class Records extends Component {
    }
 
    shouldComponentUpdate(nextProps, nextState) {
-      console.debug("[shouldComponentUpdate] >> next:", nextState, "prev:", this.state)
+      console.debug("[shouldComponentUpdate] ** nextState:", nextState, "this.state:", this.state)
       return JSON.stringify(nextState.query) !== JSON.stringify(this.state.query) ||
              nextState.current != this.state.current ||
              nextState.page != this.state.page
@@ -78,7 +78,7 @@ export default class Records extends Component {
 
    // custom
    fetchNext() {
-      console.log("[fetchNext] > state", this.state)
+      console.log("[fetchNext] * this.state:", this.state)
       if ((this.state.total > this.state.records.length) && ! this.isRequesting) {
          this.submit(this.state.page + 1)
       }
@@ -95,7 +95,7 @@ export default class Records extends Component {
           total = this.state.total,
           appended = this.state.appended
 
-      console.log("[onRecordUpdate]", record, index)
+      console.log("[onRecordUpdate] * record:", record, "index:", index)
 
       if (index < 0) {
          records.unshift(record)
@@ -179,11 +179,11 @@ export default class Records extends Component {
                      }),
       }
 
-      console.log("[onSuccessLoad] > ", response.config.url)
+      console.log("[onSuccessLoad] * ", response.config.url)
       document.body.classList.remove('in-progress')
 
       if (response.config.url === '/' + this.props.meta.remoteNames + '.json') {
-         console.log("[onSuccessLoad] > state changes", new_state)
+         console.log("[onSuccessLoad] * state changes", new_state)
          this.setState(new_state)
       }
    }
@@ -196,7 +196,7 @@ export default class Records extends Component {
 
       this.isRequesting = true
 
-      console.log("[submit] Sending...", query)
+      console.log("[submit] * Sending...", query)
       document.body.classList.add('in-progress')
 
       Axios.get(request.url, { params: query } )
@@ -225,7 +225,7 @@ export default class Records extends Component {
    }
 
    render() {
-      console.log("[render] * props:", this.props, "state:", this.state)
+      console.log("[render] * this.props:", this.props, "this.state:", this.state)
 
       return [
          <div>

@@ -2,4 +2,7 @@ class Admin::ShortCalendarySerializer < CommonCalendarySerializer
    attributes :id, :calendary
    
    def calendary
-      object.name_for(@instance_options[:locales]).text ;end;end
+      object._descriptions.find do |d|
+         d["type"] == "Appellation" &&
+         locales.include?(d["language_code"].to_sym)
+         end["text"] ;end;end

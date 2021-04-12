@@ -1,7 +1,10 @@
 class Admin::EventsController < Admin::CommonController
-   has_scope :with_memory_id, only: %i(index all)
+   has_scope :by_memory_id, only: %i(index all)
 
    protected
+
+   def with_list
+      %w(with_titles with_descriptions) ;end
 
    def model
       Event ;end

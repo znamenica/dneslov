@@ -6,6 +6,8 @@ ru:
          invalid_language_char: содержит неверные символ(ы) "%{chars}" для выбранной азбуки "%{alphabeth}"
          invalid_utf8_char: содержит невернные символы уникода "%{parts}" для выбранной азбуки "%{alphabeth}"
          languages_arent_same: содержит нетождественные языки класса и его наследников
+         invalid_uri: "%{uri} неверен"
+         inaccessible_uri: "недоступен по адресу %{uri}"
          models:
             calendary:
                attributes:

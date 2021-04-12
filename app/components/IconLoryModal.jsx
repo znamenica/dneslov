@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import { lory } from 'lory.js'
 
+import Image from 'Image'
+
 export default class IconLoryModal extends Component {
    static defaultProps = {
       links: [],
@@ -77,7 +79,7 @@ export default class IconLoryModal extends Component {
       }
    }
 
-   onImageCompleted(e) {
+   onImageCompleted() {
       this.setState((prevState) => { return { loadCounter: prevState.loadCounter + 1 }}, this.stateChanged.bind(this))
    }
 
@@ -95,10 +97,6 @@ export default class IconLoryModal extends Component {
 
    isOpen() {
       return this.$modal && this.$modal.classList.contains('open')
-   }
-
-   onImageError(e) {
-      e.target.style.display = 'none'
    }
 
    getItemBounds() {
@@ -210,12 +208,11 @@ export default class IconLoryModal extends Component {
                         {this.props.links.map((link) =>
                            <li
                               key={link.id} >
-                              <img
-                                 className='icon'
+                              <Image
+                                 wrapperClassName='icon'
                                  src={link.url}
                                  alt={link.description}
-                                 onLoad={this.onImageCompleted.bind(this)}
-                                 onError={this.onImageError.bind(this)} /></li>)}</ul></div>
+                                 onLoad={this.onImageCompleted.bind(this)} /></li>)}</ul></div>
                   <div
                      ref={e => this.$prev = e}
                      className='prev waves-effect'>

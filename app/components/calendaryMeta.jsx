@@ -1,9 +1,9 @@
 import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
-import { makeName } from 'makers'
+import { makeTitle } from 'makers'
 import UrlRegexp from 'UrlRegexp'
 
 export const calendaryMeta = {
-   default: 'name',
+   default: 'title',
    remoteName: 'calendary',
    remoteNames: 'calendaries',
    title: 'Календари',
@@ -16,9 +16,9 @@ export const calendaryMeta = {
       yes: "Да"
    },
    row: {
-      name: {
+      title: {
          title: 'Имя',
-         value: makeName,
+         value: makeTitle,
       },
       licit: {
          title: 'thumb_up',
@@ -97,7 +97,7 @@ export const calendaryMeta = {
          title: 'Опубликовать',
          display_scheme: '12-4-2-2',
       },
-      names: {
+      titles: {
          kind: 'collection',
          title: "Имена",
          action: "Добавь имя",
@@ -268,7 +268,7 @@ export const calendaryMeta = {
             },
          }
       },
-      links: {
+      beings: {
          kind: 'collection',
          title: "Ссылки",
          action: "Добавь ссылку",

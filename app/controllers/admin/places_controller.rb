@@ -15,7 +15,7 @@ class Admin::PlacesController < Admin::CommonController
    def set_places
       @places =
       if params[ :t ]
-         model.with_token(params[ :t ])
+         model.by_token(params[ :t ])
       elsif params[ :v ] && params[ :value_name ]
          model.where(params[ :v ] => params[ :v ])
       else

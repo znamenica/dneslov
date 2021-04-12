@@ -1,35 +1,27 @@
 class Admin::CalendarySerializer < CommonCalendarySerializer
    attributes :id, :slug, :language_code, :language, :alphabeth_code, :alphabeth, :author_name, :date, :council, :licit,
-              :names, :descriptions, :wikies, :links
+              :titles, :descriptions, :wikies, :beings
 
    def date
-     object.date; end
+      object.date; end
 
    def language
-      object.language_for( locales )&.text ;end
+      object._language ;end
 
    def alphabeth
-      object.alphabeth_for( locales )&.text ;end
+      object._alphabeth ;end
 
-   def names
-      ActiveModel::Serializer::CollectionSerializer.new(object.names,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+   def titles
+      object._descriptions.select { |d| d['type'] == 'Appellation' } ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d['type'] == 'Description' } ;end
 
    def wikies
-      ActiveModel::Serializer::CollectionSerializer.new(object.wikies,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end
+      object._links.select { |l| l['type'] == 'WikiLink' } ;end
 
-   def links
-      ActiveModel::Serializer::CollectionSerializer.new(object.links,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end
+   def beings
+      object._links.select { |l| l['type'] == "BeingLink" } ;end
 
    def slug
-      SlugSerializer.new(object.slug) ;end;end
+      object._slug ;end;end

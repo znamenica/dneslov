@@ -555,6 +555,57 @@ export const memoryMeta = {
                      }
                   },
                }
+            },
+            descriptions: {
+               kind: 'collection',
+               title: "Описание события",
+               action: "Добавь описание",
+               display_scheme: '12-12-12-12',
+               meta: {
+                  id: {
+                     kind: 'hidden',
+                  },
+                  text: {
+                     kind: 'text',
+                     name: 'text',
+                     title: 'Текст описания',
+                     placeholder: 'Введи текст описания',
+                     display_scheme: '12-6-4-6',
+                     validations: {
+                        "Описание отсутствует": matchEmptyObject,
+                     },
+                  },
+                  language_code: {
+                     kind: 'dynamic',
+                     title: 'Язык',
+                     display_scheme: '12-6-4-3',
+                     pathname: 'short_subjects',
+                     humanized_name: 'language',
+                     context_value: { k: "Language" },
+                     key_name: 'name',
+                     value_name: 'key',
+                     placeholder: 'Начни ввод наименования языка...',
+                     validations: {
+                        'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                        'Язык из списка должен быть выбран': matchEmptyObject,
+                     }
+                  },
+                  alphabeth_code: {
+                     kind: 'dynamic',
+                     title: 'Азбука',
+                     display_scheme: '12-6-4-3',
+                     pathname: 'short_subjects',
+                     humanized_name: 'alphabeth',
+                     context_value: { k: "Alphabeth" },
+                     key_name: 'name',
+                     value_name: 'key',
+                     placeholder: 'Начни ввод наименования азбуки...',
+                     validations: {
+                        'Избранная азбука не соотвествует избранному языку': matchCodes,
+                        'Азбука из списка должна быть выбрана': matchEmptyObject,
+                     }
+                  },
+               }
             }
          }
       },

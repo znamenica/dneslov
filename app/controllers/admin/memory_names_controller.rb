@@ -1,6 +1,6 @@
 class Admin::MemoryNamesController < Admin::CommonController
    def all
-      @names = model.with_token(params[ :t ])
+      @names = model.by_token(params[ :t ])
 
       respond_to do |format|
          format.json { render :index, json: @names.limit(500),

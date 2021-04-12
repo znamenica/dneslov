@@ -12,7 +12,7 @@ class Order < ActiveRecord::Base
    accepts_nested_attributes_for :tweets, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank
 
-   scope :with_token, -> text do
+   scope :by_token, -> text do
       left_outer_joins( :slug, :descriptions, :notes, :tweets ).
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
          where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
          where( "notes_orders.text ~* ?", "\\m#{text}.*" )))).distinct ;end
 
 
-   scope :with_tokens, -> string_in do
+   scope :by_tokens, -> string_in do
       return self if string_in.blank?
       # TODO fix the correctness of the query
       klass = self.model_name.name.constantize
@@ -33,14 +33,59 @@ class Order < ActiveRecord::Base
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
 
-   singleton_class.send(:alias_method, :t, :with_token)
-   singleton_class.send(:alias_method, :q, :with_tokens)
+   scope :with_slug, -> do
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'orders.*'
+      end
 
-   validates_presence_of :slug, :notes, :tweets
+      selector << "jsonb_build_object('id', order_slugs.id, 'text', order_slugs.text) AS _slug"
+      join = "LEFT OUTER JOIN slugs AS order_slugs
+                           ON order_slugs.sluggable_id = orders.id
+                          AND order_slugs.sluggable_type = 'Order'"
 
-   def tweet_for locales
-      tweets.where( language_code: locales ).first ;end
+      joins(join).select(selector).group(:id, 'order_slugs.id', 'order_slugs.text') ;end
 
-   def note_for locales
-      notes.where( language_code: locales ).first ;end;end
+   scope :with_descriptions, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'orders.*'
+      end
 
+      selector << "COALESCE((WITH __descriptions AS (
+                      SELECT DISTINCT ON(descriptions.id)
+                             descriptions.id AS id,
+                             descriptions.type AS type,
+                             descriptions.text AS text,
+                             descriptions.language_code AS language_code,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+                        JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+                        JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = orders.id
+                         AND descriptions.describable_type = 'Order'
+                         AND descriptions.type IN ('Tweet', 'Note', 'Description')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
+
+      select(selector).group(:id) ;end
+
+   singleton_class.send(:alias_method, :t, :by_token)
+   singleton_class.send(:alias_method, :q, :by_tokens)
+
+   validates_presence_of :slug, :notes, :tweets ;end

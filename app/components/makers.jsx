@@ -35,6 +35,15 @@ export function makeName(value, props) {
    return names[0] || ''
 }
 
+export function makeTitle(value, props) {
+   let titles = props.locales.map((locale) => {
+      return value.titles.reduce((res, title) => {
+         return res || locale === title.language_code && title.text }, null)
+   }).filter((e) => { return e })
+
+   return titles[0] || ''
+}
+
 export function makeDate(value) {
    let dates = [...event_types].map((event_type) => {
       return value.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)

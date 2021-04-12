@@ -16,7 +16,8 @@ class Admin::CommonController < ApplicationController
    rescue_from ActiveRecord::RecordNotUnique,
                ActiveRecord::RecordInvalid,
                ActiveRecord::RecordNotSaved,
-               ActiveRecord::RecordNotFound, with: :unprocessable_entity
+               ActiveRecord::RecordNotFound,
+               StandardError, with: :unprocessable_entity
 
    has_scope :t, only: %i(index all)
    has_scope :q, only: %i(index)
@@ -31,6 +32,7 @@ class Admin::CommonController < ApplicationController
 
    # GET /<objects>/
    def index
+      # binding.pry
       respond_to do |format|
          format.json { render :index, json: @objects, locales: @locales,
                                       serializer: objects_serializer,
@@ -45,13 +47,17 @@ class Admin::CommonController < ApplicationController
    def create
       @object.save!
 
-      render json: @object, serializer: object_serializer, locales: @locales ;end
+      render json: prepare_object( @object ),
+             serializer: object_serializer,
+             locales: @locales ;end
 
    # PUT /<objects>/1
    def update
       @object.update!( permitted_params )
 
-      render json: @object, serializer: object_serializer, locales: @locales ;end
+      render json: prepare_object( @object ),
+             serializer: object_serializer,
+             locales: @locales ;end
 
    # GET /<objects>/1
    def show
@@ -98,6 +104,8 @@ class Admin::CommonController < ApplicationController
          raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}" ;end;end
 
    def unprocessable_entity e
+      Rails.logger.error("#{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}")
+
       errors = @object.errors.any? && @object.errors || e.to_s
       render json: errors, status: :unprocessable_entity ;end
 
@@ -114,12 +122,35 @@ class Admin::CommonController < ApplicationController
    def new_object
       @object = model.new( permitted_params ) ;end
 
+   def context
+      { locales: @locales } ;end
+
+   def include_list
+      [] ;end
+
+   def with_list
+      [] ;end
+
+   def issue_with query, with_method
+      query.send( with_method, context )
+   rescue ArgumentError
+      query.send( with_method ) ;end
+
+   def prepare_object object
+      prepare_objects.where(id: object.id).first
+   end
+
+   def prepare_objects
+      pre = include_list.reduce( apply_scopes( model )) { |q, i| q.includes( i ) }
+
+      with_list.reduce( pre ) { |q, with_method| issue_with( q, with_method )} ;end
+
    def fetch_objects
-      @objects = apply_scopes( model ).page( params[ :p ]) ;end
+      @objects = prepare_objects.page( params[ :p ]) ;end
 
    def fetch_object
       if params[:slug]
-         @object ||= model.by_slug(params[:slug])
+         @object ||= prepare_objects.by_slug(params[:slug]).first
       else
-         @object ||= model.find(params[:id]) ;end ||
+         @object ||= prepare_objects.find(params[:id]) ;end ||
             raise(ActiveRecord::RecordNotFound) ;end;end

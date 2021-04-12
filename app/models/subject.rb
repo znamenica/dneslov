@@ -13,12 +13,12 @@ class Subject < ActiveRecord::Base
       def for language_codes
          where( language_code: language_codes ).first ;end;end
 
-   scope :with_token, -> text do
+   scope :by_token, -> text do
       self.left_outer_joins(:names, :descriptions)
           .where("descriptions.text ~* ?", "\\m#{text}.*")
           .distinct ;end
 
-   scope :with_tokens, -> string_in do
+   scope :by_tokens, -> string_in do
       return self if string_in.blank?
       # TODO fix the correctness of the query
       klass = self.model_name.name.constantize
@@ -31,12 +31,70 @@ class Subject < ActiveRecord::Base
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
 
-   scope :with_kind_code, -> kind_code do
+   scope :by_kind_code, -> kind_code do
       where(kind_code: kind_code) ;end
 
-   singleton_class.send(:alias_method, :t, :with_token)
-   singleton_class.send(:alias_method, :q, :with_tokens)
-   singleton_class.send(:alias_method, :k, :with_kind_code)
+   scope :with_kind_title, -> context do
+      language_codes = [ context[:locales] ].flatten
+      selector = self.select_values.dup
+      if selector.empty?
+         selector << 'subjects.*'
+      end
+      selector << "kind_titles.text AS _kind_title"
+
+      join = "LEFT OUTER JOIN subjects AS subject_kinds
+                           ON subject_kinds.kind_code = 'SubjectKind'
+                          AND subject_kinds.key = subjects.kind_code
+              LEFT OUTER JOIN descriptions AS kind_titles
+                           ON kind_titles.describable_id = subject_kinds.id
+                          AND kind_titles.describable_type = 'Subject'
+                          AND kind_titles.type = 'Appellation'
+                          AND kind_titles.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector).group(:id, "kind_titles.text") ;end
+
+   scope :with_descriptions, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'subjects.*'
+      end
+
+      selector << "COALESCE((WITH __descriptions AS (
+                      SELECT DISTINCT ON(descriptions.id)
+                             descriptions.id AS id,
+                             descriptions.type AS type,
+                             descriptions.text AS text,
+                             descriptions.language_code AS language_code,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+                        JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+                        JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = subjects.id
+                         AND descriptions.describable_type = 'Subject'
+                         AND descriptions.type IN ('Appellation', 'Description')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
+
+      select(selector).group(:id) ;end
+
+   singleton_class.send(:alias_method, :t, :by_token)
+   singleton_class.send(:alias_method, :q, :by_tokens)
+   singleton_class.send(:alias_method, :k, :by_kind_code)
 
    accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true

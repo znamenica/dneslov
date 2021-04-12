@@ -29,11 +29,12 @@ class Memory < ActiveRecord::Base
    has_many :orders, -> { distinct.reorder('id') }, through: :memos, source: :orders
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
 
-   default_scope { left_outer_joins( :slug ).order( base_year: :asc, short_name: :asc, id: :asc ) }
+   default_scope { order( base_year: :asc, short_name: :asc, id: :asc ) }
 
-   scope :icons, -> { joins(:slugs).where( slugs: { text: :обр } ) }
+   scope :icons, -> { joins( :slugs ).where( slugs: { text: :обр } ) }
 
    scope :by_short_name, -> name { where( short_name: name ) }
+   scope :by_slug, -> slug { unscoped.joins( :slug ).where( slugs: { text: slug })}
 
    scope :in_calendaries, -> calendaries_in do
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
@@ -83,7 +84,7 @@ class Memory < ActiveRecord::Base
 
       select(selector).group(:id) ;end
 
-   scope :with_links, -> do
+   scope :with_pure_links, -> do
       selector = "COALESCE((SELECT jsonb_agg(links)
                               FROM links
                              WHERE links.info_id = memories.id
@@ -109,7 +110,7 @@ class Memory < ActiveRecord::Base
 
       select(selector).group(:id) ;end
 
-   scope :with_slug, -> do
+   scope :with_slug_text, -> do
       selector = self.select_values.dup
       if selector.empty?
          selector << 'memories.*'
@@ -132,11 +133,274 @@ class Memory < ActiveRecord::Base
 
       joins(join).select(selector.uniq).group('_title') ;end
 
+   scope :with_slug, -> do
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector << "jsonb_build_object('id', slugs.id, 'text', slugs.text) AS _slug"
+      join = "LEFT OUTER JOIN slugs
+                           ON slugs.sluggable_id = memories.id
+                          AND slugs.sluggable_type = 'Memory'"
+
+      joins(join).select(selector).group(:id, 'slugs.id', 'slugs.text') ;end
+
+   scope :with_orders, -> context do
+      language_codes = [ context[:locales] ].flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector << "COALESCE((WITH __orders AS (
+                       SELECT DISTINCT ON(orders.id)
+                              orders.id AS id,
+                              order_names.text AS name
+                         FROM orders
+                         JOIN memo_orders
+                           ON memo_orders.order_id = orders.id
+                         JOIN memoes
+                           ON memoes.id = memo_orders.memo_id
+                         JOIN events
+                           ON events.id = event_id
+              LEFT OUTER JOIN descriptions AS order_names
+                           ON order_names.describable_id = orders.id
+                          AND order_names.describable_type = 'Order'
+                          AND order_names.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE events.memory_id = memories.id
+                     GROUP BY orders.id, order_names.text)
+                       SELECT jsonb_agg(__orders)
+                         FROM __orders), '[]'::jsonb) AS _orders"
+
+      select(selector).group(:id) ;end
+
+   scope :with_descriptions, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector << "COALESCE((with __descriptions as (
+                      select distinct on(descriptions.id)
+                             descriptions.id as id,
+                             descriptions.type as type,
+                             descriptions.text as text,
+                             descriptions.language_code AS language_code,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = memories.id
+                         AND descriptions.describable_type = 'Memory'
+                         AND descriptions.type IN ('Description', 'Appellation')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
+
+      select(selector).group(:id) ;end
+
+   scope :with_links, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector << "COALESCE((with __links as (
+                      SELECT DISTINCT ON(links.id)
+                             links.id as id,
+                             links.type as type,
+                             links.url as url,
+                             links.language_code AS language_code,
+                             links.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM links
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = links.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = links.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE links.info_id = memories.id
+                         AND links.info_type = 'Memory'
+                    GROUP BY links.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__links)
+                        FROM __links), '[]'::jsonb) AS _links"
+
+      select(selector).group(:id) ;end
+
+   scope :with_events, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector << "COALESCE((WITH __events AS (
+                      SELECT DISTINCT ON(events.id)
+                             events.id AS id,
+                             events.happened_at AS happened_at,
+                             events.kind_code AS kind_code,
+                             event_kind_titles.text AS kind_name,
+                             events.place_id AS place_id,
+                             place_names.text AS place,
+                             events.item_id AS item_id,
+                             item_names.text AS item,
+                             events.person_name AS person_name,
+                             events.type_number AS type_number,
+                             events.about_string AS about_string,
+                             events.tezo_string AS tezo_string,
+                             events.order AS order,
+                             events.council AS council,
+              COALESCE((WITH __titles AS (
+                      SELECT DISTINCT ON(titles.id)
+                             titles.id AS id,
+                             titles.text AS text,
+                             titles.language_code AS language_code,
+                             language_names.text AS language,
+                             titles.alphabeth_code AS alphabeth_code,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions AS titles
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = titles.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = titles.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE titles.describable_id = events.id
+                         AND titles.describable_type = 'Event'
+                         AND titles.language_code IN ('#{language_codes.join("', '")}')
+                         AND titles.type = 'Title'
+                    GROUP BY titles.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__titles)
+                        FROM __titles), '[]'::jsonb) AS titles,
+              COALESCE((WITH __descriptions AS (
+                      SELECT DISTINCT ON(descriptions.id)
+                             descriptions.id AS id,
+                             descriptions.text AS text,
+                             descriptions.language_code AS language_code,
+                             language_names.text AS language,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = events.id
+                         AND descriptions.describable_type = 'Event'
+                         AND descriptions.language_code IN ('#{language_codes.join("', '")}')
+                         AND descriptions.type IN ('Description')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS descriptions
+                        FROM events
+             LEFT OUTER JOIN descriptions AS place_names
+                          ON place_names.describable_id = events.place_id
+                         AND place_names.describable_type = 'Place'
+                         AND place_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN descriptions AS item_names
+                          ON item_names.describable_id = events.item_id
+                         AND item_names.describable_type = 'Item'
+                         AND item_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS event_kinds
+                          ON event_kinds.kind_code = 'EventKind'
+                         AND event_kinds.key = events.kind_code
+             LEFT OUTER JOIN descriptions AS event_kind_titles
+                          ON event_kind_titles.describable_id = event_kinds.id
+                         AND event_kind_titles.describable_type = 'Subject'
+                         AND event_kind_titles.type = 'Appellation'
+                         AND event_kind_titles.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE events.memory_id = memories.id
+                    GROUP BY events.id, place_names.text, item_names.text, event_kind_titles.text)
+                      SELECT jsonb_agg(__events)
+                        FROM __events), '[]'::jsonb) AS _events"
+
+      #binding.pry
+      select(selector).group(:id) ;end
+
+   scope :with_memory_names, -> context do
+      language_codes = [ context[:locales] ].flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'memories.*'
+      end
+
+      selector = "COALESCE((
+                        WITH __memory_names AS (
+                      SELECT memory_names.id AS id,
+                             memory_names.name_id AS name_id,
+                             names.text || ' (' || language_names.text || ')' AS name,
+                             memory_names.state_code AS state_code,
+                             memory_name_state_titles.text AS state_name,
+                             memory_names.mode AS mode,
+                             memory_names.feasible AS feasible
+                        FROM memory_names
+             LEFT OUTER JOIN subjects AS memory_name_states
+                          ON memory_name_states.key = memory_names.state_code
+             LEFT OUTER JOIN descriptions AS memory_name_state_titles
+                          ON memory_name_state_titles.describable_id = memory_name_states.id
+                         AND memory_name_state_titles.describable_type = 'Subject'
+                         AND memory_name_state_titles.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN names
+                          ON names.id = memory_names.name_id
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = names.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE memory_names.memory_id = memories.id
+                         AND memory_names.id IS NOT NULL
+                    GROUP BY memory_names.id, names.text, language_names.text, memory_name_state_titles.text)
+                      SELECT jsonb_agg(__memory_names)
+                        FROM __memory_names), '[]'::jsonb) AS _memory_names"
+
+      #binding.pry
+      select(selector).group(:id) ;end
+
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
    singleton_class.send(:alias_method, :d, :by_date)
    singleton_class.send(:alias_method, :c, :in_calendaries)
-
 
    accepts_nested_attributes_for :memory_names, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :paterics, reject_if: :all_blank, allow_destroy: true
@@ -183,53 +447,6 @@ class Memory < ActiveRecord::Base
             '0' ;end;end
 
    self.base_year ;end
-
-   def self.by_slug slug
-      unscoped.joins( :slug ).where( slugs: { text: slug } ) ;end
-
-   def all_titles_for language_code
-      Description.title.all_by_memory(self).first_in_calendary.with_lang(language_code) ;end
-
-   def all_descriptions_for language_code
-      Description.desc.all_by_memory(self).first_in_calendary.with_lang(language_code) ;end
-
-   def description_for language_code
-      descriptions.with_lang(language_code).first ;end
-
-   def beings_for language_code
-      abeings = beings.where(language_code: language_code)
-      abeings.present? && abeings || nil ;end
-
-   def wikies_for language_code
-      awikies = wikies.where(language_code: language_code)
-      awikies.present? && awikies || nil ;end
-
-   def paterics_for language_code
-      apaterics = paterics.where(language_code: language_code)
-      apaterics.present? && apaterics || nil ;end
-
-   def valid_icon_links
-      # TODO cleanup when filter for jpg/png etc will be added to model
-      icon_links.where("url ~ '.(jpg|png)$'") ;end
-
-   def filtered_events
-      types = %w(Repose Appearance Miracle Writing Founding Canonization)
-      # TODO optimize sort to SQL order
-      events.where(kind: types).sort_by { |e| types.index( e.kind ) } ;end
-
-   def troparions text_present = true
-      relation = Troparion.joins( :services ).where( services: { id: services.pluck( :id ) } )
-      text_present && relation.where.not( { text: nil } ) || relation ;end
-
-   def troparions_for language_code, text_present = true
-      troparions( text_present ).where(language_code: language_code) ;end
-
-   def kontakions text_present = true
-      relation = Kontakion.joins( :services ).where( services: { id: services.pluck( :id ) } )
-      text_present && relation.where.not( { text: nil } ) || relation ;end
-
-   def kontakions_for language_code, text_present = true
-      kontakions( text_present ).where(language_code: language_code) ;end
 
    def set_slug
       self.slug = Slug.new(base: self.short_name) if self.slug.blank? ;end

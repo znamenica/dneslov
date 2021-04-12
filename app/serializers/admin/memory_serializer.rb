@@ -1,47 +1,30 @@
 class Admin::MemorySerializer < ApplicationSerializer
-   attributes :id, :short_name, :slug, :order, :order_id, :council, :quantity, :base_year,
+   attributes :id, :short_name, :slug, :orders, :council, :quantity, :base_year,
               :beings, :wikies, :paterics, :descriptions, :memory_names, :events, :notes
 
    def slug
-      SlugSerializer.new(object.slug) ;end
+      object._slug ;end
 
-   def order
-      object.orders.first&.note_for(locales)&.text ;end
-
-   def order_id
-      object.orders.first&.note_for(locales)&.id ;end
+   def orders
+      object._orders ;end
 
    def notes
-      ActiveModel::Serializer::CollectionSerializer.new(object.notes,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d[ "type" ] == 'Note' } ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d[ "type" ] == 'Description' } ;end
 
    def wikies
-      ActiveModel::Serializer::CollectionSerializer.new(object.wikies,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end
+      object._links.select { |l| l[ "type" ] == 'WikiLink' } ;end
 
    def beings
-      ActiveModel::Serializer::CollectionSerializer.new(object.beings,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end
-
-   def events
-      ActiveModel::Serializer::CollectionSerializer.new(object.events,
-                                                        locales: locales,
-                                                        serializer: Admin::EventSerializer) ;end
-
-   def memory_names
-      ActiveModel::Serializer::CollectionSerializer.new(object.memory_names,
-                                                        locales: locales,
-                                                        serializer: Admin::MemoryNameSerializer) ;end
+      object._links.select { |l| l[ "type" ] == "BeingLink" } ;end
 
    def paterics
-      ActiveModel::Serializer::CollectionSerializer.new(object.paterics,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end;end
+      object._links.select { |l| l[ "type" ] == "PatericLink" } ;end
+
+   def events
+      object._events ;end
+
+   def memory_names
+      object._memory_names ;end;end

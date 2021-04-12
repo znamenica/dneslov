@@ -177,7 +177,7 @@ export default class DynamicField extends Component {
 
       if (this.props.value_context) {
          Object.entries(this.props.value_context).forEach(([key, value]) => {
-            data["with_" + key] = value
+            data["by_" + key] = value
          })
       }
 

@@ -16,8 +16,8 @@ class MemorySerializer < ApplicationSerializer
                     .with_cantoes(locales)
                     .with_memoes(locales)
                     .with_place(locales)
-                    .with_titles(locales)
-                    .with_description(locales)
+                    .with_titles(context)
+                    .with_description(context)
 
       ActiveModel::Serializer::CollectionSerializer.new( query,
                                                          locales: locales,
@@ -26,4 +26,10 @@ class MemorySerializer < ApplicationSerializer
                                                          calendary_slugs: calendary_slugs ) ;end
 
    def cantoes
-      object._cantoes ;end;end
+      object._cantoes ;end
+
+
+   protected
+
+   def context
+      @context ||= { locales: locales } ;end;end

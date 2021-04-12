@@ -1,6 +1,6 @@
 class Admin::ItemsController < Admin::CommonController
    def all
-      @items = model.with_token(params[ :t ])
+      @items = model.by_token(params[ :t ])
 
       respond_to do |format|
          format.json { render :index, json: @items.limit(500),

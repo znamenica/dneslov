@@ -3,16 +3,16 @@ class Admin::NameSerializer < ApplicationSerializer
               :bind_kind_code, :bind_kind_name, :bond_to_id, :bond_to
 
    def bind_kind_name
-      object.bind_kind&.names&.for( locales )&.text ;end
+      object._bind_kind_name ;end
 
    def language
-      object.language_for( locales )&.text ;end
+      object._language ;end
 
    def alphabeth
-      object.alphabeth_for( locales )&.text ;end
+      object._alphabeth ;end
 
    def root
-      object.root&.text ;end
+      object._root_name ;end
 
    def bond_to
-      object.bond_to&.text ;end;end
+      object._bond_to_name ;end;end

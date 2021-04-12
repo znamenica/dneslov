@@ -3,6 +3,9 @@ class Admin::SubjectsController < Admin::CommonController
 
    protected
 
+   def with_list
+      %w(with_descriptions with_kind_title) ;end
+
    def permitted_params
       params.require( :subject )
             .permit( :id, :key, :meta, :kind_code,

@@ -2,19 +2,13 @@ class Admin::OrderSerializer < ApplicationSerializer
    attributes :id, :slug, :tweets, :notes, :descriptions
 
    def slug
-      SlugSerializer.new(object.slug) ;end
+      object._slug ;end
 
    def tweets
-      ActiveModel::Serializer::CollectionSerializer.new(object.tweets,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d['type'] == 'Tweet' } ;end
 
    def notes
-      ActiveModel::Serializer::CollectionSerializer.new(object.notes,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d['type'] == 'Note' } ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end;end
+      object._descriptions.select { |d| d['type'] == 'Description' } ;end;end

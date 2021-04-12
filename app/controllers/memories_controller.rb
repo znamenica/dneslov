@@ -13,17 +13,19 @@ class MemoriesController < ApplicationController
    has_scope :q, only: %i(index)
    has_scope :c, only: %i(index)
 
+   rescue_from Exception, with: :render_default_error
    # NOTE https://stackoverflow.com/a/48744792/446267
    rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
+   rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
 
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
       @memoes = apply_scopes(Memo).with_base_year
-                                  .with_slug
+                                  .with_slug_text
+                                  .with_calendary_slug_text
                                   .with_description(@locales)
                                   .with_title(@locales)
-                                  .with_calendary_slug
                                   .with_date
                                   .with_thumb_url
                                   .with_bond_to_title(@locales)
@@ -113,7 +115,8 @@ class MemoriesController < ApplicationController
                   .with_title(@locales)
                   .with_description(@locales)
                   .with_url
-                  .with_slug ;end
+                  .with_slug_text
+                  .group("calendaries.id") ;end
 
    def set_julian
       @julian ||= is_julian_calendar? ;end
@@ -122,6 +125,6 @@ class MemoriesController < ApplicationController
       @memory ||= Memory.by_slug(params[ :slug ])
                         .with_cantoes( @locales )
                         .with_names( @locales )
-                        .with_links
-                        .with_slug
+                        .with_pure_links
+                        .with_slug_text
                         .first || raise( ActiveRecord::RecordNotFound ) ;end;end

@@ -3,39 +3,31 @@ class Admin::MemoSerializer < ApplicationSerializer
               :bond_to_id, :bond_to, :memory, :memory_id, :descriptions, :links, :titles, :memo_orders
 
    def year_date
-      object.year_date
-   end
+      object.year_date ;end
 
    def memory_id
-      object.event.memory_id ;end
+      object._memory_id ;end
 
    def memory
-      object.event.memory.short_name ;end
+      object._memory_name ;end
 
    def calendary
-      object.calendary.name_for( locales ).text ;end
+      object._calendary_title ;end
 
    def event
-      [ object.event.kind.names.for( locales )&.text, object.event.type_number ].compact.join( "#" ) ;end
+      object._event_short_title ;end
 
    def bond_to
-      object.bond_to&.year_date ;end
+      object._bond_to_year_date ;end
 
    def memo_orders
-      ActiveModel::Serializer::CollectionSerializer.new(object.memo_orders,
-                                                        locales: locales) ;end
+      object._memo_orders ;end
 
    def titles
-      ActiveModel::Serializer::CollectionSerializer.new(object.titles,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d['type'] == 'Title' } ;end
 
    def descriptions
-      ActiveModel::Serializer::CollectionSerializer.new(object.descriptions,
-                                                        locales: locales,
-                                                        serializer: Admin::DescriptionSerializer) ;end
+      object._descriptions.select { |d| d['type'] == 'Description' } ;end
 
    def links
-      ActiveModel::Serializer::CollectionSerializer.new(object.links,
-                                                        locales: locales,
-                                                        serializer: Admin::LinkSerializer) ;end;end
+      object._links ;end;end

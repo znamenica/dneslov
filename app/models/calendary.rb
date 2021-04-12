@@ -5,9 +5,10 @@ class Calendary < ActiveRecord::Base
    belongs_to :place, optional: true
 
    has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
-   has_many :names, as: :describable, dependent: :delete_all, class_name: :Appellation
+   has_many :links, as: :info, dependent: :delete_all, class_name: :Link
+   has_many :titles, as: :describable, dependent: :delete_all, class_name: :Appellation
    has_many :wikies, as: :info, dependent: :delete_all, class_name: :WikiLink
-   has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
+   has_many :beings, as: :info, dependent: :delete_all, class_name: :BeingLink
    has_many :memos, dependent: :delete_all
    has_one :slug, as: :sluggable
 
@@ -17,21 +18,26 @@ class Calendary < ActiveRecord::Base
          self.licit
       else
          self.left_outer_joins(:slug).licit.or(self.by_slugs(c)) end;end
-   # scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
-   scope :named_as, -> name { joins( :names ).where( names: { text: name } ) }
+   scope :titled_as, -> name { joins( :titles ).where( descriptions: { text: name } ) }
    scope :described_as, -> name { joins( :descriptions ).where( descriptions: { text: name } ) }
+   scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
    scope :by_slugs, -> slugs do
       return self if slugs.blank?
       # TODO add correct sort by slugs pos
-      select("calendaries.*, slugs.*").from("slugs, calendaries").where( "slugs.sluggable_id = calendaries.id AND slugs.sluggable_type = 'Calendary' AND slugs.text IN (?)", [slugs].flatten).reorder("slugs.text") ;end
+      select("calendaries.*, slugs.*")
+       .from("slugs, calendaries")
+       .where( "slugs.sluggable_id = calendaries.id
+            AND slugs.sluggable_type = 'Calendary'
+            AND slugs.text IN (?)", [ slugs ].flatten)
+       .reorder("slugs.text") ;end
 
    scope :by_token, -> text do
-      left_outer_joins( :slug, :descriptions, :names ).
+      left_outer_joins( :slug, :descriptions, :titles ).
          where( "calendaries.author_name ~* ?", "\\m#{text}.*" ).or(
          where( "calendaries.council ~* ?", "\\m#{text}.*" ).or(
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
          where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
-         where( "names_calendaries.text ~* ?", "\\m#{text}.*" ))))) end
+         where( "titles_calendaries.text ~* ?", "\\m#{text}.*" ))))) end
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -52,7 +58,7 @@ class Calendary < ActiveRecord::Base
    scope :with_url, -> do
       selector = 'links.url AS _url'
 
-      left_outer_joins(:links).select(selector) ;end
+      left_outer_joins(:links).select(selector).group('_url') ;end
 
    scope :with_title, -> language_code do
       selector = [ 'titles.text AS _title' ]
@@ -66,13 +72,18 @@ class Calendary < ActiveRecord::Base
                           AND titles.type = 'Appellation'
                           AND titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector) ;end
+      joins(join).select(selector).group('_title') ;end
 
 
-   scope :with_slug, -> do
-      selector = 'slugs.text AS _slug'
+   scope :with_slug_text, -> do
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
 
-      left_outer_joins(:slug).select(selector) ;end
+      selector << 'slugs.text AS _slug'
+
+      left_outer_joins(:slug).group("slugs.text").select(selector) ;end
 
    scope :with_description, -> language_code do
       selector = [ 'descriptions.text AS _description' ]
@@ -86,30 +97,131 @@ class Calendary < ActiveRecord::Base
                           AND descriptions.type = 'Description'
                           AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq) ;end
+      joins(join).select(selector.uniq).group('_description') ;end
+
+   scope :with_slug, -> do
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
+
+      selector << "jsonb_build_object('id', calendary_slugs.id, 'text', calendary_slugs.text) AS _slug"
+      join = "LEFT OUTER JOIN slugs AS calendary_slugs
+                           ON calendary_slugs.sluggable_id = calendaries.id
+                          AND calendary_slugs.sluggable_type = 'Calendary'"
+
+      joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text') ;end
+
+   scope :with_locale_names, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
+      selector.concat [ "language_names.text AS _language", "alphabeth_names.text AS _alphabeth" ]
+
+      join = "LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = calendaries.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Subject'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = calendaries.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Subject'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('language_names.text', 'alphabeth_names.text') ;end
+
+   scope :with_descriptions, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << "#{model.table_name}.*"
+      end
+
+      selector << "COALESCE((with __descriptions AS (
+                      SELECT DISTINCT ON(descriptions.id)
+                             descriptions.id AS id,
+                             descriptions.type AS type,
+                             descriptions.text AS text,
+                             descriptions.language_code AS language_code,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = #{model.table_name}.id
+                         AND descriptions.describable_type = '#{model}'
+                         AND descriptions.type IN ('Description', 'Appellation')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
+
+      select( selector ).group( :id ) ;end
+
+   scope :with_links, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
+
+      selector << "COALESCE((with __links as (
+                      SELECT DISTINCT ON(links.id)
+                             links.id as id,
+                             links.type as type,
+                             links.url as url,
+                             links.language_code AS language_code,
+                             links.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM links
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = links.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = links.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE links.info_id = calendaries.id
+                         AND links.info_type = 'Calendary'
+                    GROUP BY links.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__links)
+                        FROM __links), '[]'::jsonb) AS _links"
+
+      select(selector).group(:id) ;end
 
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :wikies, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :beings, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :place, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank, allow_destroy: true
 
    has_alphabeth
    validates :language_code, inclusion: { in: Languageble.language_list }
    validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for( l.language_code ) } }
-   validates :slug, :names, :date, presence: true
-   validates :descriptions, :names, :wikies, :links, :place, associated: true
-
-   class << self
-      def by_slug slug
-         joins( :slug ).where( slugs: { text: slug } ).first ;end;end
-
-   def link_for language_code
-      links.where(language_code: language_code).first ;end
-
-   def description_for language_codes
-      descriptions.where( language_code: language_codes ).first ;end
-
-   def name_for language_codes
-      names.where( language_code: language_codes ).first ;end;end
+   validates :slug, :titles, :date, presence: true
+   validates :descriptions, :titles, :wikies, :beings, :place, associated: true ;end

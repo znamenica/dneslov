@@ -214,7 +214,7 @@ export default class Form extends Component {
    }
 
    render() {
-      console.log("[render] > state", this.state, "from props", this.props)
+      console.log("[render] * this.state", this.state, "this.props", this.props)
 
       return (
          <form>

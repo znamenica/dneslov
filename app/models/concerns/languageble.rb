@@ -58,16 +58,17 @@ module Languageble
       Languageble::LANGUAGE_TREE.values.flatten.uniq ;end
 
    # +alphabeth_list_for+ returns list of available alphabeths for the specified
-   # language code.
+   # list of language codes as a string or and array.
    #
    # Example:
    #
    #     validates :alphabeth_code, inclusion: { in: proc { |l|
    #        Languageble.alphabeth_list_for( l.language_code ) } } ; end
    #
-   def self.alphabeth_list_for language_code
-      [ Languageble::LANGUAGE_TREE[ language_code.to_s.to_sym ] ].flatten
-         .map( &:to_s ) ;end
+   def self.alphabeth_list_for language_codes
+      [ language_codes ].flatten.map do |language_code|
+         Languageble::LANGUAGE_TREE[ language_code.to_s.to_sym ]
+         end.flatten.uniq.map( &:to_s ) ;end
 
    # +language_list_for+ returns the language list for the specified alphabeth
    # code.

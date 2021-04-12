@@ -2,4 +2,4 @@ class Admin::ShortEventSerializer < CommonCalendarySerializer
    attributes :id, :event
    
    def event
-     [ object.kind&.names&.for( locales )&.text, object.type_number ].compact.join("#") ;end;end
+      object._titles.find {|t| locales.include?(t["language_code"].to_sym) }["text"] ;end;end

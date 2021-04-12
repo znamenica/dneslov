@@ -11,6 +11,10 @@ class Admin::MemoriesController < Admin::CommonController
 
    protected
 
+   def with_list
+      %w(with_slug with_descriptions with_links with_events with_memory_names with_orders)
+   end
+
    def permitted_params
       params.require( :memory ).permit(
          :id, :covers_to_id, :bond_to_id, :short_name, :council, :quantity, :base_year,

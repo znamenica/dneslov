@@ -1,6 +1,7 @@
 import { Component } from 'react'
 
 import IconLoryModal from 'IconLoryModal'
+import Image from 'Image'
 
 export default class Carousel extends Component {
    static defaultProps = {
@@ -49,19 +50,24 @@ export default class Carousel extends Component {
       }
    }
 
+   shouldComponentUpdate() {
+      return false
+   }
+
+   componentDidUpdate() {
+      this.carousel = M.Carousel.init(this.$carousel, {});
+      Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
+         img.addEventListener('click', this.onIconClick, { passive: true })
+      })
+   }
+
    stateChanged() {
-         console.debug("LOADED", this.state.loadCounter)
       if (this.state.loadCounter == this.props.images.length) {
-         console.debug("CAROUSEL COMPLETED")
-         this.carousel = M.Carousel.init(this.$carousel, {});
-         Array.from(this.$carousel.querySelectorAll('img')).forEach((img) => {
-            console.debug("CAROUSEL", img)
-            img.addEventListener('click', this.onIconClick, { passive: true })
-         })
+         this.forceUpdate()
       }
    }
 
-   onImageCompleted(e) {
+   onImageCompleted(_index) {
       this.setState((prevState) => { return { loadCounter: prevState.loadCounter + 1 }}, this.stateChanged.bind(this))
    }
 
@@ -75,14 +81,15 @@ export default class Carousel extends Component {
                className='carousel compact'
                ref={e => this.$carousel = e} >
                {this.props.images.map((image, index) =>
-                  <img
+                  <Image
                      key={'image-' + image.id}
-                     className='carousel-item'
+                     wrapperClassName='carousel-item'
                      alt={image.description}
                      src={image.url}
-                     data-index={index}
+                     index={index}
                      onLoad={this.onImageCompleted.bind(this)}
-                     onError={this.onImageCompleted.bind(this)} />)}</div>
+                     onError={this.onImageCompleted.bind(this)} />
+               )}</div>
             <IconLoryModal
                key='lory'
                ref={e => this.$lory = e}
