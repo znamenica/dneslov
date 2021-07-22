@@ -66,6 +66,7 @@ export const orderMeta = {
          title: "Сокращения",
          action: "Добавь сокращение",
          filter: { type: "Tweet" },
+         source: "descriptions",
          display_scheme: '12-12-12-12',
          validations: {
             "Должно быть задано как минимум одно сокращение": matchEmptyObject,
@@ -123,6 +124,7 @@ export const orderMeta = {
          title: "Заглавки",
          action: "Добавь заглавок",
          name: 'notes',
+         source: "descriptions",
          filter: { type: "Note" },
          display_scheme: '12-12-12-12',
          validations: {

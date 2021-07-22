@@ -52,7 +52,6 @@ class Admin::CommonController < ApplicationController
 
    # POST /<objects>/create
    def create
-      #binding.pry
       @object.save!
 
       render plain: prepare_object(@object.reload).to_json
@@ -60,6 +59,7 @@ class Admin::CommonController < ApplicationController
 
    # PUT /<objects>/1
    def update
+      #binding.pry
       @object.update!(permitted_params)
 
       render plain: prepare_object(@object.reload).to_json

@@ -18,7 +18,8 @@ export function renderElement(element, meta) {
 
              return res
           }, sub.context_values || {}),
-          sourcedValue = element.value[sub["source"]] || element.value[name],
+          // sourcedValue = element.value[sub["source"]] || element.value[name],
+          sourcedValue = element.value[name],
           value = sourcedValue &&
                   sourcedValue.constructor.name === "Object" &&
                   sub["filter"] ?

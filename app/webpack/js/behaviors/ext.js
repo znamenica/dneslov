@@ -75,6 +75,20 @@ Array.prototype.all = function (func) {
    return !!res
 }
 
+Object.defineProperty(Object.prototype, 'isBlank', {
+   value: function (func) {
+      return Object.keys(this).length == 0
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'isPresent', {
+   value: function (func) {
+      return Object.keys(this).length > 0
+   },
+   writable: true,
+})
+
 Object.defineProperty(Object.prototype, 'all', {
    value: function (func) {
       let res

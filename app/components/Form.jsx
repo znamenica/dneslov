@@ -177,14 +177,9 @@ export default class Form extends Component {
       return result
    }
 
-   static deserializeArray(key, value, scheme) {
-      console.debug("[deserializedArray] <<< key: ", key, ", value: ", value, ", scheme: ", scheme)
-      let targets = scheme || { [key]: null }
-      let result = Object.entries(targets).reduce((preResult, [target, subscheme]) => {
-         if (target != key) {
-            return preResult
-         }
-
+   static deserializeArray(value, scheme) {
+      console.debug("[deserializedArray] <<< value: ", value, ", scheme: ", scheme)
+      let result = Object.entries(scheme).reduce((preResult, [target, subscheme]) => {
          let array
          console.debug("[deserializedArray] ** value class:", value[0] && value[0].constructor.name)
          console.debug("[deserializedArray] ** subscheme:", subscheme)
@@ -206,8 +201,12 @@ export default class Form extends Component {
          }, {})
 
          console.debug("[deserializedArray] ** resValue:", resValue)
-         console.debug("[deserializedArray] ** new resValue:", Object.assign({}, preResult, resValue))
-         return Object.assign({}, preResult, resValue)
+
+         if (resValue && !resValue.isBlank()) {
+            return merge(preResult, { [target]: resValue })
+         } else {
+            return preResult
+         }
       }, {})
 
       console.debug("[deserializedArray] >>>", result)
@@ -217,30 +216,39 @@ export default class Form extends Component {
 
    // deserialization of parsed JSON to fill the form
    // converts [] to {}
-   static deserializedHash(hash, scheme) {
-      var result = {}
-      self.result = {}
-      console.debug("[deserializedHash] <<< hash:", hash, "scheme:", scheme)
+   static deserializedHash(hash, schemeIn) {
+      console.debug("[deserializedHash] <<< hash:", hash, "schemeIn:", schemeIn)
 
-      Object.entries(hash).forEach(([key, value], index) => {
+      let entries = Object.entries(hash)
+      let result = entries.reduce((preResult, [key, value]) => {
+         let preValue = {}, tmpValue, scheme
+
          console.log("[deserializedHash] *", key, "[", (value && value.constructor.name), "]", value)
+
          switch(value && value.constructor.name) {
             case 'Array':
                if (value[0] instanceof Object) {
-                  result[key] = Form.deserializeArray(key, value, scheme)
+                  scheme = (schemeIn || { [key]: null }).select((keyIn, valueIn) => {
+                     return keyIn == key || valueIn["_source"] == key
+                  })
+                  preValue = Form.deserializeArray(value, scheme)
                } else if (value[0]) {
-                  result[key] = value
+                  preValue = { [key]: value }
                } else {
-                  result[key] = {}
+                  preValue = { [key]: {} }
                }
                break
             case 'Object':
-               result[key] = merge({ _pos: index }, Form.deserializedHash(value))
+               tmpValue = merge({ _pos: entries.indexOf([key, value]) }, Form.deserializedHash(value))
+               preValue = { [key]: tmpValue }
                break
             default:
-               result[key] = value
+               preValue = { [key]: value }
             }
-      })
+
+         console.debug("[deserializedHash] (new) preResult:", merge(preResult, preValue))
+         return merge(preResult, preValue)
+      }, {})
 
       console.debug("[deserializedHash] >>>", result)
       return result
@@ -255,6 +263,11 @@ export default class Form extends Component {
          if (value["filter"] instanceof Object) {
             scheme[key] ||= {}
             scheme[key]["_filter"] = value["filter"]
+         }
+
+         if (value["source"]) {
+            scheme[key] ||= {}
+            scheme[key]["_source"] = value["source"]
          }
 
          return scheme
