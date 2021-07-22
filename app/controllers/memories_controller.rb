@@ -4,6 +4,8 @@ class MemoriesController < ApplicationController
    before_action :set_memory, only: %i(show)
    before_action :set_query, :set_page, only: %i(index)
    before_action :set_calendary_slugs, only: %i(index show)
+   before_action :fetch_events, only: %i(show)
+   before_action :fetch_memoes, only: %i(index)
 
    has_scope :d, only: %i(index) do |_, scope, value|
       if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
@@ -21,45 +23,46 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      @memoes = apply_scopes(Memo).with_base_year
-                                  .with_slug_text
-                                  .with_calendary_slug_text
-                                  .with_description(@locales)
-                                  .with_title(@locales)
-                                  .with_date
-                                  .with_thumb_url
-                                  .with_bond_to_title(@locales)
-                                  .with_event_title(@locales)
-                                  .with_orders(@locales)
-                                  .with_event
-                                  .distinct_by('_base_year', '_slug')
-                                  .group(:id)
-                                  .page(params[ :p ])
-
       respond_to do |format|
-         format.json { render json: @memoes,
-                              serializer: MemoSpansSerializer,
-                              each_serializer: MemoSpanSerializer,
-                              total: @memoes.total_size,
-                              page: @page,
-                              date: @date,
-                              julian: @julian,
-                              calendaries: @calendary_slugs,
-                              locales: @locales }
-         format.html { render :index } end;end
+         format.html do
+            render :index,
+               locals: {
+                  memoes: @memoes.as_json(context),
+                  total: @memoes.total_size,
+                  cloud: @calendary_cloud.as_json
+               }
+         end
+         format.json do
+            render plain: {
+               list: @memoes,
+               page: @page,
+               total: @memoes.total_size
+            }.to_json(context)
+         end
+      end
+   end
 
    # GET /memories/1
    # GET /memories/1.json
    def show
+      #Benchmark.bm( 20 ) do |bm|
+      #   bm.report( "Access JSON:" ) do
+      #   end
+      #end
       respond_to do |format|
-         format.json { render :show, json: @memory,
-                                     date: @date,
-                                     calendary_slugs: @calendary_slugs,
-                                     julian: @julian,
-                                     locales: @locales }
-         format.html { render :show } ;end;end
+         format.html do
+            render :show,
+               locals: { memory: @memory.as_json(externals: { events: @events }),
+                         cloud: @calendary_cloud.as_json }
+         end
+         format.json { render plain: @memory.to_json(externals: { events: @events }) }
+      end
+   end
 
    protected
+
+   def context
+      @context ||= { locales: @locales } ;end
 
    # lazy property
    def _date
@@ -122,9 +125,39 @@ class MemoriesController < ApplicationController
       @julian ||= is_julian_calendar? ;end
 
    def set_memory
-      @memory ||= Memory.by_slug(params[ :slug ])
+      @memorys ||= Memory.by_slug(params[ :slug ])
                         .with_cantoes( @locales )
                         .with_names( @locales )
                         .with_pure_links
                         .with_slug_text
-                        .first || raise( ActiveRecord::RecordNotFound ) ;end;end
+
+      @memory ||= @memorys.first || raise( ActiveRecord::RecordNotFound )
+   end
+
+   def fetch_events
+      @events = @memory.events
+                       .memoed
+                       .with_cantoes(context[:locales])
+                       .with_memoes(context[:locales])
+                       .with_place(context[:locales])
+                       .with_titles(context)
+                       .with_description(context)
+   end
+
+   def fetch_memoes
+      @memoes = apply_scopes(Memo).with_base_year
+                                  .with_slug_text
+                                  .with_calendary_slug_text
+                                  .with_description(@locales)
+                                  .with_title(@locales)
+                                  .with_date
+                                  .with_thumb_url
+                                  .with_bond_to_title(@locales)
+                                  .with_event_title(@locales)
+                                  .with_orders(@locales)
+                                  .with_event
+                                  .distinct_by('_base_year', '_slug')
+                                  .group(:id)
+                                  .page(params[ :p ])
+   end
+end

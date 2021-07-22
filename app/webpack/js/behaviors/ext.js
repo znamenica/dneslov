@@ -62,3 +62,75 @@ String.prototype.populateTo = function(string) {
 
    return res
 }
+
+Array.prototype.all = function (func) {
+   let res
+
+   if (func && func.constructor.name === "Function") {
+      res = this.reduce((r, key) => { return r && !!func(key) }, true)
+   } else {
+      res = this.length > 0
+   }
+
+   return !!res
+}
+
+Object.defineProperty(Object.prototype, 'all', {
+   value: function (func) {
+      let res
+
+      if (func && func.constructor.name === "Function") {
+         res = Object.keys(this).reduce((r, key) => { return r && !!func([key, this[key]]) }, true)
+      } else {
+         res = Object.keys(this).length > 0
+      }
+
+      return !!res
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'select', {
+   value: function (filter) {
+      res = filter &&
+         Object.keys(this).reduce((r, key) => {
+            let cond = true
+
+            if (filter.constructor.name === "Object") {
+               cond = filter.all((_key, _value) => {
+                  return this[_key] == _value
+               })
+            } else if (filter.constructor.name === "Function") {
+               cond = filter(key, this[key])
+            }
+
+            return cond && r.merge({ [key]: this[key] }) || r
+         }, {}) || this
+
+      return res
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'merge', {
+   value: function (other) {
+      return Object.assign({}, this, other || {})
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'intersectWith', {
+   value: function (other = {}) {
+      return Object.keys(this).reduce((r, key) => {
+         return Object.keys(other).includes(key) && this[key] == other[key] ? r.merge({ [key]: this[key] }) : r
+      }, {}) || this
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'isPresent', {
+   value: function () {
+      return Object.values(this).length > 0
+   },
+   writable: true,
+})

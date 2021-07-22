@@ -31,7 +31,7 @@ export default class Form extends Component {
       if (props !== state.prevProps) {
          return({
             prevProps: props,
-            query: Form.deserializedHash(props.data),
+            query: Form.deserializedHash(props.data, Form.metaToScheme(props.meta)),
             error: ""
          })
       } else {
@@ -77,7 +77,7 @@ export default class Form extends Component {
 
    // events
    onChildChanged(e) {
-      console.log("[onChildChanged] <<<", e)
+      console.debug("[onChildChanged] <<<", e)
 
       let newState = { query: merge({}, this.state.query, e.detail) }
       console.log("[onChildChanged] > new state", newState)
@@ -91,7 +91,7 @@ export default class Form extends Component {
    }
 
    onSubmitError(error) {
-      console.log("[onSubmitError] <<<", error)
+      console.debug("[onSubmitError] <<<", error)
       let error_text
 
       if (error.response.responseJSON) {
@@ -140,6 +140,7 @@ export default class Form extends Component {
         .catch(this.onSubmitError.bind(this))
    }
 
+   // serialization to send the JSON out
    // converts {} to []
    static serializedHash(hash) {
       let result = {}, subkey
@@ -176,37 +177,88 @@ export default class Form extends Component {
       return result
    }
 
+   static deserializeArray(key, value, scheme) {
+      console.debug("[deserializedArray] <<< key: ", key, ", value: ", value, ", scheme: ", scheme)
+      let targets = scheme || { [key]: null }
+      let result = Object.entries(targets).reduce((preResult, [target, subscheme]) => {
+         if (target != key) {
+            return preResult
+         }
+
+         let array
+         console.debug("[deserializedArray] ** value class:", value[0] && value[0].constructor.name)
+         console.debug("[deserializedArray] ** subscheme:", subscheme)
+         if (subscheme && subscheme["_filter"]) {
+            array = value.filter((v) => {
+               console.debug("[deserializedArray] ** filter v:", v)
+               return subscheme["_filter"].all(([sKey, sValue]) => {
+                  return sKey.match(/^_/) || v[sKey] && v[sKey] == sValue
+               })
+            })
+         } else {
+            array = value
+         }
+
+         console.debug("[deserializedArray] ** array:", array)
+         let resValue = array.reduce((s, v, index) => {
+            s[uuid()] = merge({ _pos: index }, Form.deserializedHash(v, subscheme))
+            return s
+         }, {})
+
+         console.debug("[deserializedArray] ** resValue:", resValue)
+         console.debug("[deserializedArray] ** new resValue:", Object.assign({}, preResult, resValue))
+         return Object.assign({}, preResult, resValue)
+      }, {})
+
+      console.debug("[deserializedArray] >>>", result)
+
+      return result
+   }
+
+   // deserialization of parsed JSON to fill the form
    // converts [] to {}
-   static deserializedHash(hash) {
-      let result = {}
-      console.log("[deserializedHash] >", hash)
+   static deserializedHash(hash, scheme) {
+      var result = {}
+      self.result = {}
+      console.debug("[deserializedHash] <<< hash:", hash, "scheme:", scheme)
 
       Object.entries(hash).forEach(([key, value], index) => {
-         console.log("[deserializedHash] *", key, value, (value && value.constructor.name))
+         console.log("[deserializedHash] *", key, "[", (value && value.constructor.name), "]", value)
          switch(value && value.constructor.name) {
-         case 'Array':
-            console.log("[deserializedHash] **", value[0], value[0] && value[0].constructor.name)
-            if (value[0] instanceof Object) {
-               result[key] = value.reduce((s, v, index) => {
-                  s[uuid()] = merge({ _pos: index }, Form.deserializedHash(v))
-                  return s
-               }, {})
-            } else if (value[0]) {
+            case 'Array':
+               if (value[0] instanceof Object) {
+                  result[key] = Form.deserializeArray(key, value, scheme)
+               } else if (value[0]) {
+                  result[key] = value
+               } else {
+                  result[key] = {}
+               }
+               break
+            case 'Object':
+               result[key] = merge({ _pos: index }, Form.deserializedHash(value))
+               break
+            default:
                result[key] = value
-            } else {
-               result[key] = {}
             }
-            break
-         case 'Object':
-            result[key] = merge({ _pos: index }, Form.deserializedHash(value))
-            break
-         default:
-            result[key] = value
-         }
       })
 
-      console.log(result)
+      console.debug("[deserializedHash] >>>", result)
       return result
+   }
+
+   static metaToScheme(meta) {
+      return Object.entries(meta).reduce((scheme, [key, value]) => {
+         if (value["meta"]) {
+            scheme[key] = Form.metaToScheme(value["meta"])
+         }
+
+         if (value["filter"] instanceof Object) {
+            scheme[key] ||= {}
+            scheme[key]["_filter"] = value["filter"]
+         }
+
+         return scheme
+      }, {})
    }
 
    static getCleanState() {

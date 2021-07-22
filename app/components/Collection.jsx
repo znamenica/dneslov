@@ -53,9 +53,18 @@ export default class Collection extends Component {
    // events
    onAddItem() {
       let key = uuid(),
-          value = { [key]: { _id: key, _pos: this.state.value.length }},
-          detail = valueToObject(this.props.name, value),
-          e = new CustomEvent('dneslov-update-path', { detail: detail })
+          value_in = { _id: key, _pos: this.state.value.length },
+          value, detail, e
+
+      if (this.props.filter) {
+         value = Object.assign(this.props.filter, value_in)
+      } else {
+         value = value_in
+      }
+
+      detail = valueToObject(this.props.name, { [key]: value }),
+      e = new CustomEvent('dneslov-update-path', { detail: detail })
+      console.debug("[onAddItem] ** detail", detail)
 
       document.dispatchEvent(e)
    }
@@ -66,7 +75,7 @@ export default class Collection extends Component {
           object = valueToObject( element.name, { _destroy: new_state }),
           e = new CustomEvent('dneslov-update-path', { detail: object })
 
-      console.debug("[onToggleItem]", object)
+      console.debug("[onToggleItem] **", object)
 
       document.dispatchEvent(e)
    }

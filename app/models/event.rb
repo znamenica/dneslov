@@ -296,7 +296,8 @@ class Event < ActiveRecord::Base
                               WHERE cantoes.id = service_cantoes.canto_id
                                 AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _cantoes"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    accepts_nested_attributes_for :place, reject_if: :all_blank
    accepts_nested_attributes_for :coordinate, reject_if: :all_blank
@@ -308,10 +309,30 @@ class Event < ActiveRecord::Base
 
    validates_presence_of :kind, :kind_code
 
+   ATTRS = {
+      created_at: nil,
+      updated_at: nil,
+   }
+
+   def as_json options = {}
+      attrs = ATTRS.merge(self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types))
+      original = super(options.merge(except: attrs.keys))
+
+      attrs.reduce(original) do |r, (name, rule)|
+         if /^_(?<realname>.*)/ =~ name
+            r.merge(realname => read_attribute(name).as_json)
+         elsif rule.is_a?(Proc)
+            r.merge(name => rule[self])
+         else
+            r
+         end
+      end
+   end
+
    def self.year_date_for year_date, date_in, julian
       return nil if date_in.blank?
 
-      date = date_in.is_a?(Time) && date_in || Time.parse(date_in)
+      date =  [ Time, Date, DateTime ].any? {|c| date_in.is_a?(c) } && date_in || Time.parse(date_in)
       if /(?<day>\d+)\.(?<month>\d+)%(?<weekday>\d+)$/ =~ year_date
          base_date = Date.parse("#{date.year}-#{month}-#{day}")
          base_offset = weekday.to_i - base_date.wday
@@ -321,4 +342,7 @@ class Event < ActiveRecord::Base
          easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
          (easter + offset.to_i.days).strftime("%d.%m")
       else
-         year_date ;end;end;end
+         year_date
+      end
+   end
+end

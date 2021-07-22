@@ -1,6 +1,7 @@
 # bind_kind_code(string)  - kind of binding
 # bond_to_id(int)         - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
+   extend TotalSize
    include Languageble
 
    has_many :memories, through: :memory_names
@@ -25,7 +26,7 @@ class Name < ActiveRecord::Base
          # OR operation
          or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
-            and_rel = klass.with_token(and_token)
+            and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
@@ -126,4 +127,21 @@ class Name < ActiveRecord::Base
 
    def fill_root_id
       new_root_id = self.bond_to&.root_id || self.id
-      self.update!(root_id: new_root_id) ;end;end
+      self.update!(root_id: new_root_id)
+   end
+
+   EXCEPT = %i(created_at updated_at)
+
+   def as_json options = {}
+      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
+      original = super(options.merge(except: EXCEPT | additionals.keys))
+
+      additionals.keys.reduce(original) do |r, key|
+         if /^_(?<name>.*)/ =~ key
+            r.merge(name => read_attribute(key).as_json)
+         else
+            r
+         end
+      end
+   end
+end

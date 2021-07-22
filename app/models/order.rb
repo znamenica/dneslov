@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+   extend TotalSize
+
    has_one :slug, as: :sluggable, dependent: :destroy
    has_many :notes, as: :describable, dependent: :delete_all, class_name: :Note
    has_many :tweets, as: :describable, dependent: :delete_all, class_name: :Tweet
@@ -28,7 +30,7 @@ class Order < ActiveRecord::Base
          # OR operation
          or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
-            and_rel = klass.with_token(and_token)
+            and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
@@ -88,4 +90,20 @@ class Order < ActiveRecord::Base
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
 
-   validates_presence_of :slug, :notes, :tweets ;end
+   validates_presence_of :slug, :notes, :tweets
+
+   EXCEPT = %i(created_at updated_at)
+
+   def as_json options = {}
+      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
+      original = super(options.merge(except: EXCEPT | additionals.keys))
+
+      additionals.keys.reduce(original) do |r, key|
+         if /^_(?<name>.*)/ =~ key
+            r.merge(name => read_attribute(key).as_json)
+         else
+            r
+         end
+      end
+   end
+end

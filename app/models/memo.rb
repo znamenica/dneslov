@@ -8,6 +8,8 @@ require 'when_easter'
 # bond_to_id[int]       - ссылка на опорный помин, если nil, помин первичный
 #
 class Memo < ActiveRecord::Base
+   extend TotalSize
+
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate
@@ -448,8 +450,18 @@ class Memo < ActiveRecord::Base
       else
          self.year_date ;end;end
 
-   class << self
-      def total_size
-         #TODO optimize
-         unlimited = self.except(:limit, :offset)
-         unlimited[0] && unlimited.size ;end;end;end
+   EXCEPT = %i(created_at updated_at)
+
+   def as_json options = {}
+      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
+      original = super(options.merge(except: EXCEPT | additionals.keys))
+
+      additionals.keys.reduce(original) do |r, key|
+         if /^_(?<name>.*)/ =~ key
+            r.merge(name => read_attribute(key).as_json)
+         else
+            r
+         end
+      end
+   end
+end

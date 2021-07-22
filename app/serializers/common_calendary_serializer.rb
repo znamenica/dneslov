@@ -1,1 +1,0 @@
-class CommonCalendarySerializer < ApplicationSerializer ;end

@@ -1,5 +1,6 @@
 #licit[boolean]         - действительный календарь (не в разработке)
 class Calendary < ActiveRecord::Base
+   extend TotalSize
    include Languageble
 
    belongs_to :place, optional: true
@@ -224,4 +225,21 @@ class Calendary < ActiveRecord::Base
    validates :language_code, inclusion: { in: Languageble.language_list }
    validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for( l.language_code ) } }
    validates :slug, :titles, :date, presence: true
-   validates :descriptions, :titles, :wikies, :beings, :place, associated: true ;end
+   validates :descriptions, :titles, :wikies, :beings, :place, associated: true
+
+   EXCEPT = %i(created_at updated_at)
+
+   def as_json options = {}
+      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
+      original = super(options.merge(except: EXCEPT | additionals.keys))
+
+      additionals.keys.reduce(original) do |r, key|
+         if /^_(?<name>.*)/ =~ key
+            r.merge(name => read_attribute(key).as_json)
+         else
+            r
+         end
+      end
+   end
+end
+

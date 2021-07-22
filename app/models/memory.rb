@@ -5,6 +5,7 @@
 # bond_to_id[integer]   - отношение к (для икон это замысел или оригинал списка)
 #
 class Memory < ActiveRecord::Base
+   extend TotalSize
    extend DefaultKey
    extend Informatible
 
@@ -448,8 +449,41 @@ class Memory < ActiveRecord::Base
 
    self.base_year ;end
 
+   #def attributes_before_type_cast()
+   #   binding.pry
+   #   super
+   #end
+
+   ATTRS = {
+      created_at: nil,
+      updated_at: nil,
+   }
+
+   def as_json options = {}
+      attrs = ATTRS.merge(
+         self.instance_variable_get(:@attributes).
+            send(:attributes).
+            send(:additional_types).merge(
+               options.fetch(:externals, {})))
+      original = super(options.merge(except: attrs.keys))
+
+      attrs.reduce(original) do |r, (name, rule)|
+         if /^_(?<realname>.*)/ =~ name
+            r.merge(realname => read_attribute(name).as_json)
+         elsif rule.is_a?(Proc)
+            r.merge(name.to_s => rule[self])
+         elsif rule.is_a?(ActiveRecord::Relation)
+            r.merge(name.to_s => rule.as_json)
+         else
+            r
+         end
+      end
+   end
+
    def set_slug
       self.slug = Slug.new(base: self.short_name) if self.slug.blank? ;end
 
    def to_s
-      memory_names.join( ' ' ) ; end ; end
+      memory_names.join( ' ' )
+   end
+end

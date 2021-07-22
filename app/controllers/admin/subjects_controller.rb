@@ -4,7 +4,7 @@ class Admin::SubjectsController < Admin::CommonController
    protected
 
    def with_list
-      %w(with_descriptions with_kind_title) ;end
+      %w(with_descriptions with_kind_title with_names) ;end
 
    def permitted_params
       params.require( :subject )

@@ -12,7 +12,7 @@ import { valueToObject } from 'support'
 export default class TextArea extends Component {
    static defaultProps = {
       name: 'text',
-      value: null,
+      value: "",
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -22,7 +22,7 @@ export default class TextArea extends Component {
 
    static propTypes = {
       name: PropTypes.string.isRequired,
-      value: PropTypes.string,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
@@ -78,6 +78,17 @@ export default class TextArea extends Component {
          filter((x) => { return x }).join(" ")
    }
 
+   renderValue() {
+      switch (this.props.value.constructor.name) {
+         case "String":
+            return this.props.value
+         case "Object":
+            return JSON.stringify(this.props.value)
+         default:
+            return ""
+      }
+   }
+
    render() {
       console.log("[render] * props:", this.props)
 
@@ -92,7 +103,7 @@ export default class TextArea extends Component {
                name={this.props.name}
                ref={c => {this.$input = c}}
                placeholder={this.props.placeholder}
-               value={this.props.value || ''}
+               value={this.renderValue()}
                data-length={this.props.data && this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label

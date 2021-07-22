@@ -22,15 +22,21 @@ export const orderMeta = {
       },
       tweet: {
          title: 'Сокращение',
-         value: makeTweet
+         value: makeTweet,
+         source: 'descriptions',
+         filter: { type: "Tweet" },
       },
       note: {
          title: 'Наименование',
-         value: makeNote
+         value: makeNote,
+         source: 'descriptions',
+         filter: { type: "Note" },
       },
       description: {
          title: 'Описание',
-         value: makeDescription
+         value: makeDescription,
+         source: 'descriptions',
+         filter: { type: "Description" },
       },
    },
    form: {
@@ -57,8 +63,9 @@ export const orderMeta = {
       },
       tweets: {
          kind: 'collection',
-         title: "Сокращение",
+         title: "Сокращения",
          action: "Добавь сокращение",
+         filter: { type: "Tweet" },
          display_scheme: '12-12-12-12',
          validations: {
             "Должно быть задано как минимум одно сокращение": matchEmptyObject,
@@ -86,7 +93,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -101,7 +108,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -111,12 +118,13 @@ export const orderMeta = {
             },
          }
       },
-      titles: {
+      notes: {
          kind: 'collection',
-         title: "Заглавок",
+         title: "Заглавки",
          action: "Добавь заглавок",
-         display_scheme: '12-12-12-12',
          name: 'notes',
+         filter: { type: "Note" },
+         display_scheme: '12-12-12-12',
          validations: {
             'Минимум один заглавок должно быть задано':  matchEmptyCollection,
             'Языки в заглавках не могут совпадать': matchLanguages,
@@ -145,7 +153,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -160,7 +168,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -176,6 +184,7 @@ export const orderMeta = {
          action: 'Добавь описание',
          single: 'Описание',
          placeholder: 'Введи описание',
+         filter: { type: "Description" },
          display_scheme: '12-12-12-12',
          meta: {
             id: {
@@ -198,7 +207,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -213,7 +222,7 @@ export const orderMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {

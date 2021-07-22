@@ -23,75 +23,80 @@ class Admin::CommonController < ApplicationController
    has_scope :q, only: %i(index)
 
    def all
+      #binding.pry
       respond_to do |format|
-         format.json { render :index, json: @objects.limit(500),
-                                      locales: @locales,
-                                      serializer: Admin::AutocompleteSerializer,
-                                      total: @objects.total_count,
-                                      each_serializer: short_object_serializer } ;end;end
+         format.json do
+            render :index,
+               plain: {
+                     list: @objects.limit(500).as_json(only: %i(key value), map: { value: ->(this) { desc(this) } }),
+                     total: @objects.total_size
+                  }.to_json
+         end
+      end
+   end
 
    # GET /<objects>/
    def index
-      # binding.pry
+      #binding.pry
       respond_to do |format|
-         format.json { render :index, json: @objects, locales: @locales,
-                                      serializer: objects_serializer,
-                                      total: @objects.total_count,
-                                      page: @page,
-                                      each_serializer: object_serializer }
-         format.html { render :index } end;end
-
-
+         format.json do
+            render plain: {
+               list: @objects.as_json(context),
+               page: @page,
+               total: @objects.total_size
+            }.to_json
+         end
+         format.html { render :index }
+      end
+   end
 
    # POST /<objects>/create
    def create
+      #binding.pry
       @object.save!
 
-      render json: prepare_object( @object ),
-             serializer: object_serializer,
-             locales: @locales ;end
+      render plain: prepare_object(@object.reload).to_json
+   end
 
    # PUT /<objects>/1
    def update
-      @object.update!( permitted_params )
+      @object.update!(permitted_params)
 
-      render json: prepare_object( @object ),
-             serializer: object_serializer,
-             locales: @locales ;end
+      render plain: prepare_object(@object.reload).to_json
+   end
 
    # GET /<objects>/1
    def show
       respond_to do |format|
-         format.json { render :show, json: @object, locales: @locales,
-                                     serializer: object_serializer } ;end;end
+         format.json { render :show, plain: @object.to_json(context) }
+      end
+   end
 
    # DELETE /<objects>/1
    def destroy
-      @object.destroy
+      @object.destroy!
 
       respond_to do |format|
-         format.json { render :show, json: @object, locales: @locales,
-                                     serializer: object_serializer } ;end;end
+         format.json { render :show, plain: @object.to_json(context) }
+      end
+   end
 
    def dashboard
    end
 
    protected
 
+   # TODO SQLize
+   def desc record
+      record._names.find {|d| @locales.include?(d["language_code"].to_sym) }&.fetch("text", "")
+   end
+
+   def context
+      @context ||= { locales: @locales }
+   end
+
    def model
      self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
-   end
-
-   def short_object_serializer
-     "Admin::Short#{model}Serializer".constantize
-   end
-
-   def object_serializer
-     "Admin::#{model}Serializer".constantize
-   end
-
-   def objects_serializer
-     "Admin::#{model.to_s.pluralize}Serializer".constantize
    end
 
    def validate_session
@@ -134,7 +139,8 @@ class Admin::CommonController < ApplicationController
    def issue_with query, with_method
       query.send( with_method, context )
    rescue ArgumentError
-      query.send( with_method ) ;end
+      query.send( with_method )
+   end
 
    def prepare_object object
       prepare_objects.where(id: object.id).first
@@ -143,14 +149,18 @@ class Admin::CommonController < ApplicationController
    def prepare_objects
       pre = include_list.reduce( apply_scopes( model )) { |q, i| q.includes( i ) }
 
-      with_list.reduce( pre ) { |q, with_method| issue_with( q, with_method )} ;end
+      with_list.reduce( pre ) { |q, with_method| issue_with( q, with_method )}
+   end
 
    def fetch_objects
-      @objects = prepare_objects.page( params[ :p ]) ;end
+      @objects = prepare_objects.page( params[ :p ])
+   end
 
    def fetch_object
       if params[:slug]
          @object ||= prepare_objects.by_slug(params[:slug]).first
       else
-         @object ||= prepare_objects.find(params[:id]) ;end ||
-            raise(ActiveRecord::RecordNotFound) ;end;end
+         @object ||= prepare_objects.find(params[:id])
+      end || raise(ActiveRecord::RecordNotFound)
+   end
+end

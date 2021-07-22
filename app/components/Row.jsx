@@ -33,11 +33,17 @@ export default class Row extends Component {
    }
 
    default() {
-      return this.props.meta[this.props.default].title
+      return this.value(this.props.default)
    }
 
    t(title) {
       return title.replace(/%default/, () => { return this.default() })
+   }
+
+   value(name, element = this.props.meta[name]) {
+      return element.value &&
+         element.value(this.props.value, this.props.locales, element.source, element.filter) ||
+         this.props.value[name]
    }
 
    render() {
@@ -46,9 +52,7 @@ export default class Row extends Component {
       return (
          <tr>
             {Object.entries(this.props.meta).map(([name, element]) => {
-               return <td>{element.value &&
-                           element.value(this.props.value, this.props) ||
-                           this.props.value[name]}</td>
+               return <td>{this.value(name, element)}</td>
             })}
             <td className='actions'>
                <i

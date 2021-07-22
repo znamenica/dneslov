@@ -46,15 +46,13 @@ gem 'activerecord_json_validator'
 gem 'attribute-defaults'
 gem 'addressable'
 
-# view
+# rendering
 ## NPM packaging
 gem 'npm-pipeline-rails', '>= 1.8.1'
+gem 'oj'
 
 ## pagination
 gem 'kaminari', '>= 1.1.1'
-
-## decoration/serialization
-gem 'active_model_serializers', '>= 0.10.10'
 
 ## authentication
 gem 'excon', '~> 0.71.0'
