@@ -1,6 +1,18 @@
 module TotalSize
    include ActiveSupport::Concern
 
+   def to_joins dep
+      case dep
+      when ActiveRecord::Associations::JoinDependency
+         dep.send(:join_root).base_klass.table_name
+      when String
+         /JOIN\s*(?<tbl>\w+)/ =~ dep
+         tbl && tbl || dep
+      else
+         dep.to_s.tableize
+      end
+   end
+
    def total_size
       model = self.name.constantize
       rela = self.except(:limit, :offset)
@@ -27,8 +39,9 @@ module TotalSize
          pre
       end.compact
       join_list = join_list_pre.compact.map do |t|
-         joins.find {|j| j.to_s.tableize == t }
-      end.compact 
+         joins.map {|j| to_joins(j) }.uniq.find {|j| j == t }
+         #joins.find {|j| to_joins(j) == t }
+      end.compact.reject { |x| ojoins.include?(x.to_sym) }
 
 #      ojoin_list_pre = rela.select_values.map do |x|
 #         x.match(/(?<tab>.*)\.\w* as (?:#{types.join("|")})/i)&.[](:tab)
@@ -50,7 +63,7 @@ module TotalSize
          else
             query_pre2.select("#{model.table_name}.*")
          end
-#      binding.pry
+      #binding.pry
       model.connection.select_all("WITH cnt AS(#{query.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
    end
 end

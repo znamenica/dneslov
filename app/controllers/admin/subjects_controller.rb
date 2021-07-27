@@ -3,7 +3,7 @@ class Admin::SubjectsController < Admin::CommonController
 
    protected
 
-   def with_list
+   def index_with_list
       %w(with_descriptions with_kind_title with_names) ;end
 
    def permitted_params

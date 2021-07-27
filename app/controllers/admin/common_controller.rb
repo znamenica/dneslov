@@ -23,12 +23,12 @@ class Admin::CommonController < ApplicationController
    has_scope :q, only: %i(index)
 
    def all
-      #binding.pry
+      # binding.pry
       respond_to do |format|
          format.json do
             render :index,
                plain: {
-                     list: @objects.limit(500).as_json(only: %i(key value), map: { value: ->(this) { desc(this) } }),
+                     list: @objects.limit(500).as_json(only: %i(key value)),
                      total: @objects.total_size
                   }.to_json
          end
@@ -86,6 +86,17 @@ class Admin::CommonController < ApplicationController
 
    protected
 
+   def short_with_list
+      %w(with_key with_value)
+   end
+
+   def with_list
+      send({
+         "all" => :short_with_list,
+         "index" => :index_with_list,
+      }[action_name])
+   end
+
    # TODO SQLize
    def desc record
       record._names.find {|d| @locales.include?(d["language_code"].to_sym) }&.fetch("text", "")
@@ -133,9 +144,6 @@ class Admin::CommonController < ApplicationController
    def include_list
       [] ;end
 
-   def with_list
-      [] ;end
-
    def issue_with query, with_method
       query.send( with_method, context )
    rescue ArgumentError
@@ -144,6 +152,10 @@ class Admin::CommonController < ApplicationController
 
    def prepare_object object
       prepare_objects.where(id: object.id).first
+   end
+
+   def prepare_pure_objects
+      pre = include_list.reduce( apply_scopes( model )) { |q, i| q.includes( i ) }
    end
 
    def prepare_objects

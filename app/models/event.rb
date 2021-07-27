@@ -10,6 +10,8 @@
 #
 class Event < ActiveRecord::Base
    extend Informatible
+   extend TotalSize
+   include AsJson
 
    NOTICE = [
       'Repose',
@@ -97,6 +99,48 @@ class Event < ActiveRecord::Base
          where("descriptions_subjects.text ~* ?", "\\m#{text}.*"))))) ;end
    scope :by_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
+
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ 'events.id AS _key' ]
+
+      select(selector).group('_key').reorder("_key") ;end
+
+   scope :with_value, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+
+      join = "LEFT OUTER JOIN subjects AS event_kinds
+                           ON event_kinds.kind_code = 'EventKind'
+                          AND event_kinds.key = events.kind_code
+              LEFT OUTER JOIN descriptions AS titles
+                           ON titles.id IS NOT NULL
+                          AND (titles.describable_id = events.id
+                          AND titles.describable_type = 'Event'
+                          AND titles.type = 'Title'
+                           OR titles.describable_id = event_kinds.id
+                          AND titles.describable_type = 'Subject'
+                          AND titles.type = 'Appellation')
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = titles.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Event'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = titles.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Event'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      selector << "titles.text || ' (' || events.happened_at || ')' AS _value"
+
+      # binding.pry
+      joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
+
 
    scope :with_description, -> context do
       language_codes = [ context[:locales] ].flatten

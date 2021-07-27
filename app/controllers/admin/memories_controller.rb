@@ -11,7 +11,7 @@ class Admin::MemoriesController < Admin::CommonController
 
    protected
 
-   def with_list
+   def index_with_list
       %w(with_slug with_descriptions with_links with_events with_memory_names with_orders)
    end
 

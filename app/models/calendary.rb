@@ -56,6 +56,26 @@ class Calendary < ActiveRecord::Base
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
 
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ 'calendaries.id AS _key' ]
+
+      select(selector).group('_key') ;end
+
+   scope :with_value, -> context do
+      selector = [ 'descriptions.text AS _value' ]
+      if self.select_values.dup.empty?
+        selector.unshift( 'calendaries.*' )
+      end
+
+      language_codes = [ context[:locales] ].flatten
+      join = "LEFT OUTER JOIN descriptions ON descriptions.describable_id = calendaries.id
+                          AND descriptions.describable_type = 'Calendary'
+                          AND descriptions.type = 'Appellation'
+                          AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('_value') ;end
+
    scope :with_url, -> do
       selector = 'links.url AS _url'
 

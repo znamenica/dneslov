@@ -1,15 +1,6 @@
 class Admin::PlacesController < Admin::CommonController
    before_action :set_places, only: %i(all)
 
-   def all
-      respond_to do |format|
-         format.json { render :index, json: @places.limit(500),
-                                      locales: @locales,
-                                      serializer: Admin::AutocompleteSerializer,
-                                      total: @places.count,
-                                      each_serializer: Admin::ShortPlaceSerializer }
-      end;end
-
    protected
 
    def set_places

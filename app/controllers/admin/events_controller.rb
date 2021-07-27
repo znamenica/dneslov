@@ -3,7 +3,7 @@ class Admin::EventsController < Admin::CommonController
 
    protected
 
-   def with_list
+   def index_with_list
       %w(with_titles with_descriptions) ;end
 
    def model

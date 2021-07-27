@@ -61,6 +61,18 @@ class Memory < ActiveRecord::Base
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
 
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ 'memories.id AS _key' ]
+
+      select(selector).group('_key').reorder("_key") ;end
+
+   scope :with_value, -> context do
+      #TODO add search over names
+      selector = [ 'memories.short_name AS _value' ]
+
+      select(selector).group('_value').reorder("_value") ;end
+
    scope :with_names, -> (language_code) do
       language_codes = [ language_code ].flatten
       selector = "COALESCE((

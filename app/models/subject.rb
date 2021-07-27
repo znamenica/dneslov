@@ -37,6 +37,41 @@ class Subject < ActiveRecord::Base
    scope :by_kind_code, -> kind_code do
       where(kind_code: kind_code) ;end
 
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ "#{model.table_name}.key AS _key" ]
+
+      select(selector).group('_key').reorder("_key")
+   end
+
+   scope :with_value, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+
+      join = "LEFT OUTER JOIN descriptions AS titles
+                           ON titles.describable_id = #{model.table_name}.id
+                          AND titles.describable_type = '#{model}'
+                          AND titles.type IN ('Appellation')
+              LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = titles.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Subject'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = titles.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Subject'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      selector << "titles.text AS _value"
+
+      # binding.pry
+      joins(join).select(selector).group(:id, "titles.text")
+   end
+
    scope :with_kind_title, -> context do
       language_codes = [ context[:locales] ].flatten
       selector = self.select_values.dup

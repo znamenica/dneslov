@@ -9,5 +9,5 @@ class ItemType < ActiveRecord::Base
 
    accepts_nested_attributes_for :descriptions
 
-   validates :descriptions, presence: true
-   validates :descriptions, associated: true ;end
+   validates :descriptions, presence: true, associated: true
+end

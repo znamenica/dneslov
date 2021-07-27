@@ -1,7 +1,7 @@
 class Admin::OrdersController < Admin::CommonController
    protected
 
-   def with_list
+   def index_with_list
       %w(with_descriptions with_slug) ;end
 
    def permitted_params

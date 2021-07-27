@@ -41,8 +41,8 @@ module AsJson
       attr_hash.reduce(original) do |r, (key, rule)|
          name = /^_(?<_name>.*)/ =~ key && _name || key.to_s
 
-      #binding.pry
-      next r if except.include?(name.to_sym) || (only & [ name.to_sym, key.to_sym ].uniq).blank?
+         #binding.pry
+         next r if except.include?(name.to_sym) || (only & [ name.to_sym, key.to_sym ].uniq).blank?
 
          if _name
             r.merge(_name => read_attribute(key).as_json)
