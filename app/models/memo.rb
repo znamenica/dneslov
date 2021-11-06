@@ -122,14 +122,15 @@ class Memo < ActiveRecord::Base
    scope :distinct_by, -> *args do
       _selector = self.select_values.dup
       if _selector.empty?
-        _selector << "DISTINCT ON (#{args.join(', ')}) memoes.*"
+        _selector << "ON (#{args.join(', ')}) memoes.*"
       else
          selector = _selector.uniq
-         selector.unshift( "DISTINCT ON (#{args.join(', ')}) " + selector.shift )
+         selector.unshift( "ON (#{args.join(', ')}) " + selector.shift )
       end
 
-      self.select_values = selector
-      self ;end
+      rela = self.distinct
+      rela.select_values = selector
+      rela ;end
 
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'
