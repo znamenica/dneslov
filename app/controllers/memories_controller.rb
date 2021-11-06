@@ -119,7 +119,8 @@ class MemoriesController < ApplicationController
                   .with_description(@locales)
                   .with_url
                   .with_slug_text
-                  .group("calendaries.id") ;end
+                  .group("calendaries.id")
+                  .uniq ;end
 
    def set_julian
       @julian ||= is_julian_calendar? ;end
