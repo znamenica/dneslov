@@ -69,7 +69,21 @@ module TotalSize
       joins1 = proceed_joins(rela.joins_values)
       ojoins1 = proceed_joins(rela.left_outer_joins_values, :left_outer)
 
-      req_wheres_pre1 = rela.where_clause.send(:predicates).map {|x|x.left.relation.name}.compact.uniq
+      #binding.pry
+      req_wheres_pre1 = rela.where_clause.send(:predicates).map do |x|
+         case x
+         when Arel::Nodes::In
+            x.left.relation.name
+         when Arel::Nodes::Grouping
+            res = []
+            while x.expr.is_a?(Arel::Nodes::Or) do
+               res << x.expr.left.children.first.expr
+               x = x.expr.right.children.first
+            end
+         when String
+            x
+         end
+      end.compact.uniq
       req_wheres_pre = rela.where_clause.send(:predicates).map do |p|
          p.chain.select do |node|
             node.is_a?(Arel::Nodes::Grouping) && node.expr.is_a?(String)
@@ -77,9 +91,9 @@ module TotalSize
             /^(?<field>[\w\.]+)/.match(node.expr).[](:field).split(".").first
          end.uniq.map do |node|
             join_wheres(node)
-         end
+         end if p.respond_to?(:chain)
       end.flatten.compact.uniq
-      req_wheres = ((req_wheres_pre | req_wheres_pre1) - [self.table_name]) | fields.map {|x| x.split(".").first }
+      req_wheres = (((req_wheres_pre | req_wheres_pre1) - [self.table_name]) | fields).map {|x| x.split(".").first || x }.uniq
 
       join_list_pre = rela.select_values.map do |x|
          x.match(/(?<tab>.*)\.\w* as (?:#{types.join("|")})/i)&.[](:tab)&.strip
@@ -89,18 +103,19 @@ module TotalSize
       join_list = join_list_pre.compact.map do |t|
          req_wheres.find {|j| to_joins(j) == t.to_s }
       end.uniq.compact
-      outer_join_list = ojoins.map do |t|
-         req_wheres.find {|j| to_joins(j) == t.to_s }
-      end.uniq.compact
+      #outer_join_list = ojoins.map do |t|
+      #   req_wheres.find {|j| to_joins(j) == t.to_s }
+      #end.uniq.compact
 
-      aa=rela.arel.source.select {|x|x.is_a?(Arel::Nodes::OuterJoin)}.map {|x| x }
+      aa = rela.arel.source.select {|x|x.is_a?(Arel::Nodes::OuterJoin)}.map {|x| x }
       outer_aliases = aa.reduce({}) {|r,x| rr = x.left.respond_to?(:right) && x.left.right || nil; rr && r[rr] = x;r }
 
       reflections = self.reflections.values.map { |ref| [ ref.klass.table_name, ref ] }.to_h.merge(outer_aliases)
-      orefls = outer_join_list.map do |j|
-         ref = reflections[to_joins(j)]
-         ref.respond_to?(:source_reflection_name) && ref.source_reflection_name || ref&.name
-      end.compact
+      orefls = ojoins
+      #orefls1 = outer_join_list.map do |j|
+      #   ref = reflections[to_joins(j)]
+      #   ref.respond_to?(:source_reflection_name) && ref.source_reflection_name || ref&.name
+      #end.compact
 
       refls = (join_list | req_wheres & outer_aliases.keys).map do |j|
          ref = reflections[to_joins(j)]
@@ -150,7 +165,7 @@ module TotalSize
          else
             query_pre2.select("#{model.table_name}.*")
          end
-#       binding.pry
+      # binding.pry
       model.connection.select_all("WITH cnt AS(#{query.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
    end
 end

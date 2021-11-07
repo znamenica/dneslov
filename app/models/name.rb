@@ -101,7 +101,7 @@ class Name < ActiveRecord::Base
                            ON root_names.id = names.root_id
                          JOIN subjects AS root_languages
                            ON root_languages.key = root_names.language_code
-                         JOIN descriptions AS root_descriptions
+              LEFT OUTER JOIN descriptions AS root_descriptions
                            ON root_descriptions.describable_id = root_languages.id
                           AND root_descriptions.describable_type = 'Subject'
                           AND root_descriptions.language_code IN ('#{language_codes.join("', '")}')"
@@ -118,9 +118,9 @@ class Name < ActiveRecord::Base
 
       join = "LEFT OUTER JOIN names AS bond_to_names
                            ON bond_to_names.id = names.bond_to_id
-                         JOIN subjects AS bond_to_languages
+              LEFT OUTER JOIN subjects AS bond_to_languages
                            ON bond_to_languages.key = bond_to_names.language_code
-                         JOIN descriptions AS bond_to_descriptions
+              LEFT OUTER JOIN descriptions AS bond_to_descriptions
                            ON bond_to_descriptions.describable_id = bond_to_languages.id
                           AND bond_to_descriptions.describable_type = 'Subject'
                           AND bond_to_descriptions.language_code IN ('#{language_codes.join("', '")}')"
