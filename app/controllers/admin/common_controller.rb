@@ -94,6 +94,10 @@ class Admin::CommonController < ApplicationController
       send({
          "all" => :short_with_list,
          "index" => :index_with_list,
+         "create" => :index_with_list,
+         "update" => :index_with_list,
+         "show" => :index_with_list,
+         "destroy" => :index_with_list,
       }[action_name])
    end
 
