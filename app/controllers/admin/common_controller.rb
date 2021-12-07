@@ -59,7 +59,6 @@ class Admin::CommonController < ApplicationController
 
    # PUT /<objects>/1
    def update
-      #binding.pry
       @object.update!(permitted_params)
 
       render plain: prepare_object(@object.reload).to_json

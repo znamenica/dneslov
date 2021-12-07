@@ -23,7 +23,8 @@ class Admin::MemoriesController < Admin::CommonController
          events_attributes: [
             :id, :happened_at, :kind_code, :person_name, :type_number,
             :about_string, :tezo_string, :council, :place_id, :item_id, :_destroy,
-            titles_attributes: [ :id, :text, :language_code, :alphabeth_code, :_destroy ]],
+            titles_attributes: [ :id, :text, :language_code, :alphabeth_code, :_destroy ],
+            descriptions_attributes: [ :id, :text, :language_code, :alphabeth_code, :_destroy ]],
          wikies_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          beings_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
          paterics_attributes: [:id, :url, :language_code, :alphabeth_code, :_destroy],
