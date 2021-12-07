@@ -35,6 +35,9 @@ module TotalSize
             when String
                /(?<_outer>LEFT OUTER )?JOIN (?<_table>\w+)( AS (?<_alias>\w+))?/ =~ join
                _alias || _table
+            when Arel::Nodes::OuterJoin
+               _outer = true
+               join.left.table_alias || joins.left.name
             end
          type = _outer.nil? && :inner || _outer && :left_outer || default_type
 
@@ -44,9 +47,17 @@ module TotalSize
       end
    end
 
+   def totals rela = nil
+      model = self.name.constantize
+      rela ||= self.except(:limit, :offset)
+
+      model.connection.select_all("WITH cnt AS(#{rela.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
+   end
+
    def total_size
       model = self.name.constantize
       rela = self.except(:limit, :offset)
+      return totals(rela) #TODO
       pure = rela.except(:group, :order, :select, :joins, :left_outer_joins)
       types = rela.select_values.reduce([]) do |res, x|
          case x
@@ -77,7 +88,12 @@ module TotalSize
          when Arel::Nodes::Grouping
             res = []
             while x.expr.is_a?(Arel::Nodes::Or) do
-               res << x.expr.left.children.first.expr
+               if x.expr.left.children.first.respond_to?(:expr)
+                  res << x.expr.left.children.first.expr
+               else
+                  # binding.pry
+                  res << x.expr.left.children.first
+               end
                x = x.expr.right.children.first
             end
          when String
@@ -107,18 +123,20 @@ module TotalSize
       #   req_wheres.find {|j| to_joins(j) == t.to_s }
       #end.uniq.compact
 
+      #binding.pry
       aa = rela.arel.source.select {|x|x.is_a?(Arel::Nodes::OuterJoin)}.map {|x| x }
       outer_aliases = aa.reduce({}) {|r,x| rr = x.left.respond_to?(:right) && x.left.right || nil; rr && r[rr] = x;r }
 
-      reflections = self.reflections.values.map { |ref| [ ref.klass.table_name, ref ] }.to_h.merge(outer_aliases)
+      reflections = self.reflections.values.map { |ref| [ ref.plural_name, ref ] }.to_h.merge(outer_aliases)
       orefls = ojoins
       #orefls1 = outer_join_list.map do |j|
       #   ref = reflections[to_joins(j)]
       #   ref.respond_to?(:source_reflection_name) && ref.source_reflection_name || ref&.name
       #end.compact
 
-      refls = (join_list | req_wheres & outer_aliases.keys).map do |j|
+      refls = (joins1.keys | join_list | req_wheres & outer_aliases.keys).map do |j|
          ref = reflections[to_joins(j)]
+      #binding.pry
          case ref
          when ActiveRecord::Reflection::AbstractReflection
             ref.respond_to?(:source_reflection_name) && ref.source_reflection_name || ref&.name
@@ -165,7 +183,8 @@ module TotalSize
          else
             query_pre2.select("#{model.table_name}.*")
          end
-      # binding.pry
       model.connection.select_all("WITH cnt AS(#{query.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
+   rescue
+      totals(rela)
    end
 end

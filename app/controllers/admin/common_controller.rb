@@ -28,8 +28,8 @@ class Admin::CommonController < ApplicationController
          format.json do
             render :index,
                plain: {
+                     total: @objects.total_size,
                      list: @objects.limit(500).as_json(only: %i(key value)),
-                     total: @objects.total_size
                   }.to_json
          end
       end
