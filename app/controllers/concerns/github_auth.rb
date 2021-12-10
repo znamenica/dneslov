@@ -3,19 +3,20 @@ module GithubAuth
 
    def github
       authenticator = Auth::Github.new
-      user_info = authenticator[ params[:code] ]
+      user_info = authenticator[params[:code]]
 
-      new_params = {
+      session_params = {
          'login': user_info['login'],
          'name': user_info['name'],
          'avatar_url': user_info['avatar_url'],
          'location': user_info['location'],
-         'info': user_info['bio']}
+         'info': user_info['bio'],
+         'jwt': JwToken.encode(user_info['login']),
+         'email': user_info['email']
+      }
 
-      session.merge!( new_params.merge(
-         'jwt': JwToken.encode( user_info[ 'login' ]),
-         'email': user_info['email'] ))
-      logger.debug ("SESSION: #{session.to_hash.inspect}")
+      update_session(session_params)
+      logger.debug ("Session rom Github: #{session.to_hash.inspect}")
 
       # ... create user if it doesn't exist...
       #User.where(login: login).first_or_create!(
@@ -23,11 +24,16 @@ module GithubAuth
       #   avatar_url: avatar_url
       #)
       # ... and redirect to client app.
-      redirect_to dashboard_path(new_params)
+      params = session.to_hash.select {|x| %w(_csrf_token login name avatar_url location info).include?(x) }
+
+      redirect_to dashboard_path(params)
    rescue IOError => error
-      redirect_to dashboard_path(error: error.message) ;end
+      redirect_to dashboard_path(error: error.message)
+   end
 
    private
 
    def issuer
-      Rails.application.secrets.github[:client_url] ;end;end
+      Rails.application.secrets.github[:client_url]
+   end
+end
