@@ -1,6 +1,7 @@
 #licit[boolean]         - действительный календарь (не в разработке)
 class Calendary < ActiveRecord::Base
    extend TotalSize
+   extend AsJson
    include Languageble
 
    belongs_to :place, optional: true
@@ -55,6 +56,19 @@ class Calendary < ActiveRecord::Base
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
+
+   scope :distinct_by, -> *args do
+      _selector = self.select_values.dup
+      if _selector.empty?
+        _selector << "ON (#{args.join(', ')}) memoes.*"
+      else
+         selector = _selector.uniq
+         selector.unshift( "ON (#{args.join(', ')}) " + selector.shift )
+      end
+
+      rela = self.distinct
+      rela.select_values = selector
+      rela ;end
 
    # required for short list
    scope :with_key, -> _ do

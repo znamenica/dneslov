@@ -8,6 +8,7 @@ class Memory < ActiveRecord::Base
    extend TotalSize
    extend DefaultKey
    extend Informatible
+   extend AsJson
 
    has_default_key :short_name
 
@@ -35,7 +36,9 @@ class Memory < ActiveRecord::Base
    scope :icons, -> { joins( :slugs ).where( slugs: { text: :обр } ) }
 
    scope :by_short_name, -> name { where( short_name: name ) }
-   scope :by_slug, -> slug { unscoped.joins( :slug ).where( slugs: { text: slug })}
+   scope :by_slug, -> slug do
+      unscoped.joins(:slug).where(slugs: {text: slug})
+   end
 
    scope :in_calendaries, -> calendaries_in do
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in

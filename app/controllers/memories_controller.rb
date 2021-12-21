@@ -23,18 +23,19 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
+      #binding.pry
       respond_to do |format|
          format.html do
             render :index,
                locals: {
-                  memoes: @memoes.as_json(context),
+                  memoes: @memoes.jsonize(context),
                   total: @memoes.total_size,
-                  cloud: @calendary_cloud.as_json
+                  cloud: @calendary_cloud.jsonize
                }
          end
          format.json do
             render plain: {
-               list: @memoes,
+               list: @memoes.jsonize(context),
                page: @page,
                total: @memoes.total_size
             }.to_json(context)
@@ -49,68 +50,86 @@ class MemoriesController < ApplicationController
       #   bm.report( "Access JSON:" ) do
       #   end
       #end
+      #binding.pry
       respond_to do |format|
          format.html do
             render :show,
-               locals: { memory: @memory.as_json(externals: { events: @events }),
-                         cloud: @calendary_cloud.as_json }
+               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
+                         cloud: @calendary_cloud.jsonize }
          end
-         format.json { render plain: @memory.to_json(externals: { events: @events }) }
+         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
       end
    end
 
    protected
 
    def context
-      @context ||= { locales: @locales } ;end
+      @context ||= { locales: @locales }
+   end
 
    # lazy property
    def _date
       # TODO add detection time zone from request
       @_date ||= (
          date = Time.now + church_time_gap
-         is_julian_calendar? && date - julian_gap || date );end
+         is_julian_calendar? && date - julian_gap || date )
+   end
 
    def is_html?
-      request.formats.first&.symbol == :html ;end
+      request.formats.first&.symbol == :html
+   end
 
    def is_julian_calendar?
-      params[ :d ]&.[](0) != 'н' ;end
+      params[ :d ]&.[](0) != 'н'
+   end
 
    def church_time_gap
-      9.hours ;end
+      9.hours
+   end
 
    def julian_gap
       #TODO remove fixed julian gap
-      13.days ;end
+      13.days
+   end
 
    def default_calendary_slugs
       #TODO make automatic detection of calendary depended on the IP and country of request
-      [ 'рпц' ] ;end
+      [ 'рпц' ]
+   end
 
    def default
       if !(params[ :c ] || params[ :d ] || params[ :q ])
          params[ :d ] ||= "#{is_julian_calendar? && 'ю' || "н"}#{_date.strftime("%d-%m-%Y")}"
-         params[ :c ] ||= default_calendary_slugs.join(",") ;end;end
+         params[ :c ] ||= default_calendary_slugs.join(",")
+      end
+   end
 
    def set_locales
-      @locales ||= %i(ру цс) ;end #TODO unfix of the ru only (will depend on the locale)
+      #TODO unfix of the ru only (will depend on the locale)
+      @locales ||= %i(ру цс)
+   end
 
    def set_page
-      @page ||= params[ :p ] || 1 ;end
+      @page ||= params[ :p ] || 1
+   end
 
    def set_query
-      @query ||= params[ :q ] || "" ;end
+      @query ||= params[ :q ] || ""
+   end
 
    def set_date
-      @date ||= (
+      @date ||=
          if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ params[ :d ]
-            Date.parse(date) ;end);end
+            Date.parse(date)
+         end
+   end
 
    def set_calendary_slugs
       @calendary_slugs =
       if params[ :c ].present?
-         Slug.for_calendary.where( text: params[ :c ].split(",") ).pluck( :text ) ;end;end
+         Slug.for_calendary.where( text: params[ :c ].split(",") ).pluck( :text )
+      end
+   end
 
    def set_calendary_cloud
       @calendary_cloud ||=
@@ -120,19 +139,21 @@ class MemoriesController < ApplicationController
                   .with_url
                   .with_slug_text
                   .group("calendaries.id")
-                  .uniq ;end
+                  .distinct_by('_slug')
+   end
 
    def set_julian
-      @julian ||= is_julian_calendar? ;end
+      @julian ||= is_julian_calendar?
+   end
 
    def set_memory
-      @memorys ||= Memory.by_slug(params[ :slug ])
-                        .with_cantoes( @locales )
-                        .with_names( @locales )
-                        .with_pure_links
-                        .with_slug_text
+      @memorys ||= Memory.with_cantoes( @locales )
+                         .with_names( @locales )
+                         .with_pure_links
+                         .with_slug_text
 
-      @memory ||= @memorys.first || raise( ActiveRecord::RecordNotFound )
+
+      @memory ||= @memorys.find_by_slug(params[:slug]) || raise( ActiveRecord::RecordNotFound )
    end
 
    def fetch_events

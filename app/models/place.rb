@@ -1,6 +1,6 @@
 class Place < ActiveRecord::Base
    extend TotalSize
-   include AsJson
+   extend AsJson
 
    has_many :descriptions, as: :describable
    has_many :events

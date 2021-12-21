@@ -1,6 +1,6 @@
 class Order < ActiveRecord::Base
    extend TotalSize
-   include AsJson
+   extend AsJson
 
    has_one :slug, as: :sluggable, dependent: :destroy
    has_many :notes, as: :describable, dependent: :delete_all, class_name: :Note

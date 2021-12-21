@@ -51,7 +51,9 @@ module TotalSize
       model = self.name.constantize
       rela ||= self.except(:limit, :offset)
 
-      model.connection.select_all("WITH cnt AS(#{rela.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
+      Rails.cache.fetch(["count", "query", rela.to_sql], expires_in: 1.week) do
+         model.connection.select_all("WITH cnt AS(#{rela.to_sql}) SELECT COUNT(*) FROM cnt").rows[0][0]
+      end
    end
 
    def total_size

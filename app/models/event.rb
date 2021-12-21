@@ -11,7 +11,7 @@
 class Event < ActiveRecord::Base
    extend Informatible
    extend TotalSize
-   include AsJson
+   extend AsJson
 
    NOTICE = [
       'Repose',

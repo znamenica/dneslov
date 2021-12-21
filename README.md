@@ -24,6 +24,12 @@ application up and running.
 [![Test Coverage](https://codeclimate.com/github/znamenica/dneslov/badges/coverage.svg)](https://codeclimate.com/github/znamenica/dneslov)
 [![Scan Coverage](https://scan.coverity.com/projects/17554/badge.svg?flat=1)](https://scan.coverity.com/projects/znamenica-dneslov)
 
+## Requirements
+
+1. libhiredis-devel
+2. redis
+3. libsnappy-devel
+
 ## Dump test DB to production
 
 locally execute:

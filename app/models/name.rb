@@ -2,8 +2,8 @@
 # bond_to_id(int)         - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
    extend TotalSize
+   extend AsJson
    include Languageble
-   include AsJson
 
    has_many :memories, through: :memory_names
    has_many :memory_names

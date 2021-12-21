@@ -35,7 +35,12 @@ gem "figaro"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+# cache session / json
+gem 'hiredis', '~> 0.6'
+gem 'redis', '~> 4.0', :require => %w(redis redis/connection/hiredis)
+gem 'redis-rails', '~> 5.0'
+gem 'redis-rack-cache'
+gem 'snappy'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'
@@ -112,6 +117,7 @@ group :test do
    gem 'rspec-expectations'
    gem 'simplecov', '>= 0.17.1'
    gem 'database_cleaner'
+   gem 'database_cleaner-redis'
    gem "launchy"
    gem "capybara"
    gem 'capybara-webkit', '>= 1.15.1'

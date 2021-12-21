@@ -29,7 +29,7 @@ class Admin::CommonController < ApplicationController
             render :index,
                plain: {
                      total: @objects.total_size,
-                     list: @objects.limit(500).as_json(only: %i(key value)),
+                     list: @objects.limit(500).jsonize(only: %i(key value)),
                   }.to_json
          end
       end
@@ -41,7 +41,7 @@ class Admin::CommonController < ApplicationController
       respond_to do |format|
          format.json do
             render plain: {
-               list: @objects.as_json(context),
+               list: @objects.jsonize(context),
                page: @page,
                total: @objects.total_size
             }.to_json
@@ -54,20 +54,23 @@ class Admin::CommonController < ApplicationController
    def create
       @object.save!
 
-      render plain: prepare_object(@object.reload).to_json
+      #TODO: render json: @object.jsonize(context)
+      render json: prepare_object(@object.reload).jsonize(context)
    end
 
    # PUT /<objects>/1
    def update
       @object.update!(permitted_params)
 
-      render plain: prepare_object(@object.reload).to_json
+      #binding.pry
+      #TODO: render json: @object.jsonize(context)
+      render json: prepare_object(@object.reload).jsonize(context)
    end
 
    # GET /<objects>/1
    def show
       respond_to do |format|
-         format.json { render :show, plain: @object.to_json(context) }
+         format.json { render :show, json: @object.jsonize(context) }
       end
    end
 
@@ -76,7 +79,7 @@ class Admin::CommonController < ApplicationController
       @object.destroy!
 
       respond_to do |format|
-         format.json { render :show, plain: @object.to_json(context) }
+         format.json { render :show, json: @object.dejsonize(context) }
       end
    end
 
@@ -173,9 +176,9 @@ class Admin::CommonController < ApplicationController
 
    def fetch_object
       if params[:slug]
-         @object ||= prepare_objects.by_slug(params[:slug]).first
+         @object ||= prepare_objects.find_by_slug(params[:slug])
       else
-         @object ||= prepare_objects.find(params[:id])
+         @object ||= prepare_objects.find_by_pk(params[:id])
       end || raise(ActiveRecord::RecordNotFound)
    end
 end
