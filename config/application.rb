@@ -47,5 +47,8 @@ module Dneslov
     config.npm.install_on_asset_precompile = true
 
     config.npm.install_on_rails_server = true
+
+    # queue adapter
+    config.active_job.queue_adapter = :sidekiq
   end
 end

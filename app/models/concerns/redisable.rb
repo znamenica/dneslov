@@ -2,6 +2,29 @@ module Redisable
    include ActiveSupport::Concern
 
    class << self
+      attr_writer :processor
+
+      PROCESSORS = {
+         sidekiq: :Sidekiq, # req: Sidekiq::LimitFetch
+         resque: :Resque,
+         inline: :Inline
+      }
+
+      def processor_kind= value
+         self.processor = PROCESSORS[value]
+      end
+
+      def processor
+         @processor ||=
+            PROCESSORS.reduce(nil) do |res, (_, prc)|
+               res || Object.constants.grep(/^#{prc}$/).first && Redisable.const_get(prc)
+            end || Inline
+      end
+
+      def enqueue method, *args
+         processor.enqueue(method, *args)
+      end
+
       def filtered_for attrs, klass
          filtered = attrs.select {|attr| klass.attribute_types.keys.include?(attr) }
       end
@@ -18,125 +41,191 @@ module Redisable
       end
 
       def drop_key key
-         if meta = Rails.cache.read(key)
-            size = meta.size
+         # binding.pry
+         if value = Rails.cache.read(key)
+            if key.first == "meta"
+               size = value.size
 
-            meta.each do |rkey|
-               if Rails.cache.delete(rkey)
-                  Rails.logger.debug("Removed key #{rkey.inspect}")
-               end
+               value.each { |rkey| drop_key(rkey) }
             end
 
+            Rails.logger.debug("Removed key #{key.inspect}#{size && " with #{size} subkeys"}")
             Rails.cache.delete(key)
-            Rails.logger.debug("Removed key #{key.inspect} with #{size} children")
          end
       end
 
-      def key_name_for instance, type = :meta
-         primary_key = instance.class.primary_key
-         [type, instance.class.name, primary_key, instance[primary_key]]
+      def rekey key, type = "meta"
+         [type.to_s] + key[1..-1]
       end
 
-      def parse_instance_attrs instance, key, attrs_in = nil
-         attrs = attrs_in || instance.attribute_names.map {|x|[x, instance.read_attribute(x)] }.to_h
+      def key_name_for model_name, attrs, type = "meta"
+         primary_key = model_name.constantize.primary_key
+         [type, model_name, primary_key, attrs[primary_key].to_s]
+      end
 
+      def parse_sql_key key
+         key[-1].split(/\s(join|from)\s/i)[1..-1].map do |part|
+            part.strip.split(/[\s\"]/).reject {|x| x.blank? }.first
+         end.uniq.map do |table|
+            table.singularize.camelize.constantize rescue nil
+         end.compact.each do |klass|
+            assign_reverse_key(["meta", klass.name], key)
+         end
+      end
+
+      def parse_instance_attrs model_name, attrs, key
+         model = model_name.constantize
          children =
             attrs.map do |x, value|
                (value.is_a?(Array) || value.is_a?(Hash)) && x || nil
             end.compact
 
-         # binding.pry
          children.each do |many|
             name = /^_(?<_name>.*)/ =~ many && _name || many.to_s
 
-            if klass = instance._reflections[name]&.klass || many.singularize.camelize.constantize rescue nil
+            instance = nil
+            if klass = model.reflections[name]&.klass || many.singularize.camelize.constantize rescue nil
                attres_in = attrs[many]
                attres = attres_in.is_a?(Hash) && [attres_in] || attres_in
                attres.each do |attrs|
-                  if !attrs["type"] || klass.name == attrs["type"]
-                     newattrs = attrs.merge("describable_id" => instance.id, "describable_type" => instance.class.to_s)
-                     i = klass.new(Redisable.filtered_for(newattrs, klass))
-                     # binding.pry
-                     if i[klass.primary_key]
-                        assign_reverse_key(key_name_for(i), key)
-                     else
-                        assign_reverse_key([:meta, klass.name], key)
-                     end
-                     parse_instance_attrs(i, key, attrs)
+                  if attrs[klass.primary_key]
+                     assign_reverse_key(key_name_for(klass.name, attrs), key)
+                  else
+                     assign_reverse_key(["meta", klass.name], key)
                   end
+                  parse_instance_attrs(klass.name, attrs, key)
                end
+
+               assign_reverse_key(["meta", klass.name], key)
             end
          end
+      end
+
+      def as_json_for instance
+         instance.attribute_names.map {|x|[x, instance.read_attribute(x)] }.to_h
+      end
+
+      ### internal methods for enqueued proceeds
+      #
+      def redisize_model_metas metakey, model_name, attrs, key
+         # binding.pry
+         drop_key(metakey)
+         drop_key(metakey[0..1])
+         parse_instance_attrs(model_name, attrs, key)
+         assign_reverse_key(metakey, key)
+      end
+
+      # +redisize_sql_metas+ updates all the meta keys for the result value
+      #
+      def redisize_sql_metas key, attres
+         model_name = key[1]
+         primary_key = key[2]
+
+         # binding.pry
+         attres.map do |attrs|
+            metakey = ["meta", model_name, primary_key, attrs[primary_key]]
+
+            parse_instance_attrs(model_name, attrs, key)
+            assign_reverse_key(metakey, key)
+         end
+
+         parse_sql_key(key)
+      end
+
+      def deredisize_instance_metas key
+         metakey = rekey(key)
+
+         # binding.pry
+         drop_key(metakey)
+         Rails.cache.delete(key)
+      end
+
+      def reredisize_instance_metas key
+         metakey = rekey(key)
+         # binding.pry
+
+         drop_key(metakey)
+         assign_reverse_key(metakey, key)
+      end
+
+      def deredisize_model_metas model_name
+         # binding.pry
+         drop_key(["meta", model_name])
+      end
+
+      def deredisize_json_metas key
+         # binding.pry
+         drop_key(key)
+      end
+
+      def redisize_json_metas key, attrs
+         metakey = key_name_for(key[1], attrs)
+
+         # binding.pry
+         parse_instance_attrs(key[1], attrs, key)
+         assign_reverse_key(metakey, key)
       end
    end
 
    # self -> model instance
    def redisize_json scheme, &block
-      key = [:json, self, scheme]
+      primary_key = self.class.primary_key
+      key = ["json", self.model_name.name, primary_key, self[primary_key].to_s, scheme]
 
       # binding.pry
       Rails.cache.fetch(key, expires_in: 1.week) do
          value = block.call
 
-         metakey = [:meta, self.model_name.name, self.class.primary_key, self.send(self.class.primary_key)]
+         Redisable.enqueue(:redisize_json_metas, key, value)
 
-         Redisable.parse_instance_attrs(self, key, value)
-         Redisable.assign_reverse_key(Redisable.key_name_for(self), key)
-
-         #binding.pry
          value
       end
    end
 
    # self -> model instance
    def deredisize_json scheme, &block
-      #binding.pry
-      Redisable.drop_key([:json, self, scheme])
+      primary_key = self.class.primary_key
+      key = ["json", self.model_name.name, primary_key, self[primary_key], scheme]
+
+      # binding.pry
+      Redisable.enqueue(:deredisize_json_metas, key)
    end
 
    # self -> model instance
    def deredisize_model
-      #binding.pry
-      Redisable.drop_key([:meta, self.class.name])
+      Redisable.enqueue(:deredisize_model_metas, self.model_name.name)
    end
 
    # self -> model instance
    def reredisize_instance
-      key = Redisable.key_name_for(self, :instance)
-      meta_key = Redisable.key_name_for(self)
-      #binding.pry
+      attrs = Redisable.as_json_for(self)
+      key = Redisable.key_name_for(self.model_name.name, attrs, "instance")
 
-      Redisable.drop_key(meta_key)
+      # binding.pry
       Rails.cache.write(key, self, expires_in: 1000.years)
-      Redisable.assign_reverse_key(meta_key, key)
+      Redisable.enqueue(:reredisize_instance_metas, key)
    end
 
    # self -> model instance
    def deredisize_instance
-      Redisable.drop_key(Redisable.key_name_for(self))
-      Rails.cache.delete(Redisable.key_name_for(self, :instance))
+      attrs = Redisable.as_json_for(self)
+      key = Redisable.key_name_for(self.model_name.name, attrs, "instance")
+
+      # binding.pry
+      Redisable.enqueue(:deredisize_instance_metas, key)
    end
 
    module ClassMethods
       # self -> model class
       def redisize_sql &block
-         key = [:sql, self.name, self.all.to_sql]
+         key = ["sql", self.name, self.primary_key, self.all.to_sql]
 
          # binding.pry
          Rails.cache.fetch(key, expires_in: 1.day) do
             value = block.call
 
-            # update all the meta keys for the reasul value
-            value.map do |attrs|
-               metakey = [:meta, self.name, self.primary_key, attrs[self.primary_key]]
+            Redisable.enqueue(:redisize_sql_metas, key, value)
 
-               instance = self.new(Redisable.filtered_for(attrs, self))
-               Redisable.parse_instance_attrs(instance, key, attrs)
-               Redisable.assign_reverse_key(metakey, key)
-            end
-            Redisable.assign_reverse_key([:meta, self.name], key)
-
-            # binding.pry
             value
          end
       end
@@ -144,21 +233,64 @@ module Redisable
       # self -> model class
       def redisize_model value, options = {}, &block
          primary_key = options.fetch(:by_key, self.primary_key).to_s
-         key = [:instance, name, primary_key, value]
+         key = ["instance", name, primary_key, value]
+         metakey = ["meta", self.model_name.name, primary_key, value]
 
          # binding.pry
          Rails.cache.fetch(key, expires_in: 1.week) do
-            result = block.call
-
-            if result
-               Redisable.drop_key([:meta, self.model_name.name, primary_key, value])
-
-               Redisable.parse_instance_attrs(result, key)
-               Redisable.assign_reverse_key(Redisable.key_name_for(result), key)
+            if result = block.call
+               Redisable.enqueue(:redisize_model_metas, metakey, self.name, Redisable.as_json_for(result), key)
             end
 
-            #binding.pry
             result
+         end
+      end
+   end
+
+   class Resque
+      @queue = :caching
+
+      class << self
+         def enqueue *args
+            ::Resque.enqueue(self, *args)
+         end
+
+         def lock_workers _method, *_args
+            @queue
+         end
+
+         def perform method, *args
+            Redisable.send(method, *args)
+         end
+      end
+   end
+
+   class Sidekiq
+      include ::Sidekiq::Worker
+      sidekiq_options queue: 'caching'
+      sidekiq_options limits: { caching: 1 }
+      sidekiq_options process_limits: { caching: 1 }
+
+      def perform method, *args
+         Redisable.send(method, *args)
+      end
+
+      class << self
+         def enqueue *args
+            self.perform_async(*args)
+         end
+      end
+   end
+
+   # add: sucker_punch
+   # add ActiveJob::Base
+   # add: DelayedJobs
+   # add: dynflow
+
+   class Inline
+      class << self
+         def enqueue method, *args
+            Redisable.send(method, *args)
          end
       end
    end

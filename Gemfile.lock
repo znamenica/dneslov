@@ -4,6 +4,15 @@ GIT
   specs:
     rdoba (0.9.3)
 
+GIT
+  remote: https://github.com/majioa/dotenv.git
+  revision: 0ce21756e93c69ba968a425a61f1a290de327943
+  specs:
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -55,6 +64,10 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    airbrake (12.0.0)
+      airbrake-ruby (~> 6.0)
+    airbrake-ruby (6.0.1)
+      rbtree3 (~> 0.5)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
@@ -86,6 +99,10 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-sidekiq (2.0.0)
+      capistrano (>= 3.9.0)
+      capistrano-bundler
+      sidekiq (>= 6.0)
     capistrano3-nginx (3.0.4)
       capistrano (~> 3.0)
     capybara (3.35.3)
@@ -100,7 +117,8 @@ GEM
       capybara (>= 2.3, < 4.0)
       json
     coderay (1.1.3)
-    concurrent-ruby (1.1.8)
+    concurrent-ruby (1.1.9)
+    connection_pool (2.2.5)
     crass (1.0.6)
     cucumber (5.3.0)
       builder (~> 3.2, >= 3.2.4)
@@ -176,9 +194,11 @@ GEM
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffaker (2.18.0)
-    ffi (1.15.0)
+    ffi (1.15.4)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
+    get_process_mem (0.2.7)
+      ffi (~> 1.0)
     gh (0.18.0)
       activesupport (~> 5.0)
       addressable (~> 2.4)
@@ -195,7 +215,7 @@ GEM
     highline (2.0.3)
     hiredis (0.6.3)
     htmlentities (4.3.4)
-    i18n (1.8.9)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     json (2.5.1)
     json-schema (2.8.1)
@@ -220,7 +240,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.9.0)
+    loofah (2.13.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -235,8 +255,8 @@ GEM
     mimemagic (0.3.8)
       nokogiri (~> 1)
     mini_mime (1.0.2)
-    mini_portile2 (2.5.0)
-    minitest (5.14.4)
+    mini_portile2 (2.6.1)
+    minitest (5.15.0)
     multi_json (1.15.0)
     multi_test (0.1.2)
     multipart-post (2.1.1)
@@ -246,8 +266,8 @@ GEM
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     npm-pipeline-rails (1.8.1)
       railties (>= 4.0.0, < 6.0.0)
@@ -281,7 +301,7 @@ GEM
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-cache (1.13.0)
       rack (>= 0.4)
@@ -303,7 +323,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.3.0)
+    rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     railties (5.2.4.5)
       actionpack (= 5.2.4.5)
@@ -311,10 +331,11 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
-    rake (13.0.3)
+    rake (13.0.6)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rbtree3 (0.6.0)
     rdoc (6.3.0)
     redis (4.5.1)
     redis-actionpack (5.2.0)
@@ -352,6 +373,15 @@ GEM
       cucumber (>= 5.0.0, < 6.0.0)
       rspec-expectations (~> 3.0)
       shoulda-matchers (>= 3.0.0, < 5.0.0)
+    sidekiq (6.3.1)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      redis (>= 4.2.0)
+    sidekiq-limit_fetch (3.4.0)
+      sidekiq (>= 4)
+    sidekiq-worker-killer (1.0.0)
+      get_process_mem (~> 0.2.1)
+      sidekiq (>= 5)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -369,9 +399,9 @@ GEM
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.2)
-      actionpack (>= 4.0)
-      activesupport (>= 4.0)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
@@ -418,6 +448,7 @@ DEPENDENCIES
   activerecord-import
   activerecord_json_validator
   addressable
+  airbrake
   attribute-defaults
   bcrypt_pbkdf (~> 1.0)
   bullet
@@ -427,12 +458,14 @@ DEPENDENCIES
   capistrano-rails (~> 1.3)
   capistrano-rake
   capistrano-rvm
+  capistrano-sidekiq
   capistrano3-nginx
   capybara
   capybara-webkit (>= 1.15.1)
   cucumber-rails (>= 1.8.0)
   database_cleaner
   database_cleaner-redis
+  dotenv-rails!
   dry_crud (>= 5.2.0)
   ed25519 (~> 1.2)
   email_spec
@@ -468,6 +501,9 @@ DEPENDENCIES
   sdoc (~> 1.0.0)
   shoulda-matchers (~> 4.0)
   shoulda-matchers-cucumber (~> 1.0)
+  sidekiq
+  sidekiq-limit_fetch
+  sidekiq-worker-killer
   simplecov (>= 0.17.1)
   snappy
   spring

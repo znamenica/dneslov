@@ -10,6 +10,9 @@ require 'capistrano/rails/migrations'
 require 'capistrano/nginx'
 require 'capistrano/rake'
 require 'capistrano/rvm'
+require 'capistrano/sidekiq'
+install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
+install_plugin Capistrano::Sidekiq::Systemd
 
 # Load the SCM plugin appropriate to your project:
 #

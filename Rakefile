@@ -2,7 +2,6 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 #require 'cucumber'
-#require 'bundler/gem_tasks'
 #require 'cucumber/rake/task'
 
 require File.expand_path('../config/application', __FILE__)
@@ -12,7 +11,8 @@ Rails.application.load_tasks
 task :clean do
    puts "Cleaning..."
    `git clean -fd`
-   `rm -rf $(find  . -name "*~" -o \\( -type d -name '.bundle' -o -type d -name 'node_modules' \\) -prune |grep ~\\$)` ;end
+   `rm -rf $(find  . -name "*~" -o \\( -type d -name '.bundle' -o -type d -name 'node_modules' \\) -prune |grep ~\\$)`
+end
 
 namespace :db do
    desc 'Load DB Config'

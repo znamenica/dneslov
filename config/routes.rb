@@ -2,6 +2,10 @@ Rails.application.routes.draw do
    # The priority is based upon order of creation: first created -> highest priority.
    # See how all your routes lay out with "rake routes".
 
+   #authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => "/dashboard/sidekiq"
+   #end
+
    # auth routes
    get '/auth/github', to: 'auth#github', format: false
 

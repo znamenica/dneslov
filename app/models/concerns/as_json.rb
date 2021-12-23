@@ -13,7 +13,7 @@ module AsJson
 
       kls.class_eval do
          after_create :deredisize_model
-         after_save :reredisize_instance, :deredisize_model
+         after_save :reredisize_instance
          after_destroy :deredisize_instance, :deredisize_model
       end
    end
@@ -72,16 +72,16 @@ module AsJson
       def generate_json propses, externals = {}
          propses.reduce({}) do |r, (name, props)|
             value =
-               if props[:rule].is_a?(Proc)
-                  props[:rule][self]
-               elsif props[:rule].is_a?(Symbol)
-                  externals[props[:rule]]
-               elsif props[:real_name].to_s != name.to_s
-                  read_attribute(props[:real_name]).as_json
-               elsif props[:rule].instance_variable_get(:@value)
-                  props[:rule].instance_variable_get(:@value)
-               elsif props[:rule]
-                  read_attribute(props[:real_name] || props[:rule])
+               if props["rule"].is_a?(Proc)
+                  props["rule"][self]
+               elsif props["rule"].is_a?(String)
+                  externals.fetch(props["rule"].to_sym) { |x| externals[props["rule"]] }
+               elsif props["real_name"] != name.to_s
+                  read_attribute(props["real_name"]).as_json
+               elsif props["rule"].instance_variable_get(:@value)
+                  props["rule"].instance_variable_get(:@value)
+               elsif props["rule"]
+                  read_attribute(props["real_name"] || props["rule"])
                end
 
             r.merge(name => value)
@@ -107,12 +107,12 @@ module AsJson
 
             rule = parse_rule(rule_in)
             #binding.pry
-            [name, { rule: rule, real_name: name_in }]
+            [name, { "rule" => rule, "real_name" => name_in.to_s }]
          end.compact.to_h
       end
 
       def parse_rule rule_in
-         %w(TrueClass FalseClass NilClass Symbol).all? {|k| !rule_in.is_a?(k.constantize) } && true || rule_in
+         %w(TrueClass FalseClass NilClass Symbol).all? {|k| !rule_in.is_a?(k.constantize) } && true || rule_in.is_a?(Symbol) && rule_in.to_s || rule_in
       end
 
       def jsonize options = {}

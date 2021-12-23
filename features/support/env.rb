@@ -16,8 +16,8 @@ require 'ffaker'
 
 FactoryBot.definition_file_paths = %w(features/factories)
 FactoryBot.lint
-World( FactoryBot::Syntax::Methods )
-World( Rack::Test::Methods )
+World(FactoryBot::Syntax::Methods)
+World(Rack::Test::Methods)
 
 Shoulda::Matchers.configure do |config|
    config.integrate do |with|
@@ -37,8 +37,8 @@ Before do
 end
 
 After do
-   Dir.chdir( @owd )
-   FileUtils.remove_entry_secure( @workdir )
+   Dir.chdir(@owd)
+   FileUtils.remove_entry_secure(@workdir)
 end
 
 at_exit do
