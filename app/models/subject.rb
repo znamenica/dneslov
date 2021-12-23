@@ -39,7 +39,8 @@ class Subject < ActiveRecord::Base
 
    # required for short list
    scope :with_key, -> _ do
-      selector = [ "#{model.table_name}.key AS _key" ]
+      join_name = table.table_alias || table.name
+      selector = [ "#{join_name}.key AS _key" ]
 
       select(selector).group('_key').reorder("_key")
    end
@@ -49,8 +50,10 @@ class Subject < ActiveRecord::Base
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
       selector = self.select_values.dup
 
+      #binding.pry
+      join_name = table.table_alias || table.name
       join = "LEFT OUTER JOIN descriptions AS titles
-                           ON titles.describable_id = #{model.table_name}.id
+                           ON titles.describable_id = #{join_name}.id
                           AND titles.describable_type = '#{model}'
                           AND titles.type IN ('Appellation')
               LEFT OUTER JOIN subjects AS languages
@@ -80,9 +83,11 @@ class Subject < ActiveRecord::Base
       end
       selector << "kind_titles.text AS _kind_title"
 
+      #binding.pry
+      join_name = table.table_alias || table.name
       join = "LEFT OUTER JOIN subjects AS subject_kinds
                            ON subject_kinds.kind_code = 'SubjectKind'
-                          AND subject_kinds.key = subjects.kind_code
+                          AND subject_kinds.key = #{join_name}.kind_code
               LEFT OUTER JOIN descriptions AS kind_titles
                            ON kind_titles.describable_id = subject_kinds.id
                           AND kind_titles.describable_type = 'Subject'
@@ -99,6 +104,8 @@ class Subject < ActiveRecord::Base
          selector << 'subjects.*'
       end
 
+      #binding.pry
+      join_name = table.table_alias || table.name
       selector << "COALESCE((WITH __descriptions AS (
                       SELECT DISTINCT ON(descriptions.id)
                              descriptions.id AS id,
@@ -121,7 +128,7 @@ class Subject < ActiveRecord::Base
                           ON alphabeth_names.describable_id = alphabeths.id
                          AND alphabeth_names.describable_type = 'Subject'
                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE descriptions.describable_id = subjects.id
+                       WHERE descriptions.describable_id = #{join_name}.id
                          AND descriptions.describable_type = 'Subject'
                          AND descriptions.type IN ('Description')
                     GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
@@ -138,6 +145,8 @@ class Subject < ActiveRecord::Base
          selector << 'subjects.*'
       end
 
+      #binding.pry
+      join_name = table.table_alias || table.name
       selector << "COALESCE((WITH __names AS (
                       SELECT DISTINCT ON(names.id)
                              names.id AS id,
@@ -160,7 +169,7 @@ class Subject < ActiveRecord::Base
                           ON alphabeth_names.describable_id = alphabeths.id
                          AND alphabeth_names.describable_type = 'Subject'
                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE names.describable_id = subjects.id
+                       WHERE names.describable_id = #{join_name}.id
                          AND names.describable_type = 'Subject'
                          AND names.type IN ('Appellation')
                     GROUP BY names.id, language_names.text, alphabeth_names.text)

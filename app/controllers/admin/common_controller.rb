@@ -128,7 +128,7 @@ class Admin::CommonController < ApplicationController
    def unprocessable_entity e
       Rails.logger.error("#{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}")
 
-      errors = @object.errors.any? && @object.errors || e.to_s
+      errors = @object && @object.errors.any? && @object.errors || e.to_s
       render json: errors, status: :unprocessable_entity ;end
 
    def set_page
