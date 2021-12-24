@@ -11,19 +11,19 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build:
-    docker:
-      - image: circleci/ruby:2.6.3-stretch-node
-    executor: ruby/default
-    steps:
-      - checkout
-      - run:
-          name: Update bundler?
-          command: gem install bundler -v 2.1.4
-      - ruby/bundle-install
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
+   build:
+      docker:
+       - image: circleci/ruby:2.6.3-stretch-node
+      executor: ruby/default
+      steps:
+       - checkout
+       - run:
+            name: Update bundler?
+            command: gem install bundler -v 2.1.4
+       - ruby/bundle-install
+       - node/install-packages:
+            pkg-manager: yarn
+            cache-key: "yarn.lock"
    test:  # our next job, called "test"
       # we run "parallel job containers" to enable speeding up our tests;
       # this splits our tests across multiple containers.
