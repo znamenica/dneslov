@@ -37,6 +37,7 @@ gem 'hiredis', '~> 0.6'
 gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
 gem 'redis-rails', '~> 5.0'
 gem 'redis-rack-cache'
+gem 'redis-namespace'
 gem 'snappy'
 gem 'sidekiq', require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
