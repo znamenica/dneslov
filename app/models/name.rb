@@ -5,8 +5,8 @@ class Name < ActiveRecord::Base
    extend AsJson
    include Languageble
 
-   has_many :memories, through: :memory_names
    has_many :memory_names
+   has_many :memories, through: :memory_names
    has_many :children, class_name: :Name, foreign_key: :bond_to_id
 
    belongs_to :language, primary_key: :key, foreign_key: :language_code, class_name: :Subject

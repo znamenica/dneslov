@@ -43,9 +43,9 @@
       Если создадим новую вики ссылку с полями:
         | alphabeth_code   | РУ                    |
         | language_code    | ру                    |
-        | url              | http://www.wiki.ru    |
+        | url              | http://example.com/   |
         | info:memory      | ^Василий Памятливый   |
-      То русская вики ссылка "http://www.wiki.ru" будет существовать
+      То русская вики ссылка "http://example.com/" будет существовать
 
 
    Сценарий: Неверный url вики ссылки
@@ -54,35 +54,28 @@
       Если попробуем создать новую вики ссылку с полями:
         | alphabeth_code   | РУ                    |
         | language_code    | ру                    |
-        | url              | httr://recource.ru    |
+        | url              | :@://recource@ru      |
         | info:memory      | ^Василий Памятливый   |
       То увидим сообщение ссылки об ошибке:
          """
-         Url is not a valid URL
+         Url @://recource@ru is invalid
          """
       И ссылки "httr://recource.ru" не будет
 
-      Если попробуем создать новую вики ссылку с полями:
-        | language_code    | ру                    |
-        | alphabeth_code   | РУ                    |
-        | url              | file:///recource.ru   |
-        | info:memory      | ^Василий Памятливый   |
-      То увидим сообщение ссылки об ошибке:
-         """
-         Url is not a valid URL
-         """
-      И ссылки "httr://recource.ru" не будет
+
+   Сценарий: Недоступный url вики ссылки
+      Допустим есть память "Василий Памятливый"
 
       Если попробуем создать новую вики ссылку с полями:
-        | language_code    | ру                    |
         | alphabeth_code   | РУ                    |
-        | url              | httpe/r/recource.ruw  |
+        | language_code    | ру                    |
+        | url              | http://recource.ru    |
         | info:memory      | ^Василий Памятливый   |
       То увидим сообщение ссылки об ошибке:
          """
-         Url is not a valid URL
+         Url is inaccessible at http://recource.ru
          """
-      И ссылки "httr://recource.ru" не будет
+      И ссылки "http://recource.ru" не будет
 
 
    @language

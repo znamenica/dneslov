@@ -89,7 +89,7 @@ module MacrosSupport
             /(?<attr>[^:]*)(?::(?<modelname>.*))?/ =~ base_attr
 #            binding.pry
             submodel = ( modelname || base_attr.singularize ).camelize.constantize
-            new_attrs[ "#{attr}_id" ] =
+            new_attrs["#{attr}_id"] =
             if relation
                subattr = base_field( modelname || relation.singularize )
                submodel.joins( relation.to_sym ).where( relation => { subattr => match_value }).first.id
@@ -97,10 +97,10 @@ module MacrosSupport
                subattr = base_field( modelname || base_attr.singularize )
                submodel.where( subattr => match_value ).first.id ;end
             if model.new.respond_to?( "#{attr}_type" )
-               new_attrs[ "#{attr}_type" ] = modelname.camelize ; end
+               new_attrs["#{attr}_type"] = modelname.camelize ; end
          else
-            value = value.is_a?( String ) && YAML.load( value ) || value
-            new_attrs[ attr ] = value ; end ; end
+            value = value.is_a?(String) && YAML.load(value) || value
+            new_attrs[attr] = value ; end ; end
 
       new_attrs ;end
 
@@ -132,7 +132,7 @@ module MacrosSupport
 
    def get_type type_name
       types = { 'целый' => :integer, 'строка' => :string, 'текст' => :text }
-      types[ type_name ] ; end
+      types[type_name] ; end
 
    def base_field name
       hash = { /memory|памят[ьи]/                     => :short_name,
@@ -166,7 +166,7 @@ module MacrosSupport
    def extract_key_to r, key
       similar_to = r.delete( key )
       if similar_to
-         r[ key ] = Name.where( similar_to.deep_dup ).first ; end ; end
+         r[key] = Name.where( similar_to.deep_dup ).first ; end ; end
 
 
    def make_attrs_for hash, model
@@ -181,9 +181,9 @@ module MacrosSupport
             joins.concat( new_attrs )
             model_name = model.to_s
             new_attrs = new_attrs.map do |a|
-               model_name = model.reflections[ a.to_s ].class_name
+               model_name = model.reflections[a.to_s].class_name
                table = model_name.tableize
-               [ a.to_s, table ]
+               [a.to_s, table]
                end
             .to_h.values
 
@@ -198,10 +198,10 @@ module MacrosSupport
                model = target_model_name.camelize.constantize
 
                if /:/ =~ attrs.last
-                  add_attrs = [ "#{real_attr}_type", model.to_s ] ;end
+                  add_attrs = ["#{real_attr}_type", model.to_s] ;end
             else
-               foreign_key = model.reflections[ relation ].foreign_key
-               new_attrs = [ relation.tableize, foreign_key ]
+               foreign_key = model.reflections[relation].foreign_key
+               new_attrs = [relation.tableize, foreign_key]
                joins << relation.to_sym
                model = model_name.constantize ;end
 
@@ -216,19 +216,19 @@ module MacrosSupport
             new_value = /id$/ =~ new_attrs.last && sample.id ||
                sample.try( :default_key ) || sample
 
-            [ new_attrs.join( '.' ), new_value ]
+            [new_attrs.join( '.' ), new_value]
          else
-            [ attr, value ] ;end;end
-      .concat( [ add_attrs ] ).compact.to_h
+            [attr, value] ;end;end
+      .concat( [add_attrs] ).compact.to_h
 
-      [ attrs, joins ] ;end
+      [attrs, joins] ;end
 
    def merge_array table, options = {}
       table.map do |e|
-         [ options[ :merge ] ].compact.flatten.select{ |h| e[ h ] }.each do |h|
-            e.merge!( e[ h ] )
+         [options[:merge]].compact.flatten.select{ |h| e[h] }.each do |h|
+            e.merge!( e[h] )
             e.delete( h ) ; end
-         e.map { |k, v| [ k, v.to_s ] }.to_h ; end ; end ; end
+         e.map { |k, v| [k, v.to_s] }.to_h ; end ; end ; end
 
 World(MacrosSupport)
 

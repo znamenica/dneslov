@@ -121,7 +121,7 @@ group :test do
    gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
    gem 'simplecov', '>= 0.17.1'
-   gem 'database_cleaner'
+   gem 'database_cleaner-active_record'
    gem 'database_cleaner-redis'
    gem "launchy"
    gem "capybara"
