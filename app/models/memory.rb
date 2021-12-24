@@ -5,8 +5,10 @@
 # bond_to_id[integer]   - отношение к (для икон это замысел или оригинал списка)
 #
 class Memory < ActiveRecord::Base
+   extend TotalSize
    extend DefaultKey
    extend Informatible
+   extend AsJson
 
    has_default_key :short_name
 
@@ -34,7 +36,9 @@ class Memory < ActiveRecord::Base
    scope :icons, -> { joins( :slugs ).where( slugs: { text: :обр } ) }
 
    scope :by_short_name, -> name { where( short_name: name ) }
-   scope :by_slug, -> slug { unscoped.joins( :slug ).where( slugs: { text: slug })}
+   scope :by_slug, -> slug do
+      unscoped.joins(:slug).where(slugs: {text: slug})
+   end
 
    scope :in_calendaries, -> calendaries_in do
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
@@ -59,6 +63,18 @@ class Memory < ActiveRecord::Base
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct ;end
+
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ 'memories.id AS _key' ]
+
+      select(selector).group('_key').reorder("_key") ;end
+
+   scope :with_value, -> context do
+      #TODO add search over names
+      selector = [ 'memories.short_name AS _value' ]
+
+      select(selector).group('_value').reorder("_value") ;end
 
    scope :with_names, -> (language_code) do
       language_codes = [ language_code ].flatten
@@ -448,8 +464,41 @@ class Memory < ActiveRecord::Base
 
    self.base_year ;end
 
+   #def attributes_before_type_cast()
+   #   binding.pry
+   #   super
+   #end
+
+   ATTRS = {
+      created_at: nil,
+      updated_at: nil,
+   }
+
+   def as_json options = {}
+      attrs = ATTRS.merge(
+         self.instance_variable_get(:@attributes).
+            send(:attributes).
+            send(:additional_types).merge(
+               options.fetch(:externals, {})))
+      original = super(options.merge(except: attrs.keys))
+
+      attrs.reduce(original) do |r, (name, rule)|
+         if /^_(?<realname>.*)/ =~ name
+            r.merge(realname => read_attribute(name).as_json)
+         elsif rule.is_a?(Proc)
+            r.merge(name.to_s => rule[self])
+         elsif rule.is_a?(ActiveRecord::Relation)
+            r.merge(name.to_s => rule.as_json)
+         else
+            r
+         end
+      end
+   end
+
    def set_slug
       self.slug = Slug.new(base: self.short_name) if self.slug.blank? ;end
 
    def to_s
-      memory_names.join( ' ' ) ; end ; end
+      memory_names.join( ' ' )
+   end
+end

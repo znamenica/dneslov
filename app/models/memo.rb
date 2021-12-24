@@ -8,6 +8,9 @@ require 'when_easter'
 # bond_to_id[int]       - ссылка на опорный помин, если nil, помин первичный
 #
 class Memo < ActiveRecord::Base
+   extend TotalSize
+   extend AsJson
+
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate
@@ -120,14 +123,15 @@ class Memo < ActiveRecord::Base
    scope :distinct_by, -> *args do
       _selector = self.select_values.dup
       if _selector.empty?
-        _selector << "DISTINCT ON (#{args.join(', ')}) memoes.*"
+        _selector << "ON (#{args.join(', ')}) memoes.*"
       else
          selector = _selector.uniq
-         selector.unshift( "DISTINCT ON (#{args.join(', ')}) " + selector.shift )
+         selector.unshift( "ON (#{args.join(', ')}) " + selector.shift )
       end
 
-      self.select_values = selector
-      self ;end
+      rela = self.distinct
+      rela.select_values = selector
+      rela ;end
 
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'
@@ -448,8 +452,5 @@ class Memo < ActiveRecord::Base
       else
          self.year_date ;end;end
 
-   class << self
-      def total_size
-         #TODO optimize
-         unlimited = self.except(:limit, :offset)
-         unlimited[0] && unlimited.size ;end;end;end
+   EXCEPT = %i(created_at updated_at)
+end

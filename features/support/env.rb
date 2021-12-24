@@ -16,30 +16,34 @@ require 'ffaker'
 
 FactoryBot.definition_file_paths = %w(features/factories)
 FactoryBot.lint
-World( FactoryBot::Syntax::Methods )
-World( Rack::Test::Methods )
+World(FactoryBot::Syntax::Methods)
+World(Rack::Test::Methods)
 
 Shoulda::Matchers.configure do |config|
    config.integrate do |with|
       with.test_framework :cucumber
       with.library :active_model
-      with.library :active_record ;end;end
-
-
+      with.library :active_record
+   end
+end
 
 Around do |_scenario, block|
-   DatabaseCleaner.cleaning( &block ) ;end
+   DatabaseCleaner.cleaning( &block )
+end
 
 Before do
    @owd = Dir.pwd
-   @workdir = Dir.mktmpdir ;end
+   @workdir = Dir.mktmpdir
+end
 
 After do
-   Dir.chdir( @owd )
-   FileUtils.remove_entry_secure( @workdir ) ;end
+   Dir.chdir(@owd)
+   FileUtils.remove_entry_secure(@workdir)
+end
 
 at_exit do
-   DatabaseCleaner.clean ;end
+   DatabaseCleaner.clean
+end
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
 # selectors in your step definitions to use the XPath syntax.
@@ -62,14 +66,17 @@ at_exit do
 #
 ActionController::Base.allow_rescue = false
 
+
+DatabaseCleaner[:redis].strategy = :deletion
+DatabaseCleaner[:redis].db = Redis.new(url: "redis://localhost:6379/3")
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner[:active_record].strategy = :transaction
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
-
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #

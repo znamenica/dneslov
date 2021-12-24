@@ -21,31 +21,35 @@ export const memoMeta = {
       },
       memory: {
          title: 'Память',
+         value: (value) => { return value.memory_name },
       },
       year_date: {
          title: 'Дата',
       },
       event: {
          title: 'Событие',
+         value: (value) => { return value.event_short_title },
       },
       bond_to: {
          title: 'Связка с...',
+         value: (value) => { return value.bond_to_year_date },
       },
       add_date: {
          title: 'Добавлено...',
       },
       calendary: {
          title: 'Календарь',
+         value: (value) => { return value.calendary_title },
       }
    },
    form: {
       calendary_id: {
          kind: 'dynamic',
          title: 'Календарь',
-         humanized_name: 'calendary',
+         humanized_name: 'calendary_title',
          pathname: 'short_calendaries',
-         key_name: 'calendary',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          placeholder: 'Начни ввод наименования календаря...',
          display_scheme: '12-6-4-4',
          validations: {
@@ -54,11 +58,11 @@ export const memoMeta = {
       },
       memory_id: {
          kind: 'dynamic',
-         humanized_name: 'memory',
+         humanized_name: 'memory_name',
          display_scheme: '12-6-4-4',
          pathname: 'short_memories',
-         key_name: 'short_name',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          title: 'Память',
          placeholder: 'Начни ввод текста имени или описания памяти...',
          validations: {
@@ -68,10 +72,10 @@ export const memoMeta = {
       event_id: {
          kind: 'dynamic',
          context_names: 'memory_id',
-         humanized_name: 'event',
+         humanized_name: 'event_short_title',
          pathname: 'short_events',
-         key_name: 'event',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          title: 'Событие',
          placeholder: 'Начни ввод имени события...',
          display_scheme: '12-6-4-4',
@@ -119,12 +123,12 @@ export const memoMeta = {
       bond_to_id: {
          kind: 'dynamic',
          title: 'Привязаный помин',
-         humanized_name: 'bond_to',
+         humanized_name: 'bond_to_year_date',
          display_scheme: '12-6-4-4',
          placeholder: 'Начни ввод даты привязаного помина...',
          pathname: 'short_memoes',
-         key_name: 'memo',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          context_names: [ 'event_id', 'calendary_id' ],
          validations: {
             'Привязаная дата не должна соответствовать текущей дате': (value, context) => {
@@ -160,8 +164,8 @@ export const memoMeta = {
                title: 'Чин',
                pathname: 'short_orders',
                humanized_name: 'order',
-               key_name: 'order',
-               value_name: 'id',
+               key_name: 'value',
+               value_name: 'key',
                placeholder: 'Начни ввод наименования чина...',
                display_scheme: '12-12-12-12',
                validations: {
@@ -177,6 +181,8 @@ export const memoMeta = {
          action: 'Добавь заголовок',
          single: 'Заголовок',
          placeholder: 'Введи заголовок',
+         source: "descriptions",
+         filter: { type: "Title" },
          display_scheme: '12-12-12-12',
          validations: {
             "Языки в заголовках не могут совпадать": matchLanguages,
@@ -204,7 +210,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -219,7 +225,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -261,7 +267,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -276,7 +282,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -292,6 +298,7 @@ export const memoMeta = {
          action: 'Добавь описание',
          single: 'Описание',
          placeholder: 'Введи описание',
+         filter: { type: "Description" },
          display_scheme: '12-12-12-12',
          meta: {
             id: {
@@ -314,7 +321,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -329,7 +336,7 @@ export const memoMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {

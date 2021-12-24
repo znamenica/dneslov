@@ -7,24 +7,21 @@ end
 
 ruby '2.7.1'
 
+## Environment
+gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
+
+## Core
 gem 'rails', '~> 5.2.4', '>= 5.2.4.5'
 gem 'pg'
-#NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
+##NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
 
-# Use Uglifier as compressor for JavaScript assets
+## Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 2.7.2'
-# Use CoffeeScript for .js.coffee assets and views
-# gem 'coffee-rails', '~> 4.2.2'
 
-# Use jquery as the JavaScript library
-# CVE-2015-1840 - CSRF VULNERABILITY fix
-# gem 'jquery-rails', '~> 4.3.1'
-# Widelinks makes following links in your web application faster.
-# gem 'wiselinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
-# bundle exec rake doc:rails generates the API under doc/api.
+## bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 1.0.0', group: :doc
 
 # gem 'globalize'
@@ -32,10 +29,19 @@ gem 'sdoc', '~> 1.0.0', group: :doc
 
 gem "figaro"
 
-# Use ActiveModel has_secure_password
+## Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+## Use Redis adapter to run Action Cable in production
+## cache, session, rack / json, with usage delayed_jobs
+gem 'hiredis', '~> 0.6'
+gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
+gem 'redis-rails', '~> 5.0'
+gem 'redis-rack-cache'
+gem 'redis-namespace'
+gem 'snappy'
+gem 'sidekiq', require: %w(sidekiq sidekiq/web)
+gem 'sidekiq-worker-killer'
+gem 'sidekiq-limit_fetch'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'
@@ -46,15 +52,15 @@ gem 'activerecord_json_validator'
 gem 'attribute-defaults'
 gem 'addressable'
 
-# view
-## NPM packaging
+# rendering
+## NPM packaging for view render
 gem 'npm-pipeline-rails', '>= 1.8.1'
+
+## JSON
+gem 'oj'
 
 ## pagination
 gem 'kaminari', '>= 1.1.1'
-
-## decoration/serialization
-gem 'active_model_serializers', '>= 0.10.10'
 
 ## authentication
 gem 'excon', '~> 0.71.0'
@@ -66,6 +72,7 @@ gem 'pundit'
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
+gem 'airbrake'
 
 ## orthodox
 gem 'when_easter'
@@ -81,6 +88,7 @@ group :development do
    gem 'capistrano-bundler'
    gem 'capistrano-rake'
    gem 'capistrano-rvm'
+   gem 'capistrano-sidekiq'
    gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.7.0'
    gem 'pattern_generator', '>= 0.1.0'
@@ -113,7 +121,8 @@ group :test do
    gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
    gem 'simplecov', '>= 0.17.1'
-   gem 'database_cleaner'
+   gem 'database_cleaner-active_record'
+   gem 'database_cleaner-redis'
    gem "launchy"
    gem "capybara"
    gem 'capybara-webkit', '>= 1.15.1'

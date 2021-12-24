@@ -19,7 +19,7 @@ export default class DynamicField extends Component {
       value_name: null,
       name: 'text_id',
       humanized_name: 'text',
-      value: undefined,
+      value: "",
       humanized_value: undefined,
       wrapperClassName: null,
       title: null,

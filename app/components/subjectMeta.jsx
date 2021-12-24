@@ -19,16 +19,18 @@ export const subjectMeta = {
       key: {
          title: 'Ключ',
       },
-      kind_name: {
+      kind_title: {
          title: 'Вид',
       },
       name: {
          title: 'Наименование',
-         value: makeName
+         value: makeName,
+         source: 'names',
       },
       description: {
          title: 'Описание',
-         value: makeDescription
+         value: makeDescription,
+         source: 'descriptions',
       },
    },
    form: {
@@ -46,10 +48,10 @@ export const subjectMeta = {
          display_scheme: '12-6-6-6',
          title: 'Вид',
          pathname: 'short_subjects',
-         humanized_name: 'kind_name',
+         humanized_name: 'kind_title',
          placeholder: 'Начни ввод вида предмета...',
          context_value: { k: "SubjectKind" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          validations: {
             'Вид из списка должен быть выбран': matchEmptyObject,
@@ -66,9 +68,10 @@ export const subjectMeta = {
       },
       names: {
          kind: 'collection',
-         title: 'Имя',
+         title: 'Имена',
          action: 'Добавь имя',
          placeholder: 'Введи имя',
+         filter: { type: "Appellation" },
          display_scheme: '12-12-12-12',
          meta: {
             id: {
@@ -91,7 +94,7 @@ export const subjectMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -106,7 +109,7 @@ export const subjectMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -120,7 +123,9 @@ export const subjectMeta = {
          kind: 'collection',
          title: 'Описания',
          action: 'Добавь описание',
+         single: 'Описание',
          placeholder: 'Введи описание',
+         filter: { type: "Description" },
          display_scheme: '12-12-12-12',
          meta: {
             id: {
@@ -143,7 +148,7 @@ export const subjectMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -158,7 +163,7 @@ export const subjectMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {

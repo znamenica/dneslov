@@ -38,7 +38,9 @@ export const memoryMeta = {
       },
       description: {
          title: 'Описание',
-         value: makeDescription
+         value: makeDescription,
+         source: 'descriptions',
+         filter: { type: "Description" },
       },
    },
    form: {
@@ -70,7 +72,7 @@ export const memoryMeta = {
          placeholder: 'Введи краткое имя',
          validations: {
             "Краткое имя отсутствует": /^$/,
-            "В кратком имени допустимы только русские кириллические буквы, цифры, дефис и пробел": /[^А-Яа-яЁё0-9 \-]/,
+            "В кратком имени допустимы только русские кириллические буквы, цифры, дефис, запятая и пробел": /[^А-Яа-яЁё0-9 \,\-]/,
             "Все слова должны начинаться либо с заглавной буквы, либо с цифры": /(^[^0-9А-ЯЁ]|\s[^0-9А-ЯЁа-яё])/g,
          }
       },
@@ -95,8 +97,8 @@ export const memoryMeta = {
          pathname: 'short_places',
          humanized_name: 'place',
          name: 'place_id',
-         key_name: 'name',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          placeholder: 'Начни ввод наименования места...',
       },
       council: {
@@ -118,8 +120,8 @@ export const memoryMeta = {
          display_scheme: '12-6-6-6',
          placeholder: 'Начни ввод имени образа...',
          pathname: 'short_memoes',
-         key_name: 'memo',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
       },
       descriptions: {
          kind: 'collection',
@@ -127,6 +129,7 @@ export const memoryMeta = {
          action: 'Добавь описание',
          single: 'Описание',
          placeholder: 'Введи описание',
+         filter: { type: "Description" },
          display_scheme: '12-12-12-12',
          meta: {
             id: {
@@ -149,7 +152,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -164,7 +167,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -180,6 +183,8 @@ export const memoryMeta = {
          title: 'Заметки',
          action: 'Добавь заметку',
          textField: true,
+         source: "descriptions",
+         filter: { type: "Note" },
          validations: {
             "Языки в заметках не могут совпадать": matchLanguages,
             "Азбуки в заметках не могут совпадать": matchAlphabeths,
@@ -205,7 +210,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -220,7 +225,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -236,6 +241,8 @@ export const memoryMeta = {
          title: 'Бытия',
          action: 'Добавь ссылку на бытие',
          placeholder: 'Введи ссылку на бытие',
+         source: "links",
+         filter: { type: "BeingLink" },
          meta: {
             id: {
                kind: 'hidden',
@@ -257,7 +264,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -272,7 +279,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -288,6 +295,8 @@ export const memoryMeta = {
          title: 'Вики-ссылки',
          action: 'Добавь вики-ссылку',
          placeholder: 'Введи вики-ссылку',
+         source: "links",
+         filter: { type: "WikiLink" },
          meta: {
             id: {
                kind: 'hidden',
@@ -309,7 +318,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -324,7 +333,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -340,6 +349,8 @@ export const memoryMeta = {
          title: 'Отечники',
          action: 'Добавь отечник',
          placeholder: 'Введи ссылку на отечник',
+         source: "links",
+         filter: { type: "PatericLink" },
          meta: {
             id: {
                kind: 'hidden',
@@ -361,7 +372,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -376,7 +387,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -405,8 +416,8 @@ export const memoryMeta = {
                display_scheme: '12-4-3-3',
                placeholder: 'Начни ввод имени...',
                pathname: 'short_names',
-               key_name: 'name',
-               value_name: 'id',
+               key_name: 'value',
+               value_name: 'key',
                validations: {
                   'Имя должно быть задано':  matchEmptyObject,
                }
@@ -419,7 +430,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'state_name',
                context_value: { k: "NameKind" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                validations: {
                   'Пункт из списка должен быть выбран': /^$/,
@@ -462,7 +473,7 @@ export const memoryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'kind_name',
                context_value: { k: "EventKind" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                validations: {
                   'Пункт из списка должен быть выбран': matchEmptyObject,
@@ -484,8 +495,8 @@ export const memoryMeta = {
                pathname: 'short_places',
                humanized_name: 'place',
                name: 'place_id',
-               key_name: 'name',
-               value_name: 'id',
+               key_name: 'value',
+               value_name: 'key',
                placeholder: 'Начни ввод наименования места...',
             },
             item_id: {
@@ -495,8 +506,8 @@ export const memoryMeta = {
                pathname: 'short_items',
                humanized_name: 'item',
                name: 'item_id',
-               key_name: 'name',
-               value_name: 'id',
+               key_name: 'value',
+               value_name: 'key',
                placeholder: 'Начни ввод наименования предмета...',
             },
             person_name: {
@@ -531,7 +542,7 @@ export const memoryMeta = {
                      pathname: 'short_subjects',
                      humanized_name: 'language',
                      context_value: { k: "Language" },
-                     key_name: 'name',
+                     key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования языка...',
                      validations: {
@@ -546,7 +557,7 @@ export const memoryMeta = {
                      pathname: 'short_subjects',
                      humanized_name: 'alphabeth',
                      context_value: { k: "Alphabeth" },
-                     key_name: 'name',
+                     key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования азбуки...',
                      validations: {
@@ -582,7 +593,7 @@ export const memoryMeta = {
                      pathname: 'short_subjects',
                      humanized_name: 'language',
                      context_value: { k: "Language" },
-                     key_name: 'name',
+                     key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования языка...',
                      validations: {
@@ -597,7 +608,7 @@ export const memoryMeta = {
                      pathname: 'short_subjects',
                      humanized_name: 'alphabeth',
                      context_value: { k: "Alphabeth" },
-                     key_name: 'name',
+                     key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования азбуки...',
                      validations: {

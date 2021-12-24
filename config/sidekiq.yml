@@ -1,0 +1,13 @@
+---
+:concurrency: 5
+:verbose: false
+developent:
+   :verbose: true
+:max_retries: 5
+:poll_interval_average: 2
+:average_scheduled_poll_interval: 2
+:backtrace: true
+:queues:
+ - [caching, 2]
+ - default
+ - low

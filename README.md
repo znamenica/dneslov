@@ -18,11 +18,16 @@ application up and running.
 [![Homepage](http://img.shields.io/badge/home-dneslov.org-blue.svg)](http://dneslov.org)
 [![GitHub](http://img.shields.io/badge/github-znamenica/dneslov-blue.svg)](http://github.com/znamenica/dneslov)
 [![MIT License](http://b.repl.ca/v1/License-MIT-blue.png)](LICENSE)
-
 [![Build Status](https://api.travis-ci.org/znamenica/dneslov.png?branch=master)](https://travis-ci.org/znamenica/dneslov.png)
 [![Code Climate](https://codeclimate.com/github/znamenica/dneslov/badges/gpa.svg)](https://codeclimate.com/github/znamenica/dneslov)
 [![Test Coverage](https://codeclimate.com/github/znamenica/dneslov/badges/coverage.svg)](https://codeclimate.com/github/znamenica/dneslov)
 [![Scan Coverage](https://scan.coverity.com/projects/17554/badge.svg?flat=1)](https://scan.coverity.com/projects/znamenica-dneslov)
+
+## Requirements
+
+1. libhiredis-devel
+2. redis
+3. libsnappy-devel
 
 ## Dump test DB to production
 

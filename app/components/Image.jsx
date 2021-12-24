@@ -26,7 +26,8 @@ export default class Image extends Component {
    onImageCompleted(e) {
       let errored = false
 
-      if (e.type === "error" || e.target.naturalHeight == 100 && e.target.naturalWidth == 200) {
+      // All images with height below 300px we treat as invalid
+      if (e.type === "error" || e.target.naturalHeight < 300) {
          errored = true
       }
 
@@ -34,6 +35,8 @@ export default class Image extends Component {
    }
 
    render() {
+      console.debug("[render] **", { 'this.props': this.props, 'this.state': this.state })
+
       return (
          !this.state.errored && <img
             alt={this.props.alt}

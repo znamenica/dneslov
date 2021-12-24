@@ -1,7 +1,9 @@
 const GetSlugColor = {
-   getSlugColor(order) {
+   getSlugColor(orderIn) {
       const poses = [ "0".populateTo("9"), "а".populateTo("е"), "ё", "ж".populateTo("я") ].flat().reverse()
+      const order = orderIn || ""
 
+      console.warn("No orderIn argument specified for #getSlugColor method")
       let coeff = 4.0 / poses.length,
           colors = order.split("").map(chr => { return 12 + coeff * poses.indexOf(chr)}),
           codes = colors.map(c => {

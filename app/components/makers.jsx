@@ -1,9 +1,15 @@
 const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Translation', 'Sanctification']
 
-export function makeTweet(value, props) {
-   let tweets = props.locales.map((locale) => {
-      return value.tweets.reduce((res, tweet) => {
-         return res || locale === tweet.language_code && tweet.text }, null)
+export function makeTweet(value, locales, source = 'tweets', filter = null) {
+   let tweets = locales.map((locale) => {
+      return value[source].reduce((res, text) => {
+         return res ||
+            locale === text.language_code &&
+            (!filter || Object.keys(filter).reduce((r, key) => {
+               return r || text[key] === filter[key]
+            }, null)) &&
+            text.text
+      }, null)
    }).filter((e) => { return e })
 
    if (tweets[0] && tweets[0].length > 27) {
@@ -13,10 +19,16 @@ export function makeTweet(value, props) {
    }
 }
 
-export function makeNote(value, props) {
-   let notes = props.locales.map((locale) => {
-      return value.notes.reduce((res, note) => {
-         return res || locale === note.language_code && note.text }, null)
+export function makeNote(value, locales, source = 'notes', filter = null) {
+   let notes = locales.map((locale) => {
+      return value[source].reduce((res, text) => {
+         return res ||
+            locale === text.language_code &&
+            (!filter || Object.keys(filter).reduce((r, key) => {
+               return r || text[key] === filter[key]
+            }, null)) &&
+            text.text
+      }, null)
    }).filter((e) => { return e })
 
    if (notes[0] && notes[0].length > 27) {
@@ -26,19 +38,32 @@ export function makeNote(value, props) {
    }
 }
 
-export function makeName(value, props) {
-   let names = props.locales.map((locale) => {
-      return value.names.reduce((res, name) => {
-         return res || locale === name.language_code && name.text }, null)
+export function makeName(value, locales, source = 'names', filter = null) {
+   let names = locales.map((locale) => {
+      return value[source].reduce((res, text) => {
+         return res ||
+            locale === text.language_code &&
+            (!filter || Object.keys(filter).reduce((r, key) => {
+               return r || text[key] === filter[key]
+            }, null)) &&
+            text.text
+      }, null)
    }).filter((e) => { return e })
 
    return names[0] || ''
 }
 
-export function makeTitle(value, props) {
-   let titles = props.locales.map((locale) => {
-      return value.titles.reduce((res, title) => {
-         return res || locale === title.language_code && title.text }, null)
+// filter: hash of key: value pairs to filter out the source
+export function makeTitle(value, locales, source = 'titles', filter = null) {
+   let titles = locales.map((locale) => {
+      return value[source].reduce((res, text) => {
+         return res ||
+            locale === text.language_code &&
+            (!filter || Object.keys(filter).reduce((r, key) => {
+               return r || text[key] === filter[key]
+            }, null)) &&
+            text.text
+      }, null)
    }).filter((e) => { return e })
 
    return titles[0] || ''
@@ -60,10 +85,16 @@ export function makeCouncil(value) {
    }
 }
 
-export function makeDescription(value, props) {
-   let descriptions = props.locales.map((locale) => {
-      return value.descriptions.reduce((res, description) => {
-         return res || locale === description.language_code && description.text }, null)
+export function makeDescription(value, locales, source = 'descriptions', filter = null) {
+   let descriptions = locales.map((locale) => {
+      return value[source].reduce((res, text) => {
+         return res ||
+            locale === text.language_code &&
+            (!filter || Object.keys(filter).reduce((r, key) => {
+               return r || text[key] === filter[key]
+            }, null)) &&
+            text.text
+      }, null)
    }).filter((e) => { return e })
 
    if (descriptions[0] && descriptions[0].length > 27) {
@@ -72,4 +103,3 @@ export function makeDescription(value, props) {
       return descriptions[0] || ''
    }
 }
-

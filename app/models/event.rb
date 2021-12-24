@@ -10,6 +10,8 @@
 #
 class Event < ActiveRecord::Base
    extend Informatible
+   extend TotalSize
+   extend AsJson
 
    NOTICE = [
       'Repose',
@@ -80,6 +82,8 @@ class Event < ActiveRecord::Base
         .or( Appellation.merge(this.kind.names) )
      .order( :describable_type )
    end, primary_key: nil, class_name: :Description
+   has_many :event_kinds, primary_key: :kind_code, foreign_key: :key, foreign_type: :kind_code, class_name: :Subject
+
 
    # synod : belongs_to
    # czin: has_one/many
@@ -97,6 +101,74 @@ class Event < ActiveRecord::Base
          where("descriptions_subjects.text ~* ?", "\\m#{text}.*"))))) ;end
    scope :by_memory_id, -> memory_id do
       where(memory_id: memory_id) ;end
+
+   # required for short list
+   scope :with_key, -> _ do
+      selector = [ 'events.id AS _key' ]
+
+      select(selector).group('_key').reorder("_key") ;end
+
+   scope :with_value, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+
+  #RssFeed
+  #  .arel_table
+  #  .join(RssFeedUser.arel_table, Arel::Nodes::OuterJoin)
+  #  .on(RssFeed.arel_table[:id].eq(RssFeedUser.arel_table[:rss_feed_id]))
+  #  .where(RssFeedUser.arel_table[:user_id].eq(nil))
+  #  .project('rss_feeds.*')
+
+      #car = Q.arel_table
+     # self.join(Subject.arel_table, Arel::Nodes::OuterJoin)
+      #    .as(:event_kinds)
+      #    .on(Event.arel_table[:kind_code].eq(Subject.arel_table[:key]))
+      #    .and(Subject.arel_table[:key].eq("EventKind"))
+      #    .join(Description.arel_table, Arel::Nodes::OuterJoin)
+      #    .as(:titles)
+      #    .on(Description.arel_table[:id].not.eq(nil))
+      #    .and(Subject.arel_table[:key].eq("EventKind"))
+
+     # join = "LEFT OUTER JOIN subjects AS event_kinds
+     #                      ON event_kinds.kind_code = 'EventKind'
+     #                     AND event_kinds.key = events.kind_code
+      join = "LEFT OUTER JOIN descriptions AS titles
+                           ON titles.id IS NOT NULL
+                          AND (titles.describable_id = events.id
+                          AND titles.describable_type = 'Event'
+                          AND titles.type = 'Title'
+                           OR titles.describable_id = event_kinds.id
+                          AND titles.describable_type = 'Subject'
+                          AND titles.type = 'Appellation')
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = titles.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Event'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = titles.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Event'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      selector << "titles.text || ' (' || events.happened_at || ')' AS _value"
+      #aa.as("event_kinds")[:kind_code]
+
+      event_kinds = Subject.arel_table
+      event_kinds.table_alias = "event_kinds"
+      events = Event.arel_table
+      # binding.pry
+      #event_kinds = event_kinds_join.as("event_kinds")
+      aa = event_kinds.join(event_kinds, Arel::Nodes::OuterJoin).on(events[:kind_code].eq(event_kinds[:key]).and(event_kinds[:key].eq("EventKind")))
+      #binding.pry
+      #includes(:event_kinds).references(:event_kinds).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
+      #left_outer_joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
+      joins(aa.join_sources).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
+
 
    scope :with_description, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -296,7 +368,8 @@ class Event < ActiveRecord::Base
                               WHERE cantoes.id = service_cantoes.canto_id
                                 AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _cantoes"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    accepts_nested_attributes_for :place, reject_if: :all_blank
    accepts_nested_attributes_for :coordinate, reject_if: :all_blank
@@ -308,10 +381,30 @@ class Event < ActiveRecord::Base
 
    validates_presence_of :kind, :kind_code
 
+   ATTRS = {
+      created_at: nil,
+      updated_at: nil,
+   }
+
+   def as_json options = {}
+      attrs = ATTRS.merge(self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types))
+      original = super(options.merge(except: attrs.keys))
+
+      attrs.reduce(original) do |r, (name, rule)|
+         if /^_(?<realname>.*)/ =~ name
+            r.merge(realname => read_attribute(name).as_json)
+         elsif rule.is_a?(Proc)
+            r.merge(name => rule[self])
+         else
+            r
+         end
+      end
+   end
+
    def self.year_date_for year_date, date_in, julian
       return nil if date_in.blank?
 
-      date = date_in.is_a?(Time) && date_in || Time.parse(date_in)
+      date =  [ Time, Date, DateTime ].any? {|c| date_in.is_a?(c) } && date_in || Time.parse(date_in)
       if /(?<day>\d+)\.(?<month>\d+)%(?<weekday>\d+)$/ =~ year_date
          base_date = Date.parse("#{date.year}-#{month}-#{day}")
          base_offset = weekday.to_i - base_date.wday
@@ -321,4 +414,7 @@ class Event < ActiveRecord::Base
          easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
          (easter + offset.to_i.days).strftime("%d.%m")
       else
-         year_date ;end;end;end
+         year_date
+      end
+   end
+end

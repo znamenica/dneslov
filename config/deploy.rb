@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.13.0"
+lock "3.16.0"
 
 set :user, 'majioa'
 set :application, "dneslov"
@@ -66,4 +66,5 @@ namespace :deploy do
    after 'nginx:site:add', 'nginx:site:enable'
    after 'nginx:site:enable', 'nginx:restart'
    after 'nginx:restart', 'deploy:restart'
+   after "deploy:restart", "sidekiq:restart"
 end

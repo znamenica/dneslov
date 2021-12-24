@@ -23,75 +23,97 @@ class Admin::CommonController < ApplicationController
    has_scope :q, only: %i(index)
 
    def all
+      # binding.pry
       respond_to do |format|
-         format.json { render :index, json: @objects.limit(500),
-                                      locales: @locales,
-                                      serializer: Admin::AutocompleteSerializer,
-                                      total: @objects.total_count,
-                                      each_serializer: short_object_serializer } ;end;end
+         format.json do
+            render :index,
+               plain: {
+                     total: @objects.total_size,
+                     list: @objects.limit(500).jsonize(only: %i(key value)),
+                  }.to_json
+         end
+      end
+   end
 
    # GET /<objects>/
    def index
-      # binding.pry
+      #binding.pry
       respond_to do |format|
-         format.json { render :index, json: @objects, locales: @locales,
-                                      serializer: objects_serializer,
-                                      total: @objects.total_count,
-                                      page: @page,
-                                      each_serializer: object_serializer }
-         format.html { render :index } end;end
-
-
+         format.json do
+            render plain: {
+               list: @objects.jsonize(context),
+               page: @page,
+               total: @objects.total_size
+            }.to_json
+         end
+         format.html { render :index }
+      end
+   end
 
    # POST /<objects>/create
    def create
       @object.save!
 
-      render json: prepare_object( @object ),
-             serializer: object_serializer,
-             locales: @locales ;end
+      #TODO: render json: @object.jsonize(context)
+      render json: prepare_object(@object.reload).jsonize(context)
+   end
 
    # PUT /<objects>/1
    def update
-      @object.update!( permitted_params )
+      @object.update!(permitted_params)
 
-      render json: prepare_object( @object ),
-             serializer: object_serializer,
-             locales: @locales ;end
+      #binding.pry
+      #TODO: render json: @object.jsonize(context)
+      render json: prepare_object(@object.reload).jsonize(context)
+   end
 
    # GET /<objects>/1
    def show
       respond_to do |format|
-         format.json { render :show, json: @object, locales: @locales,
-                                     serializer: object_serializer } ;end;end
+         format.json { render :show, json: @object.jsonize(context) }
+      end
+   end
 
    # DELETE /<objects>/1
    def destroy
-      @object.destroy
+      @object.destroy!
 
       respond_to do |format|
-         format.json { render :show, json: @object, locales: @locales,
-                                     serializer: object_serializer } ;end;end
+         format.json { render :show, json: @object.dejsonize(context) }
+      end
+   end
 
    def dashboard
    end
 
    protected
 
+   def short_with_list
+      %w(with_key with_value)
+   end
+
+   def with_list
+      send({
+         "all" => :short_with_list,
+         "index" => :index_with_list,
+         "create" => :index_with_list,
+         "update" => :index_with_list,
+         "show" => :index_with_list,
+         "destroy" => :index_with_list,
+      }[action_name])
+   end
+
+   # TODO SQLize
+   def desc record
+      record._names.find {|d| @locales.include?(d["language_code"].to_sym) }&.fetch("text", "")
+   end
+
+   def context
+      @context ||= { locales: @locales }
+   end
+
    def model
      self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
-   end
-
-   def short_object_serializer
-     "Admin::Short#{model}Serializer".constantize
-   end
-
-   def object_serializer
-     "Admin::#{model}Serializer".constantize
-   end
-
-   def objects_serializer
-     "Admin::#{model.to_s.pluralize}Serializer".constantize
    end
 
    def validate_session
@@ -106,7 +128,7 @@ class Admin::CommonController < ApplicationController
    def unprocessable_entity e
       Rails.logger.error("#{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}")
 
-      errors = @object.errors.any? && @object.errors || e.to_s
+      errors = @object && @object.errors.any? && @object.errors || e.to_s
       render json: errors, status: :unprocessable_entity ;end
 
    def set_page
@@ -128,29 +150,35 @@ class Admin::CommonController < ApplicationController
    def include_list
       [] ;end
 
-   def with_list
-      [] ;end
-
    def issue_with query, with_method
       query.send( with_method, context )
    rescue ArgumentError
-      query.send( with_method ) ;end
+      query.send( with_method )
+   end
 
    def prepare_object object
       prepare_objects.where(id: object.id).first
    end
 
+   def prepare_pure_objects
+      pre = include_list.reduce( apply_scopes( model )) { |q, i| q.includes( i ) }
+   end
+
    def prepare_objects
       pre = include_list.reduce( apply_scopes( model )) { |q, i| q.includes( i ) }
 
-      with_list.reduce( pre ) { |q, with_method| issue_with( q, with_method )} ;end
+      with_list.reduce( pre ) { |q, with_method| issue_with( q, with_method )}
+   end
 
    def fetch_objects
-      @objects = prepare_objects.page( params[ :p ]) ;end
+      @objects = prepare_objects.page( params[ :p ])
+   end
 
    def fetch_object
       if params[:slug]
-         @object ||= prepare_objects.by_slug(params[:slug]).first
+         @object ||= prepare_objects.find_by_slug(params[:slug])
       else
-         @object ||= prepare_objects.find(params[:id]) ;end ||
-            raise(ActiveRecord::RecordNotFound) ;end;end
+         @object ||= prepare_objects.find_by_pk(params[:id])
+      end || raise(ActiveRecord::RecordNotFound)
+   end
+end

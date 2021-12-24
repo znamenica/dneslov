@@ -1,1 +1,0 @@
-class MemoSpansSerializer < PagedCollectionSerializer ;end

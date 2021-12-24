@@ -7,7 +7,7 @@ server "dneslov", port: "222", user: "www-data", roles: %w{app db web}, primary:
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-set :pty, true
+set :pty, false
 
 # nginx
 set :nginx_domains, "dneslov.com localhost"
@@ -32,7 +32,26 @@ set :nginx_ssl_certificate_key, 'dneslov.key'
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
+# Sidekiq
+:sidekiq_roles => :app
+:sidekiq_default_hooks => true
+:sidekiq_pid => File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') # ensure this path exists in production before deploying.
+:sidekiq_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+:sidekiq_log => File.join(shared_path, 'log', 'sidekiq.log')
+# single config
+:sidekiq_config => 'config/sidekiq.yml'
+:sidekiq_concurrency => 25
+:sidekiq_queue => %w(default high low)
+:sidekiq_processes => 1 # number of systemd processes you want to start
 
+# sidekiq systemd options
+:sidekiq_service_templates_path => 'config/deploy/templates' # to be used if a custom template is needed (filaname should be #{fetch(:sidekiq_service_unit_name)}.service.capistrano.erb or sidekiq.service.capistrano.erb
+:sidekiq_service_unit_name => 'sidekiq'
+:sidekiq_service_unit_user => :user # :system
+:sidekiq_enable_lingering => true
+:sidekiq_lingering_user => nil
+
+:sidekiq_user => nil #user to run sidekiq as
 
 # Configuration
 # =============

@@ -19,6 +19,8 @@ export const calendaryMeta = {
       title: {
          title: 'Имя',
          value: makeTitle,
+         source: 'descriptions',
+         filter: { type: "Appellation" },
       },
       licit: {
          title: 'thumb_up',
@@ -68,7 +70,7 @@ export const calendaryMeta = {
          pathname: 'short_subjects',
          humanized_name: 'language',
          context_value: { k: "Language" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования языка...',
          validations: {
@@ -83,7 +85,7 @@ export const calendaryMeta = {
          pathname: 'short_subjects',
          humanized_name: 'alphabeth',
          context_value: { k: "Alphabeth" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования азбуки...',
          validations: {
@@ -102,6 +104,8 @@ export const calendaryMeta = {
          title: "Имена",
          action: "Добавь имя",
          display_scheme: '12-12-12-12',
+         source: "descriptions",
+         filter: { type: "Appellation" },
          validations: {
             'Минимум одно имя должно быть задано':  matchEmptyCollection,
             'Языки в именах не могут совпадать': matchLanguages,
@@ -130,7 +134,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -145,7 +149,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -160,6 +164,7 @@ export const calendaryMeta = {
          title: "Описания",
          action: "Добавь описание",
          display_scheme: '12-12-12-12',
+         filter: { type: "Description" },
          validations: {
             'Языки в описаниях не могут совпадать': matchLanguages,
             'Азбуки в описаниях не могут совпадать': matchAlphabeths,
@@ -187,7 +192,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -202,7 +207,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -217,6 +222,8 @@ export const calendaryMeta = {
          title: "Вики-ссылки",
          action: "Добавь вики-ссылку",
          display_scheme: '12-12-12-12',
+         source: "links",
+         filter: { type: "WikiLink" },
          validations: {
             'Языки в описаниях не могут совпадать': matchLanguages,
             'Азбуки в описаниях не могут совпадать': matchAlphabeths,
@@ -243,7 +250,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -258,7 +265,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {
@@ -273,6 +280,8 @@ export const calendaryMeta = {
          title: "Ссылки",
          action: "Добавь ссылку",
          display_scheme: '12-12-12-12',
+         source: "links",
+         filter: { type: "BeingLink" },
          validations: {
             'Языки в описаниях не могут совпадать': matchLanguages,
             'Азбуки в описаниях не могут совпадать': matchAlphabeths,
@@ -299,7 +308,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
                validations: {
@@ -314,7 +323,7 @@ export const calendaryMeta = {
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
-               key_name: 'name',
+               key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
                validations: {

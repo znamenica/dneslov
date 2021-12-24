@@ -51,7 +51,7 @@ export const nameMeta = {
          pathname: 'short_subjects',
          humanized_name: 'language',
          context_value: { k: "Language" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования языка...',
          validations: {
@@ -66,7 +66,7 @@ export const nameMeta = {
          pathname: 'short_subjects',
          humanized_name: 'alphabeth',
          context_value: { k: "Alphabeth" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования азбуки...',
          validations: {
@@ -77,12 +77,12 @@ export const nameMeta = {
       bond_to_id: {
          kind: 'dynamic',
          title: 'Связаное имя',
-         humanized_name: 'bond_to',
+         humanized_name: 'bond_to_name',
          display_scheme: '12-6-4-2',
          placeholder: 'Начни ввод имени...',
          pathname: 'short_names',
-         key_name: 'name',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
          validations: {
             'Связаное имя не должно соответствовать названию текущего имени': (value, context) => {
                return value && value == context.id
@@ -97,7 +97,7 @@ export const nameMeta = {
          placeholder: 'Начни ввод связки...',
          pathname: 'short_subjects',
          context_value: { k: "NameBind" },
-         key_name: 'name',
+         key_name: 'value',
          value_name: 'key',
          validations: {
             'Вид связки из списка должен быть выбран': matchEmptyObject,
@@ -111,13 +111,13 @@ export const nameMeta = {
       },
       root_id: {
          kind: 'dynamic',
-         humanized_name: 'root',
+         humanized_name: 'root_name',
          title: 'Корневое имя',
          display_scheme: '12-6-4-2',
          placeholder: 'Начни ввод имени...',
          pathname: 'short_names',
-         key_name: 'name',
-         value_name: 'id',
+         key_name: 'value',
+         value_name: 'key',
       },
    }
 }

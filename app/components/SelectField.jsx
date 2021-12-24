@@ -26,11 +26,12 @@ export default class SelectField extends Component {
 
    // system
    componentDidMount() {
-      console.log("[componentDidMount] <<<")
-      this.select = FormSelect.init(this.$select, { dropdownOptions: {
-         coverTrigger: true,
-         container: document.querySelector(".modal-content"),
-      } })
+      this.select = FormSelect.init(this.$select, {
+         optionParent: this.$parent,
+         dropdownOptions: {
+            coverTrigger: true,
+            container: document.querySelector(".modal-content"),
+         }})
       this.$wrap = this.$parent.querySelector('.select-wrapper')
    }
 
@@ -73,13 +74,13 @@ export default class SelectField extends Component {
                name={this.props.name}
                defaultValue={this.props.value || ''}
                required='required'
-               onChange={this.onChange.bind(this)} >
-               {Object.keys(this.props.codeNames).map((option) =>
-                  <option
-                     {...{[option.length == 0 && 'disabled']: 'disabled'}}
-                     key={option}
-                     value={option} >
-                     {this.props.codeNames[option]}</option>)}</select>
+               onChange={this.onChange.bind(this)} />
+            {Object.keys(this.props.codeNames).map((option) =>
+               <option
+                  {...{[option.length == 0 && 'disabled']: 'disabled'}}
+                  key={option}
+                  value={option} >
+                  {this.props.codeNames[option]}</option>)}
             <label
                className='active'
                htmlFor={this.props.name}>

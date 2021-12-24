@@ -16,7 +16,7 @@ class UriValidator < ActiveModel::EachValidator
       if not response.status.eql?(200)
          raise Excon::Error::Socket ;end
 
-   rescue URI::InvalidURIError
+   rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
       record.errors[ attribute ] <<
          I18n.t( 'activerecord.errors.invalid_uri', uri: value )
 

@@ -1,7 +1,7 @@
 class Admin::NamesController < Admin::CommonController
    protected
 
-   def with_list
+   def index_with_list
       %w(with_bind_kind_name with_bond_to_name with_root_name with_locale_names) ;end
 
    def permitted_params

@@ -1,3 +1,4 @@
 class AuthController < ApplicationController
    include UloginAuth
-   include GithubAuth ;end
+   include GithubAuth
+end

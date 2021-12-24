@@ -17,11 +17,14 @@
 
 То(/^значение свойства "([^"]*)" ([^"]*?) строго попадает в размер "([^"]*)"$/) do |prop, kind, range|
    expect( model_of( kind ).new ).to validate_inclusion_of( prop ).
-      in_range( eval( range ) ) ;end
+      in_range(eval(range))
+end
 
 То(/^свойств[оа] "([^"]*)" .*? не мо(?:же|гу)т быть пустыми?$/) do |props|
    props.split(/,\s+/).each do |prop|
-      expect( subject ).to validate_presence_of( prop ) ;end ;end
+      expect(subject).to validate_presence_of(prop)
+   end
+end
 
 То(/^.*? имеет столб(?:ец|цы) "([^"]*)" рода "(целый|строка|текст)"$/) do |names, type_name|
    type = get_type( type_name )
