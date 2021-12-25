@@ -80,9 +80,9 @@ jobs:
        - run:
             name: Run tests
             command: |
-               ./cc-test-reporter before-build
+               ./tmp/cc-test-reporter before-build
                bundle exec rake
-               ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
+               ./tmp/cc-test-reporter after-build --coverage-input-type clover --exit-code $?
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
