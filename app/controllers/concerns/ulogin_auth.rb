@@ -29,9 +29,12 @@ module UloginAuth
 
       redirect_to dashboard_path(new_params)
    rescue IOError => error
-      redirect_to dashboard_path(error: error.message) ;end
+      redirect_to dashboard_path(error: error.message)
+   end
 
    private
 
    def http_host
-      Rails.application.secrets.github[:http_host] ;end;end
+      ENV["GITHUB_HTTP_HOST"]
+   end
+end

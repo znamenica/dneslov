@@ -1,6 +1,6 @@
 <%= react_component 'Dashboard', locales: @locales,
-                                 client_id: Rails.application.secrets.github[:client_id],
-                                 redirect_url: Rails.application.secrets.github[:redirect_url],
+                                 client_id: ENV["GITHUB_CLIENT_ID"],
+                                 redirect_url: ENV["GITHUB_REDIRECT_URL"],
                                  login: session['login'],
                                  name: session['name'],
                                  avatar_url: session['avatar_url'],
