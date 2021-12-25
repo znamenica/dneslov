@@ -84,8 +84,12 @@ jobs:
             name: Wait for DB
             command: dockerize -wait tcp://localhost:5432 -timeout 1m
        - run:
+            name: Start Redis
+            command: sudo redis-server --daemonize yes
+       - run:
             name: Database setup
             command: bundle exec rails db:schema:load --trace
+       - run: redis-cli ping
        # Run rspec in parallel
        - run:
             name: Run tests
