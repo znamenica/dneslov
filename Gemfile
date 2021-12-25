@@ -126,7 +126,8 @@ group :test do
    gem 'shoulda-matchers', '~> 4.0'
    gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
-   gem 'simplecov', '>= 0.17.1'
+   gem 'simplecov', '~> 0.21'
+   gem 'simplecov_json_formatter'
    gem 'database_cleaner-active_record'
    gem 'database_cleaner-redis'
    gem "launchy"

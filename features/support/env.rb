@@ -9,6 +9,8 @@ require 'rack'
 require 'rack/test'
 require 'database_cleaner/cucumber'
 require 'cucumber/rails'
+require 'simplecov'
+require "simplecov_json_formatter"
 require 'shoulda-matchers/cucumber'
 require 'factory_bot'
 require 'faker'
@@ -99,3 +101,8 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # rediable processor setup
 Redisable.processor_kind = :inline
+
+# simplecov
+SimpleCov.start 'rails'
+SimpleCov.command_name "features" + (ENV['TEST_ENV_NUMBER'] || '')
+SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter

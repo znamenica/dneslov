@@ -22,6 +22,17 @@ jobs:
        # - run: gem install bundler -v 2.1.4
        - run: bundle install
        # - run: yarn
+       - run:
+            name: Setup Code Climate test-reporter
+            command: |
+               # download test reporter as a static binary
+               mkdir -p tmp/
+               curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
+               chmod +x ./tmp/cc-test-reporter
+       - persist_to_workspace:
+            root: tmp
+            paths:
+             - cc-test-reporter
    test:  # our next job, called "test"
       # we run "parallel job containers" to enable speeding up our tests;
       # this splits our tests across multiple containers.
@@ -49,8 +60,11 @@ jobs:
          PARALLEL_WORKERS: "1"
          REDIS_CACHE_URL: redis://127.0.0.1:6379
          REDIS_QUEUE_URL: redis://127.0.0.1:6379
+         CC_TEST_REPORTER_ID: $CUSTOM_CC_TEST_REPORTER_ID
       steps:
        - checkout
+       - attach_workspace:
+            at: ~/repo/tmp
        - ruby/install-deps
          # - node/install-packages:
          #   pkg-manager: yarn
@@ -64,7 +78,11 @@ jobs:
             command: bundle exec rails db:schema:load --trace
        # Run rspec in parallel
        - run:
-            command: bundle exec rake
+            name: Run tests
+            command: |
+               ./cc-test-reporter before-build
+               bundle exec rake
+               ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:

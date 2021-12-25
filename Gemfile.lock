@@ -525,7 +525,8 @@ DEPENDENCIES
   sidekiq
   sidekiq-limit_fetch
   sidekiq-worker-killer
-  simplecov (>= 0.17.1)
+  simplecov (~> 0.21)
+  simplecov_json_formatter
   snappy
   spring
   spring-commands-cucumber
