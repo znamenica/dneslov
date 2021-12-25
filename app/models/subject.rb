@@ -2,7 +2,7 @@ class Subject < ActiveRecord::Base
    extend TotalSize
    extend AsJson
 
-   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json').to_s
+   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json')
 
    attr_defaults meta: "{}"
 

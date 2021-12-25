@@ -5,7 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '2.7.1'
+ruby '2.7.5'
+
+## Bundler
+gem 'bundler', '2.2.32'
+
+
 
 ## Environment
 gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
@@ -23,6 +28,7 @@ gem 'uglifier', '>= 2.7.2'
 # gem 'jbuilder', '~> 2.7'
 ## bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 1.0.0', group: :doc
+gem 'rdoc', '~> 6.3.2', group: :doc
 
 # gem 'globalize'
 # gem 'globalize-versioning'

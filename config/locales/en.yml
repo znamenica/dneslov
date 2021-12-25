@@ -29,3 +29,8 @@ en:
          languages_arent_same: The languages of ifself, and descendant aren't the same
          invalid_uri: "%{uri} is invalid"
          inaccessible_uri: "is inaccessible at %{uri}"
+         models:
+            subject:
+               attributes:
+                  meta:
+                     invalid_json: "Invalid JSON"
