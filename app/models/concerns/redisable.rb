@@ -11,13 +11,17 @@ module Redisable
       }
 
       def processor_kind= value
-         self.processor = PROCESSORS[value]
+         self.processor = acquire_processor(PROCESSORS[value]) || Inline
+      end
+
+      def acquire_processor symbol
+         Object.constants.grep(/^#{symbol}$/).first && Redisable.const_get(symbol)
       end
 
       def processor
          @processor ||=
             PROCESSORS.reduce(nil) do |res, (_, prc)|
-               res || Object.constants.grep(/^#{prc}$/).first && Redisable.const_get(prc)
+               res || acquire_processor(prc)
             end || Inline
       end
 
