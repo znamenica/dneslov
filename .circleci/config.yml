@@ -42,7 +42,7 @@ jobs:
       # here we set TWO docker images.
       docker:
        - image: cimg/ruby:2.7.5-node
-       - image: circleci/redis:6.2.6-alpine
+       - image: cimg/redis:6.2.6
        - image: circleci/postgres:12
          auth:
             username: dneslov
