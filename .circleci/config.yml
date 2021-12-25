@@ -85,7 +85,7 @@ jobs:
             command: dockerize -wait tcp://localhost:5432 -timeout 1m
        - run:
             name: Start Redis
-            command: sudo redis-server --daemonize yes
+            command: sudo service redis-server restart
        - run:
             name: Database setup
             command: bundle exec rails db:schema:load --trace
