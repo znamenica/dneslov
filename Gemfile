@@ -131,7 +131,7 @@ group :test do
    gem 'database_cleaner-redis'
    gem "launchy"
    gem "capybara"
-   gem 'capybara-webkit', '>= 1.15.1'
+   # gem 'capybara-webkit', '>= 1.15.1'
    gem "email_spec"
    gem 'travis', '>= 1.8.10'
 end
