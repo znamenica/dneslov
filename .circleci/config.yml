@@ -14,8 +14,6 @@ jobs:
    build:
       docker:
        - image: cimg/ruby:2.7.5-node
-       - image: circleci/postgres:12
-       - image: circleci/redis:6.2.6-alpine
          environment:
             POSTGRES_HOST_AUTH_METHOD: trust
       executor: ruby/default
@@ -30,7 +28,16 @@ jobs:
       parallelism: 3
       # here we set TWO docker images.
       docker:
-       - image: cimg/ruby:2.7-node # this is our primary docker image, where step commands run.
+       - image: cimg/ruby:2.7.5-node
+       - image: circleci/postgres:12
+       - image: circleci/redis:6.2.6-alpine
+         environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
+       - image: cimg/ruby:2.7.5-node
+       - image: circleci/postgres:12
+       - image: circleci/redis:6.2.6-alpine
+         environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
          auth:
             username: mydockerhub-user
             password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
@@ -54,7 +61,6 @@ jobs:
        - ruby/install-deps
        - node/install-packages:
             pkg-manager: yarn
-            cache-key: "yarn.lock"
          # Here we make sure that the secondary container boots
          # up before we run operations on the database.
        - run:
