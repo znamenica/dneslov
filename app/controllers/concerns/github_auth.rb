@@ -8,6 +8,7 @@ module GithubAuth
       # params = {}
       user_info = authenticator[params[:code]]
 
+      Kernel.puts user_info.inspect
       session_params = {
          'login': user_info['login'],
          'name': user_info['name'],
@@ -19,7 +20,8 @@ module GithubAuth
       }
 
       update_session(session_params)
-      logger.debug ("Session rom Github: #{session.to_hash.inspect}")
+      Kernel.puts session_params.inspect
+      logger.debug ("Session from Github: #{session.to_hash.inspect}")
 
       # ... create user if it doesn't exist...
       #User.where(login: login).first_or_create!(
@@ -27,11 +29,13 @@ module GithubAuth
       #   avatar_url: avatar_url
       #)
       # ... and redirect to client app.
-      params = session.to_hash.select {|x| %w(_csrf_token login name avatar_url location info).include?(x) }
+      new_params = session.to_hash.select {|x| %w(_csrf_token login name avatar_url location info).include?(x) }
 
-      binding.pry
-      redirect_to dashboard_path(params)
+      Kernel.puts new_params.inspect
+      redirect_to dashboard_path(new_params)
    rescue Exception => error
+      Kernel.puts error.inspect
+      Kernel.puts dashboard_path(error: error.message)
       redirect_to dashboard_path(error: error.message)
    end
 
