@@ -42,7 +42,7 @@ jobs:
       # here we set TWO docker images.
       docker:
        - image: cimg/ruby:2.7.5-node
-       - image: cimg/redis:6.2.6
+       - image: circleci/redis:6.2.6
        - image: circleci/postgres:12
          auth:
             username: dneslov
@@ -83,13 +83,14 @@ jobs:
        - run:
             name: Wait for DB
             command: dockerize -wait tcp://localhost:5432 -timeout 1m
-       - run:
-            name: Start Redis
-            command: sudo service redis-server restart
+       - run: netstat -tnpl
+            #- run:
+            #name: Start Redis
+            #command: sudo service redis-server restart
        - run:
             name: Database setup
             command: bundle exec rails db:schema:load --trace
-       - run: redis-cli ping
+            # - run: redis-cli ping
        # Run rspec in parallel
        - run:
             name: Run tests

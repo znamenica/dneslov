@@ -2,7 +2,10 @@ module GithubAuth
    include ActiveSupport::Concern
 
    def github
+      Kernel.puts params.inspect
+      Kernel.puts params[:code].inspect
       authenticator = Auth::Github.new
+      # params = {}
       user_info = authenticator[params[:code]]
 
       session_params = {
@@ -26,8 +29,9 @@ module GithubAuth
       # ... and redirect to client app.
       params = session.to_hash.select {|x| %w(_csrf_token login name avatar_url location info).include?(x) }
 
+      binding.pry
       redirect_to dashboard_path(params)
-   rescue IOError => error
+   rescue Exception => error
       redirect_to dashboard_path(error: error.message)
    end
 
