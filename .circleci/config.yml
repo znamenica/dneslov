@@ -22,7 +22,6 @@ jobs:
        - checkout
        # - run: gem install bundler -v 2.1.4
        - run: bundle install
-       # - run: yarn
        - run:
             name: Setup Code Climate test-reporter
             command: |
@@ -76,10 +75,6 @@ jobs:
        - attach_workspace:
             at: ~/repo/tmp
        - ruby/install-deps
-         # - node/install-packages:
-         #   pkg-manager: yarn
-         # Here we make sure that the secondary container boots
-         # up before we run operations on the database.
        - run:
             name: Wait for DB
             command: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -92,13 +87,7 @@ jobs:
             command: |
                bundle exec rake
                ./tmp/cc-test-reporter format-coverage -t simplecov -o tmp/codeclimate.backend.json coverage/coverage.json
-               # ./tmp/cc-test-reporter sum-coverage tmp/codeclimate.*.json -p 2 -o tmp/codeclaimate.total.json
-               # ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.total.json
-               ./tmp/cc-test-reporter upload-coverage tmp/codeclimate.backend.json
-       - persist_to_workspace:
-            root: tmp
-            paths:
-             - codeclimate.frontend.json
+               ./tmp/cc-test-reporter upload-coverage -i tmp/codeclimate.backend.json
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
