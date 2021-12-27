@@ -62,15 +62,15 @@ jobs:
          PARALLEL_WORKERS: "1"
          REDIS_CACHE_URL: redis://127.0.0.1:6379
          REDIS_QUEUE_URL: redis://127.0.0.1:6379
-         CC_TEST_REPORTER_ID: $_CC_TEST_REPORTER_ID
-         GITHUB_CLIENT_URL: $_GITHUB_CLIENT_URL
-         JWT_SECRET: $_JWT_SECRET
-         GITHUB_HTTP_HOST: $_GITHUB_HTTP_HOST
-         GITHUB_REDIRECT_URL: $_GITHUB_REDIRECT_URL
-         GITHUB_ACCESS_TOKEN_URL: $_GITHUB_ACCESS_TOKEN_URL
-         GITHUB_CLIENT_ID: $_GITHUB_CLIENT_ID
-         GITHUB_CLIENT_SECRET: $_GITHUB_CLIENT_SECRET
-         GITHUB_USER_INFO_URL: $_GITHUB_USER_INFO_URL
+         # CC_TEST_REPORTER_ID - # must be defined internally
+         # GITHUB_CLIENT_URL - # must be defined internally
+         # JWT_SECRET - # must be defined internally
+         # GITHUB_HTTP_HOST - # must be defined internally
+         # GITHUB_REDIRECT_URL - # must be defined internally
+         # GITHUB_ACCESS_TOKEN_URL - # must be defined internally
+         # GITHUB_CLIENT_ID - # must be defined internally
+         # GITHUB_CLIENT_SECRET - # must be defined internally
+         # GITHUB_USER_INFO_URL - # must be defined internally
       steps:
        - checkout
        - attach_workspace:
