@@ -1,28 +1,13 @@
-/*
- * Webpack config with Babel, Sass and PostCSS support.
- */
+const merge = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { join, normalize } = require('path')
+const webpack = require('webpack')
+const PROD = global.env === 'production' || global.env === 'staging'
+const DEBUG = !PROD
 
-global.env = process.env.RAILS_ENV || process.env.NODE_ENV || 'development'
+global.rootpath = normalize(join(__dirname, '../../'))
 
-const path = require('path');
-const join = path.join
-var PROD = global.env === 'production'
-var DEBUG = !PROD
-
-if (__dirname.match(/config/)) {
-   global.rootpath = path.normalize(join(__dirname, '../../'))
-} else {
-   global.rootpath = __dirname
-}
-
-console.log("Env:", global.env)
-console.log("Root:", global.rootpath)
-
-var webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const postcssOpts = {sourceMap: true}
-
-module.exports = {
+const customConfig = {
    cache: true,
 
    context: global.rootpath,
@@ -47,6 +32,13 @@ module.exports = {
          {
             test: /~$/,
             loader: 'ignore-loader'
+         },
+         {
+            test: /\.(png|jpe?g|gif|svg)$/,
+            loaders: [
+               'file?hash=sha512&digest=hex&name=[hash].[ext]',
+               'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+            ]
          },
          {
             test: /\.(sa|sc)ss$/,
@@ -78,13 +70,6 @@ module.exports = {
             ],
          },
          {
-            test: /\.(png|jpe?g|gif|svg)$/,
-            loaders: [
-               'file?hash=sha512&digest=hex&name=[hash].[ext]',
-               'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-            ]
-         },
-         {
             test: /\.(woff|woff2|ttf|eot)$/,
             use: [{
                loader: 'file-loader',
@@ -99,19 +84,12 @@ module.exports = {
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
 
-   resolve: {
-      extensions: [ '.js', '.jsx' ],
-      modules: ['components','node_modules'],
-      alias: {
-         components: path.join(global.rootpath, 'app/webpack/js/components')
-      }
-   },
-
    plugins: [
       new webpack.ProvidePlugin({
          React: 'react',
          M: 'materialize-css'
       }),
+
       new MiniCssExtractPlugin({ filename: '[name].css',
                                  chunkFilename: '[id].css',
                                  ignoreOrder: DEBUG ? false : true }),
@@ -132,4 +110,16 @@ module.exports = {
          ],
       }),
    ],
+
+   resolve: {
+      // configuration options
+      alias: {
+         React: 'react',
+         ReactDOM: 'react-dom',
+      },
+      extensions: [ '.js', '.jsx', 'css', 'scss' ],
+      modules: ['components', 'node_modules'],
+   },
 }
+
+module.exports = customConfig

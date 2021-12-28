@@ -1,20 +1,75 @@
-
-
-/* eslint global-require: 0 */
+process.env.NODE_ENV = process.env.RAILS_ENV || 'production'
 
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
-const sharedConfig = require('./base.config.js')
+const sharedConfig = require('./base')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const TerserJSPlugin = require('terser-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-module.exports = merge(sharedConfig, {
-   //output: { filename: '[name]-[chunkhash].js' },
+const customConfig = merge(sharedConfig, {
    devtool: 'cheap-source-map',
 
    mode: "production",
+
+   optimization: {
+      concatenateModules: true,
+      minimize: true,
+      removeAvailableModules: true,
+      mangleWasmImports: true,
+      splitChunks: {
+         chunks: 'async',
+         minSize: 30000,
+         maxSize: 0,
+         minChunks: 1,
+         maxAsyncRequests: 5,
+         maxInitialRequests: 3,
+         automaticNameDelimiter: '~',
+         automaticNameMaxLength: 30,
+         name: true,
+         cacheGroups: {
+            vendors: {
+               test: /[\\/]node_modules[\\/]/,
+               priority: -10
+            },
+            default: {
+               minChunks: 2,
+               priority: -20,
+               reuseExistingChunk: true
+            }
+         }
+      },
+      minimizer: [
+         new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+               compress: {
+                  pure_funcs: [
+                     'console.log',
+                     'console.debug',
+                  ],
+               },
+               mangle: {
+                  reserved: [
+                     'console.log',
+                     'console.debug',
+                  ],
+               },
+               format: {
+                  comments: false,
+               },
+               minify: TerserPlugin.uglifyJsMinify,
+            },
+            extractComments: false,
+         }),
+         new OptimizeCSSAssetsPlugin({}),
+      ],
+   },
+
+   output: {
+      pathinfo: false
+   },
 
    module: {
       rules: [
@@ -25,7 +80,7 @@ module.exports = merge(sharedConfig, {
                options: {
                   babelrc: false,
                   configFile: false,
-                  compact: false,
+                  compact: true,
                   cacheDirectory: true,
                   ignore: [ /cjs/, /node_modules/ ],
                   presets: [
@@ -80,34 +135,6 @@ module.exports = merge(sharedConfig, {
          },
       ],
    },
-   optimization: {
-      splitChunks: {
-         chunks: 'async',
-         minSize: 30000,
-         maxSize: 0,
-         minChunks: 1,
-         maxAsyncRequests: 5,
-         maxInitialRequests: 3,
-         automaticNameDelimiter: '~',
-         automaticNameMaxLength: 30,
-         name: true,
-         cacheGroups: {
-            vendors: {
-               test: /[\\/]node_modules[\\/]/,
-               priority: -10
-            },
-            default: {
-               minChunks: 2,
-               priority: -20,
-               reuseExistingChunk: true
-            }
-         }
-      },
-      minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
-   },
-   output: {
-      pathinfo: false
-   },
 
    plugins: [
       new webpack.optimize.AggressiveMergingPlugin(),
@@ -124,5 +151,17 @@ module.exports = merge(sharedConfig, {
          analyzerMode: process.env.LOCAL ? 'static' : 'disabled',
       }),
    ],
-   stats: 'normal',
+
+   stats: {
+      // Config for minimal console.log mess.
+      colors: true,
+      version: false,
+      hash: false,
+      timings: false,
+      chunks: false,
+      chunkModules: false
+   }
 })
+
+console.log(customConfig)
+module.exports = customConfig

@@ -1,9 +1,9 @@
-// Note: You must restart bin/webpack-dev-server for changes to take effect
+process.env.NODE_ENV = process.env.RAILS_ENV || 'development'
 
 const { join } = require('path')
 const { env } = require('process')
 const merge = require('webpack-merge')
-const sharedConfig = require('./base.config.js')
+const sharedConfig = require('./base')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const webpack = require('webpack')
 
@@ -20,13 +20,13 @@ function formatPublicPath(host = '', path = '') {
   return `${formattedHost}/${formattedPath}/`
 }
 
-module.exports = merge(sharedConfig, {
+const customConfig = merge(sharedConfig, {
    devtool: 'cheap-module-eval-source-map',
 
    devServer: {
-      clientLogLevel: 'none',
-      https: false,
-      host: "0.0.0.0",
+      clientLogLevel: 'info',
+      https: true,
+      host: "127.0.0.1",
       port: "8080",
       contentBase: join(global.rootpath, 'public', ''),
       publicPath: formatPublicPath(env.ASSET_HOST, ''),
@@ -41,6 +41,8 @@ module.exports = merge(sharedConfig, {
    mode: "development",
 
    module: {
+      // noParse: /lodash/, // ignore parsing for modules ex.lodash
+
       rules: [
          {
             test: /\.(js|jsx)$/,
@@ -105,18 +107,19 @@ module.exports = merge(sharedConfig, {
       ],
    },
 
-   output: {
-      pathinfo: true
-   },
-
    plugins: [
       new LiveReloadPlugin({
          appendScriptTag: true,
-         protocol: 'http'
+         protocol: 'https'
       }),
    ],
 
    stats: {
-      errorDetails: true
+      errorDetails: true,
+      children: true
    },
 })
+
+console.log(customConfig)
+module.exports = customConfig
+
