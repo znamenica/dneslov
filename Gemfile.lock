@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/majioa/dotenv.git
-  revision: 0ce21756e93c69ba968a425a61f1a290de327943
+  revision: 3ebec460c0b195495265b0ce4122172b084853d0
   specs:
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
