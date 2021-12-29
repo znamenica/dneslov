@@ -85,7 +85,7 @@ export default class Chip extends Component {
       if (e.target.href) {
           e.stopPropagation()
           e.preventDefault()
-          window.open(e.target.href, '_blank')
+          window.open(this.props.url, '_blank')
       }
    }
 
@@ -93,6 +93,12 @@ export default class Chip extends Component {
       e.stopPropagation()
       this.setState({ action: null })
       this.props.onAct(this.props.data)
+   }
+
+   properUrl() {
+      let url = this.props.url.replace(/^http:\/\//, 'https://')
+
+      return url
    }
 
    render() {
@@ -107,7 +113,7 @@ export default class Chip extends Component {
             {this.props.children}
             {this.props.url &&
                <a
-                  href={this.props.url}
+                  href={this.properUrl()}
                   target='_blank' >
                   {this.props.text}</a>}
             {this.hasDefaultText() &&

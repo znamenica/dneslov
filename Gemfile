@@ -107,10 +107,10 @@ end
 group :development, :test do
    gem 'ruby-prof'
    gem "factory_bot_rails", ">= 5.1.1"
-   gem 'pry', '~> 0.10.4'
-   gem 'pry-rails', '~> 0.3.6'
+   gem 'pry', '~> 0.14', '>= 0.14.1'
+   gem 'pry-rails', '>= 0.3.9'
    gem 'pry-remote'
-   gem 'pry-stack_explorer'
+   gem 'pry-stack_explorer', '>= 0.6.1'
    gem 'listen', '>= 3.0.5', '< 3.2'
    gem 'spring'
    gem 'spring-commands-cucumber'
