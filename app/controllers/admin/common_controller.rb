@@ -37,7 +37,7 @@ class Admin::CommonController < ApplicationController
 
    # GET /<objects>/
    def index
-      #binding.pry
+      # binding.pry
       respond_to do |format|
          format.json do
             render plain: {
@@ -118,34 +118,44 @@ class Admin::CommonController < ApplicationController
 
    def validate_session
       if session_lost?
-         drop_session ;end;end
+         drop_session
+      end
+   end
 
    def authorize!
       policy = Object.const_get(model.name + "Policy")
       if !policy.new(current_user, @object).send(action_name + '?')
-         raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}" ;end;end
+         raise Pundit::NotAuthorizedError, "not allowed to do #{action_name} this #{@object.inspect}"
+      end
+   end
 
    def unprocessable_entity e
       Rails.logger.error("#{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}")
 
-      errors = @object && @object.errors.any? && @object.errors || e.to_s
-      render json: errors, status: :unprocessable_entity ;end
+      errors = @object && @object.errors.any? && @object.errors.messages || { nil => e.to_s }
+      render json: errors, status: :unprocessable_entity
+   end
 
    def set_page
-      @page ||= (params[ :p ] || 1).to_i ;end
+      @page ||= (params[ :p ] || 1).to_i
+   end
 
    def set_locales
       #TODO unfix of the ru only (will depend on the locale)
-      @locales ||= %i(ру цс) ;end
+      @locales ||= %i(ру цс)
+   end
 
    def set_query
-      @query ||= params[ :q ] || "" ;end
+      @query ||= params[ :q ] || ""
+   end
 
    def new_object
-      @object = model.new( permitted_params ) ;end
+      @object = model.new( permitted_params )
+   end
 
    def context
-      { locales: @locales } ;end
+      { locales: @locales }
+   end
 
    def include_list
       [] ;end
