@@ -23,7 +23,7 @@ class MemoriesController < ApplicationController
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      #binding.pry
+      # binding.pry
       respond_to do |format|
          format.html do
             render :index,

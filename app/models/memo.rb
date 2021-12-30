@@ -49,13 +49,15 @@ class Memo < ActiveRecord::Base
       # TODO make single embedded select or after fix rails bug use merge
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
       calendary_ids = Slug.where( text: calendaries, sluggable_type: 'Calendary' ).select( :sluggable_id )
-      where( calendary_id: calendary_ids ) end
+      where( calendary_id: calendary_ids )
+   end
 
    scope :first_in_calendary, -> do
       sql = self.joins(:calendary_slug, :memory)
                 .select('row_number() OVER (PARTITION BY slugs.text, memories.id)')
       self.unscope(:where, :order)
-          .joins("INNER JOIN (#{sql.to_sql}) AS tmp ON tmp.row_number = 1 AND tmp.id = memoes.id") end
+          .joins("INNER JOIN (#{sql.to_sql}) AS tmp ON tmp.row_number = 1 AND tmp.id = memoes.id")
+   end
 
    scope :with_slug_text, -> do
       selector = self.select_values.dup
@@ -64,7 +66,8 @@ class Memo < ActiveRecord::Base
       end
       selector << 'slugs.text AS _slug'
 
-      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug') ;end
+      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
+   end
 
    scope :by_date, -> (date_in, julian = false) do
       return self if date_in.blank?
@@ -84,7 +87,8 @@ class Memo < ActiveRecord::Base
          elsif result.grep(/28\.02%/).present?
             result << "29.02%#{wday}" ;end;end
 
-      where( year_date: result ) ;end
+      where( year_date: result )
+   end
 
    scope :by_token, -> text do
       left_outer_joins( :descriptions, :titles, :memory ).
@@ -92,7 +96,8 @@ class Memo < ActiveRecord::Base
          where( "titles_memoes.text ~* ?", "\\m#{text}.*" ).or(
          where( "memories.short_name ~* ?", "\\m#{text}.*" ).or(
          where( "memoes.add_date ~* ?", "\\m#{text}.*" ).or(
-         where( "memoes.year_date ~* ?", "\\m#{text}.*" ))))) end
+         where( "memoes.year_date ~* ?", "\\m#{text}.*" )))))
+   end
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -105,13 +110,16 @@ class Memo < ActiveRecord::Base
             and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
-      self.merge(or_rel).distinct ;end
+      self.merge(or_rel).distinct
+   end
 
    scope :by_event_id, -> (event_id) do
-      where(event_id: event_id) ;end
+      where(event_id: event_id)
+   end
 
    scope :by_calendary_id, -> (calendary_id) do
-      where(calendary_id: calendary_id) ;end
+      where(calendary_id: calendary_id)
+   end
 
    scope :notice, -> { joins(:event).merge(Event.notice) }
 
@@ -131,7 +139,8 @@ class Memo < ActiveRecord::Base
 
       rela = self.distinct
       rela.select_values = selector
-      rela ;end
+      rela
+   end
 
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'
@@ -140,7 +149,8 @@ class Memo < ActiveRecord::Base
               AS order_table (event_kind_code, order_no)
               ON order_table.event_kind_code = events.kind_code"
 
-      joins(:event, join).select(selector).group('_event_code').order('_event_code') ;end
+      joins(:event, join).select(selector).group('_event_code').order('_event_code')
+   end
 
    scope :with_base_year, -> do
       selector = self.select_values.dup
@@ -149,18 +159,20 @@ class Memo < ActiveRecord::Base
       end
       selector << 'memories.base_year AS _base_year'
 
-
-      joins(:memory).select(selector).group('_base_year').order('_base_year') ;end
+      joins(:memory).select(selector).group('_base_year').order('_base_year')
+   end
 
    scope :with_date, -> do
       selector = 'events.happened_at AS _happened_at'
 
-      joins(:event).select(selector).group('_happened_at') ;end
+      joins(:event).select(selector).group('_happened_at')
+   end
 
    scope :with_thumb_url, -> do
       selector = 'links.url AS _thumb_url'
 
-      left_outer_joins(:thumb_link).select(selector).group('_thumb_url') ;end
+      left_outer_joins(:thumb_link).select(selector).group('_thumb_url')
+   end
 
    scope :with_bond_to_title, -> language_code do
       selector = 'bond_memo_titles_memoes.text AS _bond_to_title'
@@ -178,9 +190,11 @@ class Memo < ActiveRecord::Base
       left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug') ;end
 
    scope :with_orders, -> language_code do
-      selector = 'jsonb_object_agg(DISTINCT slugs_memoes.text, order_titles_memoes.text) AS _orders'
+      selector = "COALESCE(jsonb_object_agg(DISTINCT slugs_memoes.text || '', order_titles_memoes.text)
+         FILTER (WHERE slugs_memoes.id IS NOT NULL AND order_titles_memoes.id IS NOT NULL), '{}') AS _orders"
 
-      left_outer_joins(:slugs, :order_titles).select(selector) ;end
+      left_outer_joins(:slugs, :order_titles).select(selector)
+   end
 
    scope :with_slug, -> do
       selector = self.select_values.dup
@@ -189,7 +203,8 @@ class Memo < ActiveRecord::Base
       end
       selector << 'slugs.text AS _slug'
 
-      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug') ;end
+      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
+   end
 
    scope :with_description, -> language_code do
       selector = self.select_values.dup
@@ -203,7 +218,8 @@ class Memo < ActiveRecord::Base
                           AND descriptions.type = 'Description'
                           AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_description') ;end
+      joins(join).select(selector.uniq).group('_description')
+   end
 
    scope :with_title, -> language_code do
       selector = self.select_values.dup
@@ -217,7 +233,8 @@ class Memo < ActiveRecord::Base
                           AND titles.type = 'Title'
                           AND titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_title') ;end
+      joins(join).select(selector.uniq).group('_title')
+   end
 
    scope :with_pure_links, -> do
       selector = "COALESCE((SELECT jsonb_agg(links)
@@ -225,7 +242,8 @@ class Memo < ActiveRecord::Base
                              WHERE links.info_id = memories.id
                                AND links.info_type = 'Memory'), '[]'::jsonb) AS _links"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_bond_to_year_date, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -238,7 +256,8 @@ class Memo < ActiveRecord::Base
       join = "LEFT OUTER JOIN memoes AS bond_to_memoes
                            ON memoes.bond_to_id = bond_to_memoes.id"
 
-      joins(join).select(selector).group(:id, 'bond_to_memoes.year_date') ;end
+      joins(join).select(selector).group(:id, 'bond_to_memoes.year_date')
+   end
 
    scope :with_memo_orders, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -264,7 +283,8 @@ class Memo < ActiveRecord::Base
                       SELECT jsonb_agg(__memo_orders)
                         FROM __memo_orders), '[]'::jsonb) AS _memo_orders"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_calendary_title, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -282,7 +302,8 @@ class Memo < ActiveRecord::Base
                           AND calendary_titles.type = 'Appellation'
                           AND calendary_titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'calendary_titles.text') ;end
+      joins(join).select(selector).group(:id, 'calendary_titles.text')
+   end
 
    scope :with_memory_event, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -311,7 +332,8 @@ class Memo < ActiveRecord::Base
 
       joins(join).select(selector).group(:id, 'memo_event_memories.id',
                                               'memo_events.happened_at',
-                                              'event_kind_titles.text') ;end
+                                              'event_kind_titles.text')
+   end
 
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -350,7 +372,8 @@ class Memo < ActiveRecord::Base
                       SELECT jsonb_agg(__descriptions)
                         FROM __descriptions), '[]'::jsonb) AS _descriptions"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_links, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -388,7 +411,8 @@ class Memo < ActiveRecord::Base
                       SELECT jsonb_agg(__links)
                         FROM __links), '[]'::jsonb) AS _links"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true
@@ -450,7 +474,9 @@ class Memo < ActiveRecord::Base
          date = Time.parse("#{$3}.1970") - 8.days - ($2.to_i - 1) * 7
          "#{date.strftime("%1d.%m")}%#{daynum}"
       else
-         self.year_date ;end;end
+         self.year_date
+      end
+   end
 
    EXCEPT = %i(created_at updated_at)
 end
