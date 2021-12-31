@@ -77,8 +77,8 @@
     "react-cookie": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-github-login": "git+https://git@github.com/majioa/react-github-login.git#devel",
-    "react-markdown": "^5.0.3",
     "react-rails-ujs": "^1.1.0",
+    "react-showdown": "^2.3.1",
     "uuid": "^3.4.0",
     "velocity-animate": "^1.5.1"
   },

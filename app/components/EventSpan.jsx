@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import ReactMarkdown from 'react-markdown'
 
 import Chip from 'Chip'
+import Markdown from 'Markdown'
 
 export default class EventSpan extends Component {
    static defaultProps = {
@@ -127,7 +127,7 @@ export default class EventSpan extends Component {
                   {this.hasDescription() &&
                         <div className='row'>
                            <div className='col s12 description'>
-                              <ReactMarkdown source={this.state.describedMemoes[0].description} /></div></div>}
+                              <Markdown source={this.state.describedMemoes[0].description} /></div></div>}
                {this.props.cantoes > 0 &&
                   <div className='col s12'>
                      {this.props.cantoes.map((canto) =>

@@ -1,8 +1,8 @@
 import { Component } from 'react'
-import ReactMarkdown from 'react-markdown'
 
 import Chip from 'Chip'
 import Name from 'Name'
+import Markdown from 'Markdown'
 
 export default class MemorySpan extends Component {
    static defaultProps = {
@@ -113,4 +113,6 @@ export default class MemorySpan extends Component {
                <div
                   className='collapsible-body description'
                   onClick={this.onSpanBodyClick.bind(this)} >
-                  <ReactMarkdown source={this.props.description} /></div>}</li>)}}
+                  <Markdown source={this.props.description} /></div>}</li>)
+   }
+}

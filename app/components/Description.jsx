@@ -1,12 +1,12 @@
 import { Component } from 'react'
 import { mixin } from 'lodash-decorators'
 import ReactDOM from 'react-dom'
-import ReactMarkdown from 'react-markdown'
 import PropTypes from 'prop-types'
 import M from 'materialize-css'
 
 import Chip from 'Chip'
 import GetSlugColor from 'mixins/GetSlugColor'
+import Markdown from 'Markdown'
 
 @mixin(GetSlugColor)
 export default class Description extends Component {
@@ -71,6 +71,6 @@ export default class Description extends Component {
                               <div className='container'>
                                  <div className='row'>
                                     <div className='col s12 description'>
-                                       <ReactMarkdown source={memo.description} /></div></div></div></div></li>)}</ul></div></div></div>)
+                                       <Markdown source={memo.description} /></div></div></div></div></li>)}</ul></div></div></div>)
    }
 }
