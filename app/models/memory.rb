@@ -45,7 +45,8 @@ class Memory < ActiveRecord::Base
       left_outer_joins( :memos ).merge( Memo.in_calendaries( calendaries )).distinct ;end
 
    scope :by_date, -> (date, julian = false) do
-      left_outer_joins( :memos ).merge( Memo.by_date( date, julian )).distinct ;end
+      left_outer_joins(:memos).merge(Memo.by_date(date, julian)).distinct
+   end
 
    scope :by_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(

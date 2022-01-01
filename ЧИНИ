@@ -1,3 +1,7 @@
+2.1
+Memo.where("year_date ~ '%'") review each to %,>,<,~
+
+---
 vim commands for hip conversion
 
 :set fileencodings=cp1251

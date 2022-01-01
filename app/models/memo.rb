@@ -14,6 +14,12 @@ class Memo < ActiveRecord::Base
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate
+   CONDITIONALS = {
+      '<' => (1..7),
+      '>' => (-7..-1),
+      '%' => (0..6),
+      '~' => (-3..3),
+   }
 
    belongs_to :calendary
    belongs_to :event
@@ -76,18 +82,22 @@ class Memo < ActiveRecord::Base
       new_date = date.strftime("%2d.%m")
       gap = (julian && 13.days || 0)
       wday = (date + gap).wday
-      relays = (1..7).map { |x| (date - x.days).strftime("%2d.%m") + "%#{wday}" }
       easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
       days = sprintf( "%+i", date.to_time.yday - easter.yday )
+      relays =
+         CONDITIONALS.map do |(cond, range)|
+            range.map {|x| (date - x.days).strftime("%2d.%m") + "#{cond}#{wday}" }
+         end.flatten
       result = relays.dup << new_date << days
 
       if !date.leap?
-         if result.grep('28.02').present?
-            result << "29.02"
-         elsif result.grep(/28\.02%/).present?
-            result << "29.02%#{wday}" ;end;end
+         result |= result.grep(/28\.02[%<>~]?/).map do |date|
+            match = date.match(/([%<>~])/)
+            match.present? && "29.02#{match[1]}#{wday}" || "29.02"
+         end
+      end
 
-      where( year_date: result )
+      where(year_date: result)
    end
 
    scope :by_token, -> text do
@@ -108,7 +118,10 @@ class Memo < ActiveRecord::Base
          or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
             and_rel = klass.by_token(and_token)
-            rel && rel.merge(and_rel) || and_rel ;end;end
+            rel && rel.merge(and_rel) || and_rel
+         end
+      end
+
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct
    end
@@ -177,17 +190,20 @@ class Memo < ActiveRecord::Base
    scope :with_bond_to_title, -> language_code do
       selector = 'bond_memo_titles_memoes.text AS _bond_to_title'
 
-      left_outer_joins(:bond_memo_titles).select(selector).group('_bond_to_title') ;end
+      left_outer_joins(:bond_memo_titles).select(selector).group('_bond_to_title')
+   end
 
    scope :with_event_title, -> language_code do
       selector = 'event_titles_memoes.text AS _event_title'
 
-      left_outer_joins(:event_titles).select(selector).group('_event_title') ;end
+      left_outer_joins(:event_titles).select(selector).group('_event_title')
+   end
 
    scope :with_calendary_slug_text, -> do
       selector = 'calendary_slugs_memoes.text AS _calendary_slug'
 
-      left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug') ;end
+      left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug')
+   end
 
    scope :with_orders, -> language_code do
       selector = "COALESCE(jsonb_object_agg(DISTINCT slugs_memoes.text || '', order_titles_memoes.text)
@@ -422,7 +438,7 @@ class Memo < ActiveRecord::Base
    accepts_nested_attributes_for :memo_orders, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :calendary, :event
-   validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])(%[0-6])?|[+-]\d{1,3})\z/ }
+   validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }
 
    before_validation :fix_year_date
    before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
@@ -450,29 +466,33 @@ class Memo < ActiveRecord::Base
       when /^(#{DAYS.join("|")})\.до пасхи/    #-7
          daynum = DAYSR.index($1) + 1
          "-#{daynum}"
-      when /^дн\.(\d+)\.по (\d+\.\d+)$/   #29.06%7
-         date = Time.parse("#{$2}.1970") + $1.to_i
-         date.strftime("%1d.%m")
-      when /^(#{DAYS.join("|")})\.близ (\d+\.\d+)$/   #29.06%7
-         daynum = DAYS.index($1)
-         date = Time.parse("#{$2}.1970") - 4.days
-         "#{date.strftime("%1d.%m")}%#{daynum}"
-      when /^(#{DAYS.join("|")})\.по (\d+\.\d+)$/   #29.06%7
+      when /^дн\.(\d+)\.с (\d+\.\d+)$/   #29.06%7
          daynum = DAYS.index($1)
          date = Time.parse("#{$2}.1970")
          "#{date.strftime("%1d.%m")}%#{daynum}"
-      when /^(#{DAYS.join("|")})\.до (\d+\.\d+)$/  #21.06%7
+      when /^дн\.(\d+)\.по (\d+\.\d+)$/   #29.06<7
+         date = Time.parse("#{$2}.1970") + $1.to_i
+         date.strftime("%1d.%m")
+      when /^(#{DAYS.join("|")})\.близ (\d+\.\d+)$/   #29.06~7
          daynum = DAYS.index($1)
-         date = Time.parse("#{$2}.1970") - 8.days
-         "#{date.strftime("%1d.%m")}%#{daynum}"
-      when /^(#{DAYS.join("|")})\.(\d+)\.по (\d+\.\d+)$/   #29.06%7
+         date = Time.parse("#{$2}.1970") # - 4.days
+         "#{date.strftime("%1d.%m")}~#{daynum}"
+      when /^(#{DAYS.join("|")})\.по (\d+\.\d+)$/   #29.06<7
+         daynum = DAYS.index($1)
+         date = Time.parse("#{$2}.1970")
+         "#{date.strftime("%1d.%m")}<#{daynum}"
+      when /^(#{DAYS.join("|")})\.до (\d+\.\d+)$/  #21.06>7
+         daynum = DAYS.index($1)
+         date = Time.parse("#{$2}.1970")# - 8.days
+         "#{date.strftime("%1d.%m")}>#{daynum}"
+      when /^(#{DAYS.join("|")})\.(\d+)\.по (\d+\.\d+)$/   #29.06<7
          daynum = DAYS.index($1)
          date = Time.parse("#{$3}.1970") + ($2.to_i - 1) * 7
-         "#{date.strftime("%1d.%m")}%#{daynum}"
-      when /^(#{DAYS.join("|")})\.(\d+)\.до (\d+\.\d+)$/  #21.06%7
+         "#{date.strftime("%1d.%m")}<#{daynum}"
+      when /^(#{DAYS.join("|")})\.(\d+)\.до (\d+\.\d+)$/  #21.06>7
          daynum = DAYS.index($1)
          date = Time.parse("#{$3}.1970") - 8.days - ($2.to_i - 1) * 7
-         "#{date.strftime("%1d.%m")}%#{daynum}"
+         "#{date.strftime("%1d.%m")}>#{daynum}"
       else
          self.year_date
       end

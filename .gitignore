@@ -37,3 +37,5 @@ public/webpack/manifest.json
 *.log
 *.sql
 .env
+
+coverage/
