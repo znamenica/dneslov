@@ -1,6 +1,6 @@
 2.1
-Memo.where("year_date ~ '%'") review each to %,>,<,~
-
+- Memo.where("year_date ~ '%'") review each to %,>,<,~
+- .env move to prod
 ---
 vim commands for hip conversion
 

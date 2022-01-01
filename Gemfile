@@ -78,7 +78,9 @@ gem 'pundit'
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
-gem 'airbrake'
+gem 'sentry-ruby'
+gem 'sentry-rails'
+gem 'sentry-sidekiq'
 
 ## orthodox
 gem 'when_easter'
