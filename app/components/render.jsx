@@ -2,19 +2,29 @@ import { merge } from 'merge-anything'
 
 import CatchWrapper from 'CatchWrapper'
 import { kindToKlass } from 'formsLib'
-import { displaySchemeToWrapperClass } from 'support'
+import { displaySchemeToWrapperClass, valueContextRules } from 'support'
 
 export function renderElement(element, meta) {
-   console.debug("[renderElement] ** meta:", meta, "e:", element)
+   console.debug("[renderElement] <<< element:", element, "meta:", meta)
 
    let rendered = Object.getOwnPropertyNames(meta).map(_name => {
       let sub = meta[_name],
           name = sub.name || _name,
           newName = [ element.name, name ].filter((x) => { return x }).join("."),
           newHumanizedName = [ element.name, sub.humanized_name ].filter((x) => { return x }).join("."),
-          valueContextNames = [ sub.context_names ].flat().filter((x) => { return x }),
-          valueContext = valueContextNames.reduce((res, contextName) => {
-             res[contextName] = element.value[contextName]
+          rulesContext = valueContextRules(sub.context_names),
+          valueContext = Object.entries(rulesContext).reduce((res, [contextName, contextRule]) => {
+             let valid = true
+
+             if (typeof(contextRule) == "function") {
+                res[contextName] = () => {
+                   if (contextRule(element.value)) {
+                      return element.value[contextName]
+                   }
+                }
+             } else {
+                res[contextName] = element.value[contextName]
+             }
 
              return res
           }, sub.context_values || {}),

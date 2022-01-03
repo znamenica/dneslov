@@ -15,6 +15,7 @@ export default class SelectField extends Component {
       codeNames: null,
       validations: {},
       title: null,
+      value: null,
    }
 
    static propTypes = {
@@ -22,10 +23,18 @@ export default class SelectField extends Component {
       wrapperClassName: PropTypes.string.isRequired,
       codeNames: PropTypes.object.isRequired,
       title: PropTypes.string.isRequired,
+      value: PropTypes.string,
    }
 
    // system
    componentDidMount() {
+      // workaround to avoid bug in react to findout a proper option
+      let selected = this.$select.parentElement.querySelector('option[value="' + this.props.value + '"]')
+
+      if (selected) {
+         selected.setAttribute("selected", "")
+      }
+
       this.select = FormSelect.init(this.$select, {
          optionParent: this.$parent,
          dropdownOptions: {
@@ -41,6 +50,7 @@ export default class SelectField extends Component {
    }
 
    shouldComponentUpdate(nextProps, nextState) {
+      console.debug("[shouldComponentUpdate] <<< nextProps: ", nextProps, "nextState: ", nextState)
       return this.props.value !== nextProps.value
    }
 
@@ -60,7 +70,7 @@ export default class SelectField extends Component {
    }
 
    render() {
-      console.log(this.props)
+      console.log("[render] * this.props: ", this.props)
 
       return (
          <div

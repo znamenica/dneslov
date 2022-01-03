@@ -67,14 +67,17 @@ class Event < ActiveRecord::Base
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs
          calendary_ids = Calendary.by_slugs(calendary_slugs).unscope(:select).select(:id)
-         self.where(calendary_id: calendary_ids) ;end;end
+         self.where(calendary_id: calendary_ids)
+      end
+   end
 
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :calendaries, -> { distinct }, through: :memos
-   has_many :titles, -> { title }, as: :describable, class_name: :Title do
+   has_many :titles, -> { title }, as: :describable, class_name: :Description do
       def by_default this
-        self.or( Appellation.merge( this.kind.names ))
-           .order( :describable_type ).distinct ;end;end
+        self.or(Appellation.merge(this.kind.names)).order(:describable_type).distinct
+      end
+   end
 
    has_many :default_titles, -> { distinct }, through: :kind, source: :names, class_name: :Appellation
    has_many :all_titles, ->(this) do
@@ -98,15 +101,19 @@ class Event < ActiveRecord::Base
          where(type_number: text.to_i).or(
          where("descriptions.text ~* ?", "\\m#{text}.*").or(
          where("names_subjects.text ~* ?", "\\m#{text}.*").or(
-         where("descriptions_subjects.text ~* ?", "\\m#{text}.*"))))) ;end
+         where("descriptions_subjects.text ~* ?", "\\m#{text}.*")))))
+   end
+
    scope :by_memory_id, -> memory_id do
-      where(memory_id: memory_id) ;end
+      where(memory_id: memory_id)
+   end
 
    # required for short list
    scope :with_key, -> _ do
       selector = [ 'events.id AS _key' ]
 
-      select(selector).group('_key').reorder("_key") ;end
+      select(selector).group('_key').reorder("_key")
+   end
 
    scope :with_value, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -167,8 +174,8 @@ class Event < ActiveRecord::Base
       #binding.pry
       #includes(:event_kinds).references(:event_kinds).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
       #left_outer_joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
-      joins(aa.join_sources).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
-
+      joins(aa.join_sources).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" )
+   end
 
    scope :with_description, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -184,7 +191,8 @@ class Event < ActiveRecord::Base
                           AND descriptions.type = 'Description'
                           AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_description', 'events.id') ;end
+      joins(join).select(selector.uniq).group('_description', 'events.id')
+   end
 
    scope :with_titles, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -233,7 +241,8 @@ class Event < ActiveRecord::Base
                         FROM __titles), '[]'::jsonb) AS _titles"
 
       # binding.pry
-      select( selector ).group( :id ) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -272,7 +281,8 @@ class Event < ActiveRecord::Base
                       SELECT jsonb_agg(__descriptions)
                         FROM __descriptions), '[]'::jsonb) AS _descriptions"
 
-      select( selector ).group( :id ) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_place, -> language_code do
       language_codes = [ language_code ].flatten
@@ -285,7 +295,8 @@ class Event < ActiveRecord::Base
                           AND place_descriptions.describable_type = 'Place'
                           AND place_descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'places.id', 'place_descriptions.text') ;end
+      joins(join).select(selector).group(:id, 'places.id', 'place_descriptions.text')
+   end
 
    scope :with_memoes, -> (language_code) do
       language_codes = [ language_code ].flatten
@@ -350,7 +361,8 @@ class Event < ActiveRecord::Base
                          FROM __memoes), '[]'::jsonb) AS _memoes"
 
       #binding.pry
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_cantoes, -> (language_code) do
       language_codes = [ language_code ].flatten

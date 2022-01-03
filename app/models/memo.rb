@@ -1,16 +1,22 @@
 require 'when_easter'
 
-# add_date[string]      - дата добавления записи в календарь
-# year_date[string]     - дата в году постоянная или перемещаемая, когда память отмечается
-# event_id[int]         - ссылка на событие
-# calendary_id[int]     - ссылка на календарь
-# bind_kind_code[string]     - тип привязки к опорному помину(может быть не привязан)
-# bond_to_id[int]       - ссылка на опорный помин, если nil, помин первичный
+# class Memo содержит сведения о помине какой-либо памяти в календаре,
+# таким образом связывая память и календарь. Может быть либо прямым обычным помином,
+# содержащим поле годовой даты year_date, либо соборным помином, таким
+# образом указывая на другой помин, содержащий годовую дату и имеющим род собора.
 #
+# add_date[string]            - дата добавления записи в календарь
+# year_date[string]           - дата в году постоянная или перемещаемая, когда память отмечается
+# event_id[int]               - ссылка на событие
+# calendary_id[int]           - ссылка на календарь
+# bind_kind_code[string]      - тип привязки к опорному помину(может быть не привязан)
+# bond_to_id[int]             - ссылка на опорный помин, если nil, помин первичный
+# id[int]                     - опознаватель
 class Memo < ActiveRecord::Base
    extend TotalSize
    extend AsJson
 
+   EXCEPT = %i(created_at updated_at)
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate
@@ -46,6 +52,10 @@ class Memo < ActiveRecord::Base
    has_many :titles, -> { title }, as: :describable, dependent: :delete_all
    has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
 
+   delegate :quantity, to: :memory
+   delegate :quantity, to: :bond_to, prefix: true, allow_nil: true
+   # alias_method orig, new
+
    scope :primary, -> { where( bond_to_id: nil ) }
    scope :licit, -> { joins( :calendary ).where( calendaries: { licit: true })}
    scope :licit_with, ->(c) { self.left_outer_joins(:slug).licit.or(self.in_calendaries(c)) }
@@ -63,6 +73,48 @@ class Memo < ActiveRecord::Base
                 .select('row_number() OVER (PARTITION BY slugs.text, memories.id)')
       self.unscope(:where, :order)
           .joins("INNER JOIN (#{sql.to_sql}) AS tmp ON tmp.row_number = 1 AND tmp.id = memoes.id")
+   end
+
+   scope :with_key, -> _ do
+      join_name = table.table_alias || table.name
+      selector = ["#{join_name}.id AS _key"]
+
+      select(selector).group('_key').reorder("_key")
+   end
+
+   scope :with_value, -> context do
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      join_name = table.table_alias || table.name
+      selector = self.select_values.dup
+
+      join = "LEFT OUTER JOIN descriptions AS titles
+                           ON titles.id IS NOT NULL
+                          AND titles.describable_id = #{join_name}.id
+                          AND titles.describable_type = 'Memo'
+                          AND titles.type = 'Title'
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')
+                          AND titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+
+              LEFT OUTER JOIN events AS memo_events
+                           ON memo_events.id = #{join_name}.event_id
+                         JOIN subjects AS event_kinds
+                           ON event_kinds.key = memo_events.kind_code
+                          AND event_kinds.kind_code = 'EventKind'
+                         JOIN descriptions AS event_titles
+                           ON event_titles.id IS NOT NULL
+                          AND (event_titles.describable_id = memo_events.id
+                          AND event_titles.describable_type = 'Event'
+                          AND event_titles.type = 'Title'
+                           OR event_titles.describable_id = event_kinds.id
+                          AND event_titles.describable_type = 'Subject'
+                          AND event_titles.type = 'Appellation')
+                          AND event_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                          AND event_titles.language_code IN ('#{language_codes.join("', '")}')"
+
+      selector << "memoes.year_date || ' [' || memo_events.happened_at || ' - ' || COALESCE(event_titles.text, '') || ' - ' || COALESCE(titles.text, '') || ']' AS _value"
+
+      joins(join).select(selector).group(:id, "titles.text", "memo_events.happened_at", "event_titles.text")
    end
 
    scope :with_slug_text, -> do
@@ -263,16 +315,53 @@ class Memo < ActiveRecord::Base
 
    scope :with_bond_to_year_date, -> context do
       language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
       selector = self.select_values.dup
       if selector.empty?
          selector << 'memoes.*'
       end
-      selector << 'bond_to_memoes.year_date AS _bond_to_year_date'
 
       join = "LEFT OUTER JOIN memoes AS bond_to_memoes
-                           ON memoes.bond_to_id = bond_to_memoes.id"
+                           ON memoes.bond_to_id = bond_to_memoes.id
 
-      joins(join).select(selector).group(:id, 'bond_to_memoes.year_date')
+              LEFT OUTER JOIN descriptions AS titles
+                           ON titles.id IS NOT NULL
+                          AND titles.describable_id = bond_to_memoes.id
+                          AND titles.describable_type = 'Memo'
+                          AND titles.type = 'Title'
+                          AND titles.language_code IN ('#{language_codes.join("', '")}')
+                          AND titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+
+              LEFT OUTER JOIN events AS bond_to_memo_events
+                           ON bond_to_memo_events.id = bond_to_memoes.event_id
+              LEFT OUTER JOIN subjects AS bond_to_event_kinds
+                           ON bond_to_event_kinds.key = bond_to_memo_events.kind_code
+                          AND bond_to_event_kinds.kind_code = 'EventKind'
+              LEFT OUTER JOIN descriptions AS bond_to_event_titles
+                           ON bond_to_event_titles.id IS NOT NULL
+                          AND (bond_to_event_titles.describable_id = bond_to_memo_events.id
+                          AND bond_to_event_titles.describable_type = 'Event'
+                          AND bond_to_event_titles.type = 'Title'
+                           OR bond_to_event_titles.describable_id = bond_to_event_kinds.id
+                          AND bond_to_event_titles.describable_type = 'Subject'
+                          AND bond_to_event_titles.type = 'Appellation')
+                          AND bond_to_event_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                          AND bond_to_event_titles.language_code IN ('#{language_codes.join("', '")}')"
+
+      selector << "                    bond_to_memoes.year_date ||
+                                                           ' [' ||
+                  COALESCE(bond_to_memo_events.happened_at, '') ||
+                                                          ' - ' ||
+                        COALESCE(bond_to_event_titles.text, '') ||
+                                                          ' - ' ||
+                                      COALESCE(titles.text, '') ||
+                  ']' AS _bond_to_year_date"
+
+      joins(join).select(selector).group(:id,
+                                         "bond_to_memoes.year_date",
+                                         "titles.text",
+                                         "bond_to_memo_events.happened_at",
+                                         "bond_to_event_titles.text")
    end
 
    scope :with_memo_orders, -> context do
@@ -438,7 +527,9 @@ class Memo < ActiveRecord::Base
    accepts_nested_attributes_for :memo_orders, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :calendary, :event
-   validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }
+   validates_presence_of :year_date, unless: :bond_to_quantity
+   validates_absence_of :year_date, if: :bond_to_quantity
+   validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }, if: :year_date
 
    before_validation :fix_year_date
    before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
@@ -493,10 +584,10 @@ class Memo < ActiveRecord::Base
          daynum = DAYS.index($1)
          date = Time.parse("#{$3}.1970") - 8.days - ($2.to_i - 1) * 7
          "#{date.strftime("%1d.%m")}>#{daynum}"
+      when /^$/
+         nil
       else
          self.year_date
       end
    end
-
-   EXCEPT = %i(created_at updated_at)
 end

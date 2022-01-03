@@ -62,7 +62,7 @@ class Admin::CommonController < ApplicationController
    def update
       @object.update!(permitted_params)
 
-      #binding.pry
+      # binding.pry
       #TODO: render json: @object.jsonize(context)
       render json: prepare_object(@object.reload).jsonize(context)
    end

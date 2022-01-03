@@ -87,7 +87,8 @@ class Name < ActiveRecord::Base
                           AND alphabeth_names.describable_type = 'Subject'
                           AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'language_names.text', 'alphabeth_names.text') ;end
+      joins(join).select(selector).group(:id, 'language_names.text', 'alphabeth_names.text')
+   end
 
    scope :with_root_name, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -106,7 +107,8 @@ class Name < ActiveRecord::Base
                           AND root_descriptions.describable_type = 'Subject'
                           AND root_descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'root_names.text', 'root_descriptions.text') ;end
+      joins(join).select(selector).group(:id, 'root_names.text', 'root_descriptions.text')
+   end
 
    scope :with_bond_to_name, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -125,7 +127,8 @@ class Name < ActiveRecord::Base
                           AND bond_to_descriptions.describable_type = 'Subject'
                           AND bond_to_descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'bond_to_names.text', 'bond_to_descriptions.text') ;end
+      joins(join).select(selector).group(:id, 'bond_to_names.text', 'bond_to_descriptions.text')
+   end
 
    scope :with_bind_kind_name, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -143,7 +146,8 @@ class Name < ActiveRecord::Base
                           AND bind_kind_names.describable_type = 'Subject'
                           AND bind_kind_names.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, 'bind_kind_names.text') ;end
+      joins(join).select(selector).group(:id, 'bind_kind_names.text')
+   end
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)

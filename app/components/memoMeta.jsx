@@ -32,7 +32,13 @@ export const memoMeta = {
       },
       bond_to: {
          title: 'Связка с...',
-         value: (value) => { return value.bond_to_year_date },
+         value: (value) => {
+            if (value.bond_to_year_date && value.bond_to_year_date.length > 40) {
+               return value.bond_to_year_date.slice(0, 40) + '...'
+            } else {
+               return value.bond_to_year_date
+            }
+         },
       },
       add_date: {
          title: 'Добавлено...',
@@ -91,7 +97,9 @@ export const memoMeta = {
          display_scheme: '12-6-2-2',
          validations: {
             "Слишком длинное значение даты в году": /^.{8,}$/,
-            "Дата в году отсутствует": matchEmptyObject,
+            "Годовая дата отсутствует": (value, context) => {
+               return !value && context.bind_kind_code != "соборный"
+            },
             "В значении даты допустимы только цифры, точка, знаки отношения (%,>,<,~) или знаки + и -": /[^0-9+\.\-%<>~]/,
             "Знак отношения должен следовать за годичной датой": /^([0-9]+\.?|)[%<>~]/,
             "Опорный день после знака отношения обязателен": /^[0-9\.]+[%<>~]([^0-6]|)?$/,
@@ -105,6 +113,7 @@ export const memoMeta = {
          codeNames: {
             '': 'Избери вид привязки...',
             'несвязаный': 'Не привязаный',
+            'соборный': 'Соборный',
             'навечерие': 'Навечерие',
             'предпразднество': 'Предпразднество',
             'попразднество': 'Попразднество',
@@ -129,10 +138,15 @@ export const memoMeta = {
          pathname: 'short_memoes',
          key_name: 'value',
          value_name: 'key',
-         context_names: [ 'event_id', 'calendary_id' ],
+         context_names: {
+           'calendary_id': true,
+         },
          validations: {
             'Привязаная дата не должна соответствовать текущей дате': (value, context) => {
-               return value && context.bond_to == context.year_date
+               let yearDateIn = context.bond_to_year_date || context.bond_to || "",
+                   match = yearDateIn.match(/^[0-9\.]+/),
+                   yearDate = match && match[0]
+               return value && yearDate == context.year_date && context.bind_kind_code != 'соборный'
             }
          },
       },

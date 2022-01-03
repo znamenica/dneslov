@@ -1,3 +1,5 @@
+import { merge } from 'merge-anything'
+
 const wrapperLetters = ['s', 'm', 'l', 'xl' ]
 
 export function yearDateFromDate(date_in) {
@@ -130,4 +132,19 @@ export function displaySchemeToWrapperClass(scheme) {
    }
 
    return ""
+}
+
+export var valueContextRules = (contextIn) => {
+   switch(contextIn && contextIn.constructor.name) {
+   case 'Object':
+      return contextIn
+   case 'String':
+      return {[contextIn]: true}
+   case 'Array':
+      return contextIn.filter((x) => { return x }).reduce((preResult, name) => {
+         return merge(preResult, {[name]: true})
+      }, {})
+   }
+
+   return {}
 }

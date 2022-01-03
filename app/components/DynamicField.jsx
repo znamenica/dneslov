@@ -171,12 +171,30 @@ export default class DynamicField extends Component {
       document.dispatchEvent(ce)
    }
 
+   getContext(contextIn) {
+      let ctx = contextIn || this.props.context_value || {}
+
+      return Object.entries(ctx).reduce((res, [name, valueIn]) => {
+         if (typeof(valueIn) == "function") {
+            let value = valueIn()
+
+            if (value) {
+               res[name] = value
+            }
+         } else {
+            res[name] = valueIn
+         }
+
+         return res
+      }, {})
+   }
+
    getDataFor(text) {
       console.debug("[getDataFor] <<<")
-      let data = merge(this.props.context_value || {}, { t: text })
+      let data = merge(this.getContext(), { t: text })
 
       if (this.props.value_context) {
-         Object.entries(this.props.value_context).forEach(([key, value]) => {
+         Object.entries(this.getContext(this.props.value_context)).forEach(([key, value]) => {
             data["by_" + key] = value
          })
       }
