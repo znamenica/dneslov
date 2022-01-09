@@ -1,3 +1,23 @@
+Date.at = function(milliseconds) {
+   let date = new Date(milliseconds),
+       userTimezoneOffset = Math.abs(date.getTimezoneOffset() * 60000)
+
+   return new Date(date.getTime() - userTimezoneOffset)
+}
+
+Date.prototype.dayshifted = function(number) {
+    const newDate = new Date(this);
+    return new Date(newDate.setDate(newDate.getDate() + number));
+}
+
+Array.prototype.first = function() {
+   return this[0]
+}
+
+Array.prototype.last = function() {
+   return this[this.length - 1]
+}
+
 Array.prototype.transpose = function() {
    return this.reduce((prev, next) => next.map((item, i) =>
       (prev[i] || []).concat(next[i])
@@ -122,6 +142,26 @@ Object.defineProperty(Object.prototype, 'select', {
          }, {}) || this
 
       return res
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, 'purify', {
+   value: function (other) {
+      let newHash = Object.assign({}, this)
+
+      Object.keys(newHash).forEach((key) => {
+         delete newHash[key]
+      })
+
+      return newHash
+   },
+   writable: true,
+})
+
+Object.defineProperty(Object.prototype, '|', {
+   value: function (other) {
+      return Object.assign({}, this, other || {})
    },
    writable: true,
 })

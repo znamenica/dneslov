@@ -1,4 +1,4 @@
-import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
+import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection, matchValidJson } from 'matchers'
 import { makeTitle } from 'makers'
 import UrlRegexp from 'UrlRegexp'
 
@@ -356,6 +356,15 @@ export const calendaryMeta = {
          title: 'Собор',
          display_scheme: '12-4-3-3',
          placeholder: 'Введи сокращение собора',
+      },
+      meta: {
+         kind: 'json',
+         title: 'Метаданные',
+         placeholder: 'Введи метаданные',
+         display_scheme: '12-12-12-12',
+         validations: {
+            'Текст имеет неверный формат JSON': matchValidJson
+         }
       },
    }
 }

@@ -1,0 +1,53 @@
+fast_days = [
+   {
+      "title": "%{week}-th wednesday",
+      "days": ["+8%3..+49%3", "+57%3..24.12%3", "07.01%3..-63%3"],
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{week}-th friday",
+      "days": ["+8%5..+49%5", "+57%5..24.12%5", "07.01%5..-63%5"],
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of The Great Lent",
+      "days": "-48..-9",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Passion fast",
+      "days": "-8..-1",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Peter's fast",
+      "days": "+57..28.06",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Dormintion fast",
+      "days": "01.08..14.08",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Nativity fast",
+      "days": "15.11..24.12",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Carnival fast",
+      "days": "-55..-49",
+      "measure": "meat"
+   },
+   {
+      "title": "%{day}-th day of John's fast",
+      "days": "29.08",
+      "measure": ["meat", "egg", "milk", "butter"]
+   },
+   {
+      "title": "%{day}-th day of Theophany fast",
+      "days": "05.01",
+      "measure": ["meat", "egg", "milk", "butter"]
+   }
+]
+

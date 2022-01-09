@@ -4,6 +4,7 @@ FactoryBot.define do
       author_name { Faker::Superhero.name }
       language_code { :ру }
       alphabeth_code { :РУ }
+      meta { '{ "fast_days": [] }' }
 
       transient do
          slug { nil }

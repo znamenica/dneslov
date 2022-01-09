@@ -127,7 +127,7 @@ export default class MemoriesForm extends Component {
    }
 
    onCalendarUpdate(value) {
-      let d = (value['with_date'][1] == 'julian' && 'ю' || 'н') +  value['with_date'][0]
+      let d = (value['withDate'][1] == 'julian' && 'ю' || 'н') +  value['withDate'][0]
 
       this.pushSubmit(merge(this.state.query, {d: d, p: 1}))
    }
@@ -228,6 +228,18 @@ export default class MemoriesForm extends Component {
       this.updateState(state)
    }
 
+   dateFromQuery() {
+      return this.state.query.d.match(/\d{2}\.\d{2}\.\d{4}/)[0]
+   }
+
+   calendarStyleFromQuery() {
+      if (this.state.query.d.match(/ю/)) {
+         return 'julian'
+      } else {
+         return 'neojulian'
+      }
+   }
+
    render() {
       console.log("[render] * ", { props: this.props, state: this.state})
 
@@ -259,6 +271,9 @@ export default class MemoriesForm extends Component {
                         <div className='hidden' id='calendary' />
                         <div className='row'>
                            <PickMeUpCalendar
+                              calendary={this.calendariesUsed()[0]}
+                              withDate={this.dateFromQuery()}
+                              calendarStyle={this.calendarStyleFromQuery()}
                               onUpdate={this.onCalendarUpdate.bind(this)} />
                            <CalendariesCloud
                               calendaries={this.props.calendaries_cloud}
@@ -292,4 +307,6 @@ export default class MemoriesForm extends Component {
                                  onLoadRequest={this.onMemoryLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>,
          <div className="progress">
-            <div className="indeterminate"></div></div> ])}}
+            <div className="indeterminate"></div></div> ])
+   }
+}

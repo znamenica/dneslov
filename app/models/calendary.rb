@@ -4,6 +4,16 @@ class Calendary < ActiveRecord::Base
    extend AsJson
    include Languageble
 
+   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
+   JSON_ATTRS = {
+      meta: ->(this) { this.meta.to_json },
+      created_at: nil,
+      updated_at: nil,
+   }
+   EXCEPT = %i(created_at updated_at)
+
+   attr_defaults meta: "{}"
+
    belongs_to :place, optional: true
 
    has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
@@ -19,7 +29,9 @@ class Calendary < ActiveRecord::Base
       if c.blank?
          self.licit
       else
-         self.left_outer_joins(:slug).licit.or(self.by_slugs(c)) end;end
+         self.left_outer_joins(:slug).licit.or(self.by_slugs(c))
+      end
+   end
    scope :titled_as, -> name { joins( :titles ).where( descriptions: { text: name } ) }
    scope :described_as, -> name { joins( :descriptions ).where( descriptions: { text: name } ) }
    scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
@@ -31,7 +43,8 @@ class Calendary < ActiveRecord::Base
        .where( "slugs.sluggable_id = calendaries.id
             AND slugs.sluggable_type = 'Calendary'
             AND slugs.text IN (?)", [ slugs ].flatten)
-       .reorder("slugs.text") ;end
+       .reorder("slugs.text")
+   end
 
    scope :by_token, -> text do
       left_outer_joins( :slug, :descriptions, :titles ).
@@ -39,7 +52,8 @@ class Calendary < ActiveRecord::Base
          where( "calendaries.council ~* ?", "\\m#{text}.*" ).or(
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
          where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
-         where( "titles_calendaries.text ~* ?", "\\m#{text}.*" ))))) end
+         where( "titles_calendaries.text ~* ?", "\\m#{text}.*" )))))
+   end
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -52,7 +66,8 @@ class Calendary < ActiveRecord::Base
             and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
-      self.merge(or_rel).distinct ;end
+      self.merge(or_rel).distinct
+   end
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
@@ -68,11 +83,12 @@ class Calendary < ActiveRecord::Base
 
       rela = self.distinct
       rela.select_values = selector
-      rela ;end
+      rela
+   end
 
    # required for short list
    scope :with_key, -> _ do
-      selector = [ 'calendaries.id AS _key' ]
+      selector = ['calendaries.id AS _key']
 
       select(selector).group('_key') ;end
 
@@ -88,12 +104,14 @@ class Calendary < ActiveRecord::Base
                           AND descriptions.type = 'Appellation'
                           AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_value') ;end
+      joins(join).select(selector.uniq).group('_value')
+   end
 
    scope :with_url, -> do
       selector = 'links.url AS _url'
 
-      left_outer_joins(:links).select(selector).group('_url') ;end
+      left_outer_joins(:links).select(selector).group('_url')
+   end
 
    scope :with_title, -> language_code do
       selector = [ 'titles.text AS _title' ]
@@ -107,8 +125,8 @@ class Calendary < ActiveRecord::Base
                           AND titles.type = 'Appellation'
                           AND titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group('_title') ;end
-
+      joins(join).select(selector).group('_title')
+   end
 
    scope :with_slug_text, -> do
       selector = self.select_values.dup
@@ -118,7 +136,8 @@ class Calendary < ActiveRecord::Base
 
       selector << 'slugs.text AS _slug'
 
-      left_outer_joins(:slug).group("slugs.text").select(selector) ;end
+      left_outer_joins(:slug).group("slugs.text").select(selector)
+   end
 
    scope :with_description, -> language_code do
       selector = [ 'descriptions.text AS _description' ]
@@ -132,7 +151,8 @@ class Calendary < ActiveRecord::Base
                           AND descriptions.type = 'Description'
                           AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_description') ;end
+      joins(join).select(selector.uniq).group('_description')
+   end
 
    scope :with_slug, -> do
       selector = self.select_values.dup
@@ -145,7 +165,8 @@ class Calendary < ActiveRecord::Base
                            ON calendary_slugs.sluggable_id = calendaries.id
                           AND calendary_slugs.sluggable_type = 'Calendary'"
 
-      joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text') ;end
+      joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text')
+   end
 
    scope :with_locale_names, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -169,7 +190,8 @@ class Calendary < ActiveRecord::Base
                           AND alphabeth_names.describable_type = 'Subject'
                           AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('language_names.text', 'alphabeth_names.text') ;end
+      joins(join).select(selector.uniq).group('language_names.text', 'alphabeth_names.text')
+   end
 
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -208,7 +230,8 @@ class Calendary < ActiveRecord::Base
                       SELECT jsonb_agg(__descriptions)
                         FROM __descriptions), '[]'::jsonb) AS _descriptions"
 
-      select( selector ).group( :id ) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_links, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -246,7 +269,8 @@ class Calendary < ActiveRecord::Base
                       SELECT jsonb_agg(__links)
                         FROM __links), '[]'::jsonb) AS _links"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
@@ -257,11 +281,10 @@ class Calendary < ActiveRecord::Base
 
    has_alphabeth
    validates :language_code, inclusion: { in: Languageble.language_list }
-   validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for( l.language_code ) } }
+   validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for(l.language_code)}}
    validates :slug, :titles, :date, presence: true
    validates :descriptions, :titles, :wikies, :beings, :place, associated: true
-
-   EXCEPT = %i(created_at updated_at)
+   validates :meta, json: { schema: JSON_SCHEMA }
 
    def as_json options = {}
       additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
@@ -276,4 +299,3 @@ class Calendary < ActiveRecord::Base
       end
    end
 end
-

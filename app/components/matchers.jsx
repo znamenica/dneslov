@@ -1,11 +1,20 @@
 import { merge } from 'merge-anything'
 
 export function matchValidJson(text) {
-   try {
-      JSON.parse(text)
+   if (text) {
+      switch (text.constructor.name) {
+         case "String":
+            try {
+               text && JSON.parse(text)
+               return false
+            } catch (e) {
+               return true
+            }
+         case "Object":
+            return false
+      }
+   } else {
       return false
-   } catch (e) {
-      return true
    }
 }
 

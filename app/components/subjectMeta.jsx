@@ -58,13 +58,14 @@ export const subjectMeta = {
          }
       },
       meta: {
-         kind: 'tale',
+         kind: 'json',
          title: 'Метаданные',
          placeholder: 'Введи метаданные',
          display_scheme: '12-12-12-12',
          validations: {
-            'Текст имеет неверный формат JSON': matchValidJson,
-         }
+            'Поле не может быть пустым': matchEmptyObject,
+            'Текст имеет неверный формат JSON': matchValidJson
+         },
       },
       names: {
          kind: 'collection',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_31_010100) do
+ActiveRecord::Schema.define(version: 2022_01_05_121300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2021_01_31_010100) do
     t.string "author_name"
     t.string "council"
     t.boolean "licit", default: false
+    t.jsonb "meta"
+    t.index ["meta"], name: "index_calendaries_on_meta", using: :gin
   end
 
   create_table "canto_memories", id: :serial, force: :cascade do |t|

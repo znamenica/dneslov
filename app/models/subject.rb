@@ -3,6 +3,12 @@ class Subject < ActiveRecord::Base
    extend AsJson
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json')
+   JSON_ATTRS = {
+      meta: ->(this) { this.meta.to_json },
+      created_at: nil,
+      updated_at: nil,
+   }
+   EXCEPT = %i(created_at updated_at)
 
    attr_defaults meta: "{}"
 
@@ -10,16 +16,21 @@ class Subject < ActiveRecord::Base
 
    has_many :names, as: :describable, dependent: :delete_all, class_name: :Appellation do
       def for language_codes
-         where( language_code: language_codes ).first ;end;end
+         where( language_code: language_codes ).first
+      end
+   end
 
    has_many :descriptions, -> { where( type: :Description ) }, as: :describable, dependent: :delete_all do
       def for language_codes
-         where( language_code: language_codes ).first ;end;end
+         where( language_code: language_codes ).first
+      end
+   end
 
    scope :by_token, -> text do
       self.left_outer_joins(:names, :descriptions)
           .where("descriptions.text ~* ?", "\\m#{text}.*")
-          .distinct ;end
+          .distinct
+   end
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -32,10 +43,12 @@ class Subject < ActiveRecord::Base
             and_rel = klass.by_token(and_token)
             rel && rel.merge(and_rel) || and_rel ;end;end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
-      self.merge(or_rel).distinct ;end
+      self.merge(or_rel).distinct
+   end
 
    scope :by_kind_code, -> kind_code do
-      where(kind_code: kind_code) ;end
+      where(kind_code: kind_code)
+   end
 
    # required for short list
    scope :with_key, -> _ do
@@ -94,7 +107,8 @@ class Subject < ActiveRecord::Base
                           AND kind_titles.type = 'Appellation'
                           AND kind_titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector).group(:id, "kind_titles.text") ;end
+      joins(join).select(selector).group(:id, "kind_titles.text")
+   end
 
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -135,7 +149,8 @@ class Subject < ActiveRecord::Base
                       SELECT jsonb_agg(__descriptions)
                         FROM __descriptions), '[]'::jsonb) AS _descriptions"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_names, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -176,7 +191,8 @@ class Subject < ActiveRecord::Base
                       SELECT jsonb_agg(__names)
                         FROM __names), '[]'::jsonb) AS _names"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
@@ -188,10 +204,4 @@ class Subject < ActiveRecord::Base
    validates_presence_of :key, :kind_code
    validates_uniqueness_of :key
    validates :meta, json: { schema: JSON_SCHEMA }
-
-   JSON_ATTRS = {
-      meta: ->(this) { this.meta.to_json },
-      created_at: nil,
-      updated_at: nil,
-   }
 end

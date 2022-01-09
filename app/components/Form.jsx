@@ -227,20 +227,28 @@ export default class Form extends Component {
 
          switch(value && value.constructor.name) {
             case 'Array':
-               if (value[0] instanceof Object) {
-                  scheme = (schemeIn || { [key]: null }).select((keyIn, valueIn) => {
-                     return keyIn == key || valueIn["_source"] == key
-                  })
-                  preValue = Form.deserializeArray(value, scheme)
-               } else if (value[0]) {
-                  preValue = { [key]: value }
+               if (schemeIn) {
+                  if (value[0] instanceof Object) {
+                     scheme = (schemeIn || { [key]: null }).select((keyIn, valueIn) => {
+                        return keyIn == key || valueIn["_source"] == key
+                     })
+                     preValue = Form.deserializeArray(value, scheme)
+                  } else if (value[0]) {
+                     preValue = { [key]: value }
+                  } else {
+                     preValue = { [key]: {} }
+                  }
                } else {
-                  preValue = { [key]: {} }
+                  preValue = { [key]: value }
                }
                break
             case 'Object':
-               tmpValue = merge({ _pos: entries.indexOf([key, value]) }, Form.deserializedHash(value))
-               preValue = { [key]: tmpValue }
+               if (schemeIn) {
+                  tmpValue = merge({ _pos: entries.indexOf([key, value]) }, Form.deserializedHash(value, schemeIn[key]))
+                  preValue = { [key]: tmpValue }
+               } else {
+                  preValue = { [key]: value }
+               }
                break
             default:
                preValue = { [key]: value }

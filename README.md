@@ -17,4 +17,5 @@ application up and running.
 1. libhiredis-devel
 2. libsnappy-devel
 3. redis
+3.1. xclip
 4. sidekiq

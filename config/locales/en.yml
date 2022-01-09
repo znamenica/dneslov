@@ -33,4 +33,9 @@ en:
             subject:
                attributes:
                   meta:
-                     invalid_json: "Invalid JSON"
+                     invalid_json: "has improper according to schema JSON"
+         models:
+            calendary:
+               attributes:
+                  meta:
+                     invalid_json: "has improper according to schema JSON"

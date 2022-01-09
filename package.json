@@ -60,10 +60,12 @@
   },
   "dependencies": {
     "@majioa/react-scroll-pagination": "^0.2.2",
+    "@soon92/react-json-editor-ajrm": "^2.5.15",
     "@types/react": "17.0.38",
     "axios": "^0.21.2",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
+    "date-easter": "^1.0.1",
     "intro.js": "^2.9.3",
     "intro.js-react": "^0.5.0",
     "kind-of": "^6.0.3",

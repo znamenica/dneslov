@@ -6,20 +6,20 @@ import Collection from 'Collection'
 import Block from 'Block'
 import HiddenField from 'HiddenField'
 import TextArea from 'TextArea'
+import JsonEditor from 'JsonEditor'
 
 export function kindToKlass(kind) {
    const klassTable = {
       hidden: HiddenField,
       boolean: BooleanBox,
       tale: TextArea,
+      json: JsonEditor,
       text: TextField,
       select: SelectField,
       dynamic: DynamicField,
       block: Block,
       collection: Collection,
    }
-
-   console.debug(klassTable)
 
    let klass = klassTable[kind]
 

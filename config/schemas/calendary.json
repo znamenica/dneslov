@@ -1,0 +1,52 @@
+{
+   "id": "https://dneslov.org/schema/calendary",
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "description": "Calendary schema for its meta data",
+   "definitions": {
+      "measure": { "enum": ["meat", "egg", "milk", "butter"] },
+      "measureArray": {
+         "type": "array",
+         "items": { "$ref": "#/definitions/measure" },
+         "minItems": 0
+      },
+      "stringArray": {
+         "type": "array",
+         "items": { "type": "string" },
+         "minItems": 0
+      },
+      "fastHash": {
+         "type": "object",
+         "properties": {
+            "title": { "type": "string" },
+            "days": {
+               "anyOf": [
+                  { "type": "string" },
+                  { "$ref": "#/definitions/stringArray" }
+               ]
+            },
+            "measure": {
+               "anyOf": [
+                  { "$ref": "#/definitions/measure" },
+                  { "$ref": "#/definitions/measureArray" }
+               ]
+            }
+         },
+         "additionalProperties": false,
+         "required": ["title", "days", "measure"]
+      },
+      "fastDayArray": {
+         "type": "array",
+         "items": { "$ref": "#/definitions/fastHash" },
+         "minItems": 0,
+         "uniqueItems": true
+      }
+   },
+   "properties": {
+      "fast_days": {
+         "$ref": "#/definitions/fastDayArray"
+      }
+   },
+   "required": ["fast_days"],
+   "default": {}
+}

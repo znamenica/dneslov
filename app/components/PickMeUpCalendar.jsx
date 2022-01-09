@@ -2,12 +2,14 @@ import { Component } from 'react'
 import * as Pickmeup from 'pickmeup/js/pickmeup.js'
 import { merge } from 'merge-anything'
 import * as Axios from 'axios'
+import {julianEaster, orthodoxEaster} from 'date-easter'
 import PropTypes from 'prop-types'
 
 export default class PickMeUpCalendar extends Component {
    static defaultProps = {
-      with_date: null,
-      calendar_style: 'julian',
+      withDate: null,
+      calendarStyle: 'julian',
+      calendary: {},
       pickmeup: {
          first_day: 0,
          locale: 'ру',
@@ -27,13 +29,14 @@ export default class PickMeUpCalendar extends Component {
    }
 
    static propTypes = {
-      with_date: PropTypes.string,
-      calendar_style: PropTypes.oneOf(['newjulian', 'julian']),
+      withDate: PropTypes.string,
+      calendarStyle: PropTypes.oneOf(['neojulian', 'julian']),
+      calendary: PropTypes.object,
    }
 
    state = {
-      with_date: [ this.props.with_date, this.props.calendar_style ],
-      calendar_style: this.props.calendar_style
+      withDate: [ this.props.withDate, this.props.calendarStyle ],
+      calendarStyle: this.props.calendarStyle
    }
 
    pmu = null
@@ -54,7 +57,7 @@ export default class PickMeUpCalendar extends Component {
          this.state[key] = value[key]
       })
 
-      this.props.onUpdate({ with_date: this.state.with_date })
+      this.props.onUpdate({ withDate: this.state.withDate })
       console.log("state", this.state)
    }
 
@@ -108,7 +111,15 @@ export default class PickMeUpCalendar extends Component {
 
    // specific
    selectedString() {
-      let selected = this.getToday()
+      let selected
+
+      if (this.state.withDate) {
+         let parts = this.state.withDate.first().split(".")
+
+         selected = new Date(+parts[2], +parts[1] - 1, +parts[0])
+      } else {
+         selected = this.getToday()
+      }
 
       selected.setTime(selected.getTime() + 1*60*60*1000)
 
@@ -120,14 +131,14 @@ export default class PickMeUpCalendar extends Component {
    }
 
    isJulian(value) {
-      return (value || this.state.calendar_style) == 'julian'
+      return (value || this.state.calendarStyle) == 'julian'
    }
 
    getToday() {
       let today = new Date
 
       if (this.isJulian()) {
-         today.setDate(today.getDate() - 13)
+         today.setDate(today.getDate() + this.recalculateGap())
       }
       today.setTime(today.getTime() + 8*60*60*1000)
 
@@ -163,18 +174,119 @@ export default class PickMeUpCalendar extends Component {
    }
 
    onPickmeupRender(date) {
-      let renderObject = { today : this.getToday() }
+      let renderObject = { today : this.getToday() }, classes = []
 
       if (this.isJulian()) {
-         let dateClass = "pmu-date-" + date.getDate() + "-" + this.getOrigDate(date)
-         renderObject = Object.assign({}, { class_name: 'pmu-date-double ' + dateClass }, renderObject)
+         classes.push("pmu-date-" + date.getDate() + "-" + this.getOrigDate(date))
+         classes.push('pmu-date-double')
       }
 
-      return renderObject
+      if (this.matchEasterDate(date)) {
+         classes.push('pmu-date-easter')
+      }
+
+      switch(this.matchFastDate(date)) {
+         case 'meat':
+            classes.push('pmu-date-light-fast')
+            break
+         case 'butter':
+            classes.push('pmu-date-fast')
+      }
+
+      return Object.assign({}, renderObject, { class_name: classes.join(' ') })
+   }
+
+   easterDate(yearIn) {
+      let year = yearIn || Date.now().getFullYear(),
+          easterIn = Date.at(Date.parse(this.isJulian() && julianEaster(year) || orthodoxEaster(year)))
+
+      return easterIn
+   }
+
+   // "matchBound" function to the test weither the date passed as an argument
+   // is a fast day returning the measure the fast of any. Argument:
+   // date        - the date to match
+   // forward     - "+nnn" day after pascha date
+   // backward    - "-nnn" day before pascha date
+   // strictDay   - "nn" day of the month in the year
+   // strictMonth - "mm" month of the year
+   // weekDayIn   - "%n" week day only selection
+   // weekDay     - week day for the date to match
+   // easter      - easter for the date to match
+   // year        - year of the date to match
+   // baseDateRef - reference hash t store or read baseDate value from "date"
+   matchBound(date, forward, backward, strictDay, strictMonth, weekDayIn, weekDay, easter, year, baseDateRef) {
+      let cond = false,
+          condDate,
+          baseDate = baseDateRef["date"],
+          condString = `${weekDayIn && "+weekDayIn == weekDay" || "true"} && date ${baseDate && "<=" || ">="} condDate`
+
+      if (forward) {
+         condDate = easter.dayshifted(+forward)
+         cond = eval(condString)
+      } else if (backward) {
+         condDate = easter.dayshifted(-backward)
+         if (baseDate && condDate < baseDate) {
+            condDate = this.easterDate(year + 1).dayshifted(-backward)
+         }
+
+         cond = eval(condString)
+      } else if (strictDay) {
+         condDate = new Date(date)
+         condDate.setDate(strictDay)
+         condDate.setMonth(+strictMonth - 1)
+         if (baseDate && condDate < baseDate) {
+            condDate.setFullYear(condDate.getFullYear() + 1)
+         }
+
+         cond = eval(condString)
+      }
+
+      if (!baseDate) {
+         baseDateRef["date"] = condDate
+      }
+
+      return cond
+   }
+
+   matchEasterDate(date) {
+      return +date === +this.easterDate(date.getFullYear())
+   }
+
+   matchFastDate(date) {
+      let year = date.getFullYear(),
+          weekDay = (date.getDay() - this.recalculateGap()) % 7,
+          easter = this.easterDate(year)
+
+      return this.props.calendary["meta"]["fast_days"].reduce((measure, rule) => {
+         let fast = [rule["days"]].flat().some((ranges) => {
+            return [ranges].flat().some((range) => {
+               let baseDateRef = {},
+                   match = range.match(/(?:(?:\+(\d+))|(?:\-(\d+))|(\d+)\.(\d+))(?:%(\d))?(?:\.\.(?:(?:\+(\d+))|(?:\-(\d+))|(\d+)\.(\d+))(?:%(\d))?)?/),
+                   begin = this.matchBound(date, match[1], match[2], match[3], match[4], match[5], weekDay, easter, year, baseDateRef)
+
+               if (begin) {
+                  let end
+
+                  if (match[6] || match[7] || match[8]) {
+                     end = this.matchBound(date, match[6], match[7], match[8], match[9], match[10], weekDay, easter, year, baseDateRef)
+                  } else {
+                     end = this.matchBound(date, match[1], match[2], match[3], match[4], match[5], weekDay, easter, year, baseDateRef)
+                  }
+
+                  return begin && end
+               } else {
+                  return begin
+               }
+            })
+         })
+
+         return measure || fast && [rule["measure"]].flat().last()
+      }, null)
    }
 
    onPickmeupChange(e) {
-      this.setState({with_date: [ e.detail.formatted_date, this.state.calendar_style ]})
+      this.setState({withDate: [ e.detail.formatted_date, this.state.calendarStyle ]})
    }
 
    onYesterdayClick(e) {
@@ -182,7 +294,7 @@ export default class PickMeUpCalendar extends Component {
 
       date.setDate(date.getDate() - 1)
       this.pmu.set_date(date)
-      this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
+      this.setState({withDate: [ this.pmu.get_date(true), this.state.calendarStyle ]})
 
       e.preventDefault()
       e.stopPropagation()
@@ -193,7 +305,7 @@ export default class PickMeUpCalendar extends Component {
 
       date.setDate(date.getDate() + 1)
       this.pmu.set_date(date)
-      this.setState({with_date: [ this.pmu.get_date(true), this.state.calendar_style ]})
+      this.setState({withDate: [ this.pmu.get_date(true), this.state.calendarStyle ]})
 
       e.preventDefault()
       e.stopPropagation()
@@ -202,24 +314,25 @@ export default class PickMeUpCalendar extends Component {
    onChangeStyle(e) {
       let radio_id = e.target.getAttribute('for'),
           radio = e.target.parentElement.querySelector('#' + radio_id),
-          new_calendar_style = radio.getAttribute('value')
+          newCalendarStyle = radio.getAttribute('value')
 
-      if (new_calendar_style != this.state.calendar_style) {
+      if (newCalendarStyle != this.state.calendarStyle) {
          let new_date = this.pmu.get_date()
-         if (this.isJulian(new_calendar_style)) {
+         if (this.isJulian(newCalendarStyle)) {
             new_date.setDate(new_date.getDate() - 13)
          } else {
             new_date.setDate(new_date.getDate() + 13)
          }
-         this.state.calendar_style = new_calendar_style
+         this.state.calendarStyle = newCalendarStyle
          this.pmu.set_date(new_date, new_date)
          this.setState({
-            with_date: [ this.pmu.get_date(true), new_calendar_style ]
+            withDate: [ this.pmu.get_date(true), newCalendarStyle ]
          })
       }
    }
 
    render() {
+      console.log("[render] * this.props", this.props)
       return (
          <div className='row calendary'>
             <div className='hidden'>
@@ -255,4 +368,6 @@ export default class PickMeUpCalendar extends Component {
             <div
                id='calendar'
                key='calendar'
-               ref={e => this.$calendar = e} /></div>)}}
+               ref={e => this.$calendar = e} /></div>)
+   }
+}

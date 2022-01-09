@@ -40,6 +40,21 @@ html {
             height: 1.84rem;
          }
 
+         .pmu-date-light-fast {
+            background-color: $light_fast_color;
+            color: $ink;
+         }
+
+         .pmu-date-fast {
+            background-color: $fast_color;
+            color: $ink;
+         }
+
+         .pmu-date-easter {
+            background-color: $easter_color;
+            color: $inverted_ink;
+         }
+
          .pmu-date-double {
             position: relative;
             line-height: inherit;
