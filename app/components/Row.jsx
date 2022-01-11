@@ -41,6 +41,10 @@ export default class Row extends Component {
    }
 
    value(name, element = this.props.meta[name]) {
+      if (!element) {
+         return null
+      }
+
       return element.value &&
          element.value(this.props.value, this.props.locales, element.source, element.filter) ||
          this.props.value[name]

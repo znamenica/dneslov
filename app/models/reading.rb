@@ -1,30 +1,69 @@
-#licit[boolean]         - действительный календарь (не в разработке)
-class Calendary < ActiveRecord::Base
+class Reading < ActiveRecord::Base
    extend TotalSize
    extend AsJson
-   include Languageble
-   include WithLocaleNames
 
-   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
+   enum kind: %i(custom vespers matins lithurgy dinning hours)
+ 
    JSON_ATTRS = {
-      meta: ->(this) { this.meta.to_json },
       created_at: nil,
       updated_at: nil,
    }
    EXCEPT = %i(created_at updated_at)
 
-   attr_defaults meta: "{}"
+   has_many :markups, -> { order(position: :asc) }
+   has_many :scripta, through: :markups
 
-   belongs_to :place, optional: true
+   scope :with_scripta, -> language_code do
+      join_name = table.table_alias || table.name
+      selector = [ "#{join_name}.text AS _text" ]
+      if self.select_values.dup.empty?
+        selector.unshift("join_name.*")
+      end
 
-   has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
-   has_many :links, as: :info, dependent: :delete_all, class_name: :Link
-   has_many :titles, as: :describable, dependent: :delete_all, class_name: :Appellation
-   has_many :wikies, as: :info, dependent: :delete_all, class_name: :WikiLink
-   has_many :beings, as: :info, dependent: :delete_all, class_name: :BeingLink
-   has_many :memos, dependent: :delete_all
-   has_one :slug, as: :sluggable
+      #language_codes = [language_code].flatten
+      #join = "LEFT OUTER JOIN descriptions AS titles ON titles.describable_id = calendaries.id
+      #                    AND titles.describable_type = 'Calendary'
+      #                    AND titles.type = 'Appellation'
+      #                    AND titles.language_code IN ('#{language_codes.join("', '")}')"
 
+      selector << "COALESCE((with __descriptions AS (
+                      SELECT DISTINCT ON(descriptions.id)
+                             descriptions.id AS id,
+                             descriptions.type AS type,
+                             descriptions.text AS text,
+                             descriptions.language_code AS language_code,
+                             descriptions.alphabeth_code AS alphabeth_code,
+                             language_names.text AS language,
+                             alphabeth_names.text AS alphabeth
+                        FROM descriptions
+             LEFT OUTER JOIN subjects AS languages
+                          ON languages.key = descriptions.language_code
+             LEFT OUTER JOIN descriptions AS language_names
+                          ON language_names.describable_id = languages.id
+                         AND language_names.describable_type = 'Subject'
+                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN subjects AS alphabeths
+                          ON alphabeths.key = descriptions.alphabeth_code
+             LEFT OUTER JOIN descriptions AS alphabeth_names
+                          ON alphabeth_names.describable_id = alphabeths.id
+                         AND alphabeth_names.describable_type = 'Subject'
+                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE descriptions.describable_id = #{model.table_name}.id
+                         AND descriptions.describable_type = '#{model}'
+                         AND descriptions.type IN ('Description', 'Appellation')
+                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
+                      SELECT jsonb_agg(__descriptions)
+                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
+
+      joins(join).select(selector).group('_title')
+      select(selector).group(:id)
+   end
+
+   accepts_nested_attributes_for :markups, reject_if: :all_blank, allow_destroy: true
+
+   validates :markups, associated: true
+
+=begin
    scope :licit, -> { where( licit: true ) }
    scope :licit_with, ->(c) do
       if c.blank?
@@ -169,6 +208,31 @@ class Calendary < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text')
    end
 
+   scope :with_locale_names, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
+      selector.concat [ "language_names.text AS _language", "alphabeth_names.text AS _alphabeth" ]
+
+      join = "LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = calendaries.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Subject'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = calendaries.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Subject'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('language_names.text', 'alphabeth_names.text')
+   end
+
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
@@ -274,4 +338,5 @@ class Calendary < ActiveRecord::Base
          end
       end
    end
+=end
 end

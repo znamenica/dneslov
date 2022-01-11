@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :names, param: :id, except: :edit
       resources :orders, param: :id, except: :edit
       resources :subjects, param: :id, except: :edit
+      resources :scripta, param: :id, except: :edit
 
       get '/short_subjects' => 'subjects#all'
       get '/short_orders' => 'orders#all'
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
       get '/short_names' => 'names#all'
       get '/short_places' => 'places#all'
       get '/short_items' => 'items#all'
+      get '/short_scripta' => 'scripta#all'
       get '/icons' => 'memories#icons'
    end
 

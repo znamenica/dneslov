@@ -87,7 +87,8 @@ gem 'when_easter'
 
 ## data
 gem 'activerecord-import'
-gem "zero_downtime_migrations"
+gem 'zero_downtime_migrations'
+gem 'acts_as_list'
 
 group :development do
    gem 'capistrano', '~> 3.6'

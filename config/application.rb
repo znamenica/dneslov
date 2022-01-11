@@ -18,12 +18,13 @@ module Dneslov
     folders = %w(lib
                  app/models/subject
                  app/models/events
-                 app/models/cantoes
-                 app/models/cantoes/canticles
-                 app/models/cantoes/canticles/chants
-                 app/models/cantoes/canticles/chants/sessional_hymns
-                 app/models/cantoes/canticles/chants/stichiras
-                 app/models/cantoes/orisons
+                 app/models/scriptum
+                 app/models/scriptum/cantoes
+                 app/models/scriptum/cantoes/canticles
+                 app/models/scriptum/cantoes/canticles/chants
+                 app/models/scriptum/cantoes/canticles/chants/sessional_hymns
+                 app/models/scriptum/cantoes/canticles/chants/stichiras
+                 app/models/scriptum/cantoes/orisons
                  app/models/descriptions
                  app/models/links)
     folders.each do |folder|

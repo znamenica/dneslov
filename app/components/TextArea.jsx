@@ -79,14 +79,16 @@ export default class TextArea extends Component {
    }
 
    renderValue() {
-      switch (this.props.value.constructor.name) {
-         case "String":
-            return this.props.value
-         case "Object":
-            return JSON.stringify(this.props.value)
-         default:
-            return ""
+      if (this.props.value) {
+         switch (this.props.value.constructor.name) {
+            case "String":
+               return this.props.value
+            case "Object":
+               return JSON.stringify(this.props.value)
+         }
       }
+
+      return ""
    }
 
    render() {
