@@ -1,0 +1,2 @@
+class Bible < Scriptum
+end

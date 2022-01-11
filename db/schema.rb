@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_121300) do
+ActiveRecord::Schema.define(version: 2022_01_10_140444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -34,29 +34,6 @@ ActiveRecord::Schema.define(version: 2022_01_05_121300) do
     t.integer "canto_id", null: false
     t.integer "memory_id", null: false
     t.index ["canto_id", "memory_id"], name: "canto_memories_index", unique: true
-  end
-
-  create_table "cantoes", id: :serial, force: :cascade do |t|
-    t.text "text"
-    t.string "prosomeion_title"
-    t.string "language_code", null: false
-    t.integer "tone"
-    t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "title"
-    t.string "alphabeth_code", null: false
-    t.string "author"
-    t.string "description"
-    t.string "ref_title"
-    t.index ["author"], name: "index_cantoes_on_author"
-    t.index ["id", "language_code"], name: "index_cantoes_on_id_and_language_code"
-    t.index ["language_code", "alphabeth_code"], name: "index_cantoes_on_language_code_and_alphabeth_code"
-    t.index ["prosomeion_title"], name: "index_cantoes_on_prosomeion_title"
-    t.index ["title", "language_code"], name: "index_cantoes_on_title_and_language_code"
-    t.index ["title"], name: "index_cantoes_on_title", unique: true
-    t.index ["tone"], name: "index_cantoes_on_tone"
-    t.index ["type"], name: "index_cantoes_on_type"
   end
 
   create_table "descriptions", id: :serial, force: :cascade do |t|
@@ -136,6 +113,19 @@ ActiveRecord::Schema.define(version: 2022_01_05_121300) do
     t.index ["language_code"], name: "index_links_on_language_code"
     t.index ["type"], name: "index_links_on_type"
     t.index ["url"], name: "index_links_on_url"
+  end
+
+  create_table "markups", force: :cascade do |t|
+    t.bigint "scriptum_id", null: false
+    t.bigint "reading_id", null: false
+    t.integer "begin", null: false
+    t.integer "end", null: false
+    t.integer "position"
+    t.index ["position"], name: "index_markups_on_position"
+    t.index ["reading_id"], name: "index_markups_on_reading_id"
+    t.index ["scriptum_id", "reading_id", "begin", "end"], name: "index_markups_on_scriptum_id_and_reading_id_and_begin_and_end", unique: true
+    t.index ["scriptum_id", "reading_id"], name: "index_markups_on_scriptum_id_and_reading_id"
+    t.index ["scriptum_id"], name: "index_markups_on_scriptum_id"
   end
 
   create_table "memo_orders", force: :cascade do |t|
@@ -218,6 +208,40 @@ ActiveRecord::Schema.define(version: 2022_01_05_121300) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "readings", force: :cascade do |t|
+    t.string "year_date"
+    t.string "abbreviation"
+    t.string "kind"
+    t.index ["abbreviation"], name: "index_readings_on_abbreviation"
+    t.index ["kind"], name: "index_readings_on_kind"
+    t.index ["year_date", "abbreviation", "kind"], name: "index_readings_on_year_date_and_abbreviation_and_kind"
+    t.index ["year_date", "abbreviation"], name: "index_readings_on_year_date_and_abbreviation", unique: true
+    t.index ["year_date"], name: "index_readings_on_year_date"
+  end
+
+  create_table "scripta", id: :serial, force: :cascade do |t|
+    t.text "text"
+    t.string "prosomeion_title"
+    t.string "language_code", null: false
+    t.integer "tone"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "alphabeth_code", null: false
+    t.string "author"
+    t.string "description"
+    t.string "ref_title"
+    t.index ["author"], name: "index_scripta_on_author"
+    t.index ["id", "language_code"], name: "index_scripta_on_id_and_language_code"
+    t.index ["language_code", "alphabeth_code"], name: "index_scripta_on_language_code_and_alphabeth_code"
+    t.index ["prosomeion_title"], name: "index_scripta_on_prosomeion_title"
+    t.index ["title", "language_code"], name: "index_scripta_on_title_and_language_code"
+    t.index ["title"], name: "index_scripta_on_title", unique: true
+    t.index ["tone"], name: "index_scripta_on_tone"
+    t.index ["type"], name: "index_scripta_on_type"
+  end
+
   create_table "service_cantoes", id: :serial, force: :cascade do |t|
     t.integer "service_id", null: false
     t.integer "canto_id", null: false
@@ -282,6 +306,8 @@ ActiveRecord::Schema.define(version: 2022_01_05_121300) do
     t.index ["kind_code"], name: "index_subjects_on_kind_code"
   end
 
-  add_foreign_key "service_cantoes", "cantoes", on_delete: :cascade
+  add_foreign_key "markups", "readings", on_delete: :cascade
+  add_foreign_key "markups", "scripta", on_delete: :restrict
+  add_foreign_key "service_cantoes", "scripta", column: "canto_id", on_delete: :cascade
   add_foreign_key "service_cantoes", "services", on_delete: :cascade
 end

@@ -23,7 +23,6 @@ export default class SelectField extends Component {
       wrapperClassName: PropTypes.string.isRequired,
       codeNames: PropTypes.object.isRequired,
       title: PropTypes.string.isRequired,
-      value: PropTypes.string,
    }
 
    // system

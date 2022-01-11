@@ -1,30 +1,22 @@
-#licit[boolean]         - действительный календарь (не в разработке)
-class Calendary < ActiveRecord::Base
+class Markup < ActiveRecord::Base
    extend TotalSize
    extend AsJson
-   include Languageble
-   include WithLocaleNames
 
-   JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
-   JSON_ATTRS = {
-      meta: ->(this) { this.meta.to_json },
-      created_at: nil,
-      updated_at: nil,
-   }
-   EXCEPT = %i(created_at updated_at)
+   belongs_to :scriptum
+   belongs_to :reading
+   acts_as_list scope: :reading
 
-   attr_defaults meta: "{}"
+   # JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
+   #JSON_ATTRS = {
+   #   meta: ->(this) { this.meta.to_json },
+   #   created_at: nil,
+   #   updated_at: nil,
+   #}
+   #EXCEPT = %i(created_at updated_at)
 
-   belongs_to :place, optional: true
+   #attr_defaults meta: "{}"
 
-   has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
-   has_many :links, as: :info, dependent: :delete_all, class_name: :Link
-   has_many :titles, as: :describable, dependent: :delete_all, class_name: :Appellation
-   has_many :wikies, as: :info, dependent: :delete_all, class_name: :WikiLink
-   has_many :beings, as: :info, dependent: :delete_all, class_name: :BeingLink
-   has_many :memos, dependent: :delete_all
-   has_one :slug, as: :sluggable
-
+=begin
    scope :licit, -> { where( licit: true ) }
    scope :licit_with, ->(c) do
       if c.blank?
@@ -169,6 +161,31 @@ class Calendary < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text')
    end
 
+   scope :with_locale_names, -> context do
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+      selector = self.select_values.dup
+      if self.select_values.dup.empty?
+         selector << 'calendaries.*'
+      end
+      selector.concat [ "language_names.text AS _language", "alphabeth_names.text AS _alphabeth" ]
+
+      join = "LEFT OUTER JOIN subjects AS languages
+                           ON languages.key = calendaries.language_code
+              LEFT OUTER JOIN descriptions AS language_names
+                           ON language_names.describable_id = languages.id
+                          AND language_names.describable_type = 'Subject'
+                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN subjects AS alphabeths
+                           ON alphabeths.key = calendaries.alphabeth_code
+              LEFT OUTER JOIN descriptions AS alphabeth_names
+                           ON alphabeth_names.describable_id = alphabeths.id
+                          AND alphabeth_names.describable_type = 'Subject'
+                          AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
+
+      joins(join).select(selector.uniq).group('language_names.text', 'alphabeth_names.text')
+   end
+
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
@@ -274,4 +291,5 @@ class Calendary < ActiveRecord::Base
          end
       end
    end
+=end
 end

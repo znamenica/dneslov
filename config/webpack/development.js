@@ -61,7 +61,9 @@ const customConfig = merge(sharedConfig, {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
-                              "uglify": true
+                              chrome: 59,
+                              edge: 13,
+                              firefox: 50,
                            },
                            "useBuiltIns": false
                         },

@@ -1,15 +1,11 @@
-class Canto < ActiveRecord::Base
-   include Languageble
-
+class Canto < Scriptum
    has_many :service_cantoes, inverse_of: :canto
    has_many :services, through: :service_cantoes
    has_many :canto_memories, inverse_of: :canto
    has_many :memories, through: :canto_memories
    has_many :targets, through: :canto_memories, foreign_key: :memory_id, source: :memory
 
-   has_alphabeth on: %i(text prosomeion_title title)
-
-   validates :type, presence: true
+   has_alphabeth on: %i(prosomeion_title)
 
    def targets= value
       if value.kind_of?( Array )
@@ -21,4 +17,7 @@ class Canto < ActiveRecord::Base
             .compact
          super(new_value)
       else
-         super ;end;end;end
+         super
+      end
+   end
+end

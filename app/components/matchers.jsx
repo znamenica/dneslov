@@ -23,9 +23,13 @@ export function matchLetters(textIn, context) {
 
    console.debug("[matchLetters] ** text:", text, "context:", context)
 
+   if (!text) {
+      return res
+   }
+
    switch (context.alphabeth_code) {
    case 'РУ':
-      res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=>\[\]\(\)!\|]+$/)
+      res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=\[\]\(\)!\|\<\>]+$/)
       break
    case 'ЦС':
       res = ! text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)

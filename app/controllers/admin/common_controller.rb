@@ -92,6 +92,10 @@ class Admin::CommonController < ApplicationController
       %w(with_key with_value)
    end
 
+   def index_with_list
+      []
+   end
+
    def with_list
       send({
          "all" => :short_with_list,
