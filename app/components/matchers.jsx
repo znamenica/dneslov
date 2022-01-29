@@ -213,11 +213,15 @@ export function matchAlphabeths(objectIn) {
    return false
 }
 
-export function matchEmptyCollection(value, context) {
+export function matchSelection(value, _context, state) {
+   return !state.range
+}
+
+export function matchEmptyCollection(value) {
    return value.reduce((res, v) => { return res && v.value._destroy }, true)
 }
 
-export function matchEmptyObject(value, context) {
+export function matchEmptyObject(value) {
    let res = false
 
    console.debug("[matchEmptyObject] ** value:", value)

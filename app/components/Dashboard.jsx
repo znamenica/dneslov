@@ -9,6 +9,7 @@ import { memoMeta } from 'memoMeta'
 import { orderMeta } from 'orderMeta'
 import { subjectMeta } from 'subjectMeta'
 import { scriptumMeta } from 'scriptumMeta'
+import { readingMeta } from 'readingMeta'
 import Records from 'Records'
 
 const Metas = {
@@ -17,6 +18,7 @@ const Metas = {
    'names': nameMeta,
    'memoes': memoMeta,
    'scripta': scriptumMeta,
+   'readings': readingMeta,
    'orders': orderMeta,
    'subjects': subjectMeta,
 }

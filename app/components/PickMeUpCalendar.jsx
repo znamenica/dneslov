@@ -253,12 +253,15 @@ export default class PickMeUpCalendar extends Component {
       return +date === +this.easterDate(date.getFullYear())
    }
 
+   fastDays() {
+      return this.props.calendary["meta"]["fast_days"] || []
+   }
+
    matchFastDate(date) {
       let year = date.getFullYear(),
           weekDay = (date.getDay() - this.recalculateGap()) % 7,
           easter = this.easterDate(year),
           fastDays = this.props.calendary["meta"]["fast_days"] || []
-
 
       return fastDays.reduce((measure, rule) => {
          let fast = [rule["days"]].flat().some((ranges) => {

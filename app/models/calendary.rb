@@ -4,6 +4,7 @@ class Calendary < ActiveRecord::Base
    extend AsJson
    include Languageble
    include WithLocaleNames
+   include WithDescriptions
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
    JSON_ATTRS = {
@@ -167,46 +168,6 @@ class Calendary < ActiveRecord::Base
                           AND calendary_slugs.sluggable_type = 'Calendary'"
 
       joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text')
-   end
-
-   scope :with_descriptions, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << "#{model.table_name}.*"
-      end
-
-      selector << "COALESCE((with __descriptions AS (
-                      SELECT DISTINCT ON(descriptions.id)
-                             descriptions.id AS id,
-                             descriptions.type AS type,
-                             descriptions.text AS text,
-                             descriptions.language_code AS language_code,
-                             descriptions.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM descriptions
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = descriptions.language_code
-             LEFT OUTER JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = descriptions.alphabeth_code
-             LEFT OUTER JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE descriptions.describable_id = #{model.table_name}.id
-                         AND descriptions.describable_type = '#{model}'
-                         AND descriptions.type IN ('Description', 'Appellation')
-                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__descriptions)
-                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
-
-      select(selector).group(:id)
    end
 
    scope :with_links, -> context do

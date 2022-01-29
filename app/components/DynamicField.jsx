@@ -9,9 +9,11 @@ import ErrorSpan from 'ErrorSpan'
 import Chip from 'Chip'
 import Validation from 'Validation'
 import ValueToObject from 'mixins/ValueToObject'
+import RepathTo from 'mixins/RepathTo'
 
 @mixin(Validation)
 @mixin(ValueToObject)
+@mixin(RepathTo)
 export default class DynamicField extends Component {
    static defaultProps = {
       pathname: null,
@@ -20,6 +22,9 @@ export default class DynamicField extends Component {
       name: 'text_id',
       humanized_name: 'text',
       value: "",
+      begin: null,
+      end: null,
+      selectable: false,
       humanized_value: undefined,
       wrapperClassName: null,
       title: null,
@@ -33,13 +38,17 @@ export default class DynamicField extends Component {
       value_name: PropTypes.string.isRequired,
       humanized_name: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
+      begin: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      end: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      selectable: PropTypes.bool.isRequired,
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
       validations: PropTypes.object.isRequired,
    }
 
-   data = { list: {}, total: 0 }
+   data = {list: {}, total: 0}
+   state = {start: this.props.start, end: this.props.end}
 
    // system
    constructor(props) {
@@ -48,19 +57,35 @@ export default class DynamicField extends Component {
       if (props.value) {
          this.data = { list: { [props.humanized_value]: props.value }, total: 1 }
       }
+
       this.onKeyDown = this.onKeyDown.bind(this)
+      this.onSelectionChange = this.onSelectionChange.bind(this)
+      this.onSelectStart = this.onSelectStart.bind(this)
    }
 
    componentDidMount() {
-      console.debug("[componentDidMount] <<<")
-      console.log("[componentDidMount] * ", this.data, this.props.value)
+      console.debug("[componentDidMount] ** ", this.data, this.props.value)
       this.setup()
+
       document.addEventListener('keydown', this.onKeyDown)
+      document.addEventListener('selectionchange', this.onSelectionChange, { passive: true })
+      this.$span.addEventListener('selectstart', this.onSelectStart, { passive: true })
+
+//      if (this.isRangeEnabled()) {
+//         let range = new Range
+
+///         console.log("wwwwww", this.$span, this.props.begin, this.props.end)
+//         range.setStart(this.$span, this.props.begin)
+         //range.setEnd(this.$span, this.props.end)
+
+//         if (this.props.begin < this.props.end) {
+ //           this.setState({range: range})
+//         }
+//      }
    }
 
    componentDidUpdate() {
       console.debug("[componentDidUpdate] <<<")
-
       if (this.$input) {
          this.setup()
          this.autoUpdate()
@@ -70,11 +95,14 @@ export default class DynamicField extends Component {
    componentWillUnmount() {
       console.debug("[componentWillUnmount] <<<")
       this.destroy()
+      this.$span.removeEventListener('selectstart', this.onSelectStart)
+      document.removeEventListener('selectionchange', this.onSelectionChange)
       document.removeEventListener('keypress', this.onKeyDown)
    }
 
    shouldComponentUpdate(nextProps, nextState) {
-      return this.props.value !== nextProps.value ||
+      return nextState.pendingRange || nextState.selectApplied ||
+             this.props.value !== nextProps.value ||
              this.props.humanized_value !== nextProps.humanized_value
    }
 
@@ -122,6 +150,25 @@ export default class DynamicField extends Component {
       document.dispatchEvent(ce)
    }
 
+   onSelectStart() {
+      if (this.isRangeEnabled()) {
+         this.setState({selectStart: true, selectApplied: false})
+      }
+   }
+
+   onSelectionChange() {
+      if (this.isRangeEnabled() && this.state.selectStart) {
+         let selection = document.getSelection(),
+             range = selection.getRangeAt(0)
+
+         if (range.collapsed) {
+            this.setState({pendingRange: null})
+         } else {
+            this.setState({pendingRange: range})
+         }
+      }
+   }
+
    //actions
    setup() {
       if (this.$input) {
@@ -144,28 +191,27 @@ export default class DynamicField extends Component {
 
    //actions
    autoUpdate() {
-      console.log("[autoUpdate] *", this.input)
+      console.log("[autoUpdate] * this.input:", this.input)
       let list = Object.keys(this.data.list).reduce((h, x) => { h[x] = null; return h }, {})
 
-      console.debug("[autoUpdate] **", list)
+      console.debug("[autoUpdate] ** list:", list)
       this.input.updateData(list)
    }
 
-   updateTo(humanized_value_in, autofix = true) {
-      console.log("[updateTo] <<<", humanized_value_in, autofix)
-      let ce, detail, value_detail = {}, value, humanized_value
+   updateTo(humanizedValue, autofix = true) {
+      console.log("[updateTo] <<< humanizedValue:", humanizedValue, "autofix:", autofix)
+      let ce, detail, valueDetail = {}, value
 
       if (autofix || this.data.total == 1) {
-         value = this.data.list[humanized_value_in]
+         value = this.data.list[humanizedValue]
       }
-      humanized_value = humanized_value_in
 
       if (value) {
-         value_detail = this.valueToObject(this.props.name, value)
+         valueDetail = this.valueToObject(this.props.name, value)
       }
 
-      detail = merge({}, this.valueToObject(this.props.humanized_name, humanized_value), value_detail)
-      console.debug("[updateTo] ** detail", detail)
+      detail = merge({}, this.valueToObject(this.props.humanized_name, humanizedValue), valueDetail)
+      console.debug("[updateTo] ** detail:", detail, "valueDetail:", valueDetail, "huName: ", this.props.humanized_name)
 
       ce = new CustomEvent('dneslov-update-path', merge({}, { detail: detail }))
       document.dispatchEvent(ce)
@@ -246,6 +292,34 @@ export default class DynamicField extends Component {
       console.log("[storeDynamicData] * after store", this.data)
    }
 
+   onApplyRange() {
+      let r = this.state.pendingRange,
+          beginName = this.repathTo(this.props.name, "begin"),
+          endName = this.repathTo(this.props.name, "end"),
+          valueDetail = merge({}, this.valueToObject(beginName, r.startOffset), this.valueToObject(endName, r.endOffset)),
+          ce = new CustomEvent('dneslov-update-path', merge({}, { detail: valueDetail }))
+
+      console.debug("[onApplyRange] wwww ** pendingRange:", r, "ce:", ce)
+
+      let indexStart = r.startContainter.getElementIndex(),
+          indexEnd = r.endContainter.getElementIndex()
+
+      if (indexEnd == indexStart) {
+         ee
+      } else if (indexEnd - indexStart > 1) {
+      } else {
+      }
+
+      document.dispatchEvent(ce)
+      this.setState({
+         pendingRange: null,
+         start: r.startOffset,
+         end: r.endOffset,
+         selectStart: null,
+         selectApplied: true
+      })
+   }
+
    className() {
       return [ "input-field",
                this.props.wrapperClassName,
@@ -253,21 +327,66 @@ export default class DynamicField extends Component {
          filter((x) => { return x }).join(" ")
    }
 
+   spanClassName() {
+      return this.isMultiline() && ["multiline"] || []
+   }
+
+   getApplierPositionCss() {
+      let rect = this.state.pendingRange.getBoundingClientRect(),
+          span = document.elementFromPoint(rect.x, rect.y).getBoundingClientRect(),
+          top = rect.bottom - span.top + 16, left = rect.right - span.left + 16
+      console.debug("[getApplierPositionCss] ** rect:", top, left)
+
+      return {top: `${top}px`, left: `${left}px`, position: "absolute"}
+   }
+
+   // conditional
+   isRangeEnabled() {
+      return this.props.selectable
+   }
+
+   isMultiline() {
+      return this.props.display_scheme == "12-12-12-12"
+   }
+
+   spanValue() {
+      let value = this.props.humanized_value
+
+      if (this.isRangeEnabled() && this.state.start) {
+         let pre = value.slice(0, this.state.start),
+             mid = value.slice(this.state.start, this.state.end),
+             post = value.slice(this.state.end, -1)
+
+         return [pre, <span className="selected">{mid}</span>, post]
+      } else {
+         return value
+      }
+   }
+
+   // render
    render() {
-      console.log("[render] * props", this.props)
+      console.log("[render] wwwwww * props:", this.props, "state: ", this.state)
 
       return (
          <div
+            ref={e => this.$span = e}
             className={this.className()}>
-            {!!this.props.value &&
+            {this.props.value &&
                <div
                   className="chip">
-                  <span>
-                     {this.props.humanized_value}</span>
+                  <span
+                     className={this.spanClassName()}>
+                     {this.spanValue()}</span>
                   <i
                      className='material-icons unfix'
                      onClick={this.onChipAct.bind(this)}>
                      close</i>
+               {this.isRangeEnabled() && this.state.pendingRange &&
+                  <a
+                     style={this.getApplierPositionCss()}
+                     onClick={() => {this.onApplyRange()}}
+                     className="popup btn-floating btn-small waves-effect waves-light terracota">
+                     <i className="small material-icons">fingerprint</i></a>}
                </div>}
             {!this.props.value &&
                <input
