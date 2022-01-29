@@ -118,7 +118,7 @@ export const scriptumMeta = {
             'Kathismion': 'Седальна кафизмы',
             'Polileosion': 'Седальна полиелея',
             'Apostichus': 'Апостих',
-            'Cry_stichira': 'Воззвашна',
+            'CryStichira': 'Воззвашна',
             'Stichiron': 'Стихирник',
          },
          display_scheme: '12-6-2-2',

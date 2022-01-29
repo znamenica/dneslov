@@ -5,13 +5,22 @@ import { kindToKlass } from 'formsLib'
 import { displaySchemeToWrapperClass, valueContextRules } from 'support'
 
 export function renderElement(element, meta) {
-   console.debug("[renderElement] <<< element:", element, "meta:", meta)
+   console.debug("[renderElement] << element:", element, "meta:", meta)
 
-   let rendered = Object.getOwnPropertyNames(meta).map(_name => {
-      let sub = meta[_name],
-          name = sub.name || _name,
-          newName = [ element.name, name ].filter((x) => { return x }).join("."),
-          newHumanizedName = [ element.name, sub.humanized_name ].filter((x) => { return x }).join("."),
+   let mapped = Object.getOwnPropertyNames(meta).reduce((metaResult, nameIn) => {
+      let forIn = meta[nameIn].for,
+          name = forIn || meta[nameIn].name || nameIn,
+          dataIn = metaResult[name] || {},
+          data = forIn ? {[nameIn]: element.value[nameIn]} : meta[nameIn]
+
+      return metaResult.merge({[name]: dataIn.merge(data)})
+   }, {})
+   console.debug("[renderElement] ** mapped:", mapped)
+
+   let rendered = Object.getOwnPropertyNames(mapped).map(name => {
+      let sub = mapped[name],
+          newName = [element.name, name].filter((x) => { return x }).join("."),
+          newHumanizedName = [element.name, sub.humanized_name].filter((x) => { return x }).join("."),
           rulesContext = valueContextRules(sub.context_names),
           valueContext = Object.entries(rulesContext).reduce((res, [contextName, contextRule]) => {
              let valid = true
@@ -34,7 +43,7 @@ export function renderElement(element, meta) {
                   sourcedValue.constructor.name === "Object" &&
                   sub["filter"] ?
                   sourcedValue.select((_, h) => {
-                     console.debug("[renderElement] **** ", h.intersectWith(sub["filter"]), h.intersectWith(sub["filter"]).isPresent())
+                     console.debug("[renderElement] ** ", h.intersectWith(sub["filter"]), h.intersectWith(sub["filter"]).isPresent())
                      return h.intersectWith(sub["filter"]).isPresent()
                   }) : sourcedValue,
           res = merge(sub, { key: newName,
@@ -46,7 +55,7 @@ export function renderElement(element, meta) {
                              validation_context: element.value,
                              wrapperClassName: displaySchemeToWrapperClass(sub.display_scheme) })
 
-      console.debug("[renderElement] ****** ", sub["source"], "filter", sub["filter"], "value", value, sourcedValue, element.value[sub["source"]], sourcedValue && sourcedValue.select((_, h) => {
+      console.debug("[renderElement] ****** source:", sub["source"], "filter:", sub["filter"], "value:", value, sourcedValue, element.value[sub["source"]], sourcedValue && sourcedValue.select((_, h) => {
             return h.intersectWith(sub["filter"]).isPresent()
          }))
       self.klass = kindToKlass(sub['kind'])
@@ -54,7 +63,7 @@ export function renderElement(element, meta) {
       return <CatchWrapper><self.klass {...res} /></CatchWrapper>
    })
 
-   console.debug("[renderElement] >>>", rendered)
+   console.debug("[renderElement] >", rendered)
 
    return rendered
 }

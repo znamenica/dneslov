@@ -1,6 +1,7 @@
 class Subject < ActiveRecord::Base
    extend TotalSize
    extend AsJson
+   include WithDescriptions
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json')
    JSON_ATTRS = {
@@ -15,12 +16,6 @@ class Subject < ActiveRecord::Base
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
 
    has_many :names, as: :describable, dependent: :delete_all, class_name: :Appellation do
-      def for language_codes
-         where( language_code: language_codes ).first
-      end
-   end
-
-   has_many :descriptions, -> { where( type: :Description ) }, as: :describable, dependent: :delete_all do
       def for language_codes
          where( language_code: language_codes ).first
       end
@@ -110,48 +105,6 @@ class Subject < ActiveRecord::Base
       joins(join).select(selector).group(:id, "kind_titles.text")
    end
 
-   scope :with_descriptions, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'subjects.*'
-      end
-
-      #binding.pry
-      join_name = table.table_alias || table.name
-      selector << "COALESCE((WITH __descriptions AS (
-                      SELECT DISTINCT ON(descriptions.id)
-                             descriptions.id AS id,
-                             descriptions.type AS type,
-                             descriptions.text AS text,
-                             descriptions.language_code AS language_code,
-                             descriptions.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM descriptions
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = descriptions.language_code
-                        JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = descriptions.alphabeth_code
-                        JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE descriptions.describable_id = #{join_name}.id
-                         AND descriptions.describable_type = 'Subject'
-                         AND descriptions.type IN ('Description')
-                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__descriptions)
-                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
-
-      select(selector).group(:id)
-   end
-
    scope :with_names, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
@@ -199,7 +152,6 @@ class Subject < ActiveRecord::Base
    singleton_class.send(:alias_method, :k, :by_kind_code)
 
    accepts_nested_attributes_for :names, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :key, :kind_code
    validates_uniqueness_of :key

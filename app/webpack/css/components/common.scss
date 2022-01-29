@@ -388,10 +388,21 @@ html {
 
          &:not(.label-icon).active {
             height: calc(125% - 0.25rem); // NOTE due to 1.25x radio when autoresize textarea
+            width: calc(125% - 2rem);
          }
 
          &:not(.label-icon).active.textarea {
             height: calc(125% - 0.6rem); // NOTE due to 1.25x radio when autoresize textarea
+            width: calc(125% - 2rem);
+         }
+
+         .popup {
+            right: 3rem;
+            top: 2rem;
+            cursor: pointer;
+            position: absolute;
+            z-index: 1000;
+            pointer-events: all;
          }
 
          // TODO required to fix npm-pipeline-rails or move to webpacker
@@ -564,6 +575,19 @@ html {
          text-overflow: ellipsis;
          margin-left: 0.2rem;
          margin-right: 0.2rem;
+         -moz-user-select: auto;
+         -webkit-user-select: auto;
+         -ms-user-select: auto;
+
+         .selected {
+            margin: 0;
+            padding: 0;
+            background-color: aliceblue;
+         }
+      }
+
+      span.multiline {
+         white-space: pre-wrap;
       }
    }
 

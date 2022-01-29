@@ -1,3 +1,7 @@
+Element.prototype.getElementIndex = function() {
+   return Array.prototype.indexOf.call(this.parentNode.children, this)
+}
+
 Date.at = function(milliseconds) {
    let date = new Date(milliseconds),
        userTimezoneOffset = Math.abs(date.getTimezoneOffset() * 60000)
@@ -6,8 +10,8 @@ Date.at = function(milliseconds) {
 }
 
 Date.prototype.dayshifted = function(number) {
-    const newDate = new Date(this);
-    return new Date(newDate.setDate(newDate.getDate() + number));
+   const newDate = new Date(this)
+   return new Date(newDate.setDate(newDate.getDate() + number))
 }
 
 Array.prototype.first = function() {
