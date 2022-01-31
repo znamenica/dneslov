@@ -45,7 +45,7 @@ gem 'redis-rails', '~> 5.0'
 gem 'redis-rack-cache'
 gem 'redis-namespace'
 gem 'snappy'
-gem 'sidekiq', require: %w(sidekiq sidekiq/web)
+gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
 
