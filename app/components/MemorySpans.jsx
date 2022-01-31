@@ -6,9 +6,9 @@ import MemorySpan from 'MemorySpan'
 export default class MemorySpans extends Component {
    static defaultProps = {
       memories: [],
-      total_memories: 0,
-      calendaries_cloud: null,
-      default_calendary_slug: null,
+      totalMemories: 0,
+      calendariesCloud: null,
+      defaultCalendarySlug: null,
       onFetchNext: null,
       onLoadRequest: null,
    }
@@ -24,8 +24,8 @@ export default class MemorySpans extends Component {
 
    // props
    fetchNext() {
-      if (this.props.total_memories > this.props.memories.length) {
-         this.props.onFetchNext()
+      if (this.props.totalMemories > this.props.memories.length) {
+         return this.props.onFetchNext()
       }
    }
 
@@ -33,12 +33,12 @@ export default class MemorySpans extends Component {
       return this.props.memories.length > 0
    }
 
-   calendary_slugs() {
-      return this.props.calendaries_cloud || [ this.props.default_calendary_slug ]
+   calendarySlugs() {
+      return this.props.calendariesCloud || [ this.props.defaultCalendarySlug ]
    }
 
    descriptionFirst(memory) {
-      return this.calendary_slugs().reduce((text, slug) => {
+      return this.calendarySlugs().reduce((text, slug) => {
          return text || memory.descriptions.reduce((desc, description) => {
             return desc || description.calendary && description.calendary.slug == slug && description.text || null
          }, null)
@@ -46,13 +46,13 @@ export default class MemorySpans extends Component {
    }
 
    calculateDefaultCalendaryIn(array) {
-      return this.calendary_slugs().reduce((cal, calendary_slug) => {
+      return this.calendarySlugs().reduce((cal, calendarySlug) => {
          if (cal) {
             return cal
          } else {
             return array.reduce((cal, value) => {
-               if (!cal && value.calendary == calendary_slug) {
-                  return calendary_slug
+               if (!cal && value.calendary == calendarySlug) {
+                  return calendarySlug
                } else {
                   return cal
                }
@@ -85,22 +85,23 @@ export default class MemorySpans extends Component {
                         key={memory.slug}
                         slug={memory.slug}
                         title={memory.title}
-                        default_calendary_slug={this.props.default_calendary_slug}
+                        defaultCalendarySlug={this.props.defaultCalendarySlug}
                         url={memory.url}
-                        thumb_url={memory.thumb_url}
-                        happened_at={memory.happened_at}
+                        thumbUrl={memory.thumb_url}
+                        happenedAt={memory.happened_at}
                         orders={memory.orders}
                         description={memory.description}
-                        add_date={memory.add_date}
-                        year_date={memory.year_date}
-                        happened_at={memory.happened_at}
-                        bind_kind_code={memory.bind_kind_code}
-                        calendary_slug={memory.calendary_slug}
-                        event_title={memory.event_title}
+                        addDate={memory.add_date}
+                        yearDate={memory.year_date}
+                        happenedAt={memory.happened_at}
+                        bindKindCode={memory.bind_kind_code}
+                        calendarySlug={memory.calendary_slug}
+                        eventTitle={memory.event_title}
                         onLoadRequest={this.props.onLoadRequest} />)}
                   <ReactScrollPagination
                      excludeElement='header'
-                     totalPages={this.props.total_memories}
+                     total={this.props.totalMemories}
+                     loadedTotal={this.props.memories.length}
                      fetchFunc={this.fetchNext.bind(this)} /></ul>}
             {!this.isPresent() &&
                <div className='card-panel'>

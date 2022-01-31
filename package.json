@@ -59,7 +59,7 @@
     "yarn": "^1.22.0"
   },
   "dependencies": {
-    "@majioa/react-scroll-pagination": "^0.2.2",
+    "@majioa/react-scroll-pagination": "^0.2.3",
     "@soon92/react-json-editor-ajrm": "^2.5.15",
     "@types/react": "17.0.38",
     "axios": "^0.21.2",

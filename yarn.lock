@@ -1026,10 +1026,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@majioa/react-scroll-pagination@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@majioa/react-scroll-pagination/-/react-scroll-pagination-0.2.2.tgz#28c0892746316adacc82f239b70d3484364fca15"
-  integrity sha512-h24vebs65RrInud4qm0HZDejWzQkBae0UKWdeODqltZGJSu/UOHsBWVIN/qTV8GZXuGg2OIel5596iZSSfqfHA==
+"@majioa/react-scroll-pagination@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@majioa/react-scroll-pagination/-/react-scroll-pagination-0.2.3.tgz#4b8b79effb46879ffc567f0bb8334b45fe59c5c4"
+  integrity sha512-BUOAuneJnLSnGXnqjtQ9MZSjWg0NMDUo7ZG8wp+J89734pbe3vHfy2gQDdcm+IRUZziY9kKPJzoXo4VMbbBUYA==
   dependencies:
     prop-types "^15.6.0"
     react "^16.0.0"

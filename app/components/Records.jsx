@@ -84,10 +84,6 @@ export default class Records extends Component {
       }
    }
 
-   totalPages() {
-      return this.state.total != 0 && Math.round((this.state.total + 24) / 25) || 0
-   }
-
    onRecordUpdate(e) {
       let record = e.detail,
           index = this.state.records.findIndex((r) => { return r.id == record.id }),
@@ -272,5 +268,6 @@ export default class Records extends Component {
                         onRemove={this.onRecordRemove.bind(this)} />)}</tbody></table>
             <ReactScrollPagination
                excludeElement='header'
-               totalPages={this.totalPages()}
+               loadedTotal={this.props.records.list.length}
+               total={this.state.total}
                fetchFunc={this.fetchNext.bind(this)} /></div>]}}

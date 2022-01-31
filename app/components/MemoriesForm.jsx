@@ -301,9 +301,9 @@ export default class MemoriesForm extends Component {
                                  onAct={this.onSearchAct.bind(this)} />
                               <MemorySpans
                                  memories={this.state.memories}
-                                 total_memories={this.state.memoriesTotal}
-                                 calendaries_cloud={parseCalendariesString(this.state.query.c)}
-                                 default_calendary_slug={this.defaultCalendarySlug()}
+                                 totalMemories={this.state.memoriesTotal}
+                                 calendariesCloud={parseCalendariesString(this.state.query.c)}
+                                 defaultCalendarySlug={this.defaultCalendarySlug()}
                                  onLoadRequest={this.onMemoryLoadRequest.bind(this)}
                                  onFetchNext={this.onFetchNext.bind(this)}/></div>}</div></form></div></div></main>,
          <div className="progress">

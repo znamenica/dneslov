@@ -7,22 +7,22 @@ import Markdown from 'Markdown'
 export default class MemorySpan extends Component {
    static defaultProps = {
       slug: null,
-      default_calendary_slug: null,
-      thumb_url: null,
-      happened_at: null,
+      defaultCalendarySlug: null,
+      thumbUrl: null,
+      happenedAt: null,
       orders: {},
       description: null,
       title: null,
-      add_date: null,
-      year_date: null,
-      bind_kind_code: null,
-      calendary_slug: null,
-      event_title: null,
+      addDate: null,
+      yearDate: null,
+      bindKindCode: null,
+      calendarySlug: null,
+      eventTitle: null,
       onLoadRequest: null,
    }
 
    state = {
-      thumb_url: this.props.thumb_url
+      thumbUrl: this.props.thumbUrl
    }
 
    // system
@@ -63,12 +63,12 @@ export default class MemorySpan extends Component {
 
    onLoadImageError() {
       console.warn("[onLoadImageError] ** image load error")
-      this.setState({ thumb_url: null })
+      this.setState({ thumbUrl: null })
    }
 
    // props
    hasNoImage() {
-      return !this.state.thumb_url
+      return !this.state.thumbUrl
    }
 
    hasImage() {
@@ -97,7 +97,7 @@ export default class MemorySpan extends Component {
                      <img
                         className='circle z-depth-1'
                         onError={this.onLoadImageError.bind(this)}
-                        src={this.state.thumb_url} />}
+                        src={this.state.thumbUrl} />}
                   {this.hasNoImage() &&
                      <i className='material-icons circle terracota z-depth-1'>perm_identity</i>}</a>
                <Chip
@@ -108,7 +108,7 @@ export default class MemorySpan extends Component {
                   {this.props.title}</span>
                <Chip
                   className='year-date'
-                  text={this.props.happened_at} /></div>
+                  text={this.props.happenedAt} /></div>
             {this.props.description &&
                <div
                   className='collapsible-body description'
