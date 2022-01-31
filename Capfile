@@ -8,11 +8,13 @@ require 'capistrano/bundler' # Rails needs Bundler, right?
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/nginx'
-require 'capistrano/rake'
+# require 'capistrano/rake'
 require 'capistrano/rvm'
-require 'capistrano/sidekiq'
-install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
-install_plugin Capistrano::Sidekiq::Systemd
+# require 'capistrano/sidekiq'
+require "capistrano/systemd/multiservice"
+install_plugin Capistrano::Systemd::MultiService.new_service("sidekiq")
+# install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
+# install_plugin Capistrano::Sidekiq::Systemd
 
 # Load the SCM plugin appropriate to your project:
 #

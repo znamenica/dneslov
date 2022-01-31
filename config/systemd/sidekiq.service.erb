@@ -1,0 +1,21 @@
+[Unit]
+Description=<%= fetch(:application) %> application server sidekiq
+After=network.target remote-fs.target nss-lookup.target
+Requires=redis.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+Environment=RAILS_ENV=<%= fetch(:rails_env) %>
+Environment=PWD=<%= current_path %>
+WorkingDirectory=<%= current_path %>
+ExecStart=/bin/bash -lc 'exec bundle exec sidekiq'
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+TimeoutSec=10
+SyslogIdentifier=dneslov-sidekiq
+
+[Install]
+WantedBy=multi-user.target

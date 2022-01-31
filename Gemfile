@@ -94,9 +94,8 @@ group :development do
    gem 'capistrano-rails', '~> 1.3'
    gem 'capistrano3-nginx'
    gem 'capistrano-bundler'
-   gem 'capistrano-rake'
    gem 'capistrano-rvm'
-   gem 'capistrano-sidekiq'
+   gem 'capistrano-systemd-multiservice', require: false
    gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.7.0'
    gem 'pattern_generator', '>= 0.1.0'

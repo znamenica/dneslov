@@ -7,7 +7,6 @@ set :deploy_user, 'www-data'
 
 set :repo_url, "git@github.com:znamenica/dneslov.git"
 
-
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -23,7 +22,7 @@ set :repo_url, "git@github.com:znamenica/dneslov.git"
 # Default value for :pty is false
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/secrets.yml"
+append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules"
@@ -51,20 +50,27 @@ set :nginx_roles, :web
 set :nginx_static_dir, "public"
 
 set :rvm_type, :user                      # Defaults to: :auto
-set :rvm_ruby_version, '2.7.1@dneslov --create'    # Defaults to: 'default'
+set :rvm_ruby_version, '2.7.5@dneslov --create'    # Defaults to: 'default'
 # set :rvm_custom_path, '~/.rvm'          # only needed if not detected
 set :rvm_roles, [:app, :web]
 
+set :systemd_redis_service, "redis"
+
+task :setup do
+end
+
+# before 'nginx:reload', 'nginx:remove_default_vhost' TODO ?
+before 'nginx:reload', 'nginx:create_log_paths'
+after 'setup', 'nginx:reload'
+after 'setup', 'systemd:sidekiq:setup'
+after 'setup', 'systemd:redis:setup'
+after 'setup', 'nginx:site:add'
+after 'nginx:site:add', 'nginx:site:enable'
+after 'nginx:site:enable', 'nginx:restart'
+after 'nginx:restart', 'deploy:restart'
 
 namespace :deploy do
-   #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
    after :finishing, 'deploy:cleanup'
    after 'deploy:updating', 'deploy:symlink:custom'
-   #before 'deploy:setup_config', 'nginx:remove_default_vhost'
-   #after 'deploy:setup_config', 'nginx:reload'
-   after 'deploy:publishing', 'nginx:site:add'
-   after 'nginx:site:add', 'nginx:site:enable'
-   after 'nginx:site:enable', 'nginx:restart'
-   after 'nginx:restart', 'deploy:restart'
-   after "deploy:restart", "sidekiq:restart"
+   after 'deploy:publishing', 'systemd:sidekiq:reload-or-restart'
 end
