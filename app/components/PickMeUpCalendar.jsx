@@ -254,7 +254,9 @@ export default class PickMeUpCalendar extends Component {
    }
 
    fastDays() {
-      return this.props.calendary["meta"]["fast_days"] || []
+      let calendary = this.props.calendary
+
+      return calendary && calendary["meta"] && calendary["meta"]["fast_days"] || []
    }
 
    matchFastDate(date) {
