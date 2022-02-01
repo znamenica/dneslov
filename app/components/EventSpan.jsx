@@ -9,7 +9,7 @@ export default class EventSpan extends Component {
       kindName: null,
       place: {},
       titles: [],
-      cantoes: [],
+      scripta: [],
       memoes: [],
       defaultCalendarySlug: null,
       describedMemoIds: [],
@@ -76,7 +76,7 @@ export default class EventSpan extends Component {
 
    // custom
    hasData() {
-      return this.props.cantoes.length > 0 || this.hasDescription()
+      return this.props.scripta.length > 0 || this.hasDescription()
    }
 
    classNameForItem() {
@@ -128,13 +128,13 @@ export default class EventSpan extends Component {
                         <div className='row'>
                            <div className='col s12 description'>
                               <Markdown source={this.state.describedMemoes[0].description} /></div></div>}
-               {this.props.cantoes > 0 &&
+               {this.props.scripta > 0 &&
                   <div className='col s12'>
-                     {this.props.cantoes.map((canto) =>
+                     {this.props.scripta.map((scriptum) =>
                         <div className='row'>
                            <div className='col s12 title'>
-                              {canto.title}</div>
+                              {scriptum.title}</div>
                            <div className='col s12'>
-                              {canto.text}</div></div>)}</div>}</div></div>}</li>)
+                              {scriptum.text}</div></div>)}</div>}</div></div>}</li>)
    }
 }

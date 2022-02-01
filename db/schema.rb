@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_10_140444) do
+ActiveRecord::Schema.define(version: 2022_02_01_124900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -242,12 +242,12 @@ ActiveRecord::Schema.define(version: 2022_01_10_140444) do
     t.index ["type"], name: "index_scripta_on_type"
   end
 
-  create_table "service_cantoes", id: :serial, force: :cascade do |t|
+  create_table "service_scripta", id: :serial, force: :cascade do |t|
     t.integer "service_id", null: false
-    t.integer "canto_id", null: false
-    t.index ["canto_id"], name: "index_service_cantoes_on_canto_id"
-    t.index ["service_id", "canto_id"], name: "index_service_cantoes_on_service_id_and_canto_id", unique: true
-    t.index ["service_id"], name: "index_service_cantoes_on_service_id"
+    t.integer "scriptum_id", null: false
+    t.index ["scriptum_id"], name: "index_service_scripta_on_scriptum_id"
+    t.index ["service_id", "scriptum_id"], name: "index_service_scripta_on_service_id_and_scriptum_id", unique: true
+    t.index ["service_id"], name: "index_service_scripta_on_service_id"
   end
 
   create_table "services", id: :serial, force: :cascade do |t|
@@ -308,6 +308,6 @@ ActiveRecord::Schema.define(version: 2022_01_10_140444) do
 
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict
-  add_foreign_key "service_cantoes", "scripta", column: "canto_id", on_delete: :cascade
-  add_foreign_key "service_cantoes", "services", on_delete: :cascade
+  add_foreign_key "service_scripta", "scripta", on_delete: :cascade
+  add_foreign_key "service_scripta", "services", on_delete: :cascade
 end

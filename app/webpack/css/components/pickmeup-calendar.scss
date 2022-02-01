@@ -135,9 +135,9 @@ html {
          }
       }
 
-      [type="radio"] + label.pmu-style:after,
-      [type="radio"] + label.pmu-style:before,
-      [type="radio"] + label.pmu-style {
+      label.pmu-style:after,
+      label.pmu-style:before,
+      label.pmu-style {
          content: none;
          display: inline-block;
          cursor: pointer;
@@ -172,28 +172,32 @@ html {
          }
       }
 
-      [type="radio"] + label.pmu-style:after {
+      label.pmu-style:after {
          margin-left: 0.2rem;
       }
 
-      [type="radio"] + label.pmu-style:hover {
+      label.pmu-style:hover {
          background: darken($terracota, 5%);
          color: darken($dark, 5%);
          box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.2), inset 0 -0.2rem 0 rgba(0,0,0,0.32);
       }
 
-      [type="radio"]:checked + label.pmu-style {
+      label.pmu-style.checked {
          background: darken($terracota, 25%);
          color: lighten($dark, 5%);
          transform: translateY(0.15rem);
          box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.2), inset 0 -0.1rem 0 rgba(0,0,0,0.22);
       }
 
-      [type="radio"] + label.pmu-style.julian {
+      label.pmu-style.clicked {
+         filter: brightness(0.75);
+      }
+
+      label.pmu-style.julian {
          width: 42%;
       }
 
-      [type="radio"] + label.pmu-style.neo-julian {
+      label.pmu-style.neojulian {
          width: 58%;
       }
    }

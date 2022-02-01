@@ -147,7 +147,7 @@ class MemoriesController < ApplicationController
    end
 
    def set_memory
-      @memorys ||= Memory.with_cantoes( @locales )
+      @memorys ||= Memory.with_scripta( @locales )
                          .with_names( @locales )
                          .with_pure_links
                          .with_slug_text
@@ -159,7 +159,7 @@ class MemoriesController < ApplicationController
    def fetch_events
       @events = @memory.events
                        .memoed
-                       .with_cantoes(context[:locales])
+                       .with_scripta(context[:locales])
                        .with_memoes(context[:locales])
                        .with_place(context[:locales])
                        .with_titles(context)
