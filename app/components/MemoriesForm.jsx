@@ -89,6 +89,12 @@ export default class MemoriesForm extends Component {
              this.props.calendaries_cloud[0].slug
    }
 
+   defaultUsedCalendary() {
+      let calendaries = this.calendariesUsed()
+
+      return calendaries && calendaries[0]
+   }
+
    // handlers
    onCloudAct(data) {
       let c = (this.state.query.c || "").split(",").filter(c => c).concat([ data.slug ]).join(",")
@@ -271,7 +277,7 @@ export default class MemoriesForm extends Component {
                         <div className='hidden' id='calendary' />
                         <div className='row'>
                            <PickMeUpCalendar
-                              calendary={this.calendariesUsed()[0]}
+                              calendary={this.defaultUsedCalendary()}
                               withDate={this.dateFromQuery()}
                               calendarStyle={this.calendarStyleFromQuery()}
                               onUpdate={this.onCalendarUpdate.bind(this)} />
