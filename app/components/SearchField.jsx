@@ -79,4 +79,6 @@ export default class SearchField extends Component {
                value={this.state.with_text}
                onBlur={this.onBlur.bind(this)}
                onChange={this.onChange.bind(this)}
-               onKeyPress={this.onKeyPress.bind(this)} /></div>)}}
+               onKeyPress={this.onKeyPress.bind(this)} /></div>)
+   }
+}

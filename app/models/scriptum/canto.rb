@@ -1,9 +1,13 @@
 class Canto < Scriptum
-   has_many :service_cantoes, inverse_of: :canto
-   has_many :services, through: :service_cantoes
-   has_many :canto_memories, inverse_of: :canto
-   has_many :memories, through: :canto_memories
-   has_many :targets, through: :canto_memories, foreign_key: :memory_id, source: :memory
+   TYPES = %w(Canto Chant Canticle Orison Magnification Prayer Irmos IkosTroparion
+              Stichira Kontakion Exapostilarion SessionalHymn Kanonion Kathismion
+              Polileosion Apostichus CryStichira Stichiron)
+
+   has_many :service_scripta, inverse_of: :scriptum
+   has_many :services, through: :service_scripta
+   has_many :scriptum_memories, inverse_of: :scriptum
+   has_many :memories, through: :scriptum_memories
+   has_many :targets, through: :scriptum_memories, foreign_key: :memory_id, source: :memory
 
    has_alphabeth on: %i(prosomeion_title)
 

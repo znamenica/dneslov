@@ -235,11 +235,17 @@ export default class MemoriesForm extends Component {
    }
 
    dateFromQuery() {
-      return this.state.query.d.match(/\d{2}\.\d{2}\.\d{4}/)[0]
+      let date = this.state.query.d || "",
+          match = date.match(/\d{2}\.\d{2}\.\d{4}/)
+
+      return match && match[0]
    }
 
    calendarStyleFromQuery() {
-      if (this.state.query.d.match(/ю/)) {
+      let date = this.state.query.d || "",
+          match = date.match(/ю/)
+
+      if (match) {
          return 'julian'
       } else {
          return 'neojulian'

@@ -22,8 +22,8 @@ class Memory < ActiveRecord::Base
    has_many :events, dependent: :destroy
    has_many :links, as: :info
    has_many :memos, through: :events
-   has_many :service_cantoes, through: :services
-   has_many :cantoes, through: :service_cantoes
+   has_many :service_scripta, through: :services
+   has_many :scripta, through: :service_scripta
    has_many :calendaries, -> { distinct.reorder('id') }, through: :memos
    has_many :thumb_links, as: :info, inverse_of: :info, class_name: :ThumbLink, dependent: :destroy
    has_many :photo_links, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy # ЧИНЬ во photos
@@ -109,21 +109,21 @@ class Memory < ActiveRecord::Base
 
       select(selector).group(:id) ;end
 
-   scope :with_cantoes, -> (language_code) do
+   scope :with_scripta, -> (language_code) do
       language_codes = [ language_code ].flatten
       selector = self.select_values.dup
       if selector.empty?
          selector << 'memories.*'
       end
-      selector << "COALESCE((SELECT jsonb_agg(cantoes)
-                               FROM cantoes
+      selector << "COALESCE((SELECT jsonb_agg(scripta)
+                               FROM scripta
                     LEFT OUTER JOIN services
                                  ON services.info_id = memories.id
                                 AND services.info_type = 'Memory'
-                    LEFT OUTER JOIN service_cantoes
-                                 ON service_cantoes.service_id = services.id
-                              WHERE cantoes.id = service_cantoes.canto_id
-                                AND cantoes.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _cantoes"
+                    LEFT OUTER JOIN service_scripta
+                                 ON service_scripta.service_id = services.id
+                              WHERE scripta.id = service_scripta.scriptum_id
+                                AND scripta.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _scripta"
 
       select(selector).group(:id) ;end
 

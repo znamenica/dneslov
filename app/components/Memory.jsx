@@ -17,7 +17,7 @@ export default class Memory extends Component {
       names: [],
       links: [],
       events: [],
-      cantoes: [],
+      scripta: [],
       selected_calendaries: [],
       default_calendary_slug: null
    }
@@ -42,7 +42,7 @@ export default class Memory extends Component {
             describedMemoIds: Memory.getDescribedMemoIds(describedMemoes),
             links: Memory.getLinks(props),
             iconLinks: Memory.getIconLinks(props),
-            cantoes: Memory.selectCantoes(props),
+            scripta: Memory.selectScripta(props),
             happenedAt: Memory.getHappenedAt(props)
          }
       }
@@ -75,8 +75,8 @@ export default class Memory extends Component {
       }).flat().concat([ props.slug ]).compact().uniq()
    }
 
-   static selectCantoes(props) {
-      return props.cantoes.filter(c => { return c.text })
+   static selectScripta(props) {
+      return props.scripta.filter(c => { return c.text })
    }
 
    static getMsDate(props) {
@@ -174,14 +174,14 @@ export default class Memory extends Component {
    state = {}
 
    // custom
-   getCantoTitle(canto) {
+   getScriptumTitle(scriptum) {
       return [
          [
-            canto.type == "Troparion" && "Тропарь" || "Кондак",
-            canto.title && "«" + canto.title + "»",
+            scriptum.type == "Troparion" && "Тропарь" || "Кондак",
+            scriptum.title && "«" + scriptum.title + "»",
          ].compact().join(" "),
-         canto.prosomeion_title && "подобен «" + canto.prosomeion_title + "»",
-         canto.tone && "глас " + canto.tone + "-й",
+         scriptum.prosomeion_title && "подобен «" + scriptum.prosomeion_title + "»",
+         scriptum.tone && "глас " + scriptum.tone + "-й",
       ].compact().join(", ")
    }
 
@@ -223,14 +223,14 @@ export default class Memory extends Component {
                               url={link.url}
                               color={Memory.getColorForLink(link)}
                               text={Memory.getLinkText(link)} />)}</div></div></div>}
-            {this.state.cantoes.isPresent() &&
+            {this.state.scripta.isPresent() &&
                <div className='col s12'>
-                  {this.state.cantoes.map((canto) =>
+                  {this.state.scripta.map((scriptum) =>
                      <div className='row'>
                         <div className='col s12 title'>
-                           {this.getCantoTitle(canto)}</div>
+                           {this.getScriptumTitle(scriptum)}</div>
                         <div className='col s12'>
-                           {canto.text}</div></div>)}</div>}
+                           {scriptum.text}</div></div>)}</div>}
             {this.props.events.isPresent() &&
                <div className='col s12'>
                   <div className='row'>
