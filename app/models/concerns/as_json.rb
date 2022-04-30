@@ -18,7 +18,7 @@ module AsJson
       end
    end
 
-   def jsonize context = {}
+   def jsonify context = {}
       redisize_sql do
          all.as_json(context)
       end
@@ -98,7 +98,10 @@ module AsJson
             options[:map] || {}
          ].reduce { |r, hash| r.merge(hash.map {|k,v| [k.to_sym, v] }.to_h) }
          except = options.fetch(:except, [])
-         only = options.fetch(:only, self.attributes.keys.map(&:to_sym) | (options[:map] || {}).keys | embed_attrs.keys | external_attrs(options).keys)
+         only = options.fetch(:only, self.attributes.keys.map(&:to_sym) |
+                             (options[:map] || {}).keys |
+                              embed_attrs.keys |
+                              external_attrs(options).keys)
 
          attr_hash.map do |(name_in, rule_in)|
             name = /^_(?<_name>.*)/ =~ name_in && _name || name_in.to_s
@@ -112,17 +115,19 @@ module AsJson
       end
 
       def parse_rule rule_in
-         %w(TrueClass FalseClass NilClass Symbol).all? {|k| !rule_in.is_a?(k.constantize) } && true || rule_in.is_a?(Symbol) && rule_in.to_s || rule_in
+         %w(TrueClass FalseClass NilClass Symbol).all? do |k|
+            !rule_in.is_a?(k.constantize)
+         end && true || rule_in.is_a?(Symbol) && rule_in.to_s || rule_in
       end
 
-      def jsonize options = {}
+      def jsonify options = {}
          attr_props = prepare_json(options)
          redisize_json(attr_props) do
             generate_json(attr_props, options[:externals])
          end
       end
 
-      def dejsonize options = {}
+      def dejsonify options = {}
          attr_props = prepare_json(options)
          deredisize_json(attr_props)
       end

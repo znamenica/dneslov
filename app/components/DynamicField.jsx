@@ -48,7 +48,7 @@ export default class DynamicField extends Component {
    }
 
    data = {list: {}, total: 0}
-   state = {start: this.props.start, end: this.props.end}
+   state = {start: this.props.begin, end: this.props.end}
 
    // system
    constructor(props) {
@@ -292,29 +292,55 @@ export default class DynamicField extends Component {
       console.log("[storeDynamicData] * after store", this.data)
    }
 
+   getElementIndex(el) {
+      return Array.prototype.indexOf.call(el.parentNode.children, el)
+   }
+
    onApplyRange() {
       let r = this.state.pendingRange,
           beginName = this.repathTo(this.props.name, "begin"),
           endName = this.repathTo(this.props.name, "end"),
-          valueDetail = merge({}, this.valueToObject(beginName, r.startOffset), this.valueToObject(endName, r.endOffset)),
-          ce = new CustomEvent('dneslov-update-path', merge({}, { detail: valueDetail }))
+          valueDetail, ce,
+          //indexStart = this.getElementIndex(r.startContainer),
+          //indexEnd = r.endContainer.getElementIndex(),
+          posEnd = r.endOffset, posStart = r.startOffset, posOffset = 0,
+          prev = r.startContainer.parentNode.previousElementSibling?.firstChild,
+          next = r.startContainer
 
-      console.debug("[onApplyRange] wwww ** pendingRange:", r, "ce:", ce)
+      //console.debug("[onApplyRange] wwww ** pendingRange:", r.startContainer.constructor.name, r, "ce:", ce)
+      //console.debug("[onApplyRange] wwww ** indexStart:", indexStart, "indexEnd:", indexEnd)
+      //console.debug("[onApplyRange] wwww ** posEnd:", posEnd, "posStart:", posStart, "posOffset", posOffset)
+      //console.debug("[onApplyRange] wwww ** prev:", prev, "next:", next)
 
-      let indexStart = r.startContainter.getElementIndex(),
-          indexEnd = r.endContainter.getElementIndex()
+      while (prev) {
+         posOffset += prev.length
+         //prevSib = prev.parentNode.previousElementSibling
+         //console.debug("[onApplyRange] wwww prev:", prev, "l",prev.length, "sib:", prevSib && prevSib.firstChild)
 
-      if (indexEnd == indexStart) {
-         ee
-      } else if (indexEnd - indexStart > 1) {
-      } else {
+         //prev = prevSib && prevSib.firstChild
+         prev = prev.parentNode.previousElementSibling?.firstChild
       }
+      posStart += posOffset
+
+      while (next && next != r.endContainer) {
+         posOffset += next.length
+         //let nextSib = next.parentNode.nextElementSibling
+         //console.debug("[onApplyRange] wwww next:", next, "l", next.length, "sib:", nextSib && nextSib.firstChild)
+
+         //next = nextSib && nextSib.firstChild
+         next = next.parentNode.nextElementSibling?.firstChild
+      }
+      posEnd += posOffset
+
+      valueDetail = merge({}, this.valueToObject(beginName, posStart), this.valueToObject(endName, posEnd))
+      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: valueDetail }))
+      console.debug("[onApplyRange] wwww ** posOffset, ** posStart:", posStart, "posEnd:", posEnd, "ce", ce)
 
       document.dispatchEvent(ce)
       this.setState({
          pendingRange: null,
-         start: r.startOffset,
-         end: r.endOffset,
+         start: posStart,
+         end: posEnd,
          selectStart: null,
          selectApplied: true
       })
@@ -357,15 +383,17 @@ export default class DynamicField extends Component {
              mid = value.slice(this.state.start, this.state.end),
              post = value.slice(this.state.end, -1)
 
-         return [pre, <span className="selected">{mid}</span>, post]
+         return [<span className="plain">{pre}</span>,
+                 <span className="plain selected">{mid}</span>,
+                 <span className="plain">{post}</span>]
       } else {
-         return value
+         return <span className="plain">{value}</span>
       }
    }
 
    // render
    render() {
-      console.log("[render] wwwwww * props:", this.props, "state: ", this.state)
+      console.log("[render] * props:", this.props, "state: ", this.state)
 
       return (
          <div

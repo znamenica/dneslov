@@ -29,7 +29,7 @@ class Admin::CommonController < ApplicationController
             render :index,
                plain: {
                      total: @objects.total_size,
-                     list: @objects.limit(500).jsonize(only: %i(key value)),
+                     list: @objects.limit(500).jsonify(only: %i(key value)),
                   }.to_json
          end
       end
@@ -41,7 +41,7 @@ class Admin::CommonController < ApplicationController
       respond_to do |format|
          format.json do
             render plain: {
-               list: @objects.jsonize(context),
+               list: @objects.jsonify(context),
                page: @page,
                total: @objects.total_size
             }.to_json
@@ -55,7 +55,7 @@ class Admin::CommonController < ApplicationController
       @object.save!
 
       #TODO: render json: @object.jsonize(context)
-      render json: prepare_object(@object.reload).jsonize(context)
+      render json: prepare_object(@object.reload).jsonify(context)
    end
 
    # PUT /<objects>/1
@@ -64,13 +64,13 @@ class Admin::CommonController < ApplicationController
 
       # binding.pry
       #TODO: render json: @object.jsonize(context)
-      render json: prepare_object(@object.reload).jsonize(context)
+      render json: prepare_object(@object.reload).jsonify(context)
    end
 
    # GET /<objects>/1
    def show
       respond_to do |format|
-         format.json { render :show, json: @object.jsonize(context) }
+         format.json { render :show, json: @object.jsonify(context) }
       end
    end
 
@@ -79,7 +79,7 @@ class Admin::CommonController < ApplicationController
       @object.destroy!
 
       respond_to do |format|
-         format.json { render :show, json: @object.dejsonize(context) }
+         format.json { render :show, json: @object.dejsonify(context) }
       end
    end
 

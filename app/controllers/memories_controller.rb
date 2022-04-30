@@ -28,14 +28,14 @@ class MemoriesController < ApplicationController
          format.html do
             render :index,
                locals: {
-                  memoes: @memoes.jsonize(context),
+                  memoes: @memoes.jsonify(context),
                   total: @memoes.total_size,
-                  cloud: @calendary_cloud.jsonize
+                  cloud: @calendary_cloud.jsonify
                }
          end
          format.json do
             render plain: {
-               list: @memoes.jsonize(context),
+               list: @memoes.jsonify(context),
                page: @page,
                total: @memoes.total_size
             }.to_json(context)
@@ -54,10 +54,10 @@ class MemoriesController < ApplicationController
       respond_to do |format|
          format.html do
             render :show,
-               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
-                         cloud: @calendary_cloud.jsonize }
+               locals: { memory: @memory.jsonify(externals: { events: @events.jsonify }),
+                         cloud: @calendary_cloud.jsonify }
          end
-         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
+         format.json { render json: @memory.jsonify(externals: { events: @events.jsonify }) }
       end
    end
 

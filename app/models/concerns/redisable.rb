@@ -45,7 +45,8 @@ module Redisable
       end
 
       def drop_key key
-         # binding.pry
+         Rails.logger.debug("Drop key #{key.inspect}")
+
          if value = Rails.cache.read(key)
             if key.first == "meta"
                size = value.size
@@ -112,7 +113,6 @@ module Redisable
       ### internal methods for enqueued proceeds
       #
       def redisize_model_metas metakey, model_name, attrs, key
-         # binding.pry
          drop_key(metakey)
          drop_key(metakey[0..1])
          parse_instance_attrs(model_name, attrs, key)
@@ -125,7 +125,6 @@ module Redisable
          model_name = key[1]
          primary_key = key[2]
 
-         # binding.pry
          attres.map do |attrs|
             metakey = ["meta", model_name, primary_key, attrs[primary_key]]
 
@@ -145,15 +144,15 @@ module Redisable
       end
 
       def reredisize_instance_metas key
-         metakey = rekey(key)
+         Rails.logger.debug("reredisize_instance_metas #{key.inspect}")
          # binding.pry
+         metakey = rekey(key)
 
          drop_key(metakey)
          assign_reverse_key(metakey, key)
       end
 
       def deredisize_model_metas model_name
-         # binding.pry
          drop_key(["meta", model_name])
       end
 
@@ -202,10 +201,11 @@ module Redisable
 
    # self -> model instance
    def reredisize_instance
+      Rails.logger.debug("reredisize_instance")
+
       attrs = Redisable.as_json_for(self)
       key = Redisable.key_name_for(self.model_name.name, attrs, "instance")
 
-      # binding.pry
       Rails.cache.write(key, self, expires_in: 1000.years)
       Redisable.enqueue(:reredisize_instance_metas, key)
    end
@@ -224,7 +224,6 @@ module Redisable
       def redisize_sql &block
          key = ["sql", self.name, self.primary_key, self.all.to_sql]
 
-         # binding.pry
          Rails.cache.fetch(key, expires_in: 1.day) do
             value = block.call
 

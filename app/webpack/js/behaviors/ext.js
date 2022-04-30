@@ -1,5 +1,31 @@
-Element.prototype.getElementIndex = function() {
+Text.prototype.getElementIndex = function() {
    return Array.prototype.indexOf.call(this.parentNode.children, this)
+}
+
+Number.prototype.populateDownTo = function(number) {
+   let count = number - self,
+       array = new Array()
+
+   if (count < 0) {
+      for (let i = self; i >= number; i--) {
+         array.push(step)
+      }
+   }
+
+   return array
+}
+
+Number.prototype.populateTo = function(number) {
+   let count = number - self,
+       array = new Array()
+
+   if (count > 0) {
+      for (let i = self; i <= number; i++) {
+         array.push(step)
+      }
+   }
+
+   return array
 }
 
 Date.at = function(milliseconds) {

@@ -579,10 +579,14 @@ html {
          -webkit-user-select: auto;
          -ms-user-select: auto;
 
-         .selected {
+         .plain {
             margin: 0;
             padding: 0;
-            background-color: aliceblue;
+            white-space: pre-wrap;
+
+            &.selected {
+               background-color: aliceblue;
+            }
          }
       }
 
