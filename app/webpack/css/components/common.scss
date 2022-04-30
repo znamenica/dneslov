@@ -482,6 +482,14 @@ html {
       opacity: 0.98 !important;
       max-height: none;
 
+      // select dropdown
+      .select-dropdown.dropdown-content {
+         li:first-child {
+            background-color: #c0c0c0;
+            pointer-events: none;
+         }
+      }
+
       .modal-content {
          padding: 1rem;
          overflow-x: hidden;

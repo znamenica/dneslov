@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_124900) do
+ActiveRecord::Schema.define(version: 2022_05_01_015800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 2022_02_01_124900) do
   create_table "readings", force: :cascade do |t|
     t.string "year_date"
     t.string "abbreviation"
-    t.string "kind"
+    t.integer "kind"
     t.index ["abbreviation"], name: "index_readings_on_abbreviation"
     t.index ["kind"], name: "index_readings_on_kind"
     t.index ["year_date", "abbreviation", "kind"], name: "index_readings_on_year_date_and_abbreviation_and_kind"
