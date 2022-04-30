@@ -86,7 +86,6 @@ export default class SelectField extends Component {
                onChange={this.onChange.bind(this)} />
             {Object.keys(this.props.codeNames).map((option) =>
                <option
-                  {...{[option.length == 0 && 'disabled']: 'disabled'}}
                   key={option}
                   value={option} >
                   {this.props.codeNames[option]}</option>)}
