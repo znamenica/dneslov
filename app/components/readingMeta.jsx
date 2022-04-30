@@ -101,7 +101,7 @@ export const readingMeta = {
                placeholder: 'Начни ввод текста...',
                validations: {
                   'Избранный текст отсутствует': matchEmptyObject,
-                  'Текст или чего часть должен быть выделен': matchSelection,
+                  'Текст или его часть должены быть выделены': matchSelection,
                }
             },
          }

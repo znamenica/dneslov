@@ -214,7 +214,7 @@ export function matchAlphabeths(objectIn) {
 }
 
 export function matchSelection(value, _context, state) {
-   return !state.range
+   return !state.start || !state.end
 }
 
 export function matchEmptyCollection(value) {
