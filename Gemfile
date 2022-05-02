@@ -8,7 +8,7 @@ end
 ruby '2.7.5'
 
 ## Bundler
-gem 'bundler', '2.2.32'
+gem 'bundler', '>= 2.3.12'
 
 
 
@@ -16,7 +16,7 @@ gem 'bundler', '2.2.32'
 gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
 
 ## Core
-gem 'rails', '~> 5.2.4', '>= 5.2.4.6'
+gem 'rails', '~> 5.2.4', '>= 5.2.7.1'
 gem 'pg'
 ##NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
@@ -139,6 +139,6 @@ group :test do
 end
 
 group :production do
-   gem 'puma', '~> 4.3'
+   gem 'puma', '~> 4.3', '>= 4.3.12'
 end
 
