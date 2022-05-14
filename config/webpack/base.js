@@ -51,7 +51,7 @@ const customConfig = {
                   },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-               { loader: 'postcss-loader', options: { options: {}, } },
+               { loader: 'postcss-loader', options: {} },
                { loader: 'sass-loader', options: { sourceMap: true } },
             ],
          },
@@ -66,7 +66,7 @@ const customConfig = {
                   },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-               { loader: 'postcss-loader', options: { options: {}, } },
+               { loader: 'postcss-loader', options: {} },
             ],
          },
          {
