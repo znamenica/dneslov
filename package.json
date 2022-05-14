@@ -31,7 +31,7 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.1",
     "@babel/types": "^7.9.0",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "^9.8.8",
     "babel-loader": "^8.1.0",
     "babel-plugin-transform-es3-modules-literals": "^0.0.3",
     "babel-plugin-transform-react-pure-class-to-function": "^1.0.1",
@@ -43,6 +43,7 @@
     "image-webpack-loader": "^8.1.0",
     "mini-css-extract-plugin": "^0.8.0",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "postcss": "~7.0.39",
     "postcss-loader": "^4.3.0",
     "prop-types": "^15.6.0",
     "resolve-url-loader": "^4.0.0",
@@ -59,6 +60,7 @@
     "yarn": "^1.22.0"
   },
   "dependencies": {
+    "@jridgewell/gen-mapping": "0.3.1",
     "@majioa/react-scroll-pagination": "^0.2.3",
     "@soon92/react-json-editor-ajrm": "^2.5.15",
     "@types/react": "17.0.38",
