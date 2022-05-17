@@ -13,6 +13,7 @@ require 'capistrano/rvm'
 # require 'capistrano/sidekiq'
 require "capistrano/systemd/multiservice"
 install_plugin Capistrano::Systemd::MultiService.new_service("sidekiq")
+install_plugin Capistrano::Systemd::MultiService.new_service("core")
 # install_plugin Capistrano::Sidekiq  # Default sidekiq tasks
 # install_plugin Capistrano::Sidekiq::Systemd
 

@@ -48,6 +48,7 @@ set :default_env, { path: "#{release_path}/node_modules/yarn/bin:#{release_path}
 
 set :nginx_roles, :web
 set :nginx_static_dir, "public"
+set :nginx_template, "#{stage_config_path}/#{fetch :stage}/nginx.conf.erb"
 
 set :rvm_type, :user                      # Defaults to: :auto
 set :rvm_ruby_version, '2.7.5@dneslov --create'    # Defaults to: 'default'
@@ -59,18 +60,18 @@ set :systemd_redis_service, "redis"
 task :setup do
 end
 
-# before 'nginx:reload', 'nginx:remove_default_vhost' TODO ?
-before 'nginx:reload', 'nginx:create_log_paths'
-after 'setup', 'nginx:reload'
-after 'setup', 'systemd:sidekiq:setup'
-after 'setup', 'systemd:redis:setup'
-after 'setup', 'nginx:site:add'
-after 'nginx:site:add', 'nginx:site:enable'
-after 'nginx:site:enable', 'nginx:restart'
-after 'nginx:restart', 'deploy:restart'
+# deploy
+after 'deploy:publishing', 'systemd:sidekiq:setup'
+after 'deploy:publishing', 'systemd:core:setup'
+after 'deploy:publishing', 'systemd:sidekiq:enable'
+after 'deploy:publishing', 'systemd:core:enable'
+after 'deploy:finishing', 'deploy:cleanup'
 
-namespace :deploy do
-   after :finishing, 'deploy:cleanup'
-   after 'deploy:updating', 'deploy:symlink:custom'
-   after 'deploy:publishing', 'systemd:sidekiq:reload-or-restart'
-end
+# deploy:restart
+before 'nginx:reload', 'nginx:create_log_paths'
+before 'nginx:site:enable', 'nginx:site:add'
+before 'nginx:restart', 'nginx:site:enable'
+before 'deploy:restart', 'nginx:restart'
+after 'deploy:restart', 'systemd:sidekiq:reload-or-restart'
+after 'deploy:restart', 'systemd:core:reload-or-restart'
+

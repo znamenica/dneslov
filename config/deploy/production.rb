@@ -8,15 +8,15 @@ server "dneslov", port: "222", user: "www-data", roles: %w{app db web}, primary:
 set :pty, false
 
 # nginx
-set :nginx_domains, "dneslov.com localhost"
+set :nginx_domains, "dneslov.org"
 set :nginx_read_timeout, 60
 set :app_server_socket, "#{shared_path}/tmp/sockets/puma.sock"
 
 set :nginx_use_ssl, true
 set :nginx_ssl_certificate_path, '/etc/nginx/ssl'
-set :nginx_ssl_certificate, 'dneslov.crt'
+set :nginx_ssl_certificate, 'dneslov.org.pem'
 set :nginx_ssl_certificate_key_path, '/etc/nginx/ssl'
-set :nginx_ssl_certificate_key, 'dneslov.key'
+set :nginx_ssl_certificate_key, 'dneslov.org.key'
 
 # role-based syntax
 # ==================
@@ -77,7 +77,6 @@ set :branch, ENV['BRANCH'] || "master"
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :server_name, "www.dneslov.org dneslov.org"
 set :deploy_to, "/var/www/dneslov"
-# set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
 
 set :rails_env, :production
-set :enable_ssl, false
+set :enable_ssl, true

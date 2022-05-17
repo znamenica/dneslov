@@ -1,0 +1,57 @@
+upstream dneslov_app {
+   server unix:<%= fetch(:app_server_socket) %> fail_timeout=0;
+}
+
+# https://docs.nginx.com/nginx/admin-guide/security-controls/terminating-ssl-http/
+server {
+   listen 80;
+   <% if fetch(:nginx_use_ssl) %>
+   listen 443 ssl;
+   <% end %>
+
+   root <%= current_path %>/public;
+
+   server_name <%= fetch(:nginx_domains) %>;
+
+   keepalive_timeout <%= fetch(:nginx_read_timeout) %>;
+   client_max_body_size 4G;
+
+   ssl on;
+   # ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+   ssl_protocols TLSv1.2;
+   ssl_ciphers HIGH:!aNULL:!MD5:!3DES;
+   ssl_certificate_key  <%= File.join(fetch(:nginx_ssl_certificate_key_path), fetch(:nginx_ssl_certificate_key)) %>;
+   ssl_certificate      <%= File.join(fetch(:nginx_ssl_certificate_path), fetch(:nginx_ssl_certificate)) %>;
+   # add_header Strict-Transport-Security 'max-age=604800';   
+
+   try_files $uri/index.html $uri @dneslov_app;
+
+   error_page 500 502 503 504 /500.html;
+   location = /500.html {
+      root <%= current_path %>/public;
+   }
+
+   location ~ ^/(assets)/ {
+      gzip_static on;
+
+      add_header Cache-Control public;
+      expires 4w;
+      gzip on;
+      gzip_vary on;
+      gzip_proxied any;
+      gzip_disable "MSIE [1-6]\.";
+      gzip_comp_level 6;
+      gzip_types application/x-javascript text/css image/x-icon image/png image/jpeg image/gif;
+   }
+
+   location @dneslov_app {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Ssl on;
+      proxy_read_timeout 30;
+      proxy_redirect off;
+      proxy_pass http://dneslov_app;
+   }
+}
