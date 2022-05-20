@@ -27,7 +27,6 @@ if Rails.env.production?
    pidfile "#{shared_dir}/tmp/pids/puma.pid"
    state_path "#{shared_dir}/tmp/pids/puma.state"
    activate_control_app
-   daemonize true
 elsif Rails.env.development?
    shared_dir = '.'
    threads_count = Integer(ENV['MAX_THREADS'] || 1)

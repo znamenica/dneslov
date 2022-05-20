@@ -10,7 +10,7 @@ User=www-data
 Group=www-data
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'exec bundle exec sidekiq'
+ExecStart=/bin/bash -lc 'exec bundle exec puma'
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
