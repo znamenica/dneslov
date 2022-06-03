@@ -3,7 +3,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "dneslov", port: "222", user: "www-data", roles: %w{app db web}, primary: true
+server "176.113.80.84", port: "222", user: "_nginx", roles: %w{app db web}, primary: true
 
 set :pty, false
 
@@ -17,6 +17,8 @@ set :nginx_ssl_certificate_path, '/etc/nginx/ssl'
 set :nginx_ssl_certificate, 'dneslov.org.pem'
 set :nginx_ssl_certificate_key_path, '/etc/nginx/ssl'
 set :nginx_ssl_certificate_key, 'dneslov.org.key'
+set :nginx_sites_available_dir, "/etc/nginx/sites-available.d"
+set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 
 # role-based syntax
 # ==================

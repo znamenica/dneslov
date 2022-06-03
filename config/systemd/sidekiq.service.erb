@@ -1,7 +1,7 @@
 [Unit]
 Description=<%= fetch(:application) %> application server sidekiq
 After=network.target remote-fs.target nss-lookup.target
-Requires=redis-server.service postgresql.service
+Requires=redis.service postgresql.service
 
 [Service]
 Type=simple

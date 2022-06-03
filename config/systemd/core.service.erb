@@ -2,7 +2,7 @@
 Description=<%= fetch(:application) %> application server
 After=network.target remote-fs.target nss-lookup.target
 Wants=postgresql.service dneslov-sidekiq.service
-Requires=redis-server.service
+Requires=redis.service
 
 [Service]
 Type=simple
