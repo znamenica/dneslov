@@ -78,9 +78,6 @@ gem 'pundit'
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
-gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
-gem 'sentry-rails'
-gem 'sentry-sidekiq'
 
 ## orthodox
 gem 'when_easter'
@@ -140,5 +137,7 @@ end
 
 group :production do
    gem 'puma', '~> 4.3', '>= 4.3.12'
+   gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
+   gem 'sentry-rails'
+   gem 'sentry-sidekiq'
 end
-
