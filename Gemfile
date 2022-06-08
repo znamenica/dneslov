@@ -88,7 +88,7 @@ gem 'activerecord-import'
 gem "zero_downtime_migrations"
 
 ## pdf
-gem 'prawn'
+gem 'prawn', git: 'https://github.com/majioa/prawn.git', ref: '10e29240e'
 
 group :development do
    gem 'capistrano', '~> 3.6'
