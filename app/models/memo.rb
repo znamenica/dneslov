@@ -127,20 +127,15 @@ class Memo < ActiveRecord::Base
       left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
    end
 
-   scope :by_date, -> (date_in, julian = false) do
-      return self if date_in.blank?
+   scope :by_date, -> (dates_in, julian = false) do
+      return self if dates_in.blank?
 
-      date = date_in.is_a?(Date) && date_in || Date.parse(date_in)
-      new_date = date.strftime("%2d.%m")
-      gap = (julian && 13.days || 0)
-      wday = (date + gap).wday
-      easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
-      days = sprintf( "%+i", date.to_time.yday - easter.yday )
       relays =
          CONDITIONALS.map do |(cond, range)|
             range.map {|x| (date - x.days).strftime("%2d.%m") + "#{cond}#{wday}" }
          end.flatten
-      result = relays.dup << new_date << days
+
+      result = relays.dup << new_date << Memo.dates_to_days(dates_in, julian)
 
       if !date.leap?
          result |= result.grep(/28\.02[%<>~]?/).map do |date|
@@ -533,6 +528,40 @@ class Memo < ActiveRecord::Base
 
    before_validation :fix_year_date
    before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
+
+   class << self
+      def dates_to_days dates_in, julian
+         days = [dates_in].flatten.map do |date_in|
+            date = date_in.is_a?(Date) && date_in || Date.parse(date_in)
+            new_date = date.strftime("%2d.%m")
+            gap = (julian && 13.days || 0)
+            wday = (date + gap).wday
+            easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
+
+            sprintf("%+i", date.to_time.yday - easter.yday)
+         end.flatten.uniq
+      end
+   end
+
+   def year_date_for year
+      case self.year_date
+      when /([+-])(.*)/
+         # gap = (julian && 13.days || 0)
+         # wday = (date + gap).wday
+         mul = $1 == '-' && -1 || 1
+         WhenEaster::EasterCalendar.find_greek_easter_date(year.to_i) + (mul * $2.to_i).days
+      when /(.*)%(.*)/
+         date = Date.parse([$1, year].join('.'))
+         gap_in = $2.to_i - date.wday
+         gap = gap_in < 0 && gap_in + 7 || gap_in
+
+         date + gap.days
+      else
+         Date.parse([self.year_date, year].join('.'))
+      end
+   rescue
+      Time.at(0)
+   end
 
    def fix_year_date
       self.year_date =

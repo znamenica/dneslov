@@ -61,6 +61,7 @@ gem 'addressable'
 # rendering
 ## NPM packaging for view render
 gem 'npm-pipeline-rails', '>= 1.8.1'
+gem 'redcarpet'
 
 ## JSON
 gem 'oj'
@@ -85,6 +86,9 @@ gem 'when_easter'
 ## data
 gem 'activerecord-import'
 gem "zero_downtime_migrations"
+
+## pdf
+gem 'prawn'
 
 group :development do
    gem 'capistrano', '~> 3.6'
