@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'when_easter'
 
 # class Memo содержит сведения о помине какой-либо памяти в календаре,
@@ -127,15 +129,10 @@ class Memo < ActiveRecord::Base
       left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
    end
 
-   scope :by_date, -> (dates_in, julian = false) do
+   scope :by_date, ->(dates_in, julian = false) do
       return self if dates_in.blank?
 
-      relays =
-         CONDITIONALS.map do |(cond, range)|
-            range.map {|x| (date - x.days).strftime("%2d.%m") + "#{cond}#{wday}" }
-         end.flatten
-
-      result = relays.dup << new_date << Memo.dates_to_days(dates_in, julian)
+      result = Memo.dates_to_days(dates_in, julian)
 
       if !date.leap?
          result |= result.grep(/28\.02[%<>~]?/).map do |date|
@@ -531,35 +528,38 @@ class Memo < ActiveRecord::Base
 
    class << self
       def dates_to_days dates_in, julian
-         days = [dates_in].flatten.map do |date_in|
+         [dates_in].flatten.map do |date_in|
             date = date_in.is_a?(Date) && date_in || Date.parse(date_in)
-            new_date = date.strftime("%2d.%m")
-            gap = (julian && 13.days || 0)
+            new_date = date.strftime('%2d.%m')
+            gap = julian && 13.days || 0
             wday = (date + gap).wday
             easter = WhenEaster::EasterCalendar.find_greek_easter_date(date.year) - gap
 
-            sprintf("%+i", date.to_time.yday - easter.yday)
+            relays =
+               CONDITIONALS.map do |(cond, range)|
+                  range.map { |x| (date - x.days).strftime('%2d.%m') + "#{cond}#{wday}" }
+               end.flatten
+
+            [relays, new_date, format('%+i', date.to_time.yday - easter.yday)]
          end.flatten.uniq
       end
    end
 
    def year_date_for year
-      case self.year_date
-      when /([+-])(.*)/
-         # gap = (julian && 13.days || 0)
-         # wday = (date + gap).wday
-         mul = $1 == '-' && -1 || 1
-         WhenEaster::EasterCalendar.find_greek_easter_date(year.to_i) + (mul * $2.to_i).days
-      when /(.*)%(.*)/
-         date = Date.parse([$1, year].join('.'))
-         gap_in = $2.to_i - date.wday
-         gap = gap_in < 0 && gap_in + 7 || gap_in
+      case year_date
+      when /(?<sign>[+-])(?<indent>.*)/
+         mul = sign == '-' && -1 || 1
+         WhenEaster::EasterCalendar.find_greek_easter_date(year.to_i) + (mul * indent.to_i).days
+      when /(?<year_m>.*)%(?<date_m>.*)/
+         date = Date.parse([year_m, year].join('.'))
+         gap_in = date_m.to_i - date.wday
+         gap = gap_in.negative? && gap_in + 7 || gap_in
 
          date + gap.days
       else
-         Date.parse([self.year_date, year].join('.'))
+         Date.parse([year_date, year].join('.'))
       end
-   rescue
+   rescue StandardError
       Time.at(0)
    end
 

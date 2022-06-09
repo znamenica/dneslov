@@ -104,6 +104,8 @@ group :development do
    gem 'ed25519', '~> 1.2'
    gem 'bcrypt_pbkdf', '~> 1.0'
    gem 'bullet'
+   gem 'rubocop'
+   gem 'rubocop-rails'
 end
 
 group :development, :test do
@@ -141,7 +143,7 @@ end
 
 group :production do
    gem 'puma', '~> 4.3', '>= 4.3.12'
-   gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
    gem 'sentry-rails'
+   gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
    gem 'sentry-sidekiq'
 end

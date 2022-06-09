@@ -49,8 +49,8 @@ class MemoService
             titles: {
                ру_РУ: "\{day}-й день Страстного поста"
             }
-         },
-      },
+         }
+      }
    }
 
    def initialize calendary, add_date = Time.now.strptime("%d.%m.%Y %H:%M")

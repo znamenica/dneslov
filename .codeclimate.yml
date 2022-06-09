@@ -1,0 +1,20 @@
+engines:
+   rubocop:
+      enabled: true
+      checks:
+         Layout/IndentationWidth:
+            Width: 3
+         Layout/LineLength:
+            Max: 130
+         Lint/AmbiguousOperatorPrecedence: # new in 1.21
+            Enabled: false
+         Metrics/MethodLength:
+            Max: 15
+         Metrics/AbcSize:
+            Max: 30
+         Style/MethodDefParentheses:
+            EnforcedStyle: require_no_parentheses
+         Style/NegatedIf:
+            Enabled: false
+         Style/TrailingCommaInHashLiteral:
+            Enabled: false
