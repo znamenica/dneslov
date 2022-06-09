@@ -20,3 +20,11 @@ application up and running.
 4. xclip
 5. sidekiq
 6. postgresql14-server-devel
+
+## Tasks
+
+### PDF Generation
+
+To generate PDF calendary with a first record per day, use the following:
+
+    $ rake book:pdf[днеслов.pdf,днеслов]

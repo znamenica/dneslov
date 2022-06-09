@@ -1,0 +1,21 @@
+---
+Layout/IndentationWidth:
+  Width: 3
+Lint/AmbiguousOperatorPrecedence: # new in 1.21
+  Enabled: false
+Lint/Syntax:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 30
+Metrics/CyclomaticComplexity:
+  Max: 10
+Metrics/LineLength:
+  Max: 130
+Metrics/MethodLength:
+  Max: 15
+Style/MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses
+Style/NegatedIf:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  Enabled: false

@@ -61,6 +61,7 @@ gem 'addressable'
 # rendering
 ## NPM packaging for view render
 gem 'npm-pipeline-rails', '>= 1.8.1'
+gem 'redcarpet'
 
 ## JSON
 gem 'oj'
@@ -78,9 +79,6 @@ gem 'pundit'
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
 gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
-gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
-gem 'sentry-rails'
-gem 'sentry-sidekiq'
 
 ## orthodox
 gem 'when_easter'
@@ -88,6 +86,9 @@ gem 'when_easter'
 ## data
 gem 'activerecord-import'
 gem "zero_downtime_migrations"
+
+## pdf
+gem 'prawn', git: 'https://github.com/majioa/prawn.git', ref: '10e29240e'
 
 group :development do
    gem 'capistrano', '~> 3.6'
@@ -103,6 +104,8 @@ group :development do
    gem 'ed25519', '~> 1.2'
    gem 'bcrypt_pbkdf', '~> 1.0'
    gem 'bullet'
+   gem 'rubocop'
+   gem 'rubocop-rails'
 end
 
 group :development, :test do
@@ -140,5 +143,7 @@ end
 
 group :production do
    gem 'puma', '~> 4.3', '>= 4.3.12'
+   gem 'sentry-rails'
+   gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
+   gem 'sentry-sidekiq'
 end
-
