@@ -1,6 +1,6 @@
 prepare:
    fetch:
-    - url: "https://raw.githubusercontent.com/znamenica/dneslov/136_zUiVBDvH_pdf_calendary_for_time/.rubocop.yml"
+    - url: "https://raw.githubusercontent.com/znamenica/dneslov/master/.rubocop.yml"
       path: ".rubocop.yml"
 engines:
    rubocop:
