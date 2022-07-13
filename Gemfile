@@ -16,7 +16,7 @@ gem 'bundler', '>= 2.3.12'
 gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
 
 ## Core
-gem 'rails', '~> 5.2.4', '>= 5.2.7.1'
+gem 'rails', '~> 5.2.4', '>= 5.2.8.1'
 gem 'pg'
 ##NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
