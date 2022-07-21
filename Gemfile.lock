@@ -474,7 +474,7 @@ GEM
       launchy (~> 2.1, < 2.5.0)
       pusher-client (~> 0.4)
     ttfunk (1.7.0)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
