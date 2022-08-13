@@ -134,13 +134,6 @@ class Memo < ActiveRecord::Base
 
       result = Memo.dates_to_days(dates_in, julian)
 
-      if !date.leap?
-         result |= result.grep(/28\.02[%<>~]?/).map do |date|
-            match = date.match(/([%<>~])/)
-            match.present? && "29.02#{match[1]}#{wday}" || "29.02"
-         end
-      end
-
       where(year_date: result)
    end
 
@@ -539,6 +532,13 @@ class Memo < ActiveRecord::Base
                CONDITIONALS.map do |(cond, range)|
                   range.map { |x| (date - x.days).strftime('%2d.%m') + "#{cond}#{wday}" }
                end.flatten
+
+            if !date.leap?
+               relays |= relays.grep(/28\.02[%<>~]?/).map do |yeardate|
+                  match = yeardate.match(/([%<>~])/)
+                  match.present? && "29.02#{match[1]}#{wday}" || "29.02"
+               end
+            end
 
             [relays, new_date, format('%+i', date.to_time.yday - easter.yday)]
          end.flatten.uniq
