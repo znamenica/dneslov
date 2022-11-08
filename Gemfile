@@ -1,3 +1,5 @@
+ruby '3.1.2'
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -5,12 +7,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '2.7.5'
-
 ## Bundler
 gem 'bundler', '>= 2.3.12'
-
-
 
 ## Environment
 gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
