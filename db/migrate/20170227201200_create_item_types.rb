@@ -1,4 +1,7 @@
-class CreateItemTypes < ActiveRecord::Migration[4.2]
+class CreateItemTypes < ActiveRecord::Migration[5.2]
    def change
       create_table :item_types do |t|
-         t.timestamps null: false ;end;end;end
+         t.timestamps null: false
+      end
+   end
+end

@@ -1,3 +1,5 @@
-class AllowNilForCalendaryIdInMemoes < ActiveRecord::Migration[4.2]
+class AllowNilForCalendaryIdInMemoes < ActiveRecord::Migration[5.2]
    def change
-      change_column_null :memoes, :calendary_id, true ;end;end
+      change_column_null :memoes, :calendary_id, true
+   end
+end

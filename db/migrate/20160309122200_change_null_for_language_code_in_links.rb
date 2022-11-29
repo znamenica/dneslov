@@ -1,3 +1,5 @@
-class ChangeNullForLanguageCodeInLinks < ActiveRecord::Migration[4.2]
+class ChangeNullForLanguageCodeInLinks < ActiveRecord::Migration[5.2]
    def change
-      change_column_null :links, :language_code, true ; end ; end
+      change_column_null :links, :language_code, true
+   end
+end

@@ -1,4 +1,4 @@
-class CreateMagnifications < ActiveRecord::Migration[4.2]
+class CreateMagnifications < ActiveRecord::Migration[5.2]
    def change
       create_table :magnifications do |t|
          t.string  :text, null: false
@@ -6,4 +6,7 @@ class CreateMagnifications < ActiveRecord::Migration[4.2]
 
          t.timestamps null: false
 
-         t.index %i(text language_code), unique: true end;end;end
+         t.index %i(text language_code), unique: true
+      end
+   end
+end

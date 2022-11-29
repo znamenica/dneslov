@@ -1,4 +1,4 @@
-class CreateMemos < ActiveRecord::Migration[4.2]
+class CreateMemos < ActiveRecord::Migration[5.2]
    def change
       create_table :memos do |t|
          t.string :happened_at, index: true
@@ -9,4 +9,7 @@ class CreateMemos < ActiveRecord::Migration[4.2]
          t.belongs_to :memory, null: false
          t.belongs_to :calendary, null: false
 
-         t.index [ :memory_id, :calendary_id ], unique: true ;end;end;end
+         t.index [ :memory_id, :calendary_id ], unique: true
+      end
+   end
+end

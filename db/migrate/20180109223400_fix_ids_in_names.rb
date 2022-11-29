@@ -1,5 +1,6 @@
-class FixIdsInNames < ActiveRecord::Migration[4.2]
+class FixIdsInNames < ActiveRecord::Migration[5.2]
    def change
       #Name.where(bind_kind: 'несвязаное').where.not(bond_to_id: nil).update_all(bond_to_id: nil)
       #Name.where(root_id: nil).update_all("root_id = id")
-      end;end
+   end
+end

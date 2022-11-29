@@ -1,4 +1,4 @@
-class CreateDescriptions < ActiveRecord::Migration[4.2]
+class CreateDescriptions < ActiveRecord::Migration[5.2]
    def change
       create_table :descriptions do |t|
          t.string :text, null: false
@@ -7,5 +7,7 @@ class CreateDescriptions < ActiveRecord::Migration[4.2]
 
          t.timestamps null: false
 
-         t.index %i(memory_id language_code), unique: true end;end;end
-
+         t.index %i(memory_id language_code), unique: true
+      end
+   end
+end

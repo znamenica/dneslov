@@ -1,4 +1,4 @@
-class CreateChants < ActiveRecord::Migration[4.2]
+class CreateChants < ActiveRecord::Migration[5.2]
    def change
       create_table :chants do |t|
          t.string  :text, null: false
@@ -8,4 +8,7 @@ class CreateChants < ActiveRecord::Migration[4.2]
 
          t.string  :type
          t.timestamps null: false
-         t.index %i(text language_code), unique: true end;end;end
+         t.index %i(text language_code), unique: true
+      end
+   end
+end

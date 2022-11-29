@@ -1,6 +1,9 @@
-class ConvertJsonType < ActiveRecord::Migration[4.2]
+class ConvertJsonType < ActiveRecord::Migration[5.2]
    def up
-     change_column(:subjects, :meta, :jsonb) ;end
+      change_column(:subjects, :meta, :jsonb)
+   end
 
    def down
-     change_column(:subjects, :meta, :json) ;end;end
+      change_column(:subjects, :meta, :json)
+   end
+end

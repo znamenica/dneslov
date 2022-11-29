@@ -1,3 +1,5 @@
-class RemoveServiceMagnifications < ActiveRecord::Migration[4.2]
+class RemoveServiceMagnifications < ActiveRecord::Migration[5.2]
    def change
-      drop_table :service_magnifications ;end ;end
+      drop_table :service_magnifications
+   end
+end

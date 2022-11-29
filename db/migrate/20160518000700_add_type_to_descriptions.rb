@@ -1,4 +1,7 @@
-class AddTypeToDescriptions < ActiveRecord::Migration[4.2]
+class AddTypeToDescriptions < ActiveRecord::Migration[5.2]
    def change
       change_table :descriptions do |t|
-         t.string :type ;end ;end ;end
+         t.string :type
+      end
+   end
+end

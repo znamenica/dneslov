@@ -1,4 +1,4 @@
-class FixMemoes < ActiveRecord::Migration[4.2]
+class FixMemoes < ActiveRecord::Migration[5.2]
    safety_assured
 
    def change
@@ -12,7 +12,8 @@ class FixMemoes < ActiveRecord::Migration[4.2]
             t.remove :memory_id
             t.remove :before
             t.remove :after
-            t.remove :inevening ;end
+            t.remove :inevening
+         end
 
          change_column_null :memoes, :calendary_id, false
 
@@ -21,4 +22,7 @@ class FixMemoes < ActiveRecord::Migration[4.2]
          add_index :memoes, %i(bond_to_id bind_kind)
 
          drop_table :event_memoes
-         drop_table :mentions end;end;end
+         drop_table :mentions
+      end
+   end
+end

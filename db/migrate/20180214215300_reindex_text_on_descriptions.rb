@@ -1,4 +1,4 @@
-class ReindexTextOnDescriptions < ActiveRecord::Migration[4.2]
+class ReindexTextOnDescriptions < ActiveRecord::Migration[5.2]
    safety_assured
 
    def change
@@ -13,11 +13,19 @@ class ReindexTextOnDescriptions < ActiveRecord::Migration[4.2]
             t.text :text_new
          end
 
-         Description.update_all("text_new = text")
+         reversible do |dir|
+            dir.up do
+               ActiveRecord::Base.connection.execute("UPDATE descriptions SET text_new = text")
+            end
+         end
 
          remove_column :descriptions, :text, :string
 
          change_table "descriptions" do |t|
             t.rename :text_new, :text
 
-            t.index ["text"], name: "descriptions_text_index", using: :gin end;end;end;end
+            t.index ["text"], name: "descriptions_text_index", using: :gin
+         end
+      end
+   end
+end

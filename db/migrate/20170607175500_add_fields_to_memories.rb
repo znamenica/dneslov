@@ -1,4 +1,4 @@
-class AddFieldsToMemories < ActiveRecord::Migration[4.2]
+class AddFieldsToMemories < ActiveRecord::Migration[5.2]
    def change
       change_table :memories do |t|
          t.belongs_to :cover
@@ -6,4 +6,7 @@ class AddFieldsToMemories < ActiveRecord::Migration[4.2]
          t.string :short
          t.string :quantity
          t.string :order, index: true
-         t.string :counsil, index: true ;end;end;end
+         t.string :counsil, index: true
+      end
+   end
+end

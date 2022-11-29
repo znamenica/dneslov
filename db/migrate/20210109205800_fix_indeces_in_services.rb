@@ -12,7 +12,10 @@ class FixIndecesInServices < ActiveRecord::Migration[5.2]
          t.index %i(ref_title)
          t.index %i(tone)
          t.index %i(name)
-         t.index %i(info_id)
+         t.index %i(info_id), if_not_exists: true
          t.index %i(info_type)
          t.index %i(type)
-         t.index %i(info_type info_id) ;end;end;end
+         t.index %i(info_type info_id)
+      end
+   end
+end
