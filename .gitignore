@@ -39,3 +39,6 @@ public/webpack/manifest.json
 .env
 
 coverage/
+
+# db
+/db/*.sql

@@ -57,6 +57,41 @@ set :rvm_roles, [:app, :web]
 
 set :systemd_redis_service, "redis"
 
+
+### database
+
+# if you want to remove the local dump file after loading
+set :db_local_clean, true
+
+# if you want to remove the dump file from the server after downloading
+set :db_remote_clean, true
+
+# if you want to exclude table from dump
+set :db_ignore_tables, []
+
+# if you want to exclude table data (but not table schema) from dump
+set :db_ignore_data_tables, []
+
+# configure location where the dump file should be created
+set :db_dump_dir, "./db"
+
+# If you want to import assets, you can change default asset dir (default = system)
+# This directory must be in your shared directory on the server
+set :assets_dir, %w(public/assets public/att)
+set :local_assets_dir, %w(public/assets public/att)
+
+# if you want to work on a specific local environment (default = ENV['RAILS_ENV'] || 'development')
+set :locals_rails_env, ENV['RAILS_ENV'] || "production"
+
+# if you are highly paranoid and want to prevent any push operation to the server
+set :disallow_pushing, true
+
+# if you prefer bzip2/unbzip2 instead of gzip
+set :compressor, :bzip2
+
+### tasks
+
+
 task :setup do
 end
 

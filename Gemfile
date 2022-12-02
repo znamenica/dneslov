@@ -96,6 +96,7 @@ group :development do
    gem 'capistrano-bundler'
    gem 'capistrano-rvm'
    gem 'capistrano-systemd-multiservice', require: false
+   gem "capistrano-db-tasks", require: false, github: "majioa/capistrano-db-tasks", ref: "devel"
    gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '>= 3.7.0'
    gem 'pattern_generator', '>= 0.1.0'
