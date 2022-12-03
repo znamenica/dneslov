@@ -1,6 +1,6 @@
 require 'sidekiq/worker_killer'
 
-Sidekiq.default_worker_options = { 'backtrace' => true }
+Sidekiq.default_job_options = { 'backtrace' => true }
 
 Sidekiq.configure_server do |config|
    config.redis = { url: "#{ENV["REDIS_URL"]}/4", namespace: 'caching' }

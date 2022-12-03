@@ -22,9 +22,11 @@
   <meta name="msapplication-wide310x150logo" content="/widetile.png" />
   <meta name="msapplication-square310x310logo" content="/largetile.png" />
   <meta name="yandex-verification" content="624fadefc8db7a07" />
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 </head>
 <body>
   <%= yield %>

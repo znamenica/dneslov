@@ -1,5 +1,5 @@
 class Admin::CommonController < ApplicationController
-   include Concerns::Auth
+   include ::Auth
    include Pundit
 
    before_action :authenticate_user!, except: %i(dashboard)

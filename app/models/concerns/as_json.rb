@@ -37,6 +37,24 @@ module AsJson
    end
 
    module InstanceMethods
+      def additional_types
+         object = self
+
+         @additional_types =
+            while true
+               object =
+                  if object.is_a?(ActiveModel::LazyAttributeSet)
+                     break object.send(:additional_types)
+                  elsif object.instance_variables.include?(:@attributes)
+                     object.instance_variable_get(:@attributes)
+                  elsif object.respond_to?(:attributes)
+                     object.attributes
+                  else
+                     break nil
+                  end
+            end
+      end
+
       def external_attrs options = {}
          if externals = options[:externals]
             externals.keys.map {|k| [k.to_sym, k.to_sym] }.to_h

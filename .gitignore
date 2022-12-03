@@ -33,6 +33,8 @@ config/secrets.*.yml
 config/database.yml
 webpack.config.js
 public/webpack/manifest.json
+public/javascripts/
+public/stylesheets/
 
 *.log
 *.sql
@@ -42,3 +44,9 @@ coverage/
 
 # db
 /db/*.sql
+
+# frontend
+app/assets/config/manifest.js
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

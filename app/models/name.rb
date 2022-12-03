@@ -158,7 +158,7 @@ class Name < ActiveRecord::Base
 
    before_validation -> { self.bind_kind_code ||= 'несвязаное' }, on: :create
    before_save -> { self.text = self.text.strip }
-   after_save :fill_root_id, on: :create, unless: :root_id?
+   after_create :fill_root_id, unless: :root_id?
 
    def bond?
       bind_kind_code != 'несвязаное' ;end
@@ -171,10 +171,9 @@ class Name < ActiveRecord::Base
    EXCEPT = %i(created_at updated_at)
 
    def as_json options = {}
-      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
-      original = super(options.merge(except: EXCEPT | additionals.keys))
+      original = super(options.merge(except: EXCEPT | additional_types.keys))
 
-      additionals.keys.reduce(original) do |r, key|
+      additional_types.keys.reduce(original) do |r, key|
          if /^_(?<name>.*)/ =~ key
             r.merge(name => read_attribute(key).as_json)
          else

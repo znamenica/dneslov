@@ -28,3 +28,11 @@ application up and running.
 To generate PDF calendary with a first record per day, use the following:
 
     $ rake book:pdf[днеслов.pdf,днеслов]
+
+### Start
+
+In development mode:
+
+```bash
+foreman start -f Procfile.dev
+```

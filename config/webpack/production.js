@@ -1,7 +1,7 @@
-process.env.NODE_ENV = process.env.RAILS_ENV || 'production'
+process.env.NODE_ENV = 'production'
 
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
 const sharedConfig = require('./base')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -95,7 +95,6 @@ const customConfig = merge(sharedConfig, {
                               firefox: 50,
                            },
                            "useBuiltIns": "usage"
-                           "forceAllTransforms": true
                         },
                      ],
                      [

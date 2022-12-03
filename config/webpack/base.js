@@ -16,13 +16,13 @@ const customConfig = {
       //'babel-polyfill': 'babel-polyfill/lib/index.js',
       //'react-hot-loader/patch', // hot reloading react components
       // JavaScript
-      'javascripts/app': './app/webpack/js/app.js',
-      'javascripts/admin': './app/webpack/js/admin.js',
-      'javascripts/about': './app/webpack/js/about.js',
+      'javascripts/application': './app/webpack/js/app.js',
+      'javascripts/application.admin': './app/webpack/js/admin.js',
+      'javascripts/application.about': './app/webpack/js/about.js',
       // Stylesheets
-      'stylesheets/app': './app/webpack/css/app.js',
-      'stylesheets/admin': './app/webpack/css/admin.js',
-      'stylesheets/about': './app/webpack/css/about.js',
+      'stylesheets/application': './app/webpack/css/app.js',
+      'stylesheets/application.admin': './app/webpack/css/admin.js',
+      'stylesheets/application.about': './app/webpack/css/about.js',
    },
 
    module: {
@@ -41,18 +41,19 @@ const customConfig = {
             ]
          },
          {
-            test: /\.(sa|sc)ss$/,
+            test: /\.s[ac]ss$/,
             use: [
                {
                   loader: MiniCssExtractPlugin.loader,
-                  options: {
-                     hmr: DEBUG,
-                     reloadAll: true,
-                  },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-               { loader: 'postcss-loader', options: {} },
-               { loader: 'sass-loader', options: { sourceMap: true } },
+               "postcss-loader",
+               {
+                  loader: "sass-loader",
+                  options: {
+                     implementation: require("sass"),
+                  },
+               },
             ],
          },
          {
@@ -60,17 +61,13 @@ const customConfig = {
             use: [
                {
                   loader: MiniCssExtractPlugin.loader,
-                  options: {
-                     hmr: DEBUG,
-                     reloadAll: true,
-                  },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
                { loader: 'postcss-loader', options: {} },
             ],
          },
          {
-            test: /\.(woff|woff2|ttf|eot)$/,
+            test: /\.(woff2?|ttf|eot)$/,
             use: [{
                loader: 'file-loader',
             }]
@@ -79,7 +76,7 @@ const customConfig = {
    },
 
    output: {
-      path: join(global.rootpath, 'vendor/assets'),
+      path: join(global.rootpath, 'public'),
       filename: '[name].js',
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
@@ -101,7 +98,7 @@ const customConfig = {
          debug: DEBUG ? true : false,
          options: {
             sassLoader: {
-               includePaths: join(global.rootpath, 'node_modules'),
+               includePaths: [join(global.rootpath, 'public'), join(global.rootpath, 'node_modules')],
                outputStyle: DEBUG ? 'nested' : 'compressed'
             },
          },

@@ -517,7 +517,7 @@ class Memo < ActiveRecord::Base
    validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }, if: :year_date
 
    before_validation :fix_year_date
-   before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
+   before_create -> { self.bind_kind_code ||= 'несвязаный' }
 
    class << self
       def dates_to_days dates_in, julian

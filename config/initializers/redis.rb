@@ -6,13 +6,13 @@ Rails.application.configure do
       namespace: "cache"
    }, {
       expires_in: 1.day,
-      key: "_#{Rails.application.class.parent_name.downcase}_cache",
+      key: "_#{Rails.application.class.name.split("::").first.downcase}_cache",
    }
 
    config.session_store :redis_store,
       servers: ["redis://localhost:6379/1/session"],
       expire_after: 1.day,
-      key: "_#{Rails.application.class.parent_name.downcase}_session",
+      key: "_#{Rails.application.class.name.split("::").first.downcase}_session",
       threadsafe: true,
       secure: true
 

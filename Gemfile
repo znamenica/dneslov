@@ -14,13 +14,18 @@ gem 'bundler', '>= 2.3.12'
 gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
 
 ## Core
-gem 'rails', '~> 5.2.4', '>= 5.2.8.1'
+gem "rails", "~> 7.0", ">= 7.0.3.1"
 gem 'pg'
 ##NOTE http://mikecoutermarsh.com/2013/09/22/using-hstore-with-rails-4/
 # gem 'postgres_ext'
 
-## Use Uglifier as compressor for JavaScript assets
+### Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 2.7.2'
+
+### JS and CSS bunding
+gem 'redcarpet'
+gem "jsbundling-rails"
+gem "cssbundling-rails"
 
 ## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
@@ -39,7 +44,7 @@ gem "figaro"
 ## cache, session, rack / json, with usage delayed_jobs
 gem 'hiredis', '~> 0.6'
 gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
-gem 'redis-rails', '~> 5.0'
+gem 'redis-rails', github: 'redis-store/redis-rails'
 gem 'redis-rack-cache'
 gem 'redis-namespace'
 gem 'snappy'
@@ -55,11 +60,6 @@ gem 'validate_url'
 gem 'activerecord_json_validator'
 gem 'attribute-defaults'
 gem 'addressable'
-
-# rendering
-## NPM packaging for view render
-gem 'npm-pipeline-rails', '>= 1.8.1'
-gem 'redcarpet'
 
 ## JSON
 gem 'oj'
@@ -83,11 +83,17 @@ gem 'when_easter'
 
 ## data
 gem 'activerecord-import'
-gem 'zero_downtime_migrations'
+gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
 gem 'acts_as_list'
 
 ## pdf
 gem 'prawn', git: 'https://github.com/majioa/prawn.git', ref: '10e29240e'
+
+## deploy start
+gem 'foreman'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
 
 group :development do
    gem 'capistrano', '~> 3.6'
@@ -97,8 +103,8 @@ group :development do
    gem 'capistrano-rvm'
    gem 'capistrano-systemd-multiservice', require: false
    gem "capistrano-db-tasks", require: false, github: "majioa/capistrano-db-tasks", ref: "devel"
-   gem 'dry_crud' , '>= 5.2.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
-   gem 'web-console', '>= 3.7.0'
+   gem 'dry_crud' , '>= 6.0.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
+   gem 'web-console', '~> 4.2'
    gem 'pattern_generator', '>= 0.1.0'
    # deploy
    gem 'ed25519', '~> 1.2'
@@ -106,19 +112,20 @@ group :development do
    gem 'bullet'
    gem 'rubocop'
    gem 'rubocop-rails'
+   gem "debug"
 end
 
 group :development, :test do
-   gem 'ruby-prof'
+   gem 'ruby-prof', github: 'majioa/ruby-prof', ref: 'devel' # raises rack error in 7.0.4 in dashboard when no user session
    gem "factory_bot_rails", ">= 5.1.1"
    gem 'pry', '~> 0.14', '>= 0.14.1'
    gem 'pry-rails', '>= 0.3.9'
    gem 'pry-remote'
    gem 'pry-stack_explorer', '>= 0.6.1'
    gem 'listen', '>= 3.0.5', '< 3.2'
-   gem 'spring'
+   gem 'spring', '~> 4.0'
    gem 'spring-commands-cucumber'
-   gem 'spring-watcher-listen', '~> 2.0.0'
+   gem 'spring-watcher-listen', '~> 2.1'
    gem 'faker'
    gem 'ffaker'
    gem 'bundler-audit'
@@ -126,7 +133,7 @@ group :development, :test do
 end
 
 group :test do
-   gem 'cucumber-rails', '>= 1.8.0', require: nil
+   gem 'cucumber-rails', '~> 2.6', require: nil
    gem 'shoulda-matchers', '~> 4.0'
    gem 'shoulda-matchers-cucumber', '~> 1.0'
    gem 'rspec-expectations'
@@ -136,9 +143,9 @@ group :test do
    gem 'database_cleaner-redis'
    gem "launchy"
    gem "capybara"
-   # gem 'capybara-webkit', '>= 1.15.1'
+   # gem "selenium-webdriver"
+   # gem "webdrivers"
    gem "email_spec"
-   gem 'travis', '>= 1.8.10'
 end
 
 group :production do

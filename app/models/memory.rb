@@ -476,11 +476,7 @@ class Memory < ActiveRecord::Base
    }
 
    def as_json options = {}
-      attrs = ATTRS.merge(
-         self.instance_variable_get(:@attributes).
-            send(:attributes).
-            send(:additional_types).merge(
-               options.fetch(:externals, {})))
+      attrs = ATTRS.merge(additional_types.merge(options.fetch(:externals, {})))
       original = super(options.merge(except: attrs.keys))
 
       attrs.reduce(original) do |r, (name, rule)|

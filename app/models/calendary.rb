@@ -224,10 +224,9 @@ class Calendary < ActiveRecord::Base
    validates :meta, json: { schema: JSON_SCHEMA }
 
    def as_json options = {}
-      additionals = self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types)
-      original = super(options.merge(except: EXCEPT | additionals.keys))
+      original = super(options.merge(except: EXCEPT | additional_types.keys))
 
-      additionals.keys.reduce(original) do |r, key|
+      additional_types.keys.reduce(original) do |r, key|
          if /^_(?<name>.*)/ =~ key
             r.merge(name => read_attribute(key).as_json)
          else

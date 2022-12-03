@@ -85,8 +85,6 @@ class Event < ActiveRecord::Base
         .or( Appellation.merge(this.kind.names) )
      .order( :describable_type )
    end, primary_key: nil, class_name: :Description
-   has_many :event_kinds, primary_key: :kind_code, foreign_key: :key, foreign_type: :kind_code, class_name: :Subject
-
 
    # synod : belongs_to
    # czin: has_one/many
@@ -399,7 +397,7 @@ class Event < ActiveRecord::Base
    }
 
    def as_json options = {}
-      attrs = ATTRS.merge(self.instance_variable_get(:@attributes).send(:attributes).send(:additional_types))
+      attrs = ATTRS.merge(additional_types)
       original = super(options.merge(except: attrs.keys))
 
       attrs.reduce(original) do |r, (name, rule)|

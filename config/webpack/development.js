@@ -2,7 +2,7 @@ process.env.NODE_ENV = process.env.RAILS_ENV || 'development'
 
 const { join } = require('path')
 const { env } = require('process')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const sharedConfig = require('./base')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const webpack = require('webpack')

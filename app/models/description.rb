@@ -4,7 +4,7 @@ class Description < ActiveRecord::Base
    has_alphabeth on: :text
 
    belongs_to :describable, polymorphic: true
-   belongs_to :memo, foreign_key: :describable_id, foreign_type: :describable_type, class_name: :Memo
+   belongs_to :memo, polymorphic: true, foreign_key: :describable_id, foreign_type: :describable_type, class_name: :Memo
 
    scope :desc, -> { where(type: 'Description') }
    scope :title, -> { where(type: 'Title') }
@@ -14,20 +14,24 @@ class Description < ActiveRecord::Base
       self.joins(', memoes')
           .where(language_code: language_code,
                  describable_type: 'Memo')
-          .merge(Memo.in_calendaries(calendary_slug)).distinct ;end
+          .merge(Memo.in_calendaries(calendary_slug)).distinct
+   end
 
    scope :all_by_memory, ->(memory) do
       ids = memory.memos.select(:id).notice
 
       self.where(describable_type: "Memo",
-                 describable_id: ids) ;end
+                 describable_id: ids)
+   end
 
    scope :first_in_calendary, -> do
       ids = Memo.select(:id).notice.first_in_calendary
 
       self.where(describable_type: "Memo",
-                 describable_id: ids) ;end
+                 describable_id: ids)
+   end
 
    validates :text, :language_code, :alphabeth_code, presence: true
 
-   before_save -> { self.type ||= 'Description' }, on: :create end
+   before_create -> { self.type ||= 'Description' }
+end
