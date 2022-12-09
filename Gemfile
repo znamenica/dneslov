@@ -96,12 +96,12 @@ gem 'foreman'
 gem "bootsnap", require: false
 
 group :development do
-   gem 'capistrano', '~> 3.6'
-   gem 'capistrano-rails', '~> 1.3'
-   gem 'capistrano3-nginx'
+   gem "capistrano", "~> 3.17", require: false
+   gem "capistrano3-nginx", require: false, git: "https://github.com/treenewbee/capistrano3-nginx.git"
    gem 'capistrano-bundler'
+   gem "capistrano-rails", "~> 1.6", require: false
    gem 'capistrano-rvm'
-   gem 'capistrano-systemd-multiservice', require: false
+   gem "capistrano-systemd-multiservice", require: false, git: "https://github.com/majioa/capistrano-systemd-multiservice.git"
    gem "capistrano-db-tasks", require: false, github: "majioa/capistrano-db-tasks", ref: "devel"
    gem 'dry_crud' , '>= 6.0.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '~> 4.2'
