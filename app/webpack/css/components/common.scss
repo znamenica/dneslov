@@ -278,7 +278,9 @@ html {
       // fixed dynamic field
       & > .chip {
          margin-top: 0.7rem;
-         width: -webkit-fill-available;
+         width: -webkit-stretch;
+         width: -moz-available;
+         width: stretch;
       }
 
       .invalid + label.active:after {

@@ -13,9 +13,9 @@ html {
       box-shadow: none !important;
       border: none !important;
       max-width: 90%;
-      width: -webkit-fill-available;
+      width: -webkit-stretch;
       width: -moz-available;
-      width: fill-available;
+      width: stretch;
 
       .modal-content {
          padding: 0;
