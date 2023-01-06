@@ -82,7 +82,7 @@ gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
 gem 'when_easter'
 
 ## data
-gem 'activerecord-import'
+gem 'activerecord-import', '~> 1.4.1'
 gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
 gem 'acts_as_list'
 

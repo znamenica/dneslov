@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_01_015800) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_10_182501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -105,11 +105,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_015800) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "alphabeth_code"
     t.string "info_type", null: false
+    t.bigint "resource_id"
     t.index ["alphabeth_code"], name: "index_links_on_alphabeth_code"
     t.index ["info_id"], name: "index_links_on_info_id"
     t.index ["info_type", "info_id"], name: "index_links_on_info_type_and_info_id"
     t.index ["info_type"], name: "index_links_on_info_type"
     t.index ["language_code"], name: "index_links_on_language_code"
+    t.index ["resource_id"], name: "index_links_on_resource_id"
     t.index ["type"], name: "index_links_on_type"
     t.index ["url"], name: "index_links_on_url"
   end
@@ -218,6 +220,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_015800) do
     t.index ["year_date"], name: "index_readings_on_year_date"
   end
 
+  create_table "resources", force: :cascade do |t|
+    t.string "path"
+    t.jsonb "props"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "(((props ->> 'height'::text))::integer)", name: "height_index_on_props_resources", where: "((props ->> 'height'::text) IS NOT NULL)"
+    t.index "(((props ->> 'width'::text))::integer)", name: "width_index_on_props_resources", where: "((props ->> 'width'::text) IS NOT NULL)"
+    t.index "((props ->> 'comment'::text))", name: "comment_index_on_props_resources", where: "((props ->> 'comment'::text) IS NOT NULL)"
+    t.index "((props ->> 'event'::text))", name: "event_index_on_props_resources", where: "((props ->> 'event'::text) IS NOT NULL)"
+    t.index "((props ->> 'fileinfo'::text))", name: "fileinfo_index_on_props_resources", where: "((props ->> 'fileinfo'::text) IS NOT NULL)"
+    t.index "((props ->> 'imageinfo'::text))", name: "imageinfo_index_on_props_resources", where: "((props ->> 'imageinfo'::text) IS NOT NULL)"
+    t.index "((props ->> 'kind'::text))", name: "kind_index_on_props_resources", where: "((props ->> 'kind'::text) IS NOT NULL)"
+    t.index "((props ->> 'short_name'::text))", name: "short_name_index_on_props_resources", where: "((props ->> 'short_name'::text) IS NOT NULL)"
+    t.index "((props ->> 'type'::text))", name: "type_index_on_props_resources", where: "((props ->> 'type'::text) IS NOT NULL)"
+    t.index ["path"], name: "index_resources_on_path"
+  end
+
   create_table "scripta", id: :serial, force: :cascade do |t|
     t.text "text"
     t.string "prosomeion_title"
@@ -305,6 +324,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_015800) do
     t.index ["kind_code"], name: "index_subjects_on_kind_code"
   end
 
+  add_foreign_key "links", "resources", on_delete: :cascade
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict
   add_foreign_key "service_scripta", "scripta", on_delete: :cascade

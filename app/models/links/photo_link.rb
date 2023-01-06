@@ -1,4 +1,4 @@
-class IconLink < Link
+class PhotoLink < Link
    belongs_to :info, polymorphic: true
 
    has_many :descriptions, as: :describable, dependent: :destroy

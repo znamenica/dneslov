@@ -38,7 +38,7 @@ class Memo < ActiveRecord::Base
    has_one :order, through: :memo_order
    has_one :memory, through: :event
    has_one :slug, through: :memory
-   has_one :thumb_link, through: :memory, source: :thumb_links
+   has_one :thumb_link, through: :memory, source: :thumbs
    has_one :calendary_slug, through: :calendary, source: :slug, class_name: :Slug
    has_one :memory_slug, through: :memory, source: :slug, class_name: :Slug
 

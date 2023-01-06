@@ -250,7 +250,7 @@ export const memoryMeta = {
             url: {
                kind: 'text',
                title: 'Ссылка',
-               placeholder: 'Введи ссылка',
+               placeholder: 'Введи ссылку',
                display_scheme: '12-12-6-6',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
@@ -393,6 +393,75 @@ export const memoryMeta = {
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
+               }
+            },
+         }
+      },
+      icons: {
+         kind: 'collection',
+         display_scheme: '12-12-12-12',
+         title: 'Образа',
+         action: 'Добавь ссылку на образа',
+         placeholder: 'Введи ссылку на образ',
+         source: "links",
+         filter: { type: "IconLink" },
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            url: {
+               kind: 'text',
+               title: 'Ссылка',
+               placeholder: 'Введи полную или частичную ссылку',
+               display_scheme: '12-12-6-6',
+               validations: {
+                  "Ссылка отсутствует": matchEmptyObject,
+               }
+            },
+         }
+      },
+      thumbs: {
+         kind: 'collection',
+         display_scheme: '12-12-12-12',
+         title: 'Кругляши',
+         action: 'Добавь ссылку на кругляш',
+         placeholder: 'Введи ссылку на кругляш',
+         source: "links",
+         filter: { type: "ThumbLink" },
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            url: {
+               kind: 'text',
+               title: 'Ссылка',
+               placeholder: 'Введи полную или частичную ссылку',
+               display_scheme: '12-12-6-6',
+               validations: {
+                  "Ссылка отсутствует": matchEmptyObject,
+               }
+            },
+         }
+      },
+      photos: {
+         kind: 'collection',
+         display_scheme: '12-12-12-12',
+         title: 'Фотки',
+         action: 'Добавь ссылку на фотку',
+         placeholder: 'Введи ссылку на фотку',
+         source: "links",
+         filter: { type: "PhotoLink" },
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            url: {
+               kind: 'text',
+               title: 'Ссылка',
+               placeholder: 'Введи полную или частичную ссылку',
+               display_scheme: '12-12-6-6',
+               validations: {
+                  "Ссылка отсутствует": matchEmptyObject,
                }
             },
          }

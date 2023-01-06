@@ -4,9 +4,9 @@
 #require 'cucumber'
 #require 'cucumber/rake/task'
 
-require File.expand_path('../config/application', __FILE__)
-
+require_relative File.expand_path('../config/application', __FILE__)
 Rails.application.load_tasks
+
 
 task :clean do
    puts "Cleaning..."
@@ -43,11 +43,9 @@ namespace :db do
    end
 end
 
-Rake.add_rakelib 'lib/tasks'
-
-#Cucumber::Rake::Task.new(:cucumber) do |t|
-#   t.cucumber_opts = "features --format pretty"
-#end
+Cucumber::Rake::Task.new(:cucumber) do |t|
+   t.cucumber_opts = "features --format pretty"
+end
 
 task 'db:seed' => [:load_config]
 

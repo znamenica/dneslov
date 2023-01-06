@@ -25,8 +25,9 @@ class Memory < ActiveRecord::Base
    has_many :service_scripta, through: :services
    has_many :scripta, through: :service_scripta
    has_many :calendaries, -> { distinct.reorder('id') }, through: :memos
-   has_many :thumb_links, as: :info, inverse_of: :info, class_name: :ThumbLink, dependent: :destroy
-   has_many :photo_links, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy # ЧИНЬ во photos
+   has_many :thumbs, as: :info, inverse_of: :info, class_name: :ThumbLink, dependent: :destroy
+   has_many :icons, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy
+   has_many :photos, as: :info, inverse_of: :info, class_name: :PhotoLink, dependent: :destroy
    has_many :notes, as: :describable, dependent: :destroy, class_name: :Note
    has_many :orders, -> { distinct.reorder('id') }, through: :memos, source: :orders
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
@@ -423,7 +424,9 @@ class Memory < ActiveRecord::Base
    accepts_nested_attributes_for :paterics, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :events, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :memos, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :photo_links, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :thumbs, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :icons, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :photos, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :covers_to, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank
