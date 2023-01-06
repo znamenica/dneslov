@@ -81,4 +81,6 @@ Rails.application.configure do
     Bullet.rails_logger = true
     Bullet.skip_html_injection = false
   end if defined?(Bullet)
+
+  config.hosts << "raziscnik"
 end
