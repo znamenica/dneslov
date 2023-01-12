@@ -25,6 +25,14 @@ production:
   username: dneslov
   password: 
 
+staging:
+  database: dneslov_staging
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: dneslov
+  password: 
+
 cucumber:
   database: dneslov_test
   adapter: postgresql

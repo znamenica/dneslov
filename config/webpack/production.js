@@ -44,7 +44,9 @@ const customConfig = merge(sharedConfig, {
          new TerserPlugin({
             parallel: true,
             terserOptions: {
+               ecma: 6,
                compress: {
+                  drop_console: true,
                   pure_funcs: [
                      'console.log',
                      'console.debug',
@@ -56,15 +58,20 @@ const customConfig = merge(sharedConfig, {
                      'console.debug',
                   ],
                },
-               format: {
-                  comments: false,
-               },
                minify: TerserPlugin.uglifyJsMinify,
+               keep_classnames: undefined,
+               keep_fnames: false,
+               toplevel: false,
+               output: {
+                  comments: false,
+                  beautify: false
+               }
             },
             extractComments: false,
          }),
          new OptimizeCSSAssetsPlugin({}),
       ],
+      moduleIds: 'hashed',
    },
 
    output: {

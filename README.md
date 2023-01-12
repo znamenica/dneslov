@@ -73,8 +73,10 @@ To generate PDF calendary with a first record per day, use the following:
 
 In development mode:
 
+Run server and file watcher with:
+
 ```bash
-foreman start -f Procfile.dev
+RAILS_ENV=development foreman start -f config/procfiles/development.rb -d .
 ```
 
 

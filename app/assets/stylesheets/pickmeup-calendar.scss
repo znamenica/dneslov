@@ -10,15 +10,42 @@ html {
 .pickmeup {
    font-size: inherit;
    background: transparent;
+   border-radius: 0.4em;
+   -moz-box-sizing: content-box;
+   box-sizing: content-box;
+   display: inline-block;
+   position: absolute;
+   touch-action: manipulation;
+
+   .pmu-template {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+   }
+
+   &.pmu-flat {
+      @extend .pmu-template !optional;
+      position: relative;
+      background: transparent;
+   }
 
    &.pmu-hidden {
+      //display: none;
       display: block;
    }
 
+  &:not(.pmu-view-days) .pmu-days, &:not(.pmu-view-days) .pmu-day-of-week,
+  &:not(.pmu-view-months) .pmu-months, &:not(.pmu-view-years) .pmu-years {
+     display: none;
+  }
+
    .pmu-instance {
-      line-height: inherit;
+      @extend .pmu-template !optional;
+      display: inline-block;
+      padding: .5em;
       height: auto;
       width: 17rem;
+      text-align: center;
+      line-height: inherit;
 
       .pmu-selected {
          background-color: $selected_color;
@@ -31,6 +58,12 @@ html {
       .pmu-days {
          line-height: inherit;
          padding: 0 0.8rem;
+
+         * {
+            display: inline-block;
+            line-height: 1.5em;
+            width: 2em;
+         }
 
          .pmu-button {
             border-radius: 50%;
@@ -100,17 +133,33 @@ html {
          background-color: #f79eb3;
          padding: 0 0.8rem;
 
+         * {
+            display: inline-block;
+            line-height: 1.8em;
+            width: 2em;
+         }
+
          div {
             margin-left: 0.1rem;
             margin-right: 0.1rem;
          }
       }
 
+      .pmu-years *, .pmu-months * {
+         display: inline-block;
+         line-height: 3.6em;
+         width: 3.5em;
+      }
+
       & > nav {
          height: auto;
-         background-color: $terracota;
          width: auto;
+         line-height: 2em;
+         display: -ms-flexbox;
+         display: -webkit-flex;
+         display: flex;
          justify-content: space-between;
+         background-color: $terracota;
          color: rgba(47, 16, 95, 0.96);
 
          .pmu-yesterday {
@@ -120,17 +169,40 @@ html {
          .pmu-tomorrow {
             @extend .pmu-next !optional
          }
+
+         .pmu-month {
+            width: 14em;
+         }
+      }
+
+      &:first-child .pmu-prev, &:last-child .pmu-next {
+         display: block;
+      }
+
+      &:first-child, &:last-child {
+         .pmu-month {
+            width: 13em;;
+         }
+      }
+
+      &:first-child:last-child {
+         .pmu-month {
+            width: 12em;;
+         }
       }
 
       .pmu-button {
          color: $dark;
          //background-color: $terracota;
+         cursor: pointer;
+         outline: none;
+         text-decoration: none;
          padding: 0.1rem;
          box-sizing: border-box;
          border: 0.1rem solid transparent;
 
-         &hover {
-            @extend .pmu-button;
+         &:hover {
+            //@extend .pmu-button;
             //background-color: $lighten_terracota;
          }
       }

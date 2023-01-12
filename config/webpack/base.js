@@ -13,16 +13,18 @@ const customConfig = {
    context: global.rootpath,
 
    entry: {
-      //'babel-polyfill': 'babel-polyfill/lib/index.js',
-      //'react-hot-loader/patch', // hot reloading react components
-      // JavaScript
-      'javascripts/application': './app/webpack/js/app.js',
-      'javascripts/application.admin': './app/webpack/js/admin.js',
-      'javascripts/application.about': './app/webpack/js/about.js',
-      // Stylesheets
-      'stylesheets/application': './app/webpack/css/app.js',
-      'stylesheets/application.admin': './app/webpack/css/admin.js',
-      'stylesheets/application.about': './app/webpack/css/about.js',
+      'application': [
+         './app/assets/javascripts/application.js',
+         './app/assets/stylesheets/application.scss'
+      ],
+      'application.admin': [
+         './app/assets/javascripts/application.admin.js',
+         './app/assets/stylesheets/application.admin.scss',
+      ],
+      'application.about': [
+         './app/assets/javascripts/application.about.js',
+         './app/assets/stylesheets/application.about.scss',
+      ]
    },
 
    module: {
@@ -34,7 +36,7 @@ const customConfig = {
             loader: 'ignore-loader'
          },
          {
-            test: /\.(png|jpe?g|gif|svg)$/,
+            test: /\.(png|jpe?g|gif|svg|webp)$/,
             loaders: [
                'file?hash=sha512&digest=hex&name=[hash].[ext]',
                'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
@@ -76,7 +78,7 @@ const customConfig = {
    },
 
    output: {
-      path: join(global.rootpath, 'public'),
+      path: join(global.rootpath, 'app/assets/builds'),
       filename: '[name].js',
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
@@ -103,6 +105,7 @@ const customConfig = {
             },
          },
          postcss: [
+            require('postcss-import')(),
             require('autoprefixer')(),
          ],
       }),
@@ -114,7 +117,7 @@ const customConfig = {
          React: 'react',
          ReactDOM: 'react-dom',
       },
-      extensions: [ '.js', '.jsx', 'css', 'scss' ],
+      extensions: [ '.js', '.jsx', '.css', '.scss' ],
       modules: ['components', 'node_modules'],
    },
 }

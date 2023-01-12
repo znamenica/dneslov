@@ -472,6 +472,14 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     sdoc (1.0.0)
       rdoc (>= 5.0)
     sentry-rails (5.3.1)
@@ -514,6 +522,13 @@ GEM
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
       spring (>= 4)
+    sprockets (4.2.0)
+      concurrent-ruby (~> 1.0)
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      sprockets (>= 3.0.0)
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -521,6 +536,7 @@ GEM
       ffi (~> 1.1)
     thor (1.2.1)
     thread_safe (0.3.6)
+    tilt (2.0.11)
     timeout (0.3.0)
     ttfunk (1.7.0)
     tzinfo (2.0.5)
@@ -614,6 +630,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   ruby-prof!
+  sassc-rails
   sdoc (~> 1.0.0)
   sentry-rails
   sentry-ruby (~> 5.3, >= 5.3.1)
@@ -629,6 +646,7 @@ DEPENDENCIES
   spring (~> 4.0)
   spring-commands-cucumber
   spring-watcher-listen (~> 2.1)
+  sprockets-rails
   uglifier (>= 2.7.2)
   validate_url
   web-console (~> 4.2)

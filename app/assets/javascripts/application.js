@@ -1,13 +1,16 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below.
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// compiled file.
-//
-// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
-// about supported directives.
-//
-//= require 'app'
+import './polifill'
+import './ajax'
+import './ext'
+import 'classlist-polyfill'
+import 'custom-event-polyfill'
+
+// http://stackoverflow.com/a/30652110/873870
+function requireAll (r) { r.keys().forEach(r) }
+
+import { mountComponents } from 'react-rails-ujs'
+
+import MemoriesForm from 'MemoriesForm'
+
+document.addEventListener('DOMContentLoaded', () => {
+   mountComponents({ MemoriesForm })
+}, { passive: true })

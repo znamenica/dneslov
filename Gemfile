@@ -95,6 +95,10 @@ gem 'foreman'
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# standard rails assets pipeline
+gem 'sassc-rails'
+gem 'sprockets-rails'
+
 group :development do
    gem "capistrano", "~> 3.17", require: false
    gem "capistrano3-nginx", require: false, git: "https://github.com/treenewbee/capistrano3-nginx.git"
