@@ -29,6 +29,15 @@ GIT
       railties (>= 3.2)
 
 GIT
+  remote: https://github.com/majioa/jsonize.git
+  revision: 3967b41cd503f8590700dd992509f4011b643363
+  ref: 3967b41
+  specs:
+    jsonize (0.1.1)
+      activerecord (>= 4.2)
+      redisize
+
+GIT
   remote: https://github.com/majioa/prawn.git
   revision: 10e29240e0e05cc4a908069f72c8f81fa874191e
   ref: 10e29240e
@@ -37,6 +46,13 @@ GIT
       matrix (~> 0.4)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
+
+GIT
+  remote: https://github.com/majioa/redisize.git
+  revision: c5527d48fd7f4fafce74c9fb248bdd7de3c29e6b
+  ref: c5527d4
+  specs:
+    redisize (0.1.4)
 
 GIT
   remote: https://github.com/majioa/ruby-prof.git
@@ -604,6 +620,7 @@ DEPENDENCIES
   has_scope (>= 0.7.2)
   hiredis (~> 0.6)
   jsbundling-rails
+  jsonize!
   jwt
   kaminari (>= 1.1.1)
   launchy
@@ -626,6 +643,7 @@ DEPENDENCIES
   redis-namespace
   redis-rack-cache
   redis-rails!
+  redisize!
   rspec-expectations
   rubocop
   rubocop-rails

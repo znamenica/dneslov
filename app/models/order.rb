@@ -1,6 +1,5 @@
 class Order < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
 
    has_one :slug, as: :sluggable, dependent: :destroy
    has_many :notes, as: :describable, dependent: :delete_all, class_name: :Note
@@ -127,18 +126,4 @@ class Order < ActiveRecord::Base
    singleton_class.send(:alias_method, :q, :by_tokens)
 
    validates_presence_of :slug, :notes, :tweets
-
-   EXCEPT = %i(created_at updated_at)
-
-   def as_json options = {}
-      original = super(options.merge(except: EXCEPT | additional_types.keys))
-
-      additional_types.keys.reduce(original) do |r, key|
-         if /^_(?<name>.*)/ =~ key
-            r.merge(name => read_attribute(key).as_json)
-         else
-            r
-         end
-      end
-   end
 end

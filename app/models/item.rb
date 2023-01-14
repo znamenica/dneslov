@@ -1,6 +1,5 @@
 class Item < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
 
    belongs_to :item_type
    has_many :events

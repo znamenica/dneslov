@@ -8,7 +8,6 @@ class Memory < ActiveRecord::Base
    extend TotalSize
    extend DefaultKey
    extend Informatible
-   extend AsJson
 
    has_default_key :short_name
 
@@ -43,7 +42,8 @@ class Memory < ActiveRecord::Base
 
    scope :in_calendaries, -> calendaries_in do
       calendaries = calendaries_in.is_a?(String) && calendaries_in.split(',') || calendaries_in
-      left_outer_joins( :memos ).merge( Memo.in_calendaries( calendaries )).distinct ;end
+      left_outer_joins( :memos ).merge( Memo.in_calendaries( calendaries )).distinct
+   end
 
    scope :by_date, -> (date, julian = false) do
       left_outer_joins(:memos).merge(Memo.by_date(date, julian)).distinct
@@ -51,7 +51,8 @@ class Memory < ActiveRecord::Base
 
    scope :by_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
-         where("descriptions.text ~* ? OR names.text ~* ?", "\\m#{text}.*", "\\m#{text}.*")).distinct ;end
+         where("descriptions.text ~* ? OR names.text ~* ?", "\\m#{text}.*", "\\m#{text}.*")).distinct
+   end
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -62,21 +63,27 @@ class Memory < ActiveRecord::Base
          or_token.strip.split(/\s+/).reduce(nil) do |rel, and_token|
             # AND operation
             and_rel = klass.by_token(and_token)
-            rel && rel.merge(and_rel) || and_rel ;end;end
+            rel && rel.merge(and_rel) || and_rel
+         end
+      end
+
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
-      self.merge(or_rel).distinct ;end
+      self.merge(or_rel).distinct
+   end
 
    # required for short list
    scope :with_key, -> _ do
       selector = [ 'memories.id AS _key' ]
 
-      select(selector).group('_key').reorder("_key") ;end
+      select(selector).group('_key').reorder("_key")
+   end
 
    scope :with_value, -> context do
       #TODO add search over names
       selector = [ 'memories.short_name AS _value' ]
 
-      select(selector).group('_value').reorder("_value") ;end
+      select(selector).group('_value').reorder("_value")
+   end
 
    scope :with_names, -> (language_code) do
       language_codes = [ language_code ].flatten
@@ -100,7 +107,8 @@ class Memory < ActiveRecord::Base
                       SELECT jsonb_agg(__names)
                         FROM __names), '[]'::jsonb) AS _names"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_pure_links, -> do
       selector = "COALESCE((SELECT jsonb_agg(links)
@@ -108,7 +116,8 @@ class Memory < ActiveRecord::Base
                              WHERE links.info_id = memories.id
                                AND links.info_type = 'Memory'), '[]'::jsonb) AS _links"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_scripta, -> (language_code) do
       language_codes = [ language_code ].flatten
@@ -126,7 +135,8 @@ class Memory < ActiveRecord::Base
                               WHERE scripta.id = service_scripta.scriptum_id
                                 AND scripta.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _scripta"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_slug_text, -> do
       selector = self.select_values.dup
@@ -135,7 +145,8 @@ class Memory < ActiveRecord::Base
       end
       selector << 'slugs.text AS _slug'
 
-      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug') ;end
+      left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
+   end
 
    scope :with_note, -> language_code do
       selector = self.select_values.dup
@@ -149,7 +160,8 @@ class Memory < ActiveRecord::Base
                           AND titles.type = 'Title'
                           AND titles.language_code IN ('#{language_codes.join("', '")}')"
 
-      joins(join).select(selector.uniq).group('_title') ;end
+      joins(join).select(selector.uniq).group('_title')
+   end
 
    scope :with_slug, -> do
       selector = self.select_values.dup
@@ -162,7 +174,8 @@ class Memory < ActiveRecord::Base
                            ON slugs.sluggable_id = memories.id
                           AND slugs.sluggable_type = 'Memory'"
 
-      joins(join).select(selector).group(:id, 'slugs.id', 'slugs.text') ;end
+      joins(join).select(selector).group(:id, 'slugs.id', 'slugs.text')
+   end
 
    scope :with_orders, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -191,7 +204,8 @@ class Memory < ActiveRecord::Base
                        SELECT jsonb_agg(__orders)
                          FROM __orders), '[]'::jsonb) AS _orders"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_descriptions, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -230,7 +244,8 @@ class Memory < ActiveRecord::Base
                       SELECT jsonb_agg(__descriptions)
                         FROM __descriptions), '[]'::jsonb) AS _descriptions"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_links, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -268,7 +283,8 @@ class Memory < ActiveRecord::Base
                       SELECT jsonb_agg(__links)
                         FROM __links), '[]'::jsonb) AS _links"
 
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_events, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -373,7 +389,8 @@ class Memory < ActiveRecord::Base
                         FROM __events), '[]'::jsonb) AS _events"
 
       #binding.pry
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    scope :with_memory_names, -> context do
       language_codes = [ context[:locales] ].flatten
@@ -413,7 +430,8 @@ class Memory < ActiveRecord::Base
                         FROM __memory_names), '[]'::jsonb) AS _memory_names"
 
       #binding.pry
-      select(selector).group(:id) ;end
+      select(selector).group(:id)
+   end
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
@@ -446,57 +464,40 @@ class Memory < ActiveRecord::Base
 
       dates = event.happened_at.split(/[\/-]/)
       self.base_year ||=
-      case dates.first
-      when /([IVX]+)$/
-         ($1.rom - 1) * 100 + 50
-      when /\.\s*(\d+)$/
-         $1
-      when /(?:\A|\s|\()(\d+)$/
-         $1
-      when /(?:\A|\s|\(|\.)(\d+) до (?:нэ|РХ)/
-         "-#{$1}"
-      when /(:|сент)/
-         dates.last.split(".").last
-      when /давно/
-         '-3760'
-      else
-         dates = event.happened_at.split(/[\/-]/)
-         if /(?:\A|\s|\(|\.)(\d+) до (?:нэ|РХ)/ =~ dates.first
+         case dates.first
+         when /([IVX]+)$/
+            ($1.rom - 1) * 100 + 50
+         when /\.\s*(\d+)$/
+            $1
+         when /(?:\A|\s|\()(\d+)$/
+            $1
+         when /(?:\A|\s|\(|\.)(\d+) до (?:нэ|РХ)/
             "-#{$1}"
+         when /(:|сент)/
+            dates.last.split(".").last
+         when /давно/
+            '-3760'
          else
-            '0' ;end;end
-
-   self.base_year ;end
-
-   #def attributes_before_type_cast()
-   #   binding.pry
-   #   super
-   #end
-
-   ATTRS = {
-      created_at: nil,
-      updated_at: nil,
-   }
-
-   def as_json options = {}
-      attrs = ATTRS.merge(additional_types.merge(options.fetch(:externals, {})))
-      original = super(options.merge(except: attrs.keys))
-
-      attrs.reduce(original) do |r, (name, rule)|
-         if /^_(?<realname>.*)/ =~ name
-            r.merge(realname => read_attribute(name).as_json)
-         elsif rule.is_a?(Proc)
-            r.merge(name.to_s => rule[self])
-         elsif rule.is_a?(ActiveRecord::Relation)
-            r.merge(name.to_s => rule.as_json)
-         else
-            r
+            dates = event.happened_at.split(/[\/-]/)
+            if /(?:\A|\s|\(|\.)(\d+) до (?:нэ|РХ)/ =~ dates.first
+               "-#{$1}"
+            else
+               '0'
+            end
          end
-      end
+
+      self.base_year
+   end
+
+   def quantity= value_in
+      value = value_in.present? && value_in || nil
+
+      super(value)
    end
 
    def set_slug
-      self.slug = Slug.new(base: self.short_name) if self.slug.blank? ;end
+      self.slug = Slug.new(base: self.short_name) if self.slug.blank?
+   end
 
    def to_s
       memory_names.join( ' ' )

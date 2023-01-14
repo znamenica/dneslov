@@ -11,7 +11,6 @@
 class Event < ActiveRecord::Base
    extend Informatible
    extend TotalSize
-   extend AsJson
 
    NOTICE = [
       'Repose',
@@ -390,26 +389,6 @@ class Event < ActiveRecord::Base
    singleton_class.send(:alias_method, :mid, :by_memory_id)
 
    validates_presence_of :kind, :kind_code
-
-   ATTRS = {
-      created_at: nil,
-      updated_at: nil,
-   }
-
-   def as_json options = {}
-      attrs = ATTRS.merge(additional_types)
-      original = super(options.merge(except: attrs.keys))
-
-      attrs.reduce(original) do |r, (name, rule)|
-         if /^_(?<realname>.*)/ =~ name
-            r.merge(realname => read_attribute(name).as_json)
-         elsif rule.is_a?(Proc)
-            r.merge(name => rule[self])
-         else
-            r
-         end
-      end
-   end
 
    def self.year_date_for year_date, date_in, julian
       return nil if date_in.blank?

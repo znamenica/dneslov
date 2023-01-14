@@ -16,9 +16,7 @@ require 'when_easter'
 # id[int]                     - опознаватель
 class Memo < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
 
-   EXCEPT = %i(created_at updated_at)
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate

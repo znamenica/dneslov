@@ -40,6 +40,8 @@ gem "figaro"
 
 ## Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+
+# caching
 ## Use Redis adapter to run Action Cable in production
 ## cache, session, rack / json, with usage delayed_jobs
 gem 'hiredis', '~> 0.6'
@@ -51,6 +53,12 @@ gem 'snappy'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
+# gem "jsonize", ">= 0.1.1", "~> 0.1"
+# gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
+gem "jsonize", github: 'majioa/jsonize', ref: '3967b41'
+# gem "redisize", ">= 0.1.4", "~> 0.1"
+# gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
+gem 'redisize', github: 'majioa/redisize', ref: 'c5527d4'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'

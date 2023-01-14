@@ -1,17 +1,10 @@
 class Reading < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
    include Tokens
    include WithDescriptions
 
    enum kind: %i(custom vespers matins lithurgy dinning hours)
  
-   JSON_ATTRS = {
-      created_at: nil,
-      updated_at: nil,
-   }
-   EXCEPT = %i(created_at updated_at)
-
    has_many :markups, -> { order(position: :asc) }
    has_many :scripta, through: :markups
 

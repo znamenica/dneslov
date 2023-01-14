@@ -1,15 +1,8 @@
 class Scriptum < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
    include Languageble
    include Tokens
    include WithLocaleNames
-
-   JSON_ATTRS = {
-      created_at: nil,
-      updated_at: nil,
-   }
-   EXCEPT = %i(created_at updated_at)
 
    has_alphabeth on: %i(text title)
 

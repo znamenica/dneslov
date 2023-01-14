@@ -28,9 +28,9 @@ class Admin::CommonController < ApplicationController
          format.json do
             render :index,
                plain: {
-                     total: @objects.total_size,
-                     list: @objects.limit(500).jsonify(only: %i(key value)),
-                  }.to_json
+                  total: @objects.total_size,
+                  list: @objects.limit(500).jsonize(short_context(only: %i(key value))),
+               }.to_json
          end
       end
    end
@@ -41,7 +41,7 @@ class Admin::CommonController < ApplicationController
       respond_to do |format|
          format.json do
             render plain: {
-               list: @objects.jsonify(context),
+               list: @objects.jsonize(context),
                page: @page,
                total: @objects.total_size
             }.to_json
@@ -55,7 +55,7 @@ class Admin::CommonController < ApplicationController
       @object.save!
 
       #TODO: render json: @object.jsonize(context)
-      render json: prepare_object(@object.reload).jsonify(context)
+      render json: prepare_object(@object.reload).jsonize(context)
    end
 
    # PUT /<objects>/1
@@ -64,13 +64,13 @@ class Admin::CommonController < ApplicationController
 
       # binding.pry
       #TODO: render json: @object.jsonize(context)
-      render json: prepare_object(@object.reload).jsonify(context)
+      render json: prepare_object(@object.reload).jsonize(context)
    end
 
    # GET /<objects>/1
    def show
       respond_to do |format|
-         format.json { render :show, json: @object.jsonify(context) }
+         format.json { render :show, json: @object.jsonize(context) }
       end
    end
 
@@ -79,7 +79,7 @@ class Admin::CommonController < ApplicationController
       @object.destroy!
 
       respond_to do |format|
-         format.json { render :show, json: @object.dejsonify(context) }
+         format.json { render :show, json: @object.dejsonize(context) }
       end
    end
 
@@ -114,6 +114,10 @@ class Admin::CommonController < ApplicationController
 
    def context
       @context ||= { locales: @locales }
+   end
+
+   def short_context context_in = {}
+      @short_context ||= context_in.deep_merge(except: %i(created_at updated_at id meta))
    end
 
    def model
@@ -155,10 +159,6 @@ class Admin::CommonController < ApplicationController
 
    def new_object
       @object = model.new( permitted_params )
-   end
-
-   def context
-      { locales: @locales }
    end
 
    def include_list

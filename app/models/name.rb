@@ -2,7 +2,6 @@
 # bond_to_id(int)         - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
    include Languageble
 
    has_many :memory_names
@@ -166,19 +165,5 @@ class Name < ActiveRecord::Base
    def fill_root_id
       new_root_id = self.bond_to&.root_id || self.id
       self.update!(root_id: new_root_id)
-   end
-
-   EXCEPT = %i(created_at updated_at)
-
-   def as_json options = {}
-      original = super(options.merge(except: EXCEPT | additional_types.keys))
-
-      additional_types.keys.reduce(original) do |r, key|
-         if /^_(?<name>.*)/ =~ key
-            r.merge(name => read_attribute(key).as_json)
-         else
-            r
-         end
-      end
    end
 end

@@ -28,14 +28,14 @@ class MemoriesController < ApplicationController
          format.html do
             render :index,
                locals: {
-                  memoes: @memoes.jsonify(context),
+                  memoes: @memoes.jsonize(context),
                   total: @memoes.total_size,
-                  cloud: @calendary_cloud.jsonify
+                  cloud: @calendary_cloud.jsonize
                }
          end
          format.json do
             render plain: {
-               list: @memoes.jsonify(context),
+               list: @memoes.jsonize(context),
                page: @page,
                total: @memoes.total_size
             }.to_json(context)
@@ -50,14 +50,14 @@ class MemoriesController < ApplicationController
       #   bm.report( "Access JSON:" ) do
       #   end
       #end
-      #binding.pry
+      # binding.pry
       respond_to do |format|
          format.html do
             render :show,
-               locals: { memory: @memory.jsonify(externals: { events: @events.jsonify }),
-                         cloud: @calendary_cloud.jsonify }
+               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
+                         cloud: @calendary_cloud.jsonize }
          end
-         format.json { render json: @memory.jsonify(externals: { events: @events.jsonify }) }
+         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
       end
    end
 

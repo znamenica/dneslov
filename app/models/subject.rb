@@ -1,15 +1,11 @@
 class Subject < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
    include WithDescriptions
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json')
-   JSON_ATTRS = {
+   JSONIZE_ATTRS = {
       meta: ->(this) { this.meta.to_json },
-      created_at: nil,
-      updated_at: nil,
    }
-   EXCEPT = %i(created_at updated_at)
 
    attr_defaults meta: "{}"
 

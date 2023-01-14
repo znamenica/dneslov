@@ -1,18 +1,14 @@
 #licit[boolean]         - действительный календарь (не в разработке)
 class Calendary < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
    include Languageble
    include WithLocaleNames
    include WithDescriptions
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
-   JSON_ATTRS = {
+   JSONIZE_ATTRS = {
       meta: ->(this) { this.meta.to_json },
-      created_at: nil,
-      updated_at: nil,
    }
-   EXCEPT = %i(created_at updated_at)
 
    attr_defaults meta: "{}"
 
@@ -223,15 +219,7 @@ class Calendary < ActiveRecord::Base
    validates :descriptions, :titles, :wikies, :beings, :place, associated: true
    validates :meta, json: { schema: JSON_SCHEMA }
 
-   def as_json options = {}
-      original = super(options.merge(except: EXCEPT | additional_types.keys))
-
-      additional_types.keys.reduce(original) do |r, key|
-         if /^_(?<name>.*)/ =~ key
-            r.merge(name => read_attribute(key).as_json)
-         else
-            r
-         end
-      end
+   def default_title
+      titles.first.text
    end
 end
