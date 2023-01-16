@@ -22,4 +22,11 @@ namespace :dneslov do
          ImageSyncService.new.load
       end
    end
+
+   namespace :calendary do
+      desc "Copy calendary's memoes from sources to a target calendary defined by slug or name"
+      task :copy, [:sources, :target]  => :environment do |t, args|
+         CalendaryCopy.new(target: args[:target], sources: args[:sources].split(":")).do
+      end
+   end
 end

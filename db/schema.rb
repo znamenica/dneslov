@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_10_182501) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_15_150400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -291,11 +291,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_10_182501) do
     t.index ["author"], name: "index_services_on_author"
     t.index ["description"], name: "index_services_on_description"
     t.index ["gospel"], name: "index_services_on_gospel"
+    t.index ["info_id", "info_type", "name", "alphabeth_code"], name: "index_services_on_info_id_info_type_name_alphabeth_code", unique: true
     t.index ["info_id"], name: "index_services_on_info_id"
     t.index ["info_type", "info_id"], name: "index_services_on_info_type_and_info_id"
     t.index ["info_type"], name: "index_services_on_info_type"
     t.index ["language_code"], name: "index_services_on_language_code"
-    t.index ["name", "alphabeth_code"], name: "index_services_on_name_and_alphabeth_code", unique: true
     t.index ["name"], name: "index_services_on_name"
     t.index ["ref_title"], name: "index_services_on_ref_title"
     t.index ["source"], name: "index_services_on_source"

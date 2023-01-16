@@ -513,6 +513,7 @@ class Memo < ActiveRecord::Base
    validates_presence_of :year_date, unless: :bond_to_quantity
    validates_absence_of :year_date, if: :bond_to_quantity
    validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }, if: :year_date
+   validate :same_calendaries, :same_memories, if: :bond_to_id
 
    before_validation :fix_year_date
    before_create -> { self.bind_kind_code ||= 'несвязаный' }
@@ -559,6 +560,18 @@ class Memo < ActiveRecord::Base
       end
    rescue StandardError
       Time.at(0)
+   end
+
+   def same_calendaries
+      if bond_to.calendary_id != calendary_id
+         errors.add(:calendary_id, 'Calendaries of self and bond to memo must be the same')
+      end
+   end
+
+   def same_memories
+      if bond_to.memory.id != memory.id
+         errors.add(:memory, 'Memories of self and bond to memo must be the same')
+      end
    end
 
    def fix_year_date
