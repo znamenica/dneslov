@@ -92,3 +92,21 @@ Then on server side do:
 ```bash
 rake dneslov:load:resources dneslov:load:images
 ```
+
+## API
+
+Request for all licit calendaries:
+```bash
+curl -k "https://dneslov.org/api/v1/calendaries.json"
+```
+
+Paged version with 10 records per page:
+
+```bash
+curl -k "https://dneslov.org/api/v1/calendaries.json?page=1&per=10"
+```
+
+Request for all licit calendaries with ones unlicit, which are specified by slug:
+```bash
+curl -k "https://dneslov.org/api/v1/calendaries.json?c=гпц&page=1&per=10"
+```

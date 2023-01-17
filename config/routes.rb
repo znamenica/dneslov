@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       mount Sidekiq::Web => "/dashboard/sidekiq"
    #end
 
+   #mount Tiun::Engine.routes => "/" ???
+   Tiun.draw_routes(self)
+
    # auth routes
    get '/auth/github', to: 'auth#github', format: false
 

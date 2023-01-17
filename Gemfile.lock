@@ -62,6 +62,16 @@ GIT
     ruby-prof (1.4.2)
 
 GIT
+  remote: https://github.com/majioa/tiun.git
+  revision: 92a9fad66e8e8c6de43f7345a244f7c6ad8a2058
+  ref: 92a9fad
+  specs:
+    tiun (0.1.0)
+      activesupport (>= 4.1.0)
+      jsonize (~> 0.1, >= 0.1.1)
+      railties (>= 4.1.0)
+
+GIT
   remote: https://github.com/majioa/zero_downtime_migrations.git
   revision: d94a3800f84548bd1c0ff6cb811309087c317806
   ref: devel
@@ -665,6 +675,7 @@ DEPENDENCIES
   spring-commands-cucumber
   spring-watcher-listen (~> 2.1)
   sprockets-rails
+  tiun!
   uglifier (>= 2.7.2)
   validate_url
   web-console (~> 4.2)

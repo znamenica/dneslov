@@ -162,7 +162,8 @@ class Admin::CommonController < ApplicationController
    end
 
    def include_list
-      [] ;end
+      []
+   end
 
    def issue_with query, with_method
       query.send( with_method, context )

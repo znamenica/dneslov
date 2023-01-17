@@ -107,6 +107,10 @@ gem "bootsnap", require: false
 gem 'sassc-rails'
 gem 'sprockets-rails'
 
+## api
+# gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
+gem 'tiun', github: 'majioa/tiun', ref: '92a9fad'
+
 group :development do
    gem "capistrano", "~> 3.17", require: false
    gem "capistrano3-nginx", require: false, git: "https://github.com/treenewbee/capistrano3-nginx.git"
