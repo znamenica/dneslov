@@ -117,32 +117,17 @@ class Event < ActiveRecord::Base
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
       selector = self.select_values.dup
 
-  #RssFeed
-  #  .arel_table
-  #  .join(RssFeedUser.arel_table, Arel::Nodes::OuterJoin)
-  #  .on(RssFeed.arel_table[:id].eq(RssFeedUser.arel_table[:rss_feed_id]))
-  #  .where(RssFeedUser.arel_table[:user_id].eq(nil))
-  #  .project('rss_feeds.*')
+      /`(?<method_name>[^']*)'/ =~ caller.grep(/delegation/)[1]
 
-      #car = Q.arel_table
-     # self.join(Subject.arel_table, Arel::Nodes::OuterJoin)
-      #    .as(:event_kinds)
-      #    .on(Event.arel_table[:kind_code].eq(Subject.arel_table[:key]))
-      #    .and(Subject.arel_table[:key].eq("EventKind"))
-      #    .join(Description.arel_table, Arel::Nodes::OuterJoin)
-      #    .as(:titles)
-      #    .on(Description.arel_table[:id].not.eq(nil))
-      #    .and(Subject.arel_table[:key].eq("EventKind"))
-
-     # join = "LEFT OUTER JOIN subjects AS event_kinds
-     #                      ON event_kinds.kind_code = 'EventKind'
-     #                     AND event_kinds.key = events.kind_code
-      join = "LEFT OUTER JOIN descriptions AS titles
+      join = "LEFT OUTER JOIN subjects AS event_kinds_#{method_name}
+                           ON event_kinds_#{method_name}.kind_code = 'EventKind'
+                          AND event_kinds_#{method_name}.key = events.kind_code
+              LEFT OUTER JOIN descriptions AS titles
                            ON titles.id IS NOT NULL
                           AND (titles.describable_id = events.id
                           AND titles.describable_type = 'Event'
                           AND titles.type = 'Title'
-                           OR titles.describable_id = event_kinds.id
+                           OR titles.describable_id = event_kinds_#{method_name}.id
                           AND titles.describable_type = 'Subject'
                           AND titles.type = 'Appellation')
                           AND titles.language_code IN ('#{language_codes.join("', '")}')
@@ -160,18 +145,7 @@ class Event < ActiveRecord::Base
                           AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
 
       selector << "titles.text || ' (' || events.happened_at || ')' AS _value"
-      #aa.as("event_kinds")[:kind_code]
-
-      event_kinds = Subject.arel_table
-      event_kinds.table_alias = "event_kinds"
-      events = Event.arel_table
-      # binding.pry
-      #event_kinds = event_kinds_join.as("event_kinds")
-      aa = event_kinds.join(event_kinds, Arel::Nodes::OuterJoin).on(events[:kind_code].eq(event_kinds[:key]).and(event_kinds[:key].eq("EventKind")))
-      #binding.pry
-      #includes(:event_kinds).references(:event_kinds).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
-      #left_outer_joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" ) ;end
-      joins(aa.join_sources).joins(join).select( selector ).group( :id, "titles.text", "events.happened_at" )
+      joins(join).select(selector).group(:id, "titles.text", "events.happened_at")
    end
 
    scope :with_description, -> context do
