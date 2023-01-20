@@ -1,6 +1,7 @@
 class Subject < ActiveRecord::Base
    extend TotalSize
    include WithDescriptions
+   include WithLinks
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'subject.json')
    JSONIZE_ATTRS = {

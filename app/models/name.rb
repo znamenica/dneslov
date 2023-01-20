@@ -3,6 +3,8 @@
 class Name < ActiveRecord::Base
    extend TotalSize
    include Languageble
+   include WithDescriptions
+   include WithLinks
 
    has_many :memory_names
    has_many :memories, through: :memory_names
