@@ -16,6 +16,7 @@ require 'when_easter'
 # id[int]                     - опознаватель
 class Memo < ActiveRecord::Base
    extend TotalSize
+   include WithLinks
 
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
@@ -46,11 +47,9 @@ class Memo < ActiveRecord::Base
    has_many :order_titles, through: :orders, source: :tweets
    has_many :bond_memo_titles, through: :bond_to, source: :titles
    has_many :event_titles, through: :event, source: :titles
-   has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
-   has_many :services, as: :info, inverse_of: :info
+   has_many :services, as: :info, inverse_of: :info # TODO додаь задачу превода service_links/ServiceLink во Service
    has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
    has_many :titles, -> { title }, as: :describable, dependent: :delete_all
-   has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
 
    delegate :quantity, to: :memory
    delegate :quantity, to: :bond_to, prefix: true, allow_nil: true
@@ -287,15 +286,6 @@ class Memo < ActiveRecord::Base
       joins(join).select(selector.uniq).group('_title')
    end
 
-   scope :with_pure_links, -> do
-      selector = "COALESCE((SELECT jsonb_agg(links)
-                              FROM links
-                             WHERE links.info_id = memories.id
-                               AND links.info_type = 'Memory'), '[]'::jsonb) AS _links"
-
-      select(selector).group(:id)
-   end
-
    scope :with_bond_to_year_date, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
@@ -463,50 +453,9 @@ class Memo < ActiveRecord::Base
       select(selector).group(:id)
    end
 
-   scope :with_links, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'memoes.*'
-      end
-
-      selector << "COALESCE((with __links as (
-                      SELECT DISTINCT ON(links.id)
-                             links.id as id,
-                             links.type as type,
-                             links.url as url,
-                             links.language_code AS language_code,
-                             links.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM links
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = links.language_code
-                        JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = links.alphabeth_code
-                        JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE links.info_id = memoes.id
-                         AND links.info_type = 'Memo'
-                    GROUP BY links.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__links)
-                        FROM __links), '[]'::jsonb) AS _links"
-
-      select(selector).group(:id)
-   end
-
-   accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :memo_orders, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :calendary, :event
