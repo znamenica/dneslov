@@ -22,7 +22,7 @@ set :repo_url, "git@github.com:znamenica/dneslov.git"
 # Default value for :pty is false
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
+append :linked_files, "config/database.yml", ".env"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules", "public/images"
@@ -51,7 +51,10 @@ set :nginx_static_dir, "public"
 set :nginx_template, "#{stage_config_path}/#{fetch :stage}/nginx.conf.erb"
 
 set :rvm_type, :user                      # Defaults to: :auto
-set :rvm_ruby_version, '2.7.5@dneslov --create'    # Defaults to: 'default'
+
+# determine ruby version
+/ (?<version>[\d\.]+)?/ =~ Bundler.setup.instance_variable_get(:@definition).locked_gems.ruby_version
+set :rvm_ruby_version, "#{version}@dneslov --create"    # Defaults to: 'default'
 # set :rvm_custom_path, '~/.rvm'          # only needed if not detected
 set :rvm_roles, [:app, :web]
 
@@ -91,15 +94,16 @@ set :compressor, :bzip2
 
 ### tasks
 
-
+# setup
 task :setup do
 end
 
+after 'setup', 'systemd:sidekiq:setup'
+after 'setup', 'systemd:core:setup'
+after 'setup', 'systemd:sidekiq:enable'
+after 'setup', 'systemd:core:enable'
+
 # deploy
-after 'deploy:publishing', 'systemd:sidekiq:setup'
-after 'deploy:publishing', 'systemd:core:setup'
-after 'deploy:publishing', 'systemd:sidekiq:enable'
-after 'deploy:publishing', 'systemd:core:enable'
 after 'deploy:finishing', 'deploy:cleanup'
 
 # deploy:restart
