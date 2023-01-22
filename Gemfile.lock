@@ -63,8 +63,8 @@ GIT
 
 GIT
   remote: https://github.com/majioa/tiun.git
-  revision: 92a9fad66e8e8c6de43f7345a244f7c6ad8a2058
-  ref: 92a9fad
+  revision: 4f93defb5d8c66be49561e9b70d91af371be8523
+  ref: 4f93def
   specs:
     tiun (0.1.0)
       activesupport (>= 4.1.0)
