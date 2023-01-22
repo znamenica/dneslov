@@ -220,7 +220,7 @@ export const memoMeta = {
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
@@ -235,7 +235,62 @@ export const memoMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
+               pathname: 'short_subjects',
+               humanized_name: 'alphabeth',
+               context_value: { k: "Alphabeth" },
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод наименования азбуки...',
+               validations: {
+                  'Избранная азбука не соотвествует избранному языку': matchCodes,
+                  'Азбука из списка должна быть выбрана': matchEmptyObject,
+               }
+            },
+         }
+      },
+      notes: {
+         kind: 'collection',
+         title: 'Заметки',
+         action: 'Добавь заметку',
+         single: 'Заметка',
+         placeholder: 'Введи заметку',
+         source: "descriptions",
+         filter: { type: "Note" },
+         display_scheme: '12-12-12-12',
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            text: {
+               kind: 'tale',
+               title: 'Заметка',
+               placeholder: 'Введи заметку',
+               display_scheme: '12-12-12-12',
+               validations: {
+                  'Текст заметки отсутствует': matchEmptyObject,
+                  'Заметка содержит знаки вне перечня избранной азбуки': matchLetters,
+               }
+            },
+            language_code: {
+               kind: 'dynamic',
+               title: 'Язык',
+               display_scheme: '12-6-6-6',
+               pathname: 'short_subjects',
+               humanized_name: 'language',
+               context_value: { k: "Language" },
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод наименования языка...',
+               validations: {
+                  'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                  'Язык из списка должен быть выбран': matchEmptyObject,
+               }
+            },
+            alphabeth_code: {
+               kind: 'dynamic',
+               title: 'Азбука',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
@@ -274,7 +329,7 @@ export const memoMeta = {
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
@@ -289,7 +344,7 @@ export const memoMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },

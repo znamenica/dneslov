@@ -9,8 +9,17 @@ class Description < ActiveRecord::Base
    scope :desc, -> { where(type: 'Description') }
    scope :title, -> { where(type: 'Title') }
    scope :appe, -> { where(type: 'Appellation') }
-   scope :with_lang, ->(lang) { where(language_code: lang) }
-   scope :with_languaged_calendary, ->(calendary_slug, language_code) do
+   scope :descnote, -> { where(type: ['Description', 'Note'])}
+   scope :annotated, -> { order(Arel.sql('length(text) ASC')).limit(1) }
+   scope :by_language, ->(language) { where(language_code: language) }
+   scope :by_relation, ->(join_name, model) do
+      self.
+         joins(', memoes').
+         where(Arel.sql("describable_id = #{join_name}.id")).
+         and(where(describable_type: model.to_s))
+   end
+
+   scope :by_languaged_calendary, ->(calendary_slug, language_code) do
       self.joins(', memoes')
           .where(language_code: language_code,
                  describable_type: 'Memo')

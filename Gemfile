@@ -93,6 +93,7 @@ gem 'when_easter'
 gem 'activerecord-import', '~> 1.4.1'
 gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
 gem 'acts_as_list'
+# gem 'active_record_extended'
 
 ## pdf
 gem 'prawn', git: 'https://github.com/majioa/prawn.git', ref: '10e29240e'

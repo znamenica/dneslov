@@ -50,6 +50,24 @@ module WithDescriptions
             select(selector).group(:id)
          end
 
+         scope :with_description, -> context do
+            join_name = table.table_alias || table.name
+            language_codes = [context[:locales]].flatten
+
+            selector = self.select_values.dup
+            if selector.empty?
+               selector << "#{join_name}.*"
+            end
+            selector << 'first_descriptions.text AS _description'
+
+            join = "LEFT OUTER JOIN descriptions AS first_descriptions ON first_descriptions.describable_id = #{join_name}.id
+                                AND first_descriptions.describable_type = '#{model}'
+                                AND first_descriptions.type IN ('Description', 'Note')
+                                AND first_descriptions.language_code IN ('#{language_codes.join("', '")}')"
+
+            joins(join).select(selector.uniq).group('_description', "#{join_name}.id")
+         end
+
          accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
          validates :descriptions, associated: true

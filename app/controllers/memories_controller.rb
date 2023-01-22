@@ -170,13 +170,13 @@ class MemoriesController < ApplicationController
       @memoes = apply_scopes(Memo).with_base_year
                                   .with_slug_text
                                   .with_calendary_slug_text
-                                  .with_description(@locales)
-                                  .with_title(@locales)
+                                  .with_description(context)
+                                  .with_title(context)
                                   .with_date
                                   .with_thumb_url
-                                  .with_bond_to_title(@locales)
-                                  .with_event_title(@locales)
-                                  .with_orders(@locales)
+                                  .with_bond_to_title(context)
+                                  .with_event_title(context)
+                                  .with_orders(context)
                                   .with_event
                                   .distinct_by('_base_year', '_slug')
                                   .group(:id)

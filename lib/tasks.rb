@@ -3,7 +3,7 @@ require 'rdoba/roman'
 module Tasks
    class << self
       def import_memo_descriptions_from calendary_slug, language_code
-         descriptions = Description.desc.with_languaged_calendary(calendary_slug, language_code)
+         descriptions = Description.desc.by_languaged_calendary(calendary_slug, language_code)
          descriptions.each do |description|
             source = description.describable.memory.description_for(language_code)
             description.update!(text: source.text) if source ;end;end

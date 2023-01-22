@@ -46,6 +46,7 @@ module WithLinks
          end
 
          scope :with_pure_links, -> do
+            join_name = table.table_alias || table.name
             selector = "COALESCE((SELECT jsonb_agg(links)
                                     FROM links
                                    WHERE links.info_id = #{join_name}.id
