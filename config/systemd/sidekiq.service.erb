@@ -1,15 +1,15 @@
 [Unit]
-Description=<%= fetch(:application) %> application server sidekiq
+Description=<%= fetch(:application) %> application sidekiq server
 After=network.target remote-fs.target nss-lookup.target
-Requires=redis.service postgresql.service
+Requires=redis.service
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=_nginx
+Group=_nginx
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'exec bundle exec sidekiq'
+ExecStart=/bin/bash -lc 'bundle exec sidekiq'
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
