@@ -68,13 +68,8 @@ set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
-#
-#
-
-
 set :stage, :production
 set :branch, ENV['BRANCH'] || "master"
-
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :server_name, "www.dneslov.org dneslov.org"

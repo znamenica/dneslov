@@ -108,7 +108,7 @@ gem 'sprockets-rails'
 
 ## api
 # gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
-gem 'tiun', github: 'majioa/tiun', ref: '4f93def'
+gem 'tiun', github: 'majioa/tiun', ref: '8aad97c'
 
 group :development do
    gem "capistrano", "~> 3.17", require: false
