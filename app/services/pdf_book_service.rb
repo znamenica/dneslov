@@ -6,7 +6,7 @@ require 'open-uri'
 
 # PDF autogeneration service class based on the argument options
 #
-class PDFBookService
+class PdfBookService
    attr_reader :options
 
    FONTS = {
