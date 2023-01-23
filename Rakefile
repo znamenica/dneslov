@@ -1,12 +1,18 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
-require 'cucumber'
-require 'cucumber/rake/task'
+ENV['RAILS_ENV'] ||= 'test' if ARGV.include?('cucumber')
 
 require_relative File.expand_path('../config/application', __FILE__)
 Rails.application.load_tasks
 
+if Rails.env.test?
+   require 'cucumber'
+   require 'cucumber/rake/task'
+
+   Cucumber::Rake::Task.new(:cucumber) do |t|
+      t.cucumber_opts = "features --format pretty"
+   end
+end
 
 task :clean do
    puts "Cleaning..."
@@ -43,13 +49,8 @@ namespace :db do
    end
 end
 
-Cucumber::Rake::Task.new(:cucumber) do |t|
-   t.cucumber_opts = "features --format pretty"
-end
-
 task 'db:seed' => [:load_config]
 
 load "active_record/railties/databases.rake"
 
-task :all => :cucumber
-
+task :default => :cucumber

@@ -24,8 +24,6 @@ gem 'uglifier', '>= 2.7.2'
 
 ### JS and CSS bunding
 gem 'redcarpet'
-gem "jsbundling-rails"
-gem "cssbundling-rails"
 
 ## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
@@ -165,9 +163,14 @@ group :test do
    gem "email_spec"
 end
 
-group :production do
+group :production, :staging do
    gem 'puma', '~> 4.3', '>= 4.3.12'
    gem 'sentry-rails'
    gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
    gem 'sentry-sidekiq'
+end
+
+group :production, :staging, :development do
+   gem "jsbundling-rails"
+   gem "cssbundling-rails"
 end
