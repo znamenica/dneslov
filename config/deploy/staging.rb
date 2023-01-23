@@ -3,9 +3,20 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-# server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
+server "185.133.40.112", port: "222", user: "_nginx", roles: %w{app db web}, primary: true
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
+
+set :pty, false
+
+# nginx
+set :nginx_domains, "185.133.40.112"
+set :nginx_read_timeout, 60
+set :app_server_socket, "#{shared_path}/tmp/sockets/puma.sock"
+
+set :nginx_use_ssl, false
+set :nginx_sites_available_dir, "/etc/nginx/sites-available.d"
+set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 
 
 
@@ -59,3 +70,12 @@
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+set :stage, :staging
+set :branch, ENV['BRANCH'] || "master"
+
+set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
+set :server_name, "185.133.40.112"
+set :deploy_to, "/var/www/dneslov"
+
+set :rails_env, :staging
+set :enable_ssl, false

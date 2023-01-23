@@ -55,7 +55,7 @@ module MacrosSupport
                /предмета?/                         => Item,
                /тип[ау]? предмета/                 => ItemType,
                /слуга?/                            => Slug,
-               /служебн(?:ые|ых) песм(?:ена)?/     => ServiceCanto,
+               /служебн(?:ые|ых) песм(?:ена)?/     => ServiceScriptum,
                /служб[аыу]?/                       => Service }
 
    def language_code_for language_text

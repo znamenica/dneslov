@@ -113,4 +113,5 @@ before 'nginx:restart', 'nginx:site:enable'
 before 'deploy:restart', 'nginx:restart'
 after 'deploy:restart', 'systemd:sidekiq:reload-or-restart'
 after 'deploy:restart', 'systemd:core:reload-or-restart'
-
+before 'deploy:migrate', 'db:remote:createrole'
+after 'db:remote:createrole', 'db:remote:createdb'
