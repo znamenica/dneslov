@@ -18,7 +18,8 @@ set :nginx_use_ssl, false
 set :nginx_sites_available_dir, "/etc/nginx/sites-available.d"
 set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 
-
+### database
+set :disallow_pushing, false
 
 # role-based syntax
 # ==================
