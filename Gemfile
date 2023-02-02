@@ -123,8 +123,8 @@ group :development do
    gem 'pattern_generator', '>= 0.1.0'
    # deploy
    gem 'ed25519', '~> 1.2'
-   gem 'bcrypt_pbkdf', '~> 1.0'
    gem 'bullet'
+   gem 'bcrypt_pbkdf', '~> 1.1'
    gem 'rubocop'
    gem 'rubocop-rails'
    gem "debug"

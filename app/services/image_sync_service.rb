@@ -22,13 +22,11 @@ class ImageSyncService
    def scheme
       return @scheme if @scheme
 
-      #target_path = self.target_path
-
       @scheme ||= {
          targets: targets,
          source: source,
          scheme_path: scheme_path,
-         attrs: attrs,#(target_path:),
+         attrs: attrs,
          date: now,
       }
    end
@@ -41,9 +39,6 @@ class ImageSyncService
       @scheme_path ||= File.join('.schemes', now.strftime("%Y"), now.strftime("%m"), now.strftime("%Y%m%d%H%M%S"))
    end
 
-#   def target_path
-#      @target_path ||= File.join(now.strftime("%Y"), now.month.to_s, now.strftime("%Y%m%d%H%M%S"))
-#   end
    def errors
       @errors ||= []
    end
@@ -64,39 +59,33 @@ class ImageSyncService
       warns << text
    end
 
-   def attrs# target_path: self.target_path
+   def attrs
       @attrs ||=
          folders.map do |folder|
             fbase = File.basename(folder)
-            #fdir = File.dirname(f)
-            #target_path = "#{fbase[0]}/#{fbase[0]}#{fbase[1]}/#{fbase}"
+            target_path = File.join(fbase[0], fbase.gsub(/\s+/, '')[0..1], fbase)
 
-            targets.map do |t|
-               path = File.join(t, fbase)
+            source_files_for(folder).map do |file_in|
+               target_filename = reext(File.basename(file_in), 'webp')
+               event = file_in.split('/')[0..-2].first
+               file = File.join(folder, file_in)
+               type, imageinfo, fileinfo, kind, width, height = Dir.chdir(folder) { info(file_in) }
+               warn("Erroneous file's #{file} type is #{fileinfo}") unless type
 
-               source_files_for(folder).map do |file_in|
-                  target_filename = reext(File.basename(file_in), 'webp')
-                  event = file_in.split('/')[0..-2].first
-                  file = File.join(folder, file_in)
-                  type, imageinfo, fileinfo, kind, width, height = Dir.chdir(folder) { info(file_in) }
-                  warn("Erroneous file's #{file} type is #{fileinfo}") unless type
-            #      binding.pry if folder =~ /рождество/
-
-                  {
-                     type: type,
-                     target_path: File.join(fbase, target_filename),
-                     event: event,
-                     target: File.join(path, target_filename),
-                     short_name: fbase,
-                     comment: reext(File.basename(file)),
-                     source: file,
-                     imageinfo: imageinfo,
-                     fileinfo: fileinfo,
-                     kind: kind,
-                     width: width,
-                     height: height
-                  }
-               end
+               {
+                  type: type,
+                  target_path: target_path,
+                  event: event,
+                  target: File.join(target_path, target_filename),
+                  short_name: fbase,
+                  comment: reext(File.basename(file)),
+                  source: file,
+                  imageinfo: imageinfo,
+                  fileinfo: fileinfo,
+                  kind: kind,
+                  width: width,
+                  height: height
+               }
             end
          end.flatten
    end
@@ -132,7 +121,7 @@ class ImageSyncService
    end
 
    # copying source to target converting if required
-   def copy source, target, type, scheme
+   def copy source, target, type, kind, scheme
       FileUtils.mkdir_p(File.dirname(target))
 
       log =
@@ -144,7 +133,11 @@ class ImageSyncService
          when :gif
             `gif2webp '#{esc(source)}' -o '#{esc(target)}' 2>&1`
          when :webp
-            FileUtils.cp(source, target)
+            if kind == :icon
+               `convert '#{esc(source)}' -resize 300x300 '#{esc(target)}' 2>&1`
+            else
+               FileUtils.cp(source, target)
+            end
          when :text
             assign_comment(target, IO.read(source), scheme)
          else
@@ -154,6 +147,10 @@ class ImageSyncService
       binding.pry
    end
 
+   def sum target
+      `gost12sum '#{target}' 2>&1`.split(/\s+/).first.strip
+   end
+
    # synchronize source to targets
    def sync
       return if validates(scheme).size > 0
@@ -161,11 +158,14 @@ class ImageSyncService
       targets.each do |t|
          scheme_file = File.join(t, scheme[:scheme_path] + '.yaml')
          FileUtils.mkdir_p(File.dirname(scheme_file))
-         File.open(scheme_file, "w+") {|f| f.puts(scheme.to_yaml) }
-      end
 
-      scheme[:attrs].each do |a|
-         copy(a[:source], a[:target], a[:type], scheme)
+         scheme[:attrs].each do |a|
+            file = File.join(t, a[:target])
+            copy(a[:source], file, a[:type], a[:kind], scheme)
+            a[:hash] = sum(file)
+         end
+
+         File.open(scheme_file, "w+") {|f| f.puts(scheme.to_yaml) }
       end
 
       self
@@ -183,7 +183,6 @@ class ImageSyncService
       a[:type] != :text && scheme[:attrs].select do |b|
          a[:target] == b[:target] && b[:type] != :text
       end || []
-      #         binding.pry if duped.size > 1
    end
 
    def validates scheme
@@ -206,7 +205,7 @@ class ImageSyncService
       self
    end
 
-   KEYS = %i(short_name comment imageinfo fileinfo kind width height)
+   KEYS = %i(short_name comment imageinfo fileinfo kind width height hash)
    #
    # import resources from file to db
    def import
@@ -229,7 +228,7 @@ class ImageSyncService
 
             scheme[:attrs].map do |a|
                props = KEYS.reduce({ storage: storage }) { |r, key| r.merge(key => a[key]) }
-               { path: a[:target_path], props: props }
+               { path: a[:target], props: props }
             end
          end.flatten
 

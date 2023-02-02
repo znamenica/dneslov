@@ -598,7 +598,7 @@ DEPENDENCIES
   acts_as_list
   addressable
   attribute-defaults
-  bcrypt_pbkdf (~> 1.0)
+  bcrypt_pbkdf (~> 1.1)
   bootsnap
   bullet
   bundler (>= 2.3.12)
