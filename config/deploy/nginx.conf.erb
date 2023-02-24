@@ -1,4 +1,4 @@
-upstream dneslov_app {
+upstream dneslov_rails {
    server unix:<%= fetch(:app_server_socket) %> fail_timeout=0;
 }
 
@@ -25,7 +25,7 @@ server {
    <% end %>
    # add_header Strict-Transport-Security 'max-age=604800';   
 
-   try_files $uri/index.html $uri @dneslov_app;
+   try_files $uri/index.html $uri @dneslov;
 
    error_page 500 502 503 504 /500.html;
    location = /500.html {
@@ -45,7 +45,14 @@ server {
       gzip_types application/x-javascript text/css image/x-icon image/png image/jpeg image/gif;
    }
 
-   location @dneslov_app {
+   location ~ ^/(images)/ {
+      set             $redis_key $uri;
+      redis_pass      127.0.0.1:6379;
+      default_type    image/webp;
+      error_page      404 502 504 500 = @dneslov;
+   }
+
+   location @dneslov {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $http_host;
@@ -53,6 +60,6 @@ server {
       proxy_set_header X-Forwarded-Ssl on;
       proxy_read_timeout 30;
       proxy_redirect off;
-      proxy_pass http://dneslov_app;
+      proxy_pass http://dneslov_rails;
    }
 }
