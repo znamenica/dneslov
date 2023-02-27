@@ -174,14 +174,19 @@ RAILS_ENV=development foreman start -f config/procfiles/development.rb -d .
 # Tasks
 ## Image Synchronisation
 
-On client side do:
+On client side proceed images into to upload-ready format, so do:
 ```bash
-rake dneslov:image:sync[/usr/local/home/majioa/Документы/Изображения/dneslov_pin1/,/usr/local/home/majioa/git/dneslov/public/images]
+rake dneslov:image:proceed[~/Документы/Изображения/dneslov_pin1/,~/Документы/днеслов/upimages]
 ```
 
-Then on server side do:
+Then rsync them with the upload server(s):
 ```bash
-rake dneslov:load:resources dneslov:load:images
+rake dneslov:image:rsync[~/Документы/днеслов/upimages,~/git/dneslov/public/images:~/git/dneslov/public/images1]
+```
+
+Then on server side from mouted upstream server load images as resources, and then converts them into icon or thumb links, as:
+```bash
+rake dneslov:load:resources[/mnt/mail] dneslov:load:images[/images]
 ```
 
 ## API

@@ -19,9 +19,12 @@ class Subject < ActiveRecord::Base
    end
 
    scope :by_token, -> text do
-      self.left_outer_joins(:names, :descriptions)
-          .where("descriptions.text ~* ?", "\\m#{text}.*")
-          .distinct
+      join_name = table.table_alias || table.name
+
+      self.left_outer_joins(:names, :descriptions).
+         where("#{join_name}.key ~* ?", "\\m#{text}.*").or(
+         where("descriptions.text ~* ?", "\\m#{text}.*")).
+         distinct
    end
 
    scope :by_tokens, -> string_in do

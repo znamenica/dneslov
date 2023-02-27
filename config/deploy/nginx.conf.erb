@@ -46,7 +46,7 @@ server {
    }
 
    location ~ ^/(images)/ {
-      set             $redis_key $uri;
+      set             $redis_key "$uri";
       redis_pass      127.0.0.1:6379;
       default_type    image/webp;
       error_page      404 502 504 500 = @dneslov;

@@ -29,14 +29,14 @@ class ImagesController < ApplicationController
 
       root = ENV['STORE_IMAGE_PATH'] || Rails.root.join('images')
 
-      @path = File.join(root, *image_link.url.split('/'))
+      @path = File.join(root, *image_link.url.split('/')[2..-1])
    end
 
    def uri
-      @uri ||= '/' + params[:path]
+      @uri ||= '/images/' + params[:path]
    end
 
    def image_link
-      @image_link ||= Link.find_by_url(uri)
+      @image_link ||= Link.find_by_url!(uri)
    end
 end

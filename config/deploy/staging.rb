@@ -80,3 +80,21 @@ set :deploy_to, "/var/www/dneslov"
 
 set :rails_env, :staging
 set :enable_ssl, false
+
+# custom
+namespace :redis do
+   task :stop do
+      on roles(:app) do
+         execute(:sudo, :systemctl, 'stop', 'redis')
+      end
+   end
+
+   task :start do
+      on roles(:app) do
+         execute(:sudo, :systemctl, 'start', 'redis')
+      end
+   end
+end
+
+after 'deploy:assets:precompile', 'redis:start'
+before 'deploy:assets:precompile', 'redis:stop'

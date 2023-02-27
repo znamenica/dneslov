@@ -2,11 +2,15 @@ require 'yaml'
 require 'active_support/time_with_zone'
 
 class ImageSyncService
-   attr_reader :targets, :source
+   attr_reader :targets, :source, :storage, :asset_path
 
-   def initialize source: nil, targets: []
+   def initialize source: nil, targets: [], asset_path: nil, storage: nil
       @source = source # path
       @targets = targets # paths
+      @asset_path = asset_path || '/images'
+      @storage = Rails.root.join(storage || 'public/images')
+
+      FileUtils.mkdir_p(@storage) rescue nil unless File.directory?(@storage)
    end
 
    def folders
@@ -63,47 +67,54 @@ class ImageSyncService
       @attrs ||=
          folders.map do |folder|
             fbase = File.basename(folder)
-            target_path = File.join(fbase[0], fbase.gsub(/\s+/, '')[0..1], fbase)
+            target_path = File.join(now.strftime("%Y"), now.strftime("%m"), now.strftime("%Y%m%d%H%M%S"))
 
             source_files_for(folder).map do |file_in|
-               target_filename = reext(File.basename(file_in), 'webp')
                event = file_in.split('/')[0..-2].first
                file = File.join(folder, file_in)
                type, imageinfo, fileinfo, kind, width, height = Dir.chdir(folder) { info(file_in) }
-               warn("Erroneous file's #{file} type is #{fileinfo}") unless type
+               kinds = kind == :both ? [:icon, :thumb] : [kind]
 
-               {
-                  type: type,
-                  target_path: target_path,
-                  event: event,
-                  target: File.join(target_path, target_filename),
-                  short_name: fbase,
-                  comment: reext(File.basename(file)),
-                  source: file,
-                  imageinfo: imageinfo,
-                  fileinfo: fileinfo,
-                  kind: kind,
-                  width: width,
-                  height: height
-               }
+               error("Erroneous file's #{file} type is #{fileinfo}") unless type
+
+               kinds.map.with_index do |kind, index_in|
+                  index = index_in > 0 ? ".#{index_in}" : ""
+                  target_filename = "#{sum_text("#{File.join(fbase, file_in)}#{index}")}.webp"
+                  target = File.join(target_path, target_filename)
+
+                  {
+                     type: type,
+                     event: event,
+                     target_path: target_path,
+                     target: target,
+                     short_name: fbase,
+                     comment: reext(File.basename(file)),
+                     source: file,
+                     imageinfo: imageinfo,
+                     fileinfo: fileinfo,
+                     kind: kind,
+                     width: width,
+                     height: height
+                  }
+               end
             end
          end.flatten
    end
 
    def info file
-      imageinfo = `identify '#{esc(file)}' 2>&1`.strip
-      fileinfo = `file '#{esc(file)}'`.strip
+      imageinfo = `identify "#{esc(file)}" 2>&1`.strip
+      fileinfo = `file -- "#{esc(file)}" 2>&1`.strip
 
-      unless /(?<type>GIF|JPEG|WEBP|PNG) (?<width>\d+)x(?<height>\d+)/ =~ imageinfo
+      unless /(?<type>GIF|JPEG|WEBP|PNG|BMP3?) (?<width>\d+)x(?<height>\d+)/ =~ imageinfo
          case fileinfo
          when /UTF-8 Unicode text/
             type = 'text'
          end
       end
 
-      kind = !width && :nonimage ||
-         width == height && (height.to_i < 1000 && :thumb || :both) ||
-         height.to_i < 1000 && :invalid || :icon
+      kind = !width ? :nonimage :
+         (width == height ? height.to_i < 1000 && :thumb || :both :
+         height.to_i < 1000 && :invalid || :icon)
 
       [type&.downcase&.to_sym, imageinfo, fileinfo, kind, width.to_i, height.to_i]
    end
@@ -117,7 +128,7 @@ class ImageSyncService
    end
 
    def esc string
-      string.gsub("'", "\\'")
+      string.gsub('"', '\"')
    end
 
    # copying source to target converting if required
@@ -127,28 +138,32 @@ class ImageSyncService
       log =
          case type
          when :jpeg
-            `cwebp -q 90 '#{esc(source)}' -o '#{esc(target)}' 2>&1`
+            `cwebp -q 90 "#{esc(source)}" -o "#{esc(target)}" 2>&1`
          when :png
-            `cwebp -lossless -z 9 -m 6 '#{esc(source)}' -o '#{esc(target)}' 2>&1`
+            `cwebp -lossless -z 9 -m 6 "#{esc(source)}" -o "#{esc(target)}" 2>&1`
          when :gif
-            `gif2webp '#{esc(source)}' -o '#{esc(target)}' 2>&1`
+            `gif2webp "#{esc(source)}" -o "#{esc(target)}" 2>&1`
          when :webp
-            if kind == :icon
-               `convert '#{esc(source)}' -resize 300x300 '#{esc(target)}' 2>&1`
+            if kind == :thumb
+               `convert "#{esc(source)}" -resize 300x300 "#{esc(target)}" 2>&1`
             else
-               FileUtils.cp(source, target)
+               `convert "#{esc(source)}" "#{esc(target)}" 2>&1`
             end
+         when :bmp3, :bmp
+            `convert "#{esc(source)}" "#{esc(target)}" 2>&1`
          when :text
             assign_comment(target, IO.read(source), scheme)
          else
-            $stderr.puts("Skip file #{source} with null type")
+            error("Skip file #{source} with null type")
          end
-   rescue
-      binding.pry
    end
 
    def sum target
-      `gost12sum '#{target}' 2>&1`.split(/\s+/).first.strip
+      `gost12sum "#{esc(target)}" 2>&1`.split(/\s+/).first.strip
+   end
+
+   def sum_text text
+      `gost12sum 2>&1 <<< "#{text.gsub(/"/, '\"')}"`.split(/\s+/).first.strip
    end
 
    # synchronize source to targets
@@ -205,12 +220,11 @@ class ImageSyncService
       self
    end
 
-   KEYS = %i(short_name comment imageinfo fileinfo kind width height hash)
+   KEYS = %i(short_name comment imageinfo fileinfo kind width height hash event)
    #
    # import resources from file to db
    def import
       time = Resource.order(updated_at: :desc).first&.updated_at || Time.at(0) # last for updated_at or settingize
-      storage = "public/images" # TODO settingsize
       resource_path = Rails.root.join(storage)
 
       scheme_files =
@@ -227,7 +241,7 @@ class ImageSyncService
                   permitted_classes: [ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, Time, Symbol])
 
             scheme[:attrs].map do |a|
-               props = KEYS.reduce({ storage: storage }) { |r, key| r.merge(key => a[key]) }
+               props = KEYS.reduce({ storage: storage, asset_path: asset_path }) { |r, key| r.merge(key => a[key]) }
                { path: a[:target], props: props }
             end
          end.flatten
@@ -249,8 +263,8 @@ class ImageSyncService
       @events ||= {}
    end
 
-   def event_for event_name
-      events[event_name] ||= info.events.by_token('рождество').first
+   def event_for memory, event_name
+      events[[memory.short_name, event_name].join('/')] ||= memory.events.by_token(event_name).first
    end
 
    # load resources and converts them into obejcts: image_url etc
@@ -262,10 +276,9 @@ class ImageSyncService
             error("Invalid short name: #{r[:props]['short_name']}") unless info
 
             target =
-               if r[:props]['sub_kind'] && info
-                  event = event_for(r[:props]['sub_kind'])
+               if r[:props]['event'] && info
+                  event = event_for(info, r[:props]['event'])
 
-                  binding.pry if !event
                   error("Invalid event #{r[:props]['sub_kind']} for short name #{r[:props]['short_name']}") unless event
                   event
                else
@@ -273,7 +286,7 @@ class ImageSyncService
                end
 
             attrs = {
-               url: File.join("/images", r.path),
+               url: File.join(asset_path, r.path),
                # url: File.join("https://dneslov.org/images", r.path),
                info: target,
                language_code: 'ру',
