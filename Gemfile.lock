@@ -326,7 +326,7 @@ GEM
       json
       websocket (~> 1.0)
     racc (1.6.1)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rack-cache (1.13.0)
       rack (>= 0.4)
     rack-test (2.0.2)
