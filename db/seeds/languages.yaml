@@ -1,0 +1,343 @@
+---
+- key: сг
+  kind_code: Language
+  names_attributes:
+   - text: Старогрѣческій (Церковногрѣческій)
+     language_code: ру
+     alphabeth_code: РП
+- key: аб
+  kind_code: Language
+  names_attributes:
+   - text: Арабскій
+     language_code: ру
+     alphabeth_code: РП
+- key: но
+  kind_code: Language
+  names_attributes:
+   - text: Норвежскій
+     language_code: ру
+     alphabeth_code: РП
+- key: да
+  kind_code: Language
+  names_attributes:
+   - text: Датскій
+     language_code: ру
+     alphabeth_code: РП
+- key: де
+  kind_code: Language
+  names_attributes:
+   - text: Древній ивритъ
+     language_code: ру
+     alphabeth_code: РП
+- key: ам
+  kind_code: Language
+  names_attributes:
+   - text: Арамейскій
+     language_code: ру
+     alphabeth_code: РП
+- key: шв
+  kind_code: Language
+  names_attributes:
+   - text: Шведскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ил
+  kind_code: Language
+  names_attributes:
+   - text: Исландскій
+     language_code: ру
+     alphabeth_code: РП
+- key: фа
+  kind_code: Language
+  names_attributes:
+   - text: Фарерскій
+     language_code: ру
+     alphabeth_code: РП
+- key: пг
+  kind_code: Language
+  names_attributes:
+   - text: Португальскій
+     language_code: ру
+     alphabeth_code: РП
+- key: го
+  kind_code: Language
+  names_attributes:
+   - text: Готѳскій
+     language_code: ру
+     alphabeth_code: РП
+- key: фи
+  kind_code: Language
+  names_attributes:
+   - text: Финскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ес
+  kind_code: Language
+  names_attributes:
+   - text: Эстонскій
+     language_code: ру
+     alphabeth_code: РП
+- key: лт
+  kind_code: Language
+  names_attributes:
+   - text: Латвійскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ли
+  kind_code: Language
+  names_attributes:
+   - text: Литовскій
+     language_code: ру
+     alphabeth_code: РП
+- key: нн
+  kind_code: Language
+  names_attributes:
+   - text: Древненижнѣмецкій
+     language_code: ру
+     alphabeth_code: РП
+- key: вн
+  kind_code: Language
+  names_attributes:
+   - text: Древневерхненѣмецкій
+     language_code: ру
+     alphabeth_code: РП
+- key: кп
+  kind_code: Language
+  names_attributes:
+   - text: Коптскій
+     language_code: ру
+     alphabeth_code: РП
+- key: пс
+  kind_code: Language
+  names_attributes:
+   - text: Персидскій (Фарси)
+     language_code: ру
+     alphabeth_code: РП
+- key: сп
+  kind_code: Language
+  names_attributes:
+   - text: Староперидскій (Парфанскій, Пехлевійскій)
+     language_code: ру
+     alphabeth_code: РП
+- key: дп
+  kind_code: Language
+  names_attributes:
+   - text: Древнеперидскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ки
+  kind_code: Language
+  names_attributes:
+   - text: Китайскій
+     language_code: ру
+     alphabeth_code: РП
+- key: яп
+  kind_code: Language
+  names_attributes:
+   - text: Японскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ск
+  kind_code: Language
+  names_attributes:
+   - text: Санскритъ
+     language_code: ру
+     alphabeth_code: РП
+- key: ин
+  kind_code: Language
+  names_attributes:
+   - text: Индусскій (Хинди)
+     language_code: ру
+     alphabeth_code: РП
+- key: мх
+  kind_code: Language
+  names_attributes:
+   - text: Маратхи
+     language_code: ру
+     alphabeth_code: РП
+- key: СГ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Старогрѣческій алфавитъ
+     language_code: ру
+     alphabeth_code: РП
+- key: АБ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Арабица
+     language_code: ру
+     alphabeth_code: РП
+- key: НО
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Норвежская абецеда
+     language_code: ру
+     alphabeth_code: РП
+- key: ДА
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Датская абецеда
+     language_code: ру
+     alphabeth_code: РП
+- key: ДЕ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Древнееврейская
+     language_code: ру
+     alphabeth_code: РП
+- key: АМ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Арамеиская
+     language_code: ру
+     alphabeth_code: РП
+- key: ШВ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Шведскій
+     language_code: ру
+     alphabeth_code: РП
+- key: ИЛ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Исландская
+     language_code: ру
+     alphabeth_code: РП
+- key: ФА
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Фарерская
+     language_code: ру
+     alphabeth_code: РП
+- key: НЗ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Голландская
+     language_code: ру
+     alphabeth_code: РП
+- key: ПГ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Португальская
+     language_code: ру
+     alphabeth_code: РП
+- key: ГО
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Готѳская
+     language_code: ру
+     alphabeth_code: РП
+- key: ФИ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Финская
+     language_code: ру
+     alphabeth_code: РП
+- key: ЕС
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Эстонская
+     language_code: ру
+     alphabeth_code: РП
+- key: ЛТ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Латвійская
+     language_code: ру
+     alphabeth_code: РП
+- key: ЛИ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Литовская
+     language_code: ру
+     alphabeth_code: РП
+- key: ВН
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Древневерхненѣмецкая
+     language_code: ру
+     alphabeth_code: РП
+- key: НН
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Древненижненѣмецкая
+     language_code: ру
+     alphabeth_code: РП
+- key: КП
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Коптская
+     language_code: ру
+     alphabeth_code: РП
+- key: ПС
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Персидская арабица
+     language_code: ру
+     alphabeth_code: РП
+- key: СП
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Староперсская латиница
+     language_code: ру
+     alphabeth_code: РП
+- key: ПФ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Парфяница
+     language_code: ру
+     alphabeth_code: РП
+- key: ДП
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Древнеперсская латиница
+     language_code: ру
+     alphabeth_code: РП
+- key: ДИ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Древнеперсская іероглифика
+     language_code: ру
+     alphabeth_code: РП
+- key: КИ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Китаица традиціонная
+     language_code: ру
+     alphabeth_code: РП
+- key: КУ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Китаица упрощённая
+     language_code: ру
+     alphabeth_code: РП
+- key: КТ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Катакана
+     language_code: ру
+     alphabeth_code: РП
+- key: ХИ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Хирагана
+     language_code: ру
+     alphabeth_code: РП
+- key: СК
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Санскитскій деванагари
+     language_code: ру
+     alphabeth_code: РП
+- key: ИН
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Индусскій деванагари
+     language_code: ру
+     alphabeth_code: РП
+- key: МХ
+  kind_code: Alphabeth
+  names_attributes:
+   - text: Маратханскій деванагари
+     language_code: ру
+     alphabeth_code: РП
