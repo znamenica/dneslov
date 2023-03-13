@@ -3,7 +3,6 @@ Rails.application.configure do
       host: "localhost",
       port: 6379,
       db: 0,
-      namespace: "cache"
    }, {
       expires_in: 1.day,
       key: "_#{Rails.application.class.name.split("::").first.downcase}_cache",

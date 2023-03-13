@@ -46,17 +46,16 @@ gem 'hiredis', '~> 0.6'
 gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
 gem 'redis-rails', github: 'redis-store/redis-rails'
 gem 'redis-rack-cache'
-gem 'redis-namespace'
 gem 'snappy'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
 # gem "jsonize", ">= 0.1.1", "~> 0.1"
 # gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
-gem "jsonize", github: 'majioa/jsonize', ref: '3967b41'
+gem "jsonize", github: 'majioa/jsonize', ref: '96c8b77'
 # gem "redisize", ">= 0.1.4", "~> 0.1"
 # gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
-gem 'redisize', github: 'majioa/redisize', ref: 'c5527d4'
+gem 'redisize', github: 'majioa/redisize', ref: 'be60757'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'
