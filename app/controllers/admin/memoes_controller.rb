@@ -1,4 +1,7 @@
 class Admin::MemoesController < Admin::CommonController
+   has_scope :by_memory_id, only: %i(index all)
+   has_scope :by_calendary_id, only: %i(index all)
+
    protected
 
    def index_with_list

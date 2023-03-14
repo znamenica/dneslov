@@ -77,7 +77,7 @@ class Memo < ActiveRecord::Base
 
    scope :with_key, -> _ do
       join_name = table.table_alias || table.name
-      selector = ["#{join_name}.id AS _key"]
+      selector = ["DISTINCT ON (_key) #{join_name}.id AS _key"]
 
       select(selector).group('_key').reorder("_key")
    end
@@ -169,11 +169,16 @@ class Memo < ActiveRecord::Base
       where(calendary_id: calendary_id)
    end
 
+   scope :by_memory_id, -> (memory_id) do
+      joins(:event).merge(Event.by_memory_id(memory_id))
+   end
+
    scope :notice, -> { joins(:event).merge(Event.notice) }
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
    singleton_class.send(:alias_method, :d, :by_date)
+   singleton_class.send(:alias_method, :mid, :by_memory_id)
    singleton_class.send(:alias_method, :c, :in_calendaries)
 
    scope :distinct_by, -> *args do
