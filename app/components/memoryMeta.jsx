@@ -256,6 +256,27 @@ export const memoryMeta = {
                   "Неверный формат ссылки на бытие": [ "!", UrlRegexp ],
                }
             },
+            type: {
+               kind: 'select',
+               title: 'Вид ссылки',
+               display_scheme: '12-4-2-2',
+               codeNames: {
+                  '': 'Избери вид текста...',
+                  'WikiLink': 'Вики-ссылка',
+                  'DescriptiveLink': 'Описательная ссылка',
+                  'CoordLink': 'Кординатная ссылка',
+                  'ServiceLink': 'Службовая ссылка',
+                  'PatericLink': 'Отечная ссылка',
+                  'BeingLink': 'Бытийная ссылка',
+                  'PhotoLink': 'Фото-ссылка',
+                  'LanguageLink': 'Языковая ссылка',
+                  'ThumbLink': 'Кругляшовая ссылка',
+                  'IconLink': 'Иконная ссылка',
+               },
+               validations: {
+                  'Пункт из списка должен быть выбран': matchEmptyObject,
+               },
+            },
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
@@ -287,27 +308,6 @@ export const memoryMeta = {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
                }
-            },
-            type: {
-               kind: 'select',
-               title: 'Вид ссылки',
-               display_scheme: '12-4-2-2',
-               codeNames: {
-                  '': 'Избери вид текста...',
-                  'WikiLink': 'Вики-ссылка',
-                  'DescriptiveLink': 'Описательная ссылка',
-                  'CoordLink': 'Кординатная ссылка',
-                  'ServiceLink': 'Службовая ссылка',
-                  'PatericLink': 'Отечная ссылка',
-                  'BeingLink': 'Бытийная ссылка',
-                  'PhotoLink': 'Фото-ссылка',
-                  'LanguageLink': 'Языковая ссылка',
-                  'ThumbLink': 'Кругляшовая ссылка',
-                  'IconLink': 'Иконная ссылка',
-               },
-               validations: {
-                  'Пункт из списка должен быть выбран': matchEmptyObject,
-               },
             },
          }
       },
