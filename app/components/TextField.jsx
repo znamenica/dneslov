@@ -65,6 +65,10 @@ export default class TextField extends Component {
          filter((x) => { return x }).join(" ")
    }
 
+   value() {
+      return (this.props.value === undefined || this.props.value === null) ? "" : String(this.props.value)
+   }
+
    render() {
       console.log("[render] * props:", this.props)
 
@@ -79,7 +83,7 @@ export default class TextField extends Component {
                name={this.props.name}
                ref={c => {this.$input = c}}
                placeholder={this.props.placeholder}
-               value={this.props.value || ''}
+               value={this.value()}
                data-length={this.props.data && this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label

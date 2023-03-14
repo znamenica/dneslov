@@ -6,7 +6,7 @@ class Admin::OrdersController < Admin::CommonController
    end
 
    def permitted_params
-      params.require(:order).permit(:id,
+      params.require(:order).permit(:id, :significance,
          slug_attributes: %i(id text),
          notes_attributes: %i(id text language_code alphabeth_code _destroy),
          tweets_attributes: %i(id text language_code alphabeth_code _destroy),

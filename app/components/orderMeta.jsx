@@ -62,6 +62,12 @@ export const orderMeta = {
             }
          }
       },
+      significance: {
+         kind: 'text',
+         title: 'Значимость',
+         placeholder: 'Введи значимость',
+         display_scheme: '12-6-3-3',
+      },
       tweets: {
          kind: 'collection',
          title: "Сокращения",
@@ -222,60 +228,6 @@ export const orderMeta = {
                kind: 'dynamic',
                title: 'Азбука',
                display_scheme: '12-12-6-6',
-               pathname: 'short_subjects',
-               humanized_name: 'alphabeth',
-               context_value: { k: "Alphabeth" },
-               key_name: 'value',
-               value_name: 'key',
-               placeholder: 'Начни ввод наименования азбуки...',
-               validations: {
-                  'Избранная азбука не соотвествует избранному языку': matchCodes,
-                  'Азбука из списка должна быть выбрана': matchEmptyObject,
-               }
-            },
-         }
-      },
-      descriptions: {
-         kind: 'collection',
-         title: 'Описания',
-         action: 'Добавь описание',
-         single: 'Описание',
-         placeholder: 'Введи описание',
-         filter: { type: "Description" },
-         display_scheme: '12-12-12-12',
-         meta: {
-            id: {
-               kind: 'hidden',
-            },
-            text: {
-               kind: 'tale',
-               title: 'Описание',
-               placeholder: 'Введи описание',
-               display_scheme: '12-12-12-12',
-               validations: {
-                  'Текст описания отсутствует': matchEmptyObject,
-                  'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
-               }
-            },
-            language_code: {
-               kind: 'dynamic',
-               title: 'Язык',
-               display_scheme: '12-6-6-6',
-               pathname: 'short_subjects',
-               humanized_name: 'language',
-               context_value: { k: "Language" },
-               key_name: 'value',
-               value_name: 'key',
-               placeholder: 'Начни ввод наименования языка...',
-               validations: {
-                  'Избранный язык не соотвествует избранной азбуке': matchCodes,
-                  'Язык из списка должен быть выбран': matchEmptyObject,
-               }
-            },
-            alphabeth_code: {
-               kind: 'dynamic',
-               title: 'Азбука',
-               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_15_150400) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_14_213700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -202,6 +202,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_15_150400) do
   end
 
   create_table "orders", id: :serial, force: :cascade do |t|
+    t.integer "significance", limit: 2, default: 32767, null: false
+    t.index ["significance"], name: "index_orders_on_significance"
   end
 
   create_table "places", id: :serial, force: :cascade do |t|
