@@ -547,6 +547,8 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    sitemap_generator (6.3.0)
+      builder (~> 3.0)
     slop (3.6.0)
     snappy (0.3.0)
     spring (4.1.1)
@@ -677,6 +679,7 @@ DEPENDENCIES
   sidekiq-worker-killer
   simplecov (~> 0.21)
   simplecov_json_formatter
+  sitemap_generator
   snappy
   spring (~> 4.0)
   spring-commands-cucumber

@@ -52,7 +52,7 @@ server {
       error_page      404 500 502 503 504 = @dneslov;
    }
 
-   location ~ ^/(dneslov.*png$|robots.txt$|favicons/|fonts/|.*\.json$|$) {
+   location ~ ^/(dneslov.*png$|robots.txt$|favicons/|fonts/|.*\.json$|.*\.gz$|$) {
       root            /var/www/dneslov/current/public;
 
       error_page      403 404 405 = @dneslov;

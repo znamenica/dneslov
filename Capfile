@@ -11,6 +11,7 @@ require 'capistrano/rails/migrations'
 require 'capistrano/nginx'
 require 'capistrano/rake'
 require 'capistrano/rvm'
+require 'capistrano/sitemap_generator'
 # require 'capistrano/sidekiq'
 require "capistrano/systemd/multiservice"
 install_plugin Capistrano::Systemd::MultiService.new_service("sidekiq")

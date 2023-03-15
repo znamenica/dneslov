@@ -17,4 +17,4 @@ Allow: *.js*
 Allow: *.css*
 
 Host: https://dneslov.org/
-Sitemap: https://dneslov.org/sitemap.xml
+Sitemap: https://dneslov.org/sitemap.xml.gz
