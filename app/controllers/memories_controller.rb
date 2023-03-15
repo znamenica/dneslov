@@ -166,10 +166,18 @@ class MemoriesController < ApplicationController
                        .with_description(context)
    end
 
+   def cslugs
+      params['c']&.split(',')&.select {|x| x =~ Slug::RE } || []
+   end
+
+   def order
+      ['_base_year', '_slug', Arel.sql("position(calendary_slugs_memoes.text::text in '#{cslugs.join(',')}')"), '_event_code']
+   end
+
    def fetch_memoes
       @memoes = apply_scopes(Memo).with_base_year
                                   .with_slug_text
-                                  .with_calendary_slug_text
+                                  .with_calendary_slug_text(context)
                                   .with_description(context)
                                   .with_title(context)
                                   .with_date
@@ -180,6 +188,7 @@ class MemoriesController < ApplicationController
                                   .with_event
                                   .distinct_by('_base_year', '_slug')
                                   .group(:id)
+                                  .reorder(*order)
                                   .page(params[ :p ])
    end
 end

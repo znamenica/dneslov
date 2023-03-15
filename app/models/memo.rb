@@ -276,7 +276,7 @@ class Memo < ActiveRecord::Base
       joins(join).select(selector).group('_event_title')
    end
 
-   scope :with_calendary_slug_text, -> do
+   scope :with_calendary_slug_text, ->(context) do
       selector = 'calendary_slugs_memoes.text AS _calendary_slug'
 
       left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug')
