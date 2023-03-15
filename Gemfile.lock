@@ -199,6 +199,8 @@ GEM
     capistrano-rails (1.6.2)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
+    capistrano-rake (0.2.0)
+      capistrano (>= 3.0)
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
@@ -612,6 +614,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-db-tasks!
   capistrano-rails (~> 1.6)
+  capistrano-rake
   capistrano-rvm
   capistrano-systemd-multiservice!
   capistrano3-nginx!

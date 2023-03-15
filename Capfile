@@ -9,7 +9,7 @@ require 'capistrano/bundler' # Rails needs Bundler, right?
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/nginx'
-# require 'capistrano/rake'
+require 'capistrano/rake'
 require 'capistrano/rvm'
 # require 'capistrano/sidekiq'
 require "capistrano/systemd/multiservice"

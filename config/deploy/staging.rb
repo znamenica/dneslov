@@ -14,7 +14,11 @@ set :nginx_domains, "185.133.40.112"
 set :nginx_read_timeout, 60
 set :app_server_socket, "#{shared_path}/tmp/sockets/puma.sock"
 
-set :nginx_use_ssl, false
+set :nginx_use_ssl, true
+set :nginx_ssl_certificate_path, '/etc/openssl/certs'
+set :nginx_ssl_certificate, 'nginx-selfsigned.crt'
+set :nginx_ssl_certificate_key_path, '/etc/openssl/private'
+set :nginx_ssl_certificate_key, 'nginx-selfsigned.key'
 set :nginx_sites_available_dir, "/etc/nginx/sites-available.d"
 set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 
@@ -79,7 +83,7 @@ set :server_name, "185.133.40.112"
 set :deploy_to, "/var/www/dneslov"
 
 set :rails_env, :staging
-set :enable_ssl, false
+set :enable_ssl, true
 
 # custom
 namespace :redis do
@@ -96,5 +100,9 @@ namespace :redis do
    end
 end
 
+before 'bundler:install', 'systemd:sidekiq:stop'
+before 'bundler:install', 'systemd:core:stop'
+before 'bundler:install', 'redis:stop'
+before 'bundler:install', 'nginx:stop'
 after 'deploy:assets:precompile', 'redis:start'
-before 'deploy:assets:precompile', 'redis:stop'
+after 'deploy', 'deploy:restart'

@@ -156,7 +156,7 @@ Object.defineProperty(Object.prototype, 'all', {
 
 Object.defineProperty(Object.prototype, 'select', {
    value: function (filter) {
-      res = filter &&
+      let res = filter &&
          Object.keys(this).reduce((r, key) => {
             let cond = true
 
