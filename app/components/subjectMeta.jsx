@@ -84,6 +84,7 @@ export const subjectMeta = {
                title: 'Имя',
                placeholder: 'Введи имя',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст имени отсутствует': matchEmptyObject,
                   'Имя содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -99,6 +100,7 @@ export const subjectMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -114,6 +116,7 @@ export const subjectMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -138,6 +141,7 @@ export const subjectMeta = {
                title: 'Описание',
                placeholder: 'Введи описание',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст описания отсутствует': matchEmptyObject,
                   'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -153,6 +157,7 @@ export const subjectMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -168,6 +173,7 @@ export const subjectMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -207,6 +213,7 @@ export const subjectMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink"] },
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -223,6 +230,7 @@ export const subjectMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink"] },
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,

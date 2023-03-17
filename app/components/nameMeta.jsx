@@ -41,8 +41,10 @@ export const nameMeta = {
          title: 'Написание имени',
          placeholder: 'Введи написание имени',
          display_scheme: '12-6-4-2',
+         subscribeTo: '@alphabeth_code',
          validations: {
             "Имя отсутствует": matchEmptyObject,
+            'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
          },
       },
       language_code: {
@@ -55,6 +57,7 @@ export const nameMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования языка...',
+         subscribeTo: '@alphabeth_code',
          validations: {
             'Избранный язык не соотвествует избранной азбуке': matchCodes,
             'Язык из списка должен быть выбран': matchEmptyObject,
@@ -70,6 +73,7 @@ export const nameMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования азбуки...',
+         subscribeTo: '@language_code',
          validations: {
             'Избранная азбука не соотвествует избранному языку': matchCodes,
             'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -84,6 +88,7 @@ export const nameMeta = {
          pathname: 'short_names',
          key_name: 'value',
          value_name: 'key',
+         subscribeTo: ['@bind_kind_code', '@text'],
          validations: {
             'Связаное имя не должно соответствовать названию текущего имени': (value, context) => {
                return value && value == context.id
@@ -100,6 +105,7 @@ export const nameMeta = {
          context_value: { k: "NameBind" },
          key_name: 'value',
          value_name: 'key',
+         subscribeTo: '@bond_to_id',
          validations: {
             'Вид связки из списка должен быть выбран': matchEmptyObject,
             'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (value, context) => {
@@ -137,6 +143,7 @@ export const nameMeta = {
                title: 'Описание',
                placeholder: 'Введи описание',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст описания отсутствует': matchEmptyObject,
                   'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -152,6 +159,7 @@ export const nameMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -167,6 +175,7 @@ export const nameMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -206,6 +215,7 @@ export const nameMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink"] },
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -222,6 +232,7 @@ export const nameMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink"] },
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,

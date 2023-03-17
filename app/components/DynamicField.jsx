@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 import { Autocomplete } from 'materialize-css'
 import * as Axios from 'axios'
 import { merge } from 'merge-anything'
@@ -8,9 +8,11 @@ import { merge } from 'merge-anything'
 import ErrorSpan from 'ErrorSpan'
 import Chip from 'Chip'
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 import ValueToObject from 'mixins/ValueToObject'
 import RepathTo from 'mixins/RepathTo'
 
+@mixin(Subscribed)
 @mixin(Validation)
 @mixin(ValueToObject)
 @mixin(RepathTo)
@@ -29,6 +31,7 @@ export default class DynamicField extends Component {
       wrapperClassName: null,
       title: null,
       placeholder: null,
+      subscribeTo: null,
       validations: {},
    }
 
@@ -44,6 +47,7 @@ export default class DynamicField extends Component {
       wrapperClassName: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       placeholder: PropTypes.string.isRequired,
+      subscribeTo: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
       validations: PropTypes.object.isRequired,
    }
 
@@ -53,6 +57,7 @@ export default class DynamicField extends Component {
    // system
    constructor(props) {
       super(props)
+      console.debug("[componentDidMount1]0 ")
 
       if (props.value) {
          this.data = { list: { [props.humanized_value]: props.value }, total: 1 }
@@ -63,14 +68,15 @@ export default class DynamicField extends Component {
       this.onSelectStart = this.onSelectStart.bind(this)
    }
 
+   @flow('componentDidMountBefore')
    componentDidMount() {
-      console.debug("[componentDidMount] ** ", this.data, this.props.value)
+      //console.debug("[componentDidMount1]1 ** ", this, this.props, this.data, this.props.value)
+      console.debug("[componentDidMount1]1 ** ", this.props.name, this, this.props.value)
       this.setup()
 
       document.addEventListener('keydown', this.onKeyDown)
       document.addEventListener('selectionchange', this.onSelectionChange, { passive: true })
       this.$span.addEventListener('selectstart', this.onSelectStart, { passive: true })
-
 //      if (this.isRangeEnabled()) {
 //         let range = new Range
 
@@ -84,20 +90,21 @@ export default class DynamicField extends Component {
 //      }
    }
 
-   componentDidUpdate() {
-      console.debug("[componentDidUpdate] <<<")
-      if (this.$input) {
-         this.setup()
-         this.autoUpdate()
-      }
-   }
-
+   @flow('componentWillUnmountBefore')
    componentWillUnmount() {
       console.debug("[componentWillUnmount] <<<")
       this.destroy()
       this.$span.removeEventListener('selectstart', this.onSelectStart)
       document.removeEventListener('selectionchange', this.onSelectionChange)
       document.removeEventListener('keypress', this.onKeyDown)
+   }
+
+   componentDidUpdate() {
+      console.debug("[componentDidUpdate] <<<")
+      if (this.$input) {
+         this.setup()
+         this.autoUpdate()
+      }
    }
 
    shouldComponentUpdate(nextProps, nextState) {
@@ -144,8 +151,9 @@ export default class DynamicField extends Component {
 
    onChipAct() {
       let object = this.valueToObject(this.props.name, null),
-          ce = new CustomEvent('dneslov-update-path', { detail: object })
+          ce = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
+      console.debug("[onSubscribedChanged:onChipAct] <<< ", object)
       console.log("[onChipAct] * unfix with", object)
       document.dispatchEvent(ce)
    }
@@ -211,9 +219,10 @@ export default class DynamicField extends Component {
       }
 
       detail = merge({}, this.valueToObject(this.props.humanized_name, humanizedValue), valueDetail)
+
       console.debug("[updateTo] ** detail:", detail, "valueDetail:", valueDetail, "huName: ", this.props.humanized_name)
 
-      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: detail }))
+      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: { value: detail, path: this.props.name }}))
       document.dispatchEvent(ce)
    }
 
@@ -333,7 +342,7 @@ export default class DynamicField extends Component {
       posEnd += posOffset
 
       valueDetail = merge({}, this.valueToObject(beginName, posStart), this.valueToObject(endName, posEnd))
-      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: valueDetail }))
+      ce = new CustomEvent('dneslov-update-path', merge({}, { detail: { value: valueDetail, path: this.props.name }}))
       console.debug("[onApplyRange] wwww ** posOffset, ** posStart:", posStart, "posEnd:", posEnd, "ce", ce)
 
       document.dispatchEvent(ce)
@@ -394,6 +403,7 @@ export default class DynamicField extends Component {
    // render
    render() {
       console.log("[render] * props:", this.props, "state: ", this.state)
+      console.debug("[componentDidMount1]render ** ", this.getErrorText(this.props.value))
 
       return (
          <div

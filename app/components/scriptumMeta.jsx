@@ -136,6 +136,7 @@ export const scriptumMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования языка...',
+         subscribeTo: '@alphabeth_code',
          validations: {
             'Избранный язык не соотвествует избранной азбуке': matchCodes,
             'Язык из списка должен быть выбран': matchEmptyObject,
@@ -151,6 +152,7 @@ export const scriptumMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования азбуки...',
+         subscribeTo: '@language_code',
          validations: {
             'Избранная азбука не соотвествует избранному языку': matchCodes,
             'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -167,6 +169,7 @@ export const scriptumMeta = {
          title: 'Текст',
          placeholder: 'Введи текст',
          display_scheme: '12-12-12-12',
+         subscribeTo: '@alphabeth_code',
          validations: {
             'Текст отсутствует': (value, context) => {
                return !context.ref_title && matchEmptyObject(value)
@@ -179,6 +182,7 @@ export const scriptumMeta = {
          title: 'Написание описание',
          placeholder: 'Введи описание',
          display_scheme: '12-12-12-12',
+         subscribeTo: '@alphabeth_code',
          validations: {
             'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
          }

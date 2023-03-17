@@ -140,6 +140,7 @@ export const memoryMeta = {
                title: 'Описание',
                placeholder: 'Введи описание',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст описания отсутствует': matchEmptyObject,
                   'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -155,6 +156,7 @@ export const memoryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -170,6 +172,7 @@ export const memoryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -198,6 +201,7 @@ export const memoryMeta = {
                title: 'Заметка',
                placeholder: 'Введи заметку',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   "Заметка отсутствует": matchEmptyObject,
                   'Заметка содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -213,6 +217,7 @@ export const memoryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -228,6 +233,7 @@ export const memoryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -288,6 +294,7 @@ export const memoryMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink", "ServiceLink", "PatericLink", "BeingLink"] },
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -304,6 +311,7 @@ export const memoryMeta = {
                value_name: 'key',
                visible_if: { type: ["WikiLink", "DescriptiveLink", "ServiceLink", "PatericLink", "BeingLink"] },
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -445,6 +453,7 @@ export const memoryMeta = {
                      title: 'Написание наименования',
                      placeholder: 'Введи написание наименования',
                      display_scheme: '12-6-4-6',
+                     subscribeTo: '@alphabeth_code',
                      validations: {
                         "Имя отсутствует": matchEmptyObject,
                      },
@@ -459,6 +468,7 @@ export const memoryMeta = {
                      key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования языка...',
+                     subscribeTo: '@alphabeth_code',
                      validations: {
                         'Избранный язык не соотвествует избранной азбуке': matchCodes,
                         'Язык из списка должен быть выбран': matchEmptyObject,
@@ -474,6 +484,7 @@ export const memoryMeta = {
                      key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования азбуки...',
+                     subscribeTo: '@language_code',
                      validations: {
                         'Избранная азбука не соотвествует избранному языку': matchCodes,
                         'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -496,6 +507,7 @@ export const memoryMeta = {
                      title: 'Текст описания',
                      placeholder: 'Введи текст описания',
                      display_scheme: '12-6-4-6',
+                     subscribeTo: '@alphabeth_code',
                      validations: {
                         "Описание отсутствует": matchEmptyObject,
                      },
@@ -510,6 +522,7 @@ export const memoryMeta = {
                      key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования языка...',
+                     subscribeTo: '@alphabeth_code',
                      validations: {
                         'Избранный язык не соотвествует избранной азбуке': matchCodes,
                         'Язык из списка должен быть выбран': matchEmptyObject,
@@ -525,6 +538,7 @@ export const memoryMeta = {
                      key_name: 'value',
                      value_name: 'key',
                      placeholder: 'Начни ввод наименования азбуки...',
+                     subscribeTo: '@language_code',
                      validations: {
                         'Избранная азбука не соотвествует избранному языку': matchCodes,
                         'Азбука из списка должна быть выбрана': matchEmptyObject,

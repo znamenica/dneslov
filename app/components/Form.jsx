@@ -32,6 +32,7 @@ export default class Form extends Component {
          return({
             prevProps: props,
             query: Form.deserializedHash(props.data, Form.metaToScheme(props.meta)),
+            lastUpdatedPath: null,
             error: ""
          })
       } else {
@@ -68,6 +69,12 @@ export default class Form extends Component {
          this.valid = valid
          document.dispatchEvent(ce)
       }
+
+      if (this.state.lastUpdatedPath) {
+         let ce = new CustomEvent('dneslov-path-stored', { detail: this.state.lastUpdatedPath })
+
+         document.dispatchEvent(ce)
+      }
    }
 
    // custom
@@ -78,8 +85,11 @@ export default class Form extends Component {
    // events
    onChildChanged(e) {
       console.debug("[onChildChanged] <<<", e)
+      let newState = {
+         query: merge({}, this.state.query, e.detail.value),
+         lastUpdatedPath: e.detail.path
+      }
 
-      let newState = { query: merge({}, this.state.query, e.detail) }
       console.log("[onChildChanged] > new state", newState)
       this.setState(newState)
    }
