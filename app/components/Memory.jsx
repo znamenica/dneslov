@@ -18,8 +18,9 @@ export default class Memory extends Component {
       links: [],
       events: [],
       scripta: [],
-      selected_calendaries: [],
-      default_calendary_slug: null
+      selectedCalendaries: [],
+      defaultCalendarySlug: null,
+      calendarStyle: 'julian'
    }
 
    static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration" ]
@@ -51,8 +52,8 @@ export default class Memory extends Component {
    }
 
    static calculateDefaultCalendarySlug(props) {
-      return props.selected_calendaries &&
-         props.selected_calendaries.reduce((cal, calendarySlug) => {
+      return props.selectedCalendaries &&
+         props.selectedCalendaries.reduce((cal, calendarySlug) => {
             if (!cal) {
                cal = props.titles.reduce((cal, title) => {
                   if (!cal && title.calendary == calendarySlug) {
@@ -64,7 +65,7 @@ export default class Memory extends Component {
             }
 
             return cal
-         }, props.default_calendary_slug) || props.default_calendary_slug
+         }, props.defaultCalendarySlug) || props.defaultCalendarySlug
    }
 
    static collectKlugs(props) {
@@ -147,7 +148,7 @@ export default class Memory extends Component {
    }
 
    static isInCalendaries(props, memo) {
-      let selected = props.selected_calendaries.filter(calendarySlug => {
+      let selected = props.selectedCalendaries.filter(calendarySlug => {
          return memo.calendary_slug == calendarySlug
       })
 
@@ -174,10 +175,39 @@ export default class Memory extends Component {
    state = {}
 
    // custom
+   ScriptumTable = {
+      'Irmos': 'Ирмос',
+      'Ikos': 'Икос',
+      'Troparion': 'Тропарь',
+      'Kontakion': 'Кондак',
+      'Stichira': 'Стихира',
+      'CryStichira': 'Воззвашна',
+      'Exapostilarion': 'Светилен',
+      'SessionalHymn': 'Седальна',
+      'Kanonion': 'Седальна канона',
+      'Kathismion': 'Седальна кафизмы',
+      'Polileosion': 'Седальна полиелея',
+      'Apostichus': 'Стиховна',
+      'Stichiron': 'Литийна',
+      'Praision': 'Хвалитна',
+      'Sedation': 'Степенна',
+      'Anatolion': 'Восточна',
+      'Resurrexion': 'Воскресна',
+      'Ipakoi': 'Ипакой', // на 17-й кафизмѣ
+      'Magnification': 'Величание',
+      'Prayer': 'Молитва',
+      'Orison': 'Моление',
+      'Canticle': 'Спевна',
+      'Chant': 'Песнопение',
+      'Canto': 'Песма',
+      'Bible': 'Библия',
+      'Scriptum': 'Текст',
+   }
+
    getScriptumTitle(scriptum) {
       return [
          [
-            scriptum.type == "Troparion" && "Тропарь" || "Кондак",
+            this.ScriptumTable[scriptum.type],
             scriptum.title && "«" + scriptum.title + "»",
          ].compact().join(" "),
          scriptum.prosomeion_title && "подобен «" + scriptum.prosomeion_title + "»",
@@ -185,8 +215,17 @@ export default class Memory extends Component {
       ].compact().join(", ")
    }
 
+   sortedScripta() {
+      let keys = Object.keys(this.ScriptumTable)
+
+      return this.state.scripta.sort((a, b) => {
+         return keys.indexOf(a.type) - keys.indexOf(b.type)
+      })
+   }
+
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
+      console.log("[calcEventDates] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='row'>
@@ -225,7 +264,7 @@ export default class Memory extends Component {
                               text={Memory.getLinkText(link)} />)}</div></div></div>}
             {this.state.scripta.isPresent() &&
                <div className='col s12'>
-                  {this.state.scripta.map((scriptum) =>
+                  {this.sortedScripta().map((scriptum) =>
                      <div className='row'>
                         <div className='col s12 title'>
                            {this.getScriptumTitle(scriptum)}</div>
@@ -239,6 +278,7 @@ export default class Memory extends Component {
                      <div className='col s12'>
                         <EventSpans
                            msDate={this.state.msDate}
+                           calendarStyle={this.props.calendarStyle}
                            describedMemoIds={this.state.describedMemoIds}
                            defaultCalendarySlug={this.state.defaultCalendarySlug}
                            events={this.props.events} /></div></div></div>}</div>)}}

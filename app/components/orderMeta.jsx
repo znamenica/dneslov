@@ -268,7 +268,7 @@ export const orderMeta = {
                display_scheme: '12-12-6-6',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки на бытие": [ "!", UrlRegexp ],
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
                }
             },
             language_code: {

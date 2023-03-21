@@ -387,7 +387,7 @@ export const memoMeta = {
                subscribeTo: '@alphabeth_code',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки на бытие": [ "!", UrlRegexp ],
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
                }
             },
             language_code: {

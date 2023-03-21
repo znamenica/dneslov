@@ -1,6 +1,5 @@
-import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
+import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection, matchValidUrl } from 'matchers'
 import { makeCouncil, makeDate, makeDescription } from 'makers'
-import UrlRegexp from 'UrlRegexp'
 
 export const memoryMeta = {
    default: 'short_name',
@@ -259,7 +258,7 @@ export const memoryMeta = {
                display_scheme: '12-12-6-6',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки на бытие": [ "!", UrlRegexp ],
+                  "Неверный формат ссылки": matchValidUrl,
                }
             },
             type: {

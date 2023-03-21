@@ -3,6 +3,7 @@ class ImagesController < ApplicationController
    # NOTE https://stackoverflow.com/a/48744792/446267
    rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
    rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
+   rescue_from Errno::ENOENT, with: :render_not_exist_error
 
    # GET /memories/:letter/:short_name/:image
    def cache

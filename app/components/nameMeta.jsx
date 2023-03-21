@@ -24,13 +24,13 @@ export const nameMeta = {
       alphabeth_code: {
          title: 'Азбука',
       },
-      bind_kind_name: {
+      bind_kind_code: {
          title: 'Связка',
       },
-      bond_to: {
+      bond_to_name: {
          title: 'Связано с...',
       },
-      root: {
+      root_name: {
          title: 'Корневое имя',
       },
    },
@@ -201,7 +201,7 @@ export const nameMeta = {
                display_scheme: '12-12-6-6',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки на бытие": [ "!", UrlRegexp ],
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
                }
             },
             language_code: {

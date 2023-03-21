@@ -120,7 +120,11 @@ class Admin::CommonController < ApplicationController
    end
 
    def model
-     self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
+      self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
+   end
+
+   def table_name
+      model.to_s.tableize
    end
 
    def validate_session
@@ -185,7 +189,14 @@ class Admin::CommonController < ApplicationController
    end
 
    def fetch_objects
-      @objects = prepare_objects.page( params[ :p ])
+      query = prepare_objects.page(params[:p])
+
+      @objects =
+         if query.respond_to?(:distinct_by)
+            query.distinct_by("#{table_name}.#{model.primary_key}")
+         else
+            query
+         end
    end
 
    def fetch_object

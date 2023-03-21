@@ -13,6 +13,7 @@ export default class EventSpan extends Component {
       memoes: [],
       defaultCalendarySlug: null,
       describedMemoIds: [],
+      date: '',
 
       active: null,
       wrapperYearDateClass: "",
@@ -26,7 +27,6 @@ export default class EventSpan extends Component {
 
          return {
             prevProps: props,
-            yearDate: memo ? memo.yd_parsed : null,
             title: EventSpan.getTitle(props),
             describedMemoes: EventSpan.getDescribedMemoes(props),
          }
@@ -101,26 +101,27 @@ export default class EventSpan extends Component {
    }
 
    render() {
-      console.log("[render] * this.props", this.props)
+      console.log("[render] * this.props:", this.props, "this.state:", this.state)
+      console.log("[calcEventDates] * this.props", this.props, this.state)
 
       return (
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
-               key={'event-span-' + this.state.yearDate + '-' + this.props.happenedAt}
+               key={'event-span-' + this.props.date + '-' + this.props.happenedAt}
                ref={e => this.$header = e} >
                <span>
                   {this.state.title}</span>
                <Chip
                   className='happened-at'
                   text={this.props.happenedAt} />
-               {this.props.place &&
+               {this.props.place?.name &&
                   <Chip
                      className='place'
                      text={this.props.place.name} />}
-               {this.state.yearDate && <Chip
+               {this.props.date && <Chip
                   className={this.classNameForYearDate()}
-                  text={this.state.yearDate} />}</div>
+                  text={this.props.date} />}</div>
             {this.hasData() &&
                <div className='collapsible-body'>
                   <div className="container">

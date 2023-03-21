@@ -16,6 +16,38 @@ export const scriptumMeta = {
    row: {
       type: {
          title: 'Вид',
+         value: (value) => {
+            const scriptumTable = {
+               'Irmos': 'Ирмос',
+               'Ikos': 'Икос',
+               'Troparion': 'Тропарь',
+               'Kontakion': 'Кондак',
+               'Stichira': 'Стихира',
+               'CryStichira': 'Воззвашна',
+               'Exapostilarion': 'Светилен',
+               'SessionalHymn': 'Седальна',
+               'Kanonion': 'Седальна канона',
+               'Kathismion': 'Седальна кафизмы',
+               'Polileosion': 'Седальна полиелея',
+               'Apostichus': 'Стиховна',
+               'Stichiron': 'Литийна',
+               'Praision': 'Хвалитна',
+               'Sedation': 'Степенна',
+               'Anatolion': 'Восточна',
+               'Resurrexion': 'Воскресна',
+               'Ipakoi': 'Ипакой', // на 17-й кафизмѣ
+               'Magnification': 'Величание',
+               'Prayer': 'Молитва',
+               'Orison': 'Моление',
+               'Canticle': 'Спевна',
+               'Chant': 'Песнопение',
+               'Canto': 'Песма',
+               'Bible': 'Библия',
+               'Scriptum': 'Текст',
+            }
+
+            return scriptumTable[value.type]
+         },
       },
       language_code: {
          title: 'Язык',
@@ -68,8 +100,8 @@ export const scriptumMeta = {
       },
       prosomeion_title: {
          kind: 'text',
-         title: 'Прокимен',
-         placeholder: 'Введи текст прокимна',
+         title: 'Подобен',
+         placeholder: 'Введи текст подобна',
          display_scheme: '12-6-4-4',
       },
       ref_title: {
@@ -117,9 +149,14 @@ export const scriptumMeta = {
             'Kanonion': 'Седальна канона',
             'Kathismion': 'Седальна кафизмы',
             'Polileosion': 'Седальна полиелея',
-            'Apostichus': 'Апостих',
+            'Apostichus': 'Стиховна',
             'CryStichira': 'Воззвашна',
-            'Stichiron': 'Стихирник',
+            'Stichiron': 'Литийна',
+            'Praision': 'Хвалитна',
+            'Sedation': 'Степенна',
+            'Anatolion': 'Восточна',
+            'Resurrexion': 'Воскресна',
+            'Ipakoi': 'Ипакой' // на 17-й кафизмѣ
          },
          display_scheme: '12-6-2-2',
          validations: {

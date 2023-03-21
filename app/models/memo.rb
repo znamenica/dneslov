@@ -18,6 +18,7 @@ class Memo < ActiveRecord::Base
    extend TotalSize
    include WithDescriptions
    include WithLinks
+   include DistinctBy
 
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
@@ -180,20 +181,6 @@ class Memo < ActiveRecord::Base
    singleton_class.send(:alias_method, :d, :by_date)
    singleton_class.send(:alias_method, :mid, :by_memory_id)
    singleton_class.send(:alias_method, :c, :in_calendaries)
-
-   scope :distinct_by, -> *args do
-      _selector = self.select_values.dup
-      if _selector.empty?
-        _selector << "ON (#{args.join(', ')}) memoes.*"
-      else
-         selector = _selector.uniq
-         selector.unshift( "ON (#{args.join(', ')}) " + selector.shift )
-      end
-
-      rela = self.distinct
-      rela.select_values = selector
-      rela
-   end
 
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'

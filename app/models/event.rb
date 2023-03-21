@@ -218,7 +218,7 @@ class Event < ActiveRecord::Base
       selector = "COALESCE((WITH __memoes AS (
                        SELECT memoes.id AS id,
                               memoes.year_date AS year_date,
-                              jsonb_object_agg(DISTINCT memo_slugs.text,
+                              jsonb_object_agg(DISTINCT COALESCE(memo_slugs.text, 'Null'),
                                                         order_titles_memoes.text) AS orders,
                               memo_titles.text AS title,
                               memo_descriptions.text AS description,

@@ -68,8 +68,20 @@ Array.prototype.isPresent = function() {
    return this.length > 0
 }
 
+Array.prototype.filterMap = function(func) {
+   return this.reduce(([res, index], key) => {
+      if (func && func.constructor.name === "Function") {
+         let value = func(key, index)
+
+         return value ? [res.concat([value]), index + 1] : [res, index + 1]
+      } else {
+         return [res, index + 1]
+      }
+   }, [[], 0])[0]
+}
+
 Array.prototype.compact = function() {
-   return this.filter(r => { return r })
+   return this.filter(r => r)
 }
 
 Array.prototype.intersectTo = function(array) {

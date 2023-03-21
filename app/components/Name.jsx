@@ -117,12 +117,11 @@ export default class Name extends Component {
    ]
 
    static getNamesFor(prios, names_in) {
-      let names = prios.map((prio) => {
-      //console.log("WWWWEEEE", prio, names_in)
+      let names = prios.filterMap((prio) => {
          return names_in.find((name) => { 
-      //console.log("WWWWEEEE", prio, name)
-            return prio == name.state_code })
-      }).compact()
+            return prio == name.state_code
+         })
+      })
 
       //console.log("WWWWWWWWWWWwww", names, prios)
 

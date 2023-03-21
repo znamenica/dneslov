@@ -1,4 +1,9 @@
 import { merge } from 'merge-anything'
+import UrlRegexp from 'UrlRegexp'
+
+export function matchValidUrl(text) {
+   return !text || !text.match(UrlRegexp) && !text.match(/^\//)
+}
 
 export function matchValidJson(text) {
    if (text) {

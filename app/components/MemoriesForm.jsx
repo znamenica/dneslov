@@ -129,7 +129,7 @@ export default class MemoriesForm extends Component {
    }
 
    onSearchUpdate(query) {
-      this.pushSubmit(merge(this.state.query, {q: query, p: 1}))
+      this.pushSubmit(merge(this.state.query, {q: query, p: 1, d: null}))
    }
 
    onCalendarUpdate(value) {
@@ -279,7 +279,7 @@ export default class MemoriesForm extends Component {
                <div className='row'>
                   <Intro />
                   <form>
-                     <div className='col s12 m5 l3 xl2'>
+                     <div className='col s12 m4 l3 xl2'>
                         <div className='hidden' id='calendary' />
                         <div className='row'>
                            <PickMeUpCalendar
@@ -291,13 +291,14 @@ export default class MemoriesForm extends Component {
                               calendaries={this.props.calendaries_cloud}
                               calendaries_used={this.calendariesUsed()}
                               onAct={this.onCloudAct.bind(this)} /></div></div>
-                     <div className='col s12 m7 l9 xl10'>
+                     <div className='col s12 m8 l9 xl10'>
                         {this.state.memory &&
                            <Memory
                               key='memory'
                               date={parseDateString(this.state.query.d).pop()}
-                              default_calendary_slug={this.defaultCalendarySlug()}
-                              selected_calendaries={this.state.query.c?.split(",")}
+                              calendarStyle={this.calendarStyleFromQuery()}
+                              defaultCalendarySlug={this.defaultCalendarySlug()}
+                              selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
                         {! this.state.memory &&
                            <div>

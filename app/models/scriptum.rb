@@ -7,10 +7,11 @@ class Scriptum < ActiveRecord::Base
    has_alphabeth on: %i(text title)
 
    scope :by_token, -> text do
-      where("description ~* ?", "\\m#{text}.*").or(
-      where("title ~* ?", "\\m#{text}.*").or(
-      where("prosomeion_title ~* ?", "\\m#{text}.*").or(
-      where("text ~* ?", "\\m#{text}.*"))))
+      join_name = table.table_alias || table.name
+      where("#{join_name}.description ~* ?", "\\m#{text}.*").or(
+      where("#{join_name}.title ~* ?", "\\m#{text}.*").or(
+      where("#{join_name}.prosomeion_title ~* ?", "\\m#{text}.*").or(
+      where("#{join_name}.text ~* ?", "\\m#{text}.*"))))
    end
    singleton_class.send(:alias_method, :t, :by_token)
 
