@@ -287,7 +287,7 @@ GEM
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
-    nio4r (2.5.8)
+    nio4r (2.5.9)
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     npm-pipeline-rails (1.8.1)
@@ -318,7 +318,7 @@ GEM
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
     public_suffix (4.0.6)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     pundit (2.1.1)
       activesupport (>= 3.0.0)
@@ -550,7 +550,7 @@ DEPENDENCIES
   pry-rails (>= 0.3.9)
   pry-remote
   pry-stack_explorer (>= 0.6.1)
-  puma (~> 4.3, >= 4.3.12)
+  puma (~> 5.6)
   pundit
   rails (~> 5.2.4, >= 5.2.8.1)
   rdoba!
