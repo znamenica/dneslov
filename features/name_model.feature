@@ -50,17 +50,17 @@
          - :alphabeth_code: :СР
            :language_code: :сх
            :text: Бранко
-           :bind_kind_code: переводное
+           :bind_kind_name: переводное
            :bond_to: *1
          - :alphabeth_code: :ГР
            :language_code: :гр
            :text: Αλέξιος
-           :bind_kind_code: переводное
+           :bind_kind_name: переводное
            :bond_to: *1
          - :alphabeth_code: :АН
            :language_code: :ан
            :text: Valentin
-           :bind_kind_code: переводное
+           :bind_kind_name: переводное
            :bond_to: *2
          """
       То будут существовать русские личные имена "Валентин, Алексей"

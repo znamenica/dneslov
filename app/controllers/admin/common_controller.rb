@@ -1,6 +1,6 @@
 class Admin::CommonController < ApplicationController
    include ::Auth
-   include Pundit
+   include ::Pundit::Authorization
 
    before_action :authenticate_user!, except: %i(dashboard)
    before_action :validate_session

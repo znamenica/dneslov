@@ -9,7 +9,6 @@ application up and running.
 [![Website dneslov.org](https://img.shields.io/website-up-down-green-red/https/dneslov.org.svg)](https://dneslov.org/)
 [![GitHub](http://img.shields.io/badge/github-znamenica/dneslov-blue.svg)](http://github.com/znamenica/dneslov)
 [![GitHub tag](https://img.shields.io/github/tag/znamenica/dneslov.svg)](https://GitHub.com/znamenica/dneslov/tags/)
-[![MIT License](http://b.repl.ca/v1/License-MIT-blue.png)](LICENSE)
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/znamenica/dneslov)
 [![GPLv2 license](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt)
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fznamenica%2Fdneslov%2Fbadge&style=flat&logo=none)](https://actions-badge.atrox.dev/znamenica/dneslov/goto)

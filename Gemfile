@@ -89,7 +89,7 @@ gem 'when_easter'
 ## data
 gem 'activerecord-import', '~> 1.4.1'
 gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
-gem 'acts_as_list'
+#gem 'zero_downtime_migrations', path: '/usr/local/home/majioa/git/zero_downtime_migrations'
 # gem 'active_record_extended'
 
 ## pdf

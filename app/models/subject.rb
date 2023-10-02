@@ -156,4 +156,8 @@ class Subject < ActiveRecord::Base
    validates_presence_of :key, :kind_code
    validates_uniqueness_of :key
    validates :meta, json: { schema: JSON_SCHEMA }
+
+   def order
+      meta["order"]
+   end
 end

@@ -3,16 +3,27 @@ namespace :fix do
    task root_id: :environment do
       Tasks.fix_root_in_names
 
-      true; end
+      true
+   end
 
    desc "Fix base year of memory"
    task base_year: :environment do
       Tasks.fix_base_year
 
-      true; end
+      true
+   end
 
    desc "Fix memo dates"
    task memo_dates: :environment do
       Tasks.fix_memo_date
 
-      true; end;end
+      true
+   end
+
+   desc "Fix bind_kind_path in Nomina"
+   task bind_kind_path: :environment do
+      Tasks.fix_bind_kind_path_in_nomina
+
+      true
+   end
+end

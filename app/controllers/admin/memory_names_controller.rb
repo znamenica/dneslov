@@ -8,18 +8,24 @@ class Admin::MemoryNamesController < Admin::CommonController
                                       serializer: Admin::AutocompleteSerializer,
                                       total: @names.count,
                                       each_serializer: Admin::ShortNameSerializer }
-      end;end
+      end
+   end
 
    protected
 
    def model
-      Name ;end
+      Name
+   end
 
    def permitted_params
-      params.require( :name ).permit( :text, :language_code, :alphabeth_code, :root_id, :bind_kind_code, :bond_to_id ) ;end
+      params.require(:name).permit(:text, :language_code, :alphabeth_code, :root_id, :bind_kind_name, :bond_to_id)
+   end
 
    def object_serializer
-      Admin::NameSerializer ;end
+      Admin::NameSerializer
+   end
 
    def objects_serializer
-      Admin::NamesSerializer ;end;end
+      Admin::NamesSerializer
+   end
+end

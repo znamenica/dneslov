@@ -147,8 +147,8 @@ class MemoriesController < ApplicationController
    end
 
    def set_memory
-      @memorys ||= Memory.with_scripta( @locales )
-                         .with_names( @locales )
+      @memorys ||= Memory.with_scripta(context[:locales])
+                         .with_names(context)
                          .with_pure_links
                          .with_slug_text
 

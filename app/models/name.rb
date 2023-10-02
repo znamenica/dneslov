@@ -1,24 +1,24 @@
-# bind_kind_code(string)  - kind of binding
-# bond_to_id(int)         - id of name which the name is linked (bond) to
 class Name < ActiveRecord::Base
    extend TotalSize
    include Languageble
    include WithDescriptions
    include WithLinks
-
-   has_many :memory_names
-   has_many :memories, through: :memory_names
-   has_many :children, class_name: :Name, foreign_key: :bond_to_id
+   include WithLocaleNames
 
    belongs_to :language, primary_key: :key, foreign_key: :language_code, class_name: :Subject
    belongs_to :alphabeth, primary_key: :key, foreign_key: :alphabeth_code, class_name: :Subject
-   belongs_to :bind_kind, primary_key: :key, foreign_key: :bind_kind_code, class_name: :Subject
-   belongs_to :bond_to, class_name: :Name
-   belongs_to :root, class_name: :Name
+
+   has_many :nomina
 
    has_alphabeth on: { text: [ :nosyntax, allow: " ‑" ] }
 
    scope :by_token, -> text { where( "#{model.table_name}.text ~* ?", "\\m#{text}.*" ) }
+
+   scope :by_token, -> text do
+      join_name = table.table_alias || table.name
+      where("#{join_name}.text ~* ?", "\\m#{text}.*")
+   end
+   singleton_class.send(:alias_method, :t, :by_token)
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?
@@ -34,6 +34,13 @@ class Name < ActiveRecord::Base
       end
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct
+   end
+   scope :by_root, -> do
+      if where_clause.send(:predicates).any?
+         model.joins(:nomina).where(nomina: { root_id: self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id')
+      else
+         self
+      end#.group('nomina.id')
    end
 
    # required for short list
@@ -66,6 +73,23 @@ class Name < ActiveRecord::Base
       joins(join).select(selector).group(:id, "#{model.table_name}.text", "languages.key", "alphabeths.key")
    end
 
+   # required for short list
+   scope :with_key, -> _ do
+      selector = ["#{table.name}.id AS _key"]
+
+      select(selector).group('_key')
+   end
+
+   scope :with_value, -> context do
+      join_name = table.table_alias || table.name
+      selector = ["#{join_name}.text AS _value"]
+      if self.select_values.dup.empty?
+        selector.unshift("#{join_name}.*")
+      end
+
+      select(selector.uniq).group('_value')
+   end
+
    scope :with_locale_names, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
@@ -91,81 +115,46 @@ class Name < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'language_names.text', 'alphabeth_names.text')
    end
 
-   scope :with_root_name, -> context do
-      language_codes = [ context[:locales] ].flatten
+   scope :with_nomina, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
       selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'names.*'
-      end
-      selector << "root_names.text || ' (' || root_descriptions.text || ')' AS _root_name"
+      selector << "#{join_name}.*" if self.select_values.dup.empty?
+      selector << "COALESCE((WITH __nomina AS (
+                      SELECT DISTINCT ON(nomina.id)
+                             nomina.id AS id,
+                             nomina.bind_kind_name AS bind_kind_name,
+                             bind_kind_names.text AS bind_kind_humanized,
+                             nomina.bond_to_id AS bond_to_id,
+                             bond_to_names.text || ' (' || bond_to_names.language_code || '_' || bond_to_names.alphabeth_code || ')' AS bond_to_name,
+                             nomina.root_id AS root_id,
+                             root_names.text || ' (' || root_names.language_code || '_' || root_names.alphabeth_code || ')' AS root_name
+                        FROM nomina
+             LEFT OUTER JOIN names AS bond_to_names
+                          ON bond_to_names.id = nomina.bond_to_id
+             LEFT OUTER JOIN names AS root_names
+                          ON root_names.id = nomina.root_id
+             LEFT OUTER JOIN subjects AS bind_kinds
+                          ON bind_kinds.kind_code = 'NameBind'
+                         AND bind_kinds.key = nomina.bind_kind_name
+                        JOIN descriptions AS bind_kind_names
+                          ON bind_kind_names.describable_id = bind_kinds.id
+                         AND bind_kind_names.describable_type = 'Subject'
+                         AND bind_kind_names.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE names.id = nomina.name_id
+                    GROUP BY root_names.language_code, root_names.alphabeth_code, root_names.text, bond_to_names.language_code, bond_to_names.alphabeth_code, bond_to_names.text, bind_kind_names.text, nomina.id)
+                      SELECT jsonb_agg(__nomina)
+                        FROM __nomina), '[]'::jsonb) AS _nomina"
 
-      join = "LEFT OUTER JOIN names AS root_names
-                           ON root_names.id = names.root_id
-                         JOIN subjects AS root_languages
-                           ON root_languages.key = root_names.language_code
-              LEFT OUTER JOIN descriptions AS root_descriptions
-                           ON root_descriptions.describable_id = root_languages.id
-                          AND root_descriptions.describable_type = 'Subject'
-                          AND root_descriptions.language_code IN ('#{language_codes.join("', '")}')"
-
-      joins(join).select(selector).group(:id, 'root_names.text', 'root_descriptions.text')
-   end
-
-   scope :with_bond_to_name, -> context do
-      language_codes = [ context[:locales] ].flatten
-      selector = self.select_values.dup
-      if selector.empty?
-         selector << 'names.*'
-      end
-      selector << "bond_to_names.text || ' (' || bond_to_descriptions.text || ')' AS _bond_to_name"
-
-      join = "LEFT OUTER JOIN names AS bond_to_names
-                           ON bond_to_names.id = names.bond_to_id
-              LEFT OUTER JOIN subjects AS bond_to_languages
-                           ON bond_to_languages.key = bond_to_names.language_code
-              LEFT OUTER JOIN descriptions AS bond_to_descriptions
-                           ON bond_to_descriptions.describable_id = bond_to_languages.id
-                          AND bond_to_descriptions.describable_type = 'Subject'
-                          AND bond_to_descriptions.language_code IN ('#{language_codes.join("', '")}')"
-
-      joins(join).select(selector).group(:id, 'bond_to_names.text', 'bond_to_descriptions.text')
-   end
-
-   scope :with_bind_kind_name, -> context do
-      language_codes = [ context[:locales] ].flatten
-      selector = self.select_values.dup
-      if selector.empty?
-         selector << 'names.*'
-      end
-      selector << 'bind_kind_names.text AS _bind_kind_name'
-
-      join = "LEFT OUTER JOIN subjects AS bind_kinds
-                           ON bind_kinds.kind_code = 'NameBind'
-                          AND bind_kinds.key = names.bind_kind_code
-                         JOIN descriptions AS bind_kind_names
-                           ON bind_kind_names.describable_id = bind_kinds.id
-                          AND bind_kind_names.describable_type = 'Subject'
-                          AND bind_kind_names.language_code IN ('#{language_codes.join("', '")}')"
-
-      joins(join).select(selector).group(:id, 'bind_kind_names.text')
+      select(selector)
    end
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
 
-   validates_presence_of :text, :language_code, :alphabeth_code, :bind_kind
-   validates_presence_of :bond_to_id, if: :bond?
-   validates_absence_of :bond_to_id, unless: :bond?
-
-   before_validation -> { self.bind_kind_code ||= 'несвязаное' }, on: :create
+   validates_presence_of :text, :language_code, :alphabeth_code
    before_save -> { self.text = self.text.strip }
-   after_create :fill_root_id, unless: :root_id?
 
-   def bond?
-      bind_kind_code != 'несвязаное' ;end
-
-   def fill_root_id
-      new_root_id = self.bond_to&.root_id || self.id
-      self.update!(root_id: new_root_id)
-   end
+   accepts_nested_attributes_for :nomina, reject_if: :all_blank, allow_destroy: true
 end

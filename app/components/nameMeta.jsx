@@ -24,14 +24,23 @@ export const nameMeta = {
       alphabeth_code: {
          title: 'Азбука',
       },
-      bind_kind_code: {
+      bind_kind_name: {
          title: 'Связка',
+         value: (value) => {
+            return value.nomina && value.nomina[0]?.bind_kind_name
+         },
       },
       bond_to_name: {
          title: 'Связано с...',
+         value: (value) => {
+            return value.nomina && value.nomina[0]?.bond_to_name
+         },
       },
       root_name: {
          title: 'Корневое имя',
+         value: (value) => {
+            return value.nomina && value.nomina[0]?.root_name
+         },
       },
    },
    form: {
@@ -40,7 +49,7 @@ export const nameMeta = {
          name: 'text',
          title: 'Написание имени',
          placeholder: 'Введи написание имени',
-         display_scheme: '12-6-4-2',
+         display_scheme: '12-4-6-8',
          subscribeTo: '@alphabeth_code',
          validations: {
             "Имя отсутствует": matchEmptyObject,
@@ -50,7 +59,7 @@ export const nameMeta = {
       language_code: {
          kind: 'dynamic',
          title: 'Язык',
-         display_scheme: '12-6-4-2',
+         display_scheme: '12-4-3-2',
          pathname: 'short_subjects',
          humanized_name: 'language',
          context_value: { k: "Language" },
@@ -66,7 +75,7 @@ export const nameMeta = {
       alphabeth_code: {
          kind: 'dynamic',
          title: 'Азбука',
-         display_scheme: '12-6-4-2',
+         display_scheme: '12-4-3-2',
          pathname: 'short_subjects',
          humanized_name: 'alphabeth',
          context_value: { k: "Alphabeth" },
@@ -79,52 +88,68 @@ export const nameMeta = {
             'Азбука из списка должна быть выбрана': matchEmptyObject,
          }
       },
-      bond_to_id: {
-         kind: 'dynamic',
-         title: 'Связаное имя',
-         humanized_name: 'bond_to_name',
-         display_scheme: '12-6-4-2',
-         placeholder: 'Начни ввод имени...',
-         pathname: 'short_names',
-         key_name: 'value',
-         value_name: 'key',
-         subscribeTo: ['@bind_kind_code', '@text'],
+      nomina: {
+         kind: 'collection',
+         title: 'Связи',
+         action: 'Добавь связь',
+         single: 'Связь',
+         placeholder: 'Введи связь',
+         display_scheme: '12-12-12-12',
          validations: {
-            'Связаное имя не должно соответствовать названию текущего имени': (value, context) => {
-               return value && value == context.id
+            'Минимум одна связь должна быть задана':  matchEmptyCollection
+         },
+         meta: {
+            id: {
+               kind: 'hidden',
             },
-         }
-      },
-      bind_kind_code: {
-         humanized_name: 'bind_kind_name',
-         kind: 'dynamic',
-         display_scheme: '12-6-4-2',
-         title: 'Вид связки',
-         placeholder: 'Начни ввод связки...',
-         pathname: 'short_subjects',
-         context_value: { k: "NameBind" },
-         key_name: 'value',
-         value_name: 'key',
-         subscribeTo: '@bond_to_id',
-         validations: {
-            'Вид связки из списка должен быть выбран': matchEmptyObject,
-            'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (value, context) => {
-               return context.bond_to_id && value == "несвязаное"
+            bond_to_id: {
+               kind: 'dynamic',
+               title: 'Связаное имя',
+               humanized_name: 'bond_to_name',
+               display_scheme: '12-4-5-5',
+               placeholder: 'Начни ввод имени...',
+               pathname: 'short_names',
+               key_name: 'value',
+               value_name: 'key',
+               subscribeTo: ['@bind_kind_name', '@text'],
+               validations: {
+                  'Связаное имя не должно соответствовать названию текущего имени': (value, context) => {
+                     return value && value == context.id
+                  },
+               }
             },
-            'Вид связки должен иметь значение "Не связанное" в случае, если связаное имя отсутствует': (value, context) => {
-               return !context.bond_to_id && value != "несвязаное"
+            bind_kind_name: {
+               humanized_name: 'bind_kind_humanized',
+               kind: 'dynamic',
+               display_scheme: '12-4-3-2',
+               title: 'Вид связки',
+               placeholder: 'Начни ввод связки...',
+               pathname: 'short_subjects',
+               context_value: { k: "NameBind" },
+               key_name: 'value',
+               value_name: 'key',
+               subscribeTo: '@bond_to_id',
+               validations: {
+                  'Вид связки из списка должен быть выбран': matchEmptyObject,
+                  'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (value, context) => {
+                     return context.bond_to_id && value == "несвязаное"
+                  },
+                  'Вид связки должен иметь значение "Не связанное" в случае, если связаное имя отсутствует': (value, context) => {
+                     return !context.bond_to_id && value != "несвязаное"
+                  },
+               }
             },
-         }
-      },
-      root_id: {
-         kind: 'dynamic',
-         humanized_name: 'root_name',
-         title: 'Корневое имя',
-         display_scheme: '12-6-4-2',
-         placeholder: 'Начни ввод имени...',
-         pathname: 'short_names',
-         key_name: 'value',
-         value_name: 'key',
+            root_id: {
+               kind: 'dynamic',
+               humanized_name: 'root_name',
+               title: 'Корневое имя',
+               display_scheme: '12-4-4-5',
+               placeholder: 'Начни ввод имени...',
+               pathname: 'short_names',
+               key_name: 'value',
+               value_name: 'key',
+            },
+         },
       },
       descriptions: {
          kind: 'collection',

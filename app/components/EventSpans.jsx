@@ -72,7 +72,8 @@ export default class EventSpans extends Component {
          eventsIn.map((event, index) => {
             return [event.date - msDate, index]
          }),
-         indexNearby = distances.filter(([dist, _]) => dist >= 0).sort(([dist1, _i], [dist2, _j]) => dist1 > dist2)[0][1]
+         indexNearbyIn = distances.filter(([dist, _]) => dist >= 0).sort(([dist1, _i], [dist2, _j]) => dist1 > dist2)[0] || [],
+         indexNearby = indexNearbyIn[1]
 
       return eventsIn.map((event, index) => {
          if (index == indexNearby) {

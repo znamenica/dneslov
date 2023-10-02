@@ -73,7 +73,7 @@ GIT
 
 GIT
   remote: https://github.com/majioa/zero_downtime_migrations.git
-  revision: d94a3800f84548bd1c0ff6cb811309087c317806
+  revision: 96f7e1fef71c8bf2ee3d54ae7d2ecd02d7459a15
   ref: devel
   specs:
     zero_downtime_migrations (0.0.7)
@@ -167,8 +167,6 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    acts_as_list (1.1.0)
-      activerecord (>= 4.2)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
@@ -604,7 +602,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import (~> 1.4.1)
   activerecord_json_validator
-  acts_as_list
   addressable
   attribute-defaults
   bcrypt_pbkdf (~> 1.1)

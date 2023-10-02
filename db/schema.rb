@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_14_213700) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_23_195400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -172,33 +172,41 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_213700) do
 
   create_table "memory_names", id: :serial, force: :cascade do |t|
     t.integer "memory_id", null: false
-    t.integer "name_id", null: false
+    t.integer "nomen_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "mode"
     t.boolean "feasible", default: false, null: false
     t.string "state_code", null: false
     t.index ["memory_id", "id"], name: "index_memory_names_on_memory_id_and_id"
-    t.index ["memory_id", "name_id"], name: "index_memory_names_on_memory_id_and_name_id", unique: true
+    t.index ["memory_id", "nomen_id"], name: "index_memory_names_on_memory_id_and_nomen_id", unique: true
     t.index ["memory_id"], name: "index_memory_names_on_memory_id"
-    t.index ["name_id"], name: "index_memory_names_on_name_id"
+    t.index ["nomen_id"], name: "index_memory_names_on_nomen_id"
   end
 
   create_table "names", id: :serial, force: :cascade do |t|
-    t.string "text", null: false
+    t.text "text", null: false
     t.string "language_code", null: false
+    t.string "alphabeth_code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alphabeth_code"], name: "index_names_on_alphabeth_code"
+    t.index ["language_code"], name: "index_names_on_language_code"
+    t.index ["text", "alphabeth_code"], name: "index_names_on_text_and_alphabeth_code", unique: true
+    t.index ["text"], name: "index_names_on_text"
+  end
+
+  create_table "nomina", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.integer "bond_to_id"
-    t.string "alphabeth_code", null: false
-    t.integer "root_id"
-    t.string "bind_kind_code", null: false
-    t.index ["alphabeth_code"], name: "index_names_on_alphabeth_code"
-    t.index ["bond_to_id", "bind_kind_code"], name: "index_names_on_bond_to_id_and_bind_kind_code"
-    t.index ["id", "language_code"], name: "index_names_on_id_and_language_code"
-    t.index ["language_code", "alphabeth_code"], name: "index_names_on_language_code_and_alphabeth_code"
-    t.index ["root_id"], name: "index_names_on_root_id"
-    t.index ["text", "alphabeth_code"], name: "index_names_on_text_and_alphabeth_code", unique: true
+    t.bigint "bond_to_id"
+    t.bigint "root_id"
+    t.string "bind_kind_name", null: false
+    t.bigint "name_id", null: false
+    t.string "bind_kind_path"
+    t.index ["bond_to_id", "bind_kind_name"], name: "index_nomina_on_bond_to_id_and_bind_kind_name"
+    t.index ["name_id"], name: "index_nomina_on_name_id"
+    t.index ["root_id"], name: "index_nomina_on_root_id"
   end
 
   create_table "orders", id: :serial, force: :cascade do |t|

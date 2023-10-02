@@ -90,7 +90,7 @@ export default class Memory extends Component {
 
    static getCalendaryTitle(props, cslug) {
       let title = props.events.reduce((tt, e) => {
-         return e.memoes.reduce((t, m) => { return t || cslug == m.calendary_slug && m.title }, tt)
+         return e.memoes.reduce((t, m) => { return t || cslug == m.calendary_slug && m.title || null }, tt)
       }, null)
 
       return title || props.short_name
@@ -160,7 +160,7 @@ export default class Memory extends Component {
          return order || e.memoes.reduce((_order, m) => {
             return _order || this.isInCalendaries(props, m) && Object.values(m.orders)[0]
          }, order)
-      }, null)
+      }, props.order || null)
    }
 
    static getHappenedAt(props) {
@@ -236,7 +236,7 @@ export default class Memory extends Component {
                         color={this.getSlugColor(this.state.order)}
                         text={this.state.order} />
                      <Name
-                        short_name={this.state.short_name}
+                        short_name={this.props.short_name}
                         defaultNameInCalendary={this.state.title}
                         klugs={this.state.klugs}
                         names={this.props.names} />

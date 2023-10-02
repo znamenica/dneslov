@@ -26,7 +26,8 @@ module Dneslov
                    app/models/scriptum/cantoes/orisons
                    app/models/descriptions
                    app/models/links
-                   app/controllers/concerns).each do |folder|
+                   app/controllers/concerns
+                   app/lib).each do |folder|
          config.autoload_paths << Rails.root.join(folder)
       end
 

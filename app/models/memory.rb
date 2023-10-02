@@ -18,7 +18,8 @@ class Memory < ActiveRecord::Base
 
    has_one :slug, as: :sluggable, dependent: :destroy
    has_many :memory_names, dependent: :destroy
-   has_many :names, through: :memory_names
+   has_many :nomina, through: :memory_names
+   has_many :names, through: :nomina
    has_many :paterics, as: :info, dependent: :destroy, class_name: :PatericLink
    has_many :events, dependent: :destroy
    has_many :memos, through: :events
@@ -86,27 +87,102 @@ class Memory < ActiveRecord::Base
       select(selector).group('_value').reorder("_value")
    end
 
-   scope :with_names, -> (language_code) do
-      language_codes = [ language_code ].flatten
+   scope :with_names, -> (context) do
+      language_codes = [context[:locales]].flatten
+=begin
+with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_alphabeth_code,name_language_code,name_text,state_code,mode,feasible) as (
+        with recursive tt(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_alphabeth_code,name_language_code,name_text,state_code,mode,feasible) as (SELECT 0,nm.text,n.id,n.name_id,n.bind_kind_name,n.bond_to_id,n.root_id,nm.alphabeth_code,nm.language_code,nm.text,mn.state_code,mn.mode,mn.feasible FROM nomina n JOIN names nm ON nm.id = n.name_id JOIN memory_names mn ON mn.nomen_id = n.id WHERE  mn.memory_id = 2989 UNION SELECT level + 1, path || ' > ' || nm.text, n.id,n.name_id,n.bind_kind_name,n.bond_to_id,n.root_id,nm.alphabeth_code,nm.language_code,nm.text,tt.state_code,tt.mode,tt.feasible FROM nomina n JOIN tt ON n.root_id = tt.root_id AND  tt.bond_to_id = n.name_id JOIN names nm ON nm.id = n.name_id JOIN names nm_t ON nm_t.id = tt.name_id AND nm_t.language_code <> nm.language_code LEFT OUTER JOIN memory_names mn ON n.root_id = mn.nomen_id AND mn.memory_id = 2989 ) select * from tt
+    UNION
+        SELECT DISTINCT
+            level + 1,
+            path || ' > ' || nm.text,
+            n.id,n.name_id,n.bind_kind_name,n.bond_to_id,n.root_id,nm.alphabeth_code,nm.language_code,nm.text,t.state_code,t.mode,t.feasible
+        FROM
+            nomina n JOIN t
+                ON n.bond_to_id = t.name_id AND n.root_id = t.root_id JOIN names nm ON nm.id = n.name_id JOIN names nm_t ON nm_t.id = t.name_id AND nm_t.language_code <> nm.language_code LEFT OUTER JOIN memory_names mn ON n.root_id = mn.nomen_id AND mn.memory_id = 2989
+) select * from t  WHERE name_language_code IN ('ру')
+=end
+
       selector = "COALESCE((
-                        WITH __names AS (
-                      SELECT names.alphabeth_code AS alphabeth_code,
-                             names.language_code AS language_code,
-                             names.bind_kind_code AS bind_kind_code,
-                             names.text AS text,
-                             memory_names.state_code AS state_code,
-                             memory_names.mode AS mode,
-                             memory_names.feasible AS feasible
-                        FROM memory_names
-             LEFT OUTER JOIN names
-                          ON names.id = memory_names.name_id
-                         AND names.language_code IN ('#{language_codes.join("', '")}')
-                       WHERE memory_names.memory_id = memories.id
-                         AND memory_names.id IS NOT NULL
-                    GROUP BY text, mode, feasible, state_code, bind_kind_code,
-                             language_code, alphabeth_code)
+              WITH RECURSIVE __names(level,path,id,name_id,name_bind_kind_name,bond_to_id,root_id,name_alphabeth_code,name_language_code,name_text,state_code,mode,feasible) AS (
+              WITH RECURSIVE tt(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_alphabeth_code,name_language_code,name_text,state_code,mode,feasible) AS (
+                      SELECT 0,
+                             nm.text,
+                             n.id,
+                             n.name_id,
+                             n.bind_kind_name,
+                             n.bond_to_id,
+                             n.root_id,
+                             nm.alphabeth_code,
+                             nm.language_code,
+                             nm.text,
+                             mn.state_code,
+                             mn.mode,
+                             mn.feasible
+                        FROM nomina n
+                        JOIN names nm
+                          ON nm.id = n.name_id
+                        JOIN memory_names mn
+                          ON mn.nomen_id = n.id
+                         AND mn.memory_id = memories.id
+                       UNION
+
+                      SELECT 0,
+                             nm.text,
+                             n.id,
+                             n.name_id,
+                             n.bind_kind_name,
+                             n.bond_to_id,
+                             n.root_id,
+                             nm.alphabeth_code,
+                             nm.language_code,
+                             nm.text,
+                             tt.state_code,
+                             tt.mode,
+                             tt.feasible
+                        FROM nomina n
+                        JOIN tt
+                          ON n.root_id = tt.root_id AND tt.bond_to_id = n.name_id
+                        JOIN names nm
+                          ON nm.id = n.name_id
+                        JOIN names nm_t
+                          ON nm_t.id = tt.name_id
+                         AND nm_t.language_code <> nm.language_code
+             LEFT OUTER JOIN memory_names mn
+                          ON n.root_id = mn.nomen_id
+                         AND mn.memory_id = memories.id)
+                      SELECT *
+                        FROM tt
+
+                       UNION
+                      SELECT level + 1,
+                             path || ' > ' || nm.text,
+                             n.id,
+                             n.name_id,
+                             n.bind_kind_name,
+                             n.bond_to_id,
+                             n.root_id,
+                             nm.alphabeth_code,
+                             nm.language_code,
+                             nm.text,
+                             t.state_code,
+                             t.mode,
+                             t.feasible
+                        FROM nomina n
+                        JOIN __names t
+                          ON n.bond_to_id = t.name_id
+                         AND n.root_id = t.root_id
+                        JOIN names nm
+                          ON nm.id = n.name_id
+                        JOIN names nm_t
+                          ON nm_t.id = t.name_id
+                         AND nm_t.language_code <> nm.language_code
+             LEFT OUTER JOIN memory_names mn
+                          ON n.root_id = mn.nomen_id
+                         AND mn.memory_id = memories.id)
                       SELECT jsonb_agg(__names)
-                        FROM __names), '[]'::jsonb) AS _names"
+                        FROM __names
+                       WHERE __names.name_language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _names"
 
       select(selector).group(:id)
    end
@@ -301,7 +377,6 @@ class Memory < ActiveRecord::Base
                       SELECT jsonb_agg(__events)
                         FROM __events), '[]'::jsonb) AS _events"
 
-      #binding.pry
       select(selector).group(:id)
    end
 
@@ -315,7 +390,7 @@ class Memory < ActiveRecord::Base
       selector = "COALESCE((
                         WITH __memory_names AS (
                       SELECT memory_names.id AS id,
-                             memory_names.name_id AS name_id,
+                             names.id AS name_id,
                              names.text || ' (' || language_names.text || ')' AS name,
                              memory_names.state_code AS state_code,
                              memory_name_state_titles.text AS state_name,
@@ -328,8 +403,10 @@ class Memory < ActiveRecord::Base
                           ON memory_name_state_titles.describable_id = memory_name_states.id
                          AND memory_name_state_titles.describable_type = 'Subject'
                          AND memory_name_state_titles.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN nomina
+                          ON nomina.id = memory_names.nomen_id
              LEFT OUTER JOIN names
-                          ON names.id = memory_names.name_id
+                          ON names.id = nomina.name_id
              LEFT OUTER JOIN subjects AS languages
                           ON languages.key = names.language_code
              LEFT OUTER JOIN descriptions AS language_names
@@ -338,11 +415,10 @@ class Memory < ActiveRecord::Base
                          AND language_names.language_code IN ('#{language_codes.join("', '")}')
                        WHERE memory_names.memory_id = memories.id
                          AND memory_names.id IS NOT NULL
-                    GROUP BY memory_names.id, names.text, language_names.text, memory_name_state_titles.text)
+                    GROUP BY memory_names.id, names.text, language_names.text, memory_name_state_titles.text, names.id)
                       SELECT jsonb_agg(__memory_names)
                         FROM __memory_names), '[]'::jsonb) AS _memory_names"
 
-      #binding.pry
       select(selector).group(:id)
    end
 
