@@ -89,6 +89,15 @@ export const memoMeta = {
             "Событие должно быть избрано": /^$/
          }
       },
+      add_date: {
+         kind: 'text',
+         title: 'Пора добавления',
+         placeholder: 'Введи пору',
+         display_scheme: '12-6-3-3',
+         validations: {
+            "Пора отсутствует":matchEmptyObject,
+         }
+      },
       year_date: {
          kind: 'text',
          title: 'Дата в году',
@@ -119,6 +128,7 @@ export const memoMeta = {
             'попразднество': 'Попразднество',
          },
          display_scheme: '12-3-3-3',
+         subscribeTo: '@bond_to_id',
          validations: {
             'Пункт из списка должен быть выбран': matchEmptyObject,
             'Вид привязки не должен иметь значение "Не привязаный" в случае, если привязка задана': (value, context) => {
@@ -138,6 +148,8 @@ export const memoMeta = {
          pathname: 'short_memoes',
          key_name: 'value',
          value_name: 'key',
+         subscribeTo: '@bind_kind_code',
+         visible_if: { bind_kind_code: ["соборный", "навечерие", "предпразднество", "попразднество"] },
          context_names: {
            'calendary_id': true,
            'memory_id': true,
@@ -150,15 +162,6 @@ export const memoMeta = {
                return value && yearDate == context.year_date && context.bind_kind_code != 'соборный'
             }
          },
-      },
-      add_date: {
-         kind: 'text',
-         title: 'Пора добавления',
-         placeholder: 'Введи пору',
-         display_scheme: '12-6-3-3',
-         validations: {
-            "Пора отсутствует":matchEmptyObject,
-         }
       },
       memo_orders: {
          kind: 'collection',

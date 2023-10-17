@@ -78,7 +78,7 @@ class Memo < ActiveRecord::Base
 
    scope :with_key, -> _ do
       join_name = table.table_alias || table.name
-      selector = ["DISTINCT ON (_key) #{join_name}.id AS _key"]
+      selector = ["#{join_name}.id AS _key"]
 
       select(selector).group('_key').reorder("_key")
    end
@@ -464,7 +464,7 @@ class Memo < ActiveRecord::Base
    validates_presence_of :year_date, unless: :bond_to_quantity
    validates_absence_of :year_date, if: :bond_to_quantity
    validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }, if: :year_date
-   validate :same_calendaries, :same_memories, if: :bond_to_id
+   validate :bind_kind_code_present, :same_calendaries, :same_memories, if: :bond_to_id
 
    before_validation :fix_year_date
    before_create -> { self.bind_kind_code ||= 'несвязаный' }
@@ -515,13 +515,19 @@ class Memo < ActiveRecord::Base
 
    def same_calendaries
       if bond_to.calendary_id != calendary_id
-         errors.add(:calendary_id, 'Calendaries of self and bond to memo must be the same')
+         errors.add(:bond_to_id, "'s calendary must be the same as self calendary")
       end
    end
 
    def same_memories
       if bond_to.memory.id != memory.id
-         errors.add(:memory, 'Memories of self and bond to memo must be the same')
+         errors.add(:bond_to_id, "'s memory must be the same as self memory")
+      end
+   end
+
+   def bind_kind_code_present
+      if bind_kind_code.blank?
+         errors.add(:bind_kind_code, 'must be present when memo is bond to')
       end
    end
 
