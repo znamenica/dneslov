@@ -65,6 +65,7 @@ gem 'validate_url'
 gem 'activerecord_json_validator'
 gem 'attribute-defaults'
 gem 'addressable'
+gem 'acts_as_list'
 
 ## JSON
 gem 'oj'
