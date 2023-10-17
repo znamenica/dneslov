@@ -122,6 +122,7 @@ group :development do
    gem 'capistrano-rake'
    gem "capistrano-systemd-multiservice", require: false, git: "https://github.com/majioa/capistrano-systemd-multiservice.git"
    gem "capistrano-db-tasks", require: false, github: "majioa/capistrano-db-tasks", ref: "devel"
+   # gem "capistrano-db-tasks", require: false, path: '/usr/local/home/majioa/git/capistrano-db-tasks'
    gem 'dry_crud' , '>= 6.0.0' # then rails generate dry_crud [--templates haml] [--tests rspec]
    gem 'web-console', '~> 4.2'
    gem 'pattern_generator', '>= 0.1.0'

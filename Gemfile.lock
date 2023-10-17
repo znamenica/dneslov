@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/majioa/capistrano-db-tasks.git
-  revision: 9c9ff31dba0aafcdfed68babd16d25a7a66e57bd
+  revision: 978abe880e40dfaf9a85f62215b5f6c747cfb185
   ref: devel
   specs:
     capistrano-db-tasks (0.6)
