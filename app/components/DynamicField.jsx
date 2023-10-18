@@ -23,11 +23,13 @@ export default class DynamicField extends Component {
       value_name: null,
       name: 'text_id',
       humanized_name: 'text',
-      value: "",
+      value: "", // previously stored value
+      humanized_value: undefined, // previously stored value name
+      default: "", // default value
+      humanized_default: undefined, // default value name
       begin: null,
       end: null,
       selectable: false,
-      humanized_value: undefined,
       wrapperClassName: null,
       title: null,
       placeholder: null,
@@ -57,10 +59,16 @@ export default class DynamicField extends Component {
    // system
    constructor(props) {
       super(props)
-      console.debug("[componentDidMount1]0 ")
+      console.debug("[componentDidMount:constructor] <<< ", props.value, props.default)
 
       if (props.value) {
          this.data = { list: { [props.humanized_value]: props.value }, total: 1 }
+      } else if (props.default) {
+         this.data = { list: { [props.humanized_default]: props.default }, total: 1 }
+
+         if (this.props.default) {
+            this.updateTo(this.props.humanized_default, false)
+         }
       }
 
       this.onKeyDown = this.onKeyDown.bind(this)
