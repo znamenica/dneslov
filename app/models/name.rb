@@ -12,8 +12,6 @@ class Name < ActiveRecord::Base
 
    has_alphabeth on: { text: [ :nosyntax, allow: " ‑" ] }
 
-   scope :by_token, -> text { where( "#{model.table_name}.text ~* ?", "\\m#{text}.*" ) }
-
    scope :by_token, -> text do
       join_name = table.table_alias || table.name
       where("#{join_name}.text ~* ?", "\\m#{text}.*")
@@ -35,6 +33,7 @@ class Name < ActiveRecord::Base
       or_rel = or_rel_tokens.reduce { |sum_rel, rel| sum_rel.or(rel) }
       self.merge(or_rel).distinct
    end
+
    scope :by_root, -> do
       if where_clause.send(:predicates).any?
          model.joins(:nomina).where(nomina: { root_id: self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id')
@@ -73,23 +72,6 @@ class Name < ActiveRecord::Base
       joins(join).select(selector).group(:id, "#{model.table_name}.text", "languages.key", "alphabeths.key")
    end
 
-   # required for short list
-   scope :with_key, -> _ do
-      selector = ["#{table.name}.id AS _key"]
-
-      select(selector).group('_key')
-   end
-
-   scope :with_value, -> context do
-      join_name = table.table_alias || table.name
-      selector = ["#{join_name}.text AS _value"]
-      if self.select_values.dup.empty?
-        selector.unshift("#{join_name}.*")
-      end
-
-      select(selector.uniq).group('_value')
-   end
-
    scope :with_locale_names, -> context do
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
@@ -126,6 +108,7 @@ class Name < ActiveRecord::Base
                              nomina.id AS id,
                              nomina.bind_kind_name AS bind_kind_name,
                              bind_kind_names.text AS bind_kind_humanized,
+                             nomina.modifier AS modifier,
                              nomina.bond_to_id AS bond_to_id,
                              bond_to_names.text || ' (' || bond_to_names.language_code || '_' || bond_to_names.alphabeth_code || ')' AS bond_to_name,
                              nomina.root_id AS root_id,
