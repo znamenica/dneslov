@@ -390,8 +390,8 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       selector = "COALESCE((
                         WITH __memory_names AS (
                       SELECT memory_names.id AS id,
-                             names.id AS name_id,
-                             names.text || ' (' || language_names.text || ')' AS name,
+                             nomina.id AS nomen_id,
+                             names.text || COALESCE(' < ' || bond_toes.text, '') || ' (' || names.language_code|| '_' || names.alphabeth_code || ')' AS name,
                              memory_names.state_code AS state_code,
                              memory_name_state_titles.text AS state_name,
                              memory_names.mode AS mode,
@@ -407,15 +407,11 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                           ON nomina.id = memory_names.nomen_id
              LEFT OUTER JOIN names
                           ON names.id = nomina.name_id
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = names.language_code
-             LEFT OUTER JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN names AS bond_toes
+                          ON bond_toes.id = nomina.bond_to_id
                        WHERE memory_names.memory_id = memories.id
                          AND memory_names.id IS NOT NULL
-                    GROUP BY memory_names.id, names.text, language_names.text, memory_name_state_titles.text, names.id)
+                    GROUP BY memory_names.id, names.text, bond_toes.text, memory_name_state_titles.text, names.language_code, names.alphabeth_code, nomina.id)
                       SELECT jsonb_agg(__memory_names)
                         FROM __memory_names), '[]'::jsonb) AS _memory_names"
 

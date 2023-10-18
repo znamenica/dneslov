@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_23_195400) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_18_172555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -204,7 +204,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_195400) do
     t.string "bind_kind_name", null: false
     t.bigint "name_id", null: false
     t.string "bind_kind_path"
+    t.string "modifier"
     t.index ["bond_to_id", "bind_kind_name"], name: "index_nomina_on_bond_to_id_and_bind_kind_name"
+    t.index ["bond_to_id", "name_id"], name: "index_nomina_on_bond_to_id_and_name_id", unique: true
+    t.index ["modifier"], name: "index_nomina_on_modifier"
     t.index ["name_id"], name: "index_nomina_on_name_id"
     t.index ["root_id"], name: "index_nomina_on_root_id"
   end
@@ -337,6 +340,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_195400) do
   add_foreign_key "links", "resources", on_delete: :cascade
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict
+  add_foreign_key "memory_names", "nomina", on_delete: :cascade
   add_foreign_key "service_scripta", "scripta", on_delete: :cascade
   add_foreign_key "service_scripta", "services", on_delete: :cascade
 end

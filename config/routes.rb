@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get '/short_events' => 'events#all'
       get '/short_memories' => 'memories#all'
       get '/short_names' => 'names#all'
+      get '/short_nomina' => 'nomina#all'
       get '/short_places' => 'places#all'
       get '/short_items' => 'items#all'
       get '/short_scripta' => 'scripta#all'

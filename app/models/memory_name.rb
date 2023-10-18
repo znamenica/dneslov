@@ -5,8 +5,6 @@ class MemoryName < ActiveRecord::Base
 
    enum mode: [ :ored, :prefix ]
 
-   delegate :name_id, :name_id=, :name, :name=, to: :nomen
-
    accepts_nested_attributes_for :nomen, reject_if: :all_blank
 
    validates_presence_of :memory, :nomen, :state

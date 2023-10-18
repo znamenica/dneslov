@@ -36,10 +36,10 @@ class Name < ActiveRecord::Base
 
    scope :by_root, -> do
       if where_clause.send(:predicates).any?
-         model.joins(:nomina).where(nomina: { root_id: self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id')
+         model.joins(:nomina).where(nomina: { root_id: self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id').distinct
       else
          self
-      end#.group('nomina.id')
+      end
    end
 
    # required for short list

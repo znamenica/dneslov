@@ -330,13 +330,13 @@ export const memoryMeta = {
             id: {
                kind: 'hidden',
             },
-            name_id: {
+            nomen_id: {
                kind: 'dynamic',
                title: 'Имя',
                humanized_name: 'name',
                display_scheme: '12-4-3-3',
                placeholder: 'Начни ввод имени...',
-               pathname: 'short_names',
+               pathname: 'short_nomina',
                key_name: 'value',
                value_name: 'key',
                validations: {

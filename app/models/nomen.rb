@@ -14,6 +14,34 @@ class Nomen < ActiveRecord::Base
    belongs_to :root, primary_key: :id, foreign_key: :root_id, class_name: :Name
    belongs_to :name
 
+   scope :by_token, -> text do
+      left_outer_joins(:name).where("names.text ~* ?", "\\m#{text}.*").distinct
+   end
+
+   # required for short list
+   scope :with_key, -> _ do
+      join_name = table.table_alias || table.name
+      selector = self.select_values.dup | ["#{join_name}.id AS _key"]
+
+      select(selector).group('_key').reorder("_key")
+   end
+
+   scope :with_value, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      selector = self.select_values.dup |
+        ["#{join_name}_names.text || COALESCE(' < ' || #{join_name}_bond_toes.text, '') || ' (' || #{join_name}_names.language_code || '_' || #{join_name}_names.alphabeth_code || ')' AS _value"]
+
+      join = "LEFT OUTER JOIN names AS #{join_name}_names
+                           ON #{join_name}.name_id = #{join_name}_names.id
+              LEFT OUTER JOIN names AS #{join_name}_bond_toes
+                           ON #{join_name}.bond_to_id = #{join_name}_bond_toes.id"
+
+      # binding.pry
+      joins(join).select(selector).group(:id, "#{join_name}_names.text", "#{join_name}_bond_toes.text", "#{join_name}_names.language_code", "#{join_name}_names.alphabeth_code")
+   end
+
    scope :with_root_name, -> context do
       join_name = table.table_alias || table.name
       language_codes = [ context[:locales] ].flatten
@@ -84,6 +112,8 @@ class Nomen < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'bind_kind_names.text')
    end
 
+   singleton_class.send(:alias_method, :t, :by_token)
+
    validates_presence_of :bind_kind
    validates_presence_of :bond_to_id, if: :bond?
    validates_absence_of :bond_to_id, unless: :bond?
@@ -105,7 +135,7 @@ class Nomen < ActiveRecord::Base
    end
 
    def fill_root_id
-      new_root_id = self.bond_to&.nomina&.first&.root_id || self.id
+      new_root_id = self.bond_to&.nomina&.first&.root_id || name_id
       self.update!(root_id: new_root_id)
    end
 end

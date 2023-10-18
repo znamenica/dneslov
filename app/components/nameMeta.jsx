@@ -102,11 +102,44 @@ export const nameMeta = {
             id: {
                kind: 'hidden',
             },
+            root_id: {
+               kind: 'dynamic',
+               humanized_name: 'root_name',
+               title: 'Корневое имя',
+               display_scheme: '12-3-3-4',
+               placeholder: 'Начни ввод имени...',
+               pathname: 'short_names',
+               key_name: 'value',
+               value_name: 'key',
+            },
+            bind_kind_name: {
+               humanized_name: 'bind_kind_humanized',
+               kind: 'dynamic',
+               display_scheme: '12-3-3-2',
+               title: 'Вид связки',
+               placeholder: 'Начни ввод связки...',
+               pathname: 'short_subjects',
+               context_value: { k: "NameBind" },
+               key_name: 'value',
+               value_name: 'key',
+               subscribeTo: '@bond_to_id',
+               default: "несвязаное", // default value
+               humanized_default: "Не связанное", // default value name
+               validations: {
+                  'Вид связки из списка должен быть выбран': matchEmptyObject,
+                  'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (value, context) => {
+                     return context.bond_to_id && value == "несвязаное"
+                  },
+                  'Вид связки должен иметь значение "Не связанное" в случае, если связаное имя отсутствует': (value, context) => {
+                     return !context.bond_to_id && value != "несвязаное"
+                  },
+               }
+            },
             bond_to_id: {
                kind: 'dynamic',
                title: 'Связаное имя',
                humanized_name: 'bond_to_name',
-               display_scheme: '12-4-5-5',
+               display_scheme: '12-3-3-4',
                placeholder: 'Начни ввод имени...',
                pathname: 'short_names',
                key_name: 'value',
@@ -118,36 +151,14 @@ export const nameMeta = {
                   },
                }
             },
-            bind_kind_name: {
-               humanized_name: 'bind_kind_humanized',
-               kind: 'dynamic',
-               display_scheme: '12-4-3-2',
-               title: 'Вид связки',
-               placeholder: 'Начни ввод связки...',
-               pathname: 'short_subjects',
-               context_value: { k: "NameBind" },
-               key_name: 'value',
-               value_name: 'key',
-               subscribeTo: '@bond_to_id',
-               validations: {
-                  'Вид связки из списка должен быть выбран': matchEmptyObject,
-                  'Вид связки не должен иметь значение "Не связанное" в случае, если связаное имя задано': (value, context) => {
-                     return context.bond_to_id && value == "несвязаное"
-                  },
-                  'Вид связки должен иметь значение "Не связанное" в случае, если связаное имя отсутствует': (value, context) => {
-                     return !context.bond_to_id && value != "несвязаное"
-                  },
-               }
-            },
-            root_id: {
-               kind: 'dynamic',
-               humanized_name: 'root_name',
-               title: 'Корневое имя',
-               display_scheme: '12-4-4-5',
-               placeholder: 'Начни ввод имени...',
-               pathname: 'short_names',
-               key_name: 'value',
-               value_name: 'key',
+            modifier: {
+               kind: 'text',
+               name: 'modifier',
+               title: 'Прилаживатель (модификатор)',
+               placeholder: 'Введи прилаживатель (модификатор)',
+               display_scheme: '12-3-3-2',
+               visible_if: { bind_kind_name: ["прилаженое"] },
+               subscribeTo: '@bind_kind_name',
             },
          },
       },
