@@ -9,11 +9,9 @@ export default class EventSpan extends Component {
       kindName: null,
       place: {},
       titles: [],
-      scripta: [],
-      memoes: [],
       defaultCalendarySlug: null,
-      describedMemoIds: [],
       date: '',
+      url: null,
 
       active: null,
       wrapperYearDateClass: "",
@@ -23,32 +21,13 @@ export default class EventSpan extends Component {
 
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
-         let memo = EventSpan.getMemo(props)
-
          return {
             prevProps: props,
             title: EventSpan.getTitle(props),
-            describedMemoes: EventSpan.getDescribedMemoes(props),
          }
       }
 
       return null
-   }
-
-   static getDescribedMemoes(props) {
-      let dMs = props.memoes.filter((m) => {
-         return m.description && !props.describedMemoIds.includes(m.id)
-      })
-
-      return dMs
-   }
-
-   static getMemo(props) {
-      let titles = props.memoes.sort((x, y) => {
-         return x.calendary_slug == props.defaultCalendarySlug ? -1 : 0
-      })
-
-      return titles[0]
    }
 
    static getTitle(props) {
@@ -60,44 +39,13 @@ export default class EventSpan extends Component {
    // system
    state = {}
 
-   constructor(props) {
-      super(props)
-
-      this.onSpanHeaderClick = this.onSpanHeaderClick.bind(this)
-   }
-
-   componentDidMount() {
-      this.$header.addEventListener('click', this.onSpanHeaderClick)
-   }
-
-   componentWillUnmount() {
-      this.$header.removeEventListener('click', this.onSpanHeaderClick)
-   }
-
    // custom
-   hasData() {
-      return this.props.scripta.length > 0 || this.hasDescription()
-   }
-
    classNameForItem() {
       return 'collection-item event ' + (this.props.active && "active" || "")
    }
 
    classNameForYearDate() {
       return 'year-date right ' + (this.props.active && "nearby" || "")
-   }
-
-   hasDescription() {
-      let memo = this.state.describedMemoes[0]
-
-      return memo && memo.description
-   }
-
-   onSpanHeaderClick(e) {
-      if (!this.hasData()) {
-         e.preventDefault()
-         e.stopPropagation()
-      }
    }
 
    render() {
@@ -108,10 +56,13 @@ export default class EventSpan extends Component {
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
-               key={'event-span-' + this.props.date + '-' + this.props.happenedAt}
-               ref={e => this.$header = e} >
-               <span>
-                  {this.state.title}</span>
+               key={'event-span-' + this.props.date + '-' + this.props.happenedAt}>
+               {this.props.url &&
+                  <a href={this.props.url}>
+                     {this.state.title}</a>}
+               {!this.props.url &&
+                  <span>
+                     {this.state.title}</span>}
                <Chip
                   className='happened-at'
                   text={this.props.happenedAt} />
@@ -121,21 +72,6 @@ export default class EventSpan extends Component {
                      text={this.props.place.name} />}
                {this.props.date && <Chip
                   className={this.classNameForYearDate()}
-                  text={this.props.date} />}</div>
-            {this.hasData() &&
-               <div className='collapsible-body'>
-                  <div className="container">
-                  {this.hasDescription() &&
-                        <div className='row'>
-                           <div className='col s12 description'>
-                              <Markdown source={this.state.describedMemoes[0].description} /></div></div>}
-               {this.props.scripta > 0 &&
-                  <div className='col s12'>
-                     {this.props.scripta.map((scriptum) =>
-                        <div className='row'>
-                           <div className='col s12 title'>
-                              {scriptum.title}</div>
-                           <div className='col s12'>
-                              {scriptum.text}</div></div>)}</div>}</div></div>}</li>)
+                  text={this.props.date} />}</div></li>)
    }
 }

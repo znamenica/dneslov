@@ -55,12 +55,13 @@ export function parseDateString(string) {
 }
 
 export function getPathsFromState(state) {
-   let path = "/" + (state.memory?.slug || ""),
+   console.debug("getPathsFromState", state.memory?.slug, state.eventee)
+   let path = "/" + [(state.memory?.slug || state.eventee?.memory?.slug || ""), state.eventee?.id].compact().join("/"),
        json_path = (path === '/' && 'index' || path) + '.json',
        args = "",
        anchor = null,
        params = Object.entries(state.query).reduce((line, [key, value]) => {
-         console.log("[getPathFromState] *", "key:", key, "value:", value, "query:", line)
+         console.log("[getPathsFromState] *", "key:", key, "value:", value, "query:", line)
          if (value && value.length > 0) {
             let part = key + "=" + encodeURIComponent(value)
             return line && line + "&" + part || part
@@ -77,6 +78,7 @@ export function getPathsFromState(state) {
       args += "?" + params
    }
 
+   console.debug("getPathsFromState", path, json_path)
    return [ path + args, json_path + args ]
 }
 

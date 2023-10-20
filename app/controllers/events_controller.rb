@@ -1,18 +1,15 @@
-class MemoriesController < ApplicationController
-   before_action :default, only: %i(index show)
+class EventsController < ApplicationController
+   before_action :default, only: %i(show)
    before_action :set_locales, :set_date, :set_calendary_cloud, :set_julian
    before_action :set_memory, only: %i(show)
-   before_action :set_query, :set_page, only: %i(index)
-   before_action :set_calendary_slugs, only: %i(index show)
-   before_action :fetch_events, only: %i(show)
-   before_action :fetch_memoes, only: %i(index)
+   before_action :set_calendary_slugs, only: %i(show)
+   before_action :set_event, only: %i(show)
 
    has_scope :d, only: %i(index) do |_, scope, value|
       if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
          scope.d( date, julian != "н" )
       else
          scope ;end;end
-   has_scope :q, only: %i(index)
    has_scope :c, only: %i(index)
 
    rescue_from Exception, with: :render_default_error
@@ -20,44 +17,16 @@ class MemoriesController < ApplicationController
    rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
    rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
 
-   # GET /memories,/,/index
-   # GET /memories.js,/index.js
-   def index
-      # binding.pry
-      respond_to do |format|
-         format.html do
-            render :index,
-               locals: {
-                  memoes: @memoes.jsonize(context),
-                  total: @memoes.total_size,
-                  cloud: @calendary_cloud.jsonize
-               }
-         end
-         format.json do
-            render plain: {
-               list: @memoes.jsonize(context),
-               page: @page,
-               total: @memoes.total_size
-            }.to_json(context)
-         end
-      end
-   end
-
    # GET /memories/1
    # GET /memories/1.json
    def show
-      #Benchmark.bm( 20 ) do |bm|
-      #   bm.report( "Access JSON:" ) do
-      #   end
-      #end
-      # binding.pry
       respond_to do |format|
          format.html do
             render :show,
-               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
+               locals: { event: @event.jsonize,
                          cloud: @calendary_cloud.jsonize }
          end
-         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
+         format.json { render json: @event.jsonize }
       end
    end
 
@@ -75,10 +44,10 @@ class MemoriesController < ApplicationController
          is_julian_calendar? && date - julian_gap || date )
    end
 
-   def is_html?
-      request.formats.first&.symbol == :html
-   end
-
+#   def is_html?
+#      request.formats.first&.symbol == :html
+#   end
+#
    def is_julian_calendar?
       params[ :d ]&.[](0) != 'н'
    end
@@ -109,13 +78,13 @@ class MemoriesController < ApplicationController
       @locales ||= %i(ру цс)
    end
 
-   def set_page
-      @page ||= params[ :p ] || 1
-   end
-
-   def set_query
-      @query ||= params[ :q ] || ""
-   end
+#   def set_page
+#      @page ||= params[ :p ] || 1
+#   end
+#
+#   def set_query
+#      @query ||= params[ :q ] || ""
+#   end
 
    def set_date
       @date ||=
@@ -156,39 +125,22 @@ class MemoriesController < ApplicationController
       @memory ||= @memorys.find_by_slug(params[:slug]) || raise( ActiveRecord::RecordNotFound )
    end
 
-   def fetch_events
+   def set_event
       @events = @memory.events
                        .memoed
+                       .with_memory(context)
                        .with_scripta(context)
                        .with_memoes(context)
                        .with_place(context)
                        .with_titles(context)
                        .with_description(context)
-   end
+                       .select("memories.base_year",
+                               "memories.short_name",
+                               "memories.id AS memory_id")
+                       .group("memories.id",
+                              "events_memories.order",
+                              "events_memories.short_name") 
 
-   def cslugs
-      params['c']&.split(',')&.select {|x| x =~ Slug::RE } || []
-   end
-
-   def order
-      ['_base_year', '_slug', Arel.sql("position(calendary_slugs_memoes.text::text in '#{cslugs.join(',')}')"), '_event_code']
-   end
-
-   def fetch_memoes
-      @memoes = apply_scopes(Memo).with_base_year
-                                  .with_slug_text
-                                  .with_calendary_slug_text(context)
-                                  .with_description(context)
-                                  .with_title(context)
-                                  .with_date
-                                  .with_thumb_url
-                                  .with_bond_to_title(context)
-                                  .with_event_title(context)
-                                  .with_orders(context)
-                                  .with_event
-                                  .distinct_by('_base_year', '_slug')
-                                  .group(:id)
-                                  .reorder(*order)
-                                  .page(params[ :p ])
+      @event ||= @events.by_event_code(params[:event]).first || raise(ActiveRecord::RecordNotFound)
    end
 end

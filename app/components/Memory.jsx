@@ -23,7 +23,7 @@ export default class Memory extends Component {
       calendarStyle: 'julian'
    }
 
-   static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration" ]
+   static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration", "Miracle", "Writing", "Resurrection", "Monasticry", "Council", "Marriage" ]
    static happenedAtKindCodes = [ "Miracle", "Appearance", "Writing", "Veneration", "Repose", "Resurrection" ]
 
    static getDerivedStateFromProps(props, state) {
@@ -278,6 +278,7 @@ export default class Memory extends Component {
                      <div className='col s12'>
                         <EventSpans
                            msDate={this.state.msDate}
+                           slug={this.props.slug}
                            calendarStyle={this.props.calendarStyle}
                            describedMemoIds={this.state.describedMemoIds}
                            defaultCalendarySlug={this.state.defaultCalendarySlug}

@@ -161,6 +161,7 @@ body {
 
                &:only-child {
                   cursor: default;
+                  //pointer-events: none;
                   background-color: #f9f9f9;
                }
             }

@@ -63,6 +63,7 @@ class Event < ActiveRecord::Base
    belongs_to :place, optional: true
    belongs_to :item, optional: true
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
+   has_many :kind_titles, through: :kind, source: :names
 
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs
@@ -91,7 +92,7 @@ class Event < ActiveRecord::Base
 
    scope :notice, -> { where(kind_code: NOTICE) }
    scope :usual, -> { where(kind_code: USUAL) }
-   scope :memoed, -> { joins( :memos ).distinct }
+   scope :memoed, -> { joins(:memos).merge(Memo.licit).distinct }
    scope :by_token, -> text do
       left_outer_joins( :kind, :titles ).
          merge(Subject.by_token(text)).
@@ -100,6 +101,13 @@ class Event < ActiveRecord::Base
          where("descriptions.text ~* ?", "\\m#{text}.*").or(
          where("names_subjects.text ~* ?", "\\m#{text}.*").or(
          where("descriptions_subjects.text ~* ?", "\\m#{text}.*")))))
+   end
+   scope :by_event_code, -> code do
+      if code =~ /^\d+$/
+         where(id: code)
+      else
+         left_outer_joins(:kind_titles).where(kind_titles: { text: code })
+      end
    end
 
    scope :by_memory_id, -> memory_id do
@@ -147,6 +155,23 @@ class Event < ActiveRecord::Base
 
       selector << "titles.text || ' (' || events.happened_at || ')' AS _value"
       joins(join).select(selector).group(:id, "titles.text", "events.happened_at")
+   end
+
+   scope :with_memory, -> context do
+      join_name = table.table_alias || table.name
+      selector = self.select_values.dup << "#{join_name}.*" <<
+         "COALESCE(jsonb_build_object(
+            'slug', memory_slugs.text,
+            'order', #{join_name}_memories.order,
+            'short_name', #{join_name}_memories.short_name)) AS _memory"
+
+      join = "LEFT OUTER JOIN memories AS #{join_name}_memories
+                           ON #{join_name}_memories.id = #{join_name}.memory_id
+              LEFT OUTER JOIN slugs AS memory_slugs
+                           ON memory_slugs.sluggable_type = 'Memory'
+                          AND memory_slugs.sluggable_id = #{join_name}.memory_id"
+
+      joins(join, :memory).merge(Memory.with_names(context)).select(selector).group(:id, 'memory_slugs.text')
    end
 
    scope :with_titles, -> context do
@@ -199,8 +224,8 @@ class Event < ActiveRecord::Base
       select(selector).group(:id)
    end
 
-   scope :with_place, -> language_code do
-      language_codes = [ language_code ].flatten
+   scope :with_place, -> context do
+      language_codes = [ context[:locales] ].flatten
       selector = "jsonb_build_object('id', places.id, 'name', place_descriptions.text) AS _place"
       join = "LEFT OUTER JOIN places
                            ON events.place_id = places.id
@@ -213,8 +238,8 @@ class Event < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'places.id', 'place_descriptions.text')
    end
 
-   scope :with_memoes, -> (language_code) do
-      language_codes = [ language_code ].flatten
+   scope :with_memoes, -> context do
+      language_codes = [ context[:locales] ].flatten
       selector = "COALESCE((WITH __memoes AS (
                        SELECT memoes.id AS id,
                               memoes.year_date AS year_date,
@@ -227,11 +252,13 @@ class Event < ActiveRecord::Base
                               calendary_slugs.text AS calendary_slug,
                               calendary_titles.text AS calendary_title
                          FROM memoes
+                         JOIN calendaries
+                           ON calendaries.id = memoes.calendary_id
               LEFT OUTER JOIN slugs AS calendary_slugs
-                           ON calendary_slugs.sluggable_id = memoes.calendary_id
+                           ON calendary_slugs.sluggable_id = calendaries.id
                           AND calendary_slugs.sluggable_type = 'Calendary'
               LEFT OUTER JOIN links AS calendary_links
-                           ON calendary_links.info_id = memoes.id
+                           ON calendary_links.info_id = calendaries.id
                           AND calendary_links.info_type = 'Calendary'
               LEFT OUTER JOIN descriptions AS memo_titles
                            ON memo_titles.describable_id = memoes.id
@@ -247,7 +274,7 @@ class Event < ActiveRecord::Base
                            ON memo_links.info_id = memoes.id
                           AND memo_links.info_type = 'Memo'
               LEFT OUTER JOIN descriptions AS calendary_titles
-                           ON calendary_titles.describable_id = memoes.calendary_id
+                           ON calendary_titles.describable_id = calendaries.id
                           AND calendary_titles.describable_type = 'Calendary'
                           AND calendary_titles.type = 'Appellation'
                           AND calendary_titles.language_code IN ('#{language_codes.join("', '")}')
@@ -270,6 +297,7 @@ class Event < ActiveRecord::Base
                         WHERE memoes.event_id = events.id
                           AND memoes.bond_to_id IS NULL
                           AND memoes.id IS NOT NULL
+                          AND calendaries.licit = 't'
                      GROUP BY memoes.id, year_date, title, description, calendary_slug,
                               calendary_title, calendary_url, memo_links.url)
                        SELECT jsonb_agg(__memoes)
@@ -279,8 +307,8 @@ class Event < ActiveRecord::Base
       select(selector).group(:id)
    end
 
-   scope :with_scripta, -> (language_code) do
-      language_codes = [ language_code ].flatten
+   scope :with_scripta, -> context do
+      language_codes = [ context[:locales] ].flatten
       selector = self.select_values.dup
       if selector.empty?
          selector << 'events.*'

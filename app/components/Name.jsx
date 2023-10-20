@@ -20,7 +20,7 @@ export default class Name extends Component {
          return {
             prevProps: props,
             fullName: fullName,
-            autoName: fullName || props.defaultNameInCalendary,
+            autoName: fullName || props.defaultNameInCalendary || props.short_name,
          }
       }
 

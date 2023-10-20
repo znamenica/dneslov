@@ -11,6 +11,7 @@ export default class EventSpans extends Component {
       defaultCalendarySlug: null,
       describedMemoIds: [],
       events: [],
+      slug: null,
    }
 
    static staticKindCodes = [
@@ -203,6 +204,6 @@ length + 1
                      kindName={event.kind_name}
                      place={event.place}
                      date={event.date.toLocaleDateString('ru-RU')}
-                     memoes={event.memoes}
+                     url={'/' + this.props.slug + '/' + event.id}
                      titles={event.titles}
                      scripta={event.scripta} />)}</ul></div>)}}

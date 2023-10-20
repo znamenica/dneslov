@@ -9,6 +9,7 @@ import SearchField from 'SearchField'
 import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
+import Eventee from 'Eventee'
 import Intro from 'Intro'
 import { getCalendariesString, getDateString, getPathsFromState, getTitleFromState, parseDateString, parseCalendariesString } from 'support'
 
@@ -38,6 +39,7 @@ export default class MemoriesForm extends Component {
                memories: props.memories.list,
                memoriesTotal: props.memories.total,
                memory: props.memory,
+               eventee: props.eventee,
                query: {
                   c: getCalendariesString(props),
                   d: getDateString(props),
@@ -254,6 +256,8 @@ export default class MemoriesForm extends Component {
 
    render() {
       console.log("[render] * ", { props: this.props, state: this.state})
+      console.log("[render] * ", )
+
 
       return (
          [<header>
@@ -264,7 +268,7 @@ export default class MemoriesForm extends Component {
                      href='/'
                      alt="Днеслов">
                      <img
-                        src="dneslov-title.png" /></a>
+                        src="/dneslov-title.png" /></a>
                   <ul id="nav-mobile" className="right hide-on-med-and-down">
                      <li>
                         <a
@@ -300,7 +304,15 @@ export default class MemoriesForm extends Component {
                               defaultCalendarySlug={this.defaultCalendarySlug()}
                               selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
-                        {! this.state.memory &&
+                        {this.state.eventee &&
+                           <Eventee
+                              key='eventee'
+                              date={parseDateString(this.state.query.d).pop()}
+                              calendarStyle={this.calendarStyleFromQuery()}
+                              defaultCalendarySlug={this.defaultCalendarySlug()}
+                              selectedCalendaries={this.state.query.c?.split(",")}
+                              {...this.state.eventee} />}
+                        {this.props.memories.list && !this.state.eventee && !this.state.memory &&
                            <div>
                               <div className='row'>
                                  <SearchField

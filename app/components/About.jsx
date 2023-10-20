@@ -39,7 +39,7 @@ export default class About extends Component {
                      href='/'
                      alt="Днеслов">
                      <img
-                        src="dneslov-title.png" /></a></div></nav></header>,
+                        src="/dneslov-title.png" /></a></div></nav></header>,
       <main>
          <div className='container about'>
             <div className='row'>

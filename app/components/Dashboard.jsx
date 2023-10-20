@@ -94,7 +94,7 @@ export default class Dashboard extends Component {
                      href='/'
                      alt="Днеслов">
                      <img
-                        src="dneslov-title.png" /></a>
+                        src="/dneslov-title.png" /></a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right">
                         {Object.entries(Metas).map(([path, meta]) =>

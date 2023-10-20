@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :resources
    # The priority is based upon order of creation: first created -> highest priority.
    # See how all your routes lay out with "rake routes".
 
@@ -47,8 +46,10 @@ Rails.application.routes.draw do
 
    get '/index' => 'memories#index'
 
-   #slug_options[ :constraints ] = { slug: /[ёа-я0-9]{1,6}/ } if Rails.env.production? 
-   get '/:slug' => 'memories#show', as: 'slug'
+   get '/:lat' => 'errors#show', constraints: { lat: /[a-z]+/ }
+
+   get '/:slug' => 'memories#show'#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
+   get '/:slug/:event' => 'events#show'
 
    # caching images; NOTE don't keep images in public/images
    get '/images/*path' => 'images#cache', format: false
