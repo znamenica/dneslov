@@ -66,9 +66,13 @@ class Event < ActiveRecord::Base
    has_many :kind_titles, through: :kind, source: :names
 
    has_many :memos, dependent: :delete_all do
-      def for calendary_slugs
-         calendary_ids = Calendary.by_slugs(calendary_slugs).unscope(:select).select(:id)
-         self.where(calendary_id: calendary_ids)
+      def for calendary_slugs = nil
+         if calendary_slugs
+            calendary_ids = Calendary.by_slugs(calendary_slugs).unscope(:select).select(:id)
+            self.where(calendary_id: calendary_ids)
+         else
+            self
+         end
       end
    end
 
@@ -92,7 +96,9 @@ class Event < ActiveRecord::Base
 
    scope :notice, -> { where(kind_code: NOTICE) }
    scope :usual, -> { where(kind_code: USUAL) }
+   scope :calendaried, ->(calendary_slugs) { self.joins(:memos).where(memoes: { calendary_id: Calendary.by_slugs(calendary_slugs).unscope(:select).select(:id) }) }
    scope :memoed, -> { joins(:memos).merge(Memo.licit).distinct }
+   scope :memoed_for, ->(calendary_slugs) { joins(:memos).calendaried(calendary_slugs).merge(Memo.licit).distinct }
    scope :by_token, -> text do
       left_outer_joins( :kind, :titles ).
          merge(Subject.by_token(text)).
@@ -240,6 +246,8 @@ class Event < ActiveRecord::Base
 
    scope :with_memoes, -> context do
       language_codes = [ context[:locales] ].flatten
+      cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""
+
       selector = "COALESCE((WITH __memoes AS (
                        SELECT DISTINCT ON(memoes.id)
                               memoes.id AS id,
@@ -255,9 +263,10 @@ class Event < ActiveRecord::Base
                          FROM memoes
                          JOIN calendaries
                            ON calendaries.id = memoes.calendary_id
-              LEFT OUTER JOIN slugs AS calendary_slugs
+                         JOIN slugs AS calendary_slugs
                            ON calendary_slugs.sluggable_id = calendaries.id
                           AND calendary_slugs.sluggable_type = 'Calendary'
+                          #{cslugs_rule}
               LEFT OUTER JOIN links AS calendary_links
                            ON calendary_links.info_id = calendaries.id
                           AND calendary_links.info_type = 'Calendary'

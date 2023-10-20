@@ -9,6 +9,7 @@ export default class EventSpans extends Component {
       msDate: null,
       calendarStyle: 'julian',
       defaultCalendarySlug: null,
+      specifiedCalendarySlug: null,
       describedMemoIds: [],
       events: [],
       slug: null,
@@ -198,12 +199,14 @@ length + 1
                   <EventSpan
                      key={'event-' + event.id}
                      active={event.active}
+                     specifiedCalendarySlug={this.props.specifiedCalendarySlug}
                      defaultCalendarySlug={this.props.defaultCalendarySlug}
                      describedMemoIds={this.props.describedMemoIds}
                      happenedAt={event.happened_at}
                      kindName={event.kind_name}
                      place={event.place}
+                     id={event.id}
                      date={event.date.toLocaleDateString('ru-RU')}
-                     url={'/' + this.props.slug + '/' + event.id}
+                     slug={this.props.slug}
                      titles={event.titles}
                      scripta={event.scripta} />)}</ul></div>)}}

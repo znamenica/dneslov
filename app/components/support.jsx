@@ -55,8 +55,8 @@ export function parseDateString(string) {
 }
 
 export function getPathsFromState(state) {
-   console.debug("getPathsFromState", state.memory?.slug, state.eventee)
-   let path = "/" + [(state.memory?.slug || state.eventee?.memory?.slug || ""), state.eventee?.id].compact().join("/"),
+   console.debug("[getPathsFromState] **", state.calendarySlug, state.memory?.slug, state.eventee)
+   let path = "/" + [state.calendarySlug, (state.memory?.slug || state.eventee?.memory?.slug), state.eventee?.id].compact().join("/"),
        json_path = (path === '/' && 'index' || path) + '.json',
        args = "",
        anchor = null,
@@ -82,10 +82,10 @@ export function getPathsFromState(state) {
    return [ path + args, json_path + args ]
 }
 
-export function getUrlsFrom(memory, eventee) {
-   console.debug("[getUrlsFrom] <<<", memory, eventee)
+export function getUrlsFrom(calendarySlug, memory, eventee) {
+   console.debug("[getUrlsFrom] <<<", calendarySlug, memory, eventee)
    console.debug("[getUrlsFrom] **", Object.fromEntries(new URLSearchParams(window.location.search)))
-   let path = "/" + [(memory?.slug || eventee?.memory?.slug || ""), eventee?.id].compact().join("/"),
+   let path = "/" + [calendarySlug, (memory?.slug || eventee?.memory?.slug), eventee?.id].compact().join("/"),
        json_path = (path === '/' && 'index' || path) + '.json',
        args = "",
        anchor = null,
@@ -110,7 +110,7 @@ export function getUrlsFrom(memory, eventee) {
 
    let fullPath = window.location.origin + path,
        fullJsonPath = window.location.origin + json_path
-   console.debug("[getUrlsFrom] >>>", fullPath, fullJsonPath)
+   console.debug("[getUrlsFrom] >>>", fullPath + args, fullJsonPath + args)
 
    return [ fullPath + args, fullJsonPath + args ]
 }

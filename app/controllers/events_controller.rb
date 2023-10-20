@@ -4,15 +4,8 @@ class EventsController < ApplicationController
    before_action :set_memory, only: %i(show)
    before_action :set_event, only: %i(show)
 
-   has_scope :d, only: %i(index) do |_, scope, value|
-      if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
-         scope.d( date, julian != "н" )
-      else
-         scope ;end;end
-   has_scope :c, only: %i(index)
-
-   # GET /memories/1
-   # GET /memories/1.json
+   # GET /events/1
+   # GET /events/1.json
    def show
       respond_to do |format|
          format.html do
@@ -28,7 +21,7 @@ class EventsController < ApplicationController
 
    def set_event
       @events = @memory.events
-                       .memoed
+                       .memoed_for(@calendary_slugs)
                        .with_memory(context)
                        .with_scripta(context)
                        .with_memoes(context)
@@ -42,7 +35,6 @@ class EventsController < ApplicationController
                               "events_memories.order",
                               "events_memories.short_name") 
 
-      # binding.pry
       @event ||= @events.by_event_code(params[:event]).first || raise(ActiveRecord::RecordNotFound)
    end
 end

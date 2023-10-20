@@ -1,7 +1,9 @@
 import { Component } from 'react'
 
 import Chip from 'Chip'
+import Name from 'Name'
 import Markdown from 'Markdown'
+import { getUrlsFrom } from 'support'
 
 export default class EventSpan extends Component {
    static defaultProps = {
@@ -10,8 +12,10 @@ export default class EventSpan extends Component {
       place: {},
       titles: [],
       defaultCalendarySlug: null,
+      specifiedCalendarySlug: null,
       date: '',
-      url: null,
+      id: null,
+      slug: null,
 
       active: null,
       wrapperYearDateClass: "",
@@ -50,19 +54,15 @@ export default class EventSpan extends Component {
 
    render() {
       console.log("[render] * this.props:", this.props, "this.state:", this.state)
-      console.log("[calcEventDates] * this.props", this.props, this.state)
 
       return (
          <li className={this.classNameForItem()}>
             <div
                className='collapsible-header'
                key={'event-span-' + this.props.date + '-' + this.props.happenedAt}>
-               {this.props.url &&
-                  <a href={this.props.url}>
-                     {this.state.title}</a>}
-               {!this.props.url &&
-                  <span>
-                     {this.state.title}</span>}
+               <Name
+                  short_name={this.state.title}
+                  url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props, this.props)[0]} />
                <Chip
                   className='happened-at'
                   text={this.props.happenedAt} />

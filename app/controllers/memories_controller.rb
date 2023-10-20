@@ -5,13 +5,7 @@ class MemoriesController < ApplicationController
    before_action :fetch_events, only: %i(show)
    before_action :fetch_memoes, only: %i(index)
 
-   has_scope :d, only: %i(index) do |_, scope, value|
-      if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
-         scope.d( date, julian != "н" )
-      else
-         scope ;end;end
    has_scope :q, only: %i(index)
-   has_scope :c, only: %i(index)
 
    # GET /memories,/,/index
    # GET /memories.js,/index.js

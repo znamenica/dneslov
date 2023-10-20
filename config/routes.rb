@@ -45,12 +45,12 @@ Rails.application.routes.draw do
    end
 
    get '/index' => 'memories#index'
-
+   # caching images; NOTE don't keep images in public/images
+   get '/images/*path' => 'images#cache', format: false
    get '/:lat' => 'errors#show', constraints: { lat: /[a-z]+/ }
 
    get '/:slug' => 'memories#show'#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
-   get '/:slug/:event' => 'events#show'
-
-   # caching images; NOTE don't keep images in public/images
-   get '/images/*path' => 'images#cache', format: false
+   get '/:slug/:event' => 'events#show', constraints: { event: /[0-9]{1,6}/ }
+   get '/:c/:slug' => 'memories#show'
+   get '/:c/:slug/:event' => 'events#show', constraints: { event: /[0-9]{1,6}/ }
 end

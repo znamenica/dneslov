@@ -40,6 +40,7 @@ export default class MemoriesForm extends Component {
                memoriesTotal: props.memories.total,
                memory: props.memory,
                eventee: props.eventee,
+               calendarySlug: props.calendaries_used.length == 1 ? props.calendaries_used[0] : null,
                query: {
                   c: getCalendariesString(props),
                   d: getDateString(props),
@@ -86,7 +87,8 @@ export default class MemoriesForm extends Component {
    }
 
    defaultCalendarySlug() {
-      return this.props.calendaries_used &&
+      return this.state.calendarySlug ||
+             this.props.calendaries_used &&
              this.props.calendaries_used[0] ||
              this.props.calendaries_cloud[0].slug
    }
@@ -302,6 +304,7 @@ export default class MemoriesForm extends Component {
                               date={parseDateString(this.state.query.d).pop()}
                               calendarStyle={this.calendarStyleFromQuery()}
                               defaultCalendarySlug={this.defaultCalendarySlug()}
+                              specifiedCalendarySlug={this.state.calendarySlug}
                               selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
                         {this.state.eventee &&
@@ -310,6 +313,7 @@ export default class MemoriesForm extends Component {
                               date={parseDateString(this.state.query.d).pop()}
                               calendarStyle={this.calendarStyleFromQuery()}
                               defaultCalendarySlug={this.defaultCalendarySlug()}
+                              specifiedCalendarySlug={this.state.calendarySlug}
                               selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.eventee} />}
                         {this.props.memories.list && !this.state.eventee && !this.state.memory &&

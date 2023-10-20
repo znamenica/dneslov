@@ -25,6 +25,7 @@ export default class Eventee extends Component {
 
       active: null,
       defaultCalendarySlug: null,
+      specifiedCalendarySlug: null,
       wrapperYearDateClass: "",
       selectedCalendaries: [],
       calendarStyle: 'julian'
@@ -32,7 +33,8 @@ export default class Eventee extends Component {
 
    static propTypes = {
       happened_at: PropTypes.string.isRequired,
-      defaultCalendarySlug: PropTypes.string.isRequired,
+      defaultCalendarySlug: PropTypes.string,
+      specifiedCalendarySlug: PropTypes.string,
       memory: PropTypes.object.isRequired,
       specific_title: PropTypes.string,
       title: PropTypes.string,
@@ -167,7 +169,7 @@ export default class Eventee extends Component {
                      text={this.props.memory?.order} />,
                   <Name
                      short_name={this.props.memory?.short_name}
-                     url={getUrlsFrom(this.props.memory)[0]}
+                     url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.memory)[0]}
                      names={this.props.names} />,
                   <Chip
                      color={this.getSlugColor(this.state.title)}
@@ -190,6 +192,7 @@ export default class Eventee extends Component {
             {this.props.memoes.isPresent() &&
                <Description
                   describedMemoes={this.props.memoes}
+                  specifiedCalendarySlug={this.props.specifiedCalendarySlug}
                   defaultCalendarySlug={this.props.defaultCalendarySlug} />}
             {this.state.links.isPresent() &&
                <div className='col s12'>

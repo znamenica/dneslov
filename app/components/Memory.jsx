@@ -20,6 +20,7 @@ export default class Memory extends Component {
       scripta: [],
       selectedCalendaries: [],
       defaultCalendarySlug: null,
+      specifiedCalendarySlug: null,
       calendarStyle: 'julian'
    }
 
@@ -282,4 +283,5 @@ export default class Memory extends Component {
                            calendarStyle={this.props.calendarStyle}
                            describedMemoIds={this.state.describedMemoIds}
                            defaultCalendarySlug={this.state.defaultCalendarySlug}
+                           specifiedCalendarySlug={this.props.specifiedCalendarySlug}
                            events={this.props.events} /></div></div></div>}</div>)}}

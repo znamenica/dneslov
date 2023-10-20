@@ -12,11 +12,20 @@ module CoreFeatures
          # NOTE https://stackoverflow.com/a/48744792/446267
          rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
          rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
+
+         has_scope :d, only: %i(index) do |_, scope, value|
+            if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
+               scope.d( date, julian != "н" )
+            else
+               scope
+            end
+         end
+         has_scope :c, only: %i(index)
       end
    end
 
    def context
-      @context ||= { locales: @locales }
+      @context ||= { locales: @locales, calendary_slugs: @calendary_slugs }
    end
 
    # lazy property
@@ -66,9 +75,9 @@ module CoreFeatures
 
    def set_calendary_slugs
       @calendary_slugs =
-      if params[ :c ].present?
-         Slug.for_calendary.where( text: params[ :c ].split(",") ).pluck( :text )
-      end
+         if params[:c].present?
+            Slug.for_calendary.where(text: params[:c].split(",") ).pluck(:text)
+         end
    end
 
    def set_calendary_cloud
