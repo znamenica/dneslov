@@ -82,6 +82,39 @@ export function getPathsFromState(state) {
    return [ path + args, json_path + args ]
 }
 
+export function getUrlsFrom(memory, eventee) {
+   console.debug("[getUrlsFrom] <<<", memory, eventee)
+   console.debug("[getUrlsFrom] **", Object.fromEntries(new URLSearchParams(window.location.search)))
+   let path = "/" + [(memory?.slug || eventee?.memory?.slug || ""), eventee?.id].compact().join("/"),
+       json_path = (path === '/' && 'index' || path) + '.json',
+       args = "",
+       anchor = null,
+       query = Object.fromEntries(new URLSearchParams(window.location.search)),
+       params = Object.entries(query).reduce((line, [key, value]) => {
+         console.log("[getUrlsFrom] *", "key:", key, "value:", value, "query:", line)
+         if (value && value.length > 0) {
+            let part = key + "=" + encodeURIComponent(value)
+            return line && line + "&" + part || part
+         } else {
+            return line
+         }
+      }, "")
+
+   if (anchor) {
+      args += "#" + anchor
+   }
+
+   if (params) {
+      args += "?" + params
+   }
+
+   let fullPath = window.location.origin + path,
+       fullJsonPath = window.location.origin + json_path
+   console.debug("[getUrlsFrom] >>>", fullPath, fullJsonPath)
+
+   return [ fullPath + args, fullJsonPath + args ]
+}
+
 export function getTitleFromState(state) {
    let [ date, style ] = parseDateString(state.query.d),
        cals = "[ " + state.query.c + " ]",

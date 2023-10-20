@@ -8,6 +8,7 @@ import Name from 'Name'
 import Description from 'Description'
 import GetSlugColor from 'mixins/GetSlugColor'
 import Markdown from 'Markdown'
+import { getUrlsFrom } from 'support'
 
 @mixin(GetSlugColor)
 export default class Eventee extends Component {
@@ -166,6 +167,7 @@ export default class Eventee extends Component {
                      text={this.props.memory?.order} />,
                   <Name
                      short_name={this.props.memory?.short_name}
+                     url={getUrlsFrom(this.props.memory)[0]}
                      names={this.props.names} />,
                   <Chip
                      color={this.getSlugColor(this.state.title)}

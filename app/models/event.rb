@@ -241,7 +241,8 @@ class Event < ActiveRecord::Base
    scope :with_memoes, -> context do
       language_codes = [ context[:locales] ].flatten
       selector = "COALESCE((WITH __memoes AS (
-                       SELECT memoes.id AS id,
+                       SELECT DISTINCT ON(memoes.id)
+                              memoes.id AS id,
                               memoes.year_date AS year_date,
                               jsonb_object_agg(DISTINCT COALESCE(memo_slugs.text, 'Null'),
                                                         order_titles_memoes.text) AS orders,

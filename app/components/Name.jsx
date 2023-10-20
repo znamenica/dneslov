@@ -152,13 +152,24 @@ export default class Name extends Component {
 
    state = {}
 
+   properUrl() {
+      let url = this.props.url.replace(/^http:\/\//, 'https://')
+
+      return url
+   }
+
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <span
             className='name'>
-               {this.state.autoName}</span>
+            {this.props.url &&
+               <a
+                  href={this.properUrl()}
+                  target='_self' >
+                  {this.state.autoName}</a>}
+            {! this.props.url && this.state.autoName}</span>
       )
    }
 }
