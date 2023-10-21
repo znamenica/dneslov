@@ -9,10 +9,6 @@ class MemoryName < ActiveRecord::Base
 
    validates_presence_of :memory, :nomen, :state
 
-   def nomen_attributes= value
-      self.nomen = Nomen.where(value).first || super && nomen
-   end
-
    def to_s
       nomen.text
    end

@@ -1,16 +1,43 @@
 class MemoriesController < ApplicationController
    include CoreFeatures
 
-   before_action :set_query, :set_page, only: %i(index)
-   before_action :fetch_events, only: %i(show)
-   before_action :fetch_memoes, only: %i(index)
+   before_action :set_query, :set_page, only: %i(index show)
+   before_action :fetch_events, only: %i(show), if: ->(x) { @slug.sluggable_type == "Memory" }
+   before_action :fetch_memoes, only: %i(index show), if: ->(x) { not @slug or @slug.sluggable_type == "Calendary" }
 
-   has_scope :q, only: %i(index)
+   has_scope :q, only: %i(index show)
 
    # GET /memories,/,/index
    # GET /memories.js,/index.js
    def index
-      # binding.pry
+      index_memories
+   end
+
+   # GET /memories/1
+   # GET /memories/1.json
+   def show
+      case @slug.sluggable_type
+      when "Memory"
+         show_memory
+      when "Calendary"
+         index_memories
+      end
+   end
+
+   protected
+
+   def show_memory
+      respond_to do |format|
+         format.html do
+            render :show,
+               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
+                         cloud: @calendary_cloud.jsonize }
+         end
+         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
+      end
+   end
+
+   def index_memories
       respond_to do |format|
          format.html do
             render :index,
@@ -30,26 +57,6 @@ class MemoriesController < ApplicationController
       end
    end
 
-   # GET /memories/1
-   # GET /memories/1.json
-   def show
-      #Benchmark.bm( 20 ) do |bm|
-      #   bm.report( "Access JSON:" ) do
-      #   end
-      #end
-      # binding.pry
-      respond_to do |format|
-         format.html do
-            render :show,
-               locals: { memory: @memory.jsonize(externals: { events: @events.jsonize }),
-                         cloud: @calendary_cloud.jsonize }
-         end
-         format.json { render json: @memory.jsonize(externals: { events: @events.jsonize }) }
-      end
-   end
-
-   protected
-
    def is_html?
       request.formats.first&.symbol == :html
    end
@@ -66,7 +73,7 @@ class MemoriesController < ApplicationController
       @events = @memory.events
                        .memoed
                        .with_scripta(context)
-                       .with_memoes(context)
+                       .with_short_memoes(context)
                        .with_place(context)
                        .with_titles(context)
                        .with_description(context)

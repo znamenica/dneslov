@@ -395,7 +395,7 @@ export default class DynamicField extends Component {
    spanValue() {
       let value = this.props.humanized_value
 
-      if (this.isRangeEnabled() && this.state.start) {
+      if (this.isRangeEnabled() && Number.isInteger(this.state.start)) {
          let pre = value.slice(0, this.state.start),
              mid = value.slice(this.state.start, this.state.end),
              post = value.slice(this.state.end, -1)

@@ -1,3 +1,3 @@
-unless Rails.env.production?
+unless Rails.env.production? or Rails.env.staging?
    Redisable.processor_kind = :inline
 end

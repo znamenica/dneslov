@@ -169,9 +169,9 @@ class Admin::CommonController < ApplicationController
    end
 
    def issue_with query, with_method
-      query.send( with_method, context )
+      query.send(with_method, context)
    rescue ArgumentError
-      query.send( with_method )
+      query.send(with_method)
    end
 
    def prepare_object object

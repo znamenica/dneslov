@@ -52,6 +52,7 @@ export default class MemoriesForm extends Component {
          document.title = getTitleFromState(state)
          let [ path, json_path ] = getPathsFromState(state)
          history.replaceState({ query: state.query, path: json_path }, document.title, path)
+         console.debug("[getDerivedStateFromProps] <<<", { toNewState: state })
          return state
       }
 
@@ -66,6 +67,7 @@ export default class MemoriesForm extends Component {
       document.title = getTitleFromState(state)
       history.replaceState({ query: state.query, path: json_path }, document.title, path)
 
+      console.debug("[getDerivedStateFromProps] <<<", { newState: state })
       this.setState(state)
    }
 
@@ -161,7 +163,7 @@ export default class MemoriesForm extends Component {
       console.debug("[onPopState] <<<", { e: e })
 
       if (e.state) {
-         this.submit(e.state.query, e.state.path)
+         this.submit(e.state.query.merge({p: 1}), e.state.path)
       }
    }
 
@@ -191,11 +193,14 @@ export default class MemoriesForm extends Component {
 
    onLoadSuccess(response) {
       console.debug("[onLoadSuccess] <<< response", response)
+      console.debug("[onLoadSuccess] <<< response", response.data, response.data.total)
 
-      if (response.config.url.match(/index.json/)) {
+      if (response.data.total) {
          this.memoriesParse(response.data, response.config)
-      } else {
+      } else if (response.data.events) {
          this.memoryParse(response.data, response.config)
+      } else {
+         this.eventParse(response.data, response.config)
       }
    }
 
@@ -215,12 +220,14 @@ export default class MemoriesForm extends Component {
          state = merge(this.state, {
             memories: newMemories,
             memoriesTotal: memories.total,
-            memory: null})
+            memory: null,
+            eventee: null})
       } else {
          state = merge(this.state, {
             memories: memories.list,
             memoriesTotal: memories.total,
-            memory: null})
+            memory: null,
+            eventee: null})
       }
 
       document.body.classList.remove('in-progress')
@@ -231,8 +238,20 @@ export default class MemoriesForm extends Component {
    memoryParse(memory, config) {
       let state = merge(this.state,
                         { memory: memory,
-                          memories: null,
-                          query: config.params })
+                          memories: [],
+                          query: config.params,
+                          eventee: null})
+
+      document.body.classList.remove('in-progress')
+      this.updateState(state)
+   }
+
+   eventParse(eventee, config) {
+      let state = merge(this.state,
+                        { memory: null,
+                          memories: [],
+                          query: config.params,
+                          eventee: eventee})
 
       document.body.classList.remove('in-progress')
       this.updateState(state)

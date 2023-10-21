@@ -21,7 +21,7 @@ export default class EventSpan extends Component {
       wrapperYearDateClass: "",
    }
 
-   static types = [ "Subject", "Event" ]
+   static types = ["Subject", "Event"]
 
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
@@ -72,6 +72,8 @@ export default class EventSpan extends Component {
                      text={this.props.place.name} />}
                {this.props.date && <Chip
                   className={this.classNameForYearDate()}
-                  text={this.props.date} />}</div></li>)
+                  text={this.props.date} />}</div>
+            <div
+               className='collapsible-body' /></li>)
    }
 }

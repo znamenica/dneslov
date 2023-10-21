@@ -6,21 +6,22 @@ module CoreFeatures
          before_action :default, only: %i(index show)
          before_action :set_locales, :set_date, :set_calendary_cloud, :set_julian
          before_action :set_calendary_slugs, only: %i(index show)
-         before_action :set_memory, only: %i(show)
+         before_action :set_slug, only: %i(index show)
+         before_action :set_memory, only: %i(show), if: ->(x) { @slug.sluggable_type == "Memory" }
 
          rescue_from Exception, with: :render_default_error
          # NOTE https://stackoverflow.com/a/48744792/446267
          rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
          rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
 
-         has_scope :d, only: %i(index) do |_, scope, value|
+         has_scope :d, only: %i(index show) do |_, scope, value|
             if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value
                scope.d( date, julian != "н" )
             else
                scope
             end
          end
-         has_scope :c, only: %i(index)
+         has_scope :c, only: %i(index show)
       end
    end
 
@@ -95,13 +96,19 @@ module CoreFeatures
       @julian ||= is_julian_calendar?
    end
 
+   def set_slug
+      @slug =
+         if params[:slug]
+            Slug.where(text: params[:slug]).first || raise(ActiveRecord::RecordNotFound)
+         end
+   end
+
    def set_memory
       @memorys ||= Memory.with_scripta(context[:locales])
                          .with_names(context)
                          .with_pure_links
                          .with_slug_text
 
-
-      @memory ||= @memorys.find_by_slug(params[:slug]) || raise( ActiveRecord::RecordNotFound )
+      @memory ||= @memorys.find_by_slug(@slug.text) || raise( ActiveRecord::RecordNotFound )
    end
 end

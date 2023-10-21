@@ -25,7 +25,9 @@ export const readingMeta = {
       },
       scriptum: {
          title: 'Сведённый текст',
-         value: (value) => { return value.markups[0]?.scriptum }
+         value: (value) => {
+            return value.markups.map((x) => { return x.scriptum.slice(x.begin, x.end) }).join("")
+         }
       },
    },
    form: {

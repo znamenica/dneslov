@@ -57,6 +57,8 @@ export default class EventSpans extends Component {
    ]
 
    static getDerivedStateFromProps(props, state) {
+      console.debug("[getDerivedStateFromProps] <<<", props, state)
+
       if (props !== state.prevProps) {
          return({
             events: EventSpans.sortEvents(props),
@@ -68,7 +70,7 @@ export default class EventSpans extends Component {
    }
 
    static calculateNearbyDate(eventsIn, msDate) {
-      console.debug("[calculateNearbyDate] <<<", eventsIn, msDate)
+      console.debug("[calculateNearbyDate] <<<", eventsIn, msDate, new Date(msDate || Date.now()))
 
       let distances =
          eventsIn.map((event, index) => {
@@ -89,7 +91,7 @@ export default class EventSpans extends Component {
    static yearDateFor(event, calendarySlug) {
       let memo = event.memoes.find(m => m.calendary_slug == calendarySlug) || event.memoes[0]
 
-      return memo.year_date
+      return memo?.year_date
    }
 
    static easterDate(yearIn, style) {
@@ -100,7 +102,7 @@ export default class EventSpans extends Component {
    }
 
    static fixedYearForYearDate(yearDate, year) {
-      return yearDate.split('.').reverse().join("") >= "0901" ? year - 1 : year
+      return yearDate && yearDate.split('.').reverse().join("") >= "0901" ? year : year + 1
    }
 
    static dateFor(yearDate, msDate, style) {
@@ -108,12 +110,12 @@ export default class EventSpans extends Component {
 
       let dateIn = new Date(msDate || Date.now()),
           yearIn = dateIn.getFullYear(),
-          m = yearDate.match(/(?<sign>[+-])(?<indent>.*)|(?<yearM>.*)(?<divisor>[%<>~])(?<dateM>.*)/),
+          m = yearDate && yearDate.match(/(?<sign>[+-])(?<indent>.*)|(?<yearM>.*)(?<divisor>[%<>~])(?<dateM>.*)/),
           date, year, datePre, gapIn, gap, mul
 
       if (!m) {
          year = this.fixedYearForYearDate(yearDate, yearIn)
-         date = new Date(Date.parse((yearDate.concat("." + year)).split('.').reverse().join('-')))
+         date = yearDate && new Date(Date.parse((yearDate.concat("." + year)).split('.').reverse().join('-')))
       } else if (m[1]) {
          mul = m[1] == '-' ? -1 : 1
 
@@ -143,6 +145,8 @@ export default class EventSpans extends Component {
 
          date = new Date(datePre - gap * 24 * 60 * 60 * 1000)
       }
+
+      console.debug("[dateFor] >>>", date)
 
       return date
    }
@@ -206,7 +210,7 @@ length + 1
                      kindName={event.kind_name}
                      place={event.place}
                      id={event.id}
-                     date={event.date.toLocaleDateString('ru-RU')}
+                     date={event.date?.toLocaleDateString('ru-RU')}
                      slug={this.props.slug}
                      titles={event.titles}
                      scripta={event.scripta} />)}</ul></div>)}}

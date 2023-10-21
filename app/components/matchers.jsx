@@ -38,6 +38,7 @@ export function matchLetters(textIn, context) {
       break
    case 'ЦС':
       res = ! text.match(/^[҂҃҄҇꙼꙾ⷣⷮ꙽ꙿА-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
+      break
    case 'РУ':
       res = ! text.match(/^[А-ЯЁІѢѲѴа-яёіѣѳѵ:,.!;\-\/*()0-9«»́–—\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
       break
@@ -219,7 +220,7 @@ export function matchAlphabeths(objectIn) {
 }
 
 export function matchSelection(value, _context, state) {
-   return !state.start || !state.end
+   return !Number.isInteger(state.start) || !Number.isInteger(state.end)
 }
 
 export function matchEmptyCollection(value) {

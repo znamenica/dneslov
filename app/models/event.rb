@@ -244,6 +244,56 @@ class Event < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'places.id', 'place_descriptions.text')
    end
 
+   scope :with_short_memoes, -> context do
+      language_codes = [ context[:locales] ].flatten
+      cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""
+
+      selector = "COALESCE((WITH __memoes AS (
+                       SELECT DISTINCT ON(memoes.id)
+                              memoes.id AS id,
+                              memoes.year_date AS year_date,
+                              jsonb_object_agg(DISTINCT COALESCE(memo_slugs.text, 'Null'),
+                                                        order_titles_memoes.text) AS orders,
+                              memo_titles.text AS title
+                         FROM memoes
+                         JOIN calendaries
+                           ON calendaries.id = memoes.calendary_id
+                         JOIN slugs AS calendary_slugs
+                           ON calendary_slugs.sluggable_id = calendaries.id
+                          AND calendary_slugs.sluggable_type = 'Calendary'
+                          #{cslugs_rule}
+              LEFT OUTER JOIN descriptions AS memo_titles
+                           ON memo_titles.describable_id = memoes.id
+                          AND memo_titles.describable_type = 'Memo'
+                          AND memo_titles.type = 'Title'
+                          AND memo_titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN memo_orders
+                           ON memo_orders.memo_id = memoes.id
+              LEFT OUTER JOIN orders
+                           ON orders.id = memo_orders.order_id
+              LEFT OUTER JOIN slugs AS memo_slugs
+                           ON memo_slugs.sluggable_id = orders.id
+                          AND memo_slugs.sluggable_type = 'Order'
+              LEFT OUTER JOIN memo_orders AS memo_orders_memoes_join
+                           ON memo_orders_memoes_join.memo_id = memoes.id
+              LEFT OUTER JOIN orders AS orders_memoes_join
+                           ON orders_memoes_join.id = memo_orders_memoes_join.order_id
+              LEFT OUTER JOIN descriptions AS order_titles_memoes
+                           ON order_titles_memoes.describable_id = orders_memoes_join.id
+                          AND order_titles_memoes.describable_type = 'Order'
+                          AND order_titles_memoes.type IN ('Tweet')
+                          AND order_titles_memoes.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE memoes.event_id = events.id
+                          AND memoes.bond_to_id IS NULL
+                          AND memoes.id IS NOT NULL
+                     GROUP BY memoes.id, year_date, title)
+                       SELECT jsonb_agg(__memoes)
+                         FROM __memoes), '[]'::jsonb) AS _memoes"
+
+      #binding.pry
+      select(selector).group(:id)
+   end
+
    scope :with_memoes, -> context do
       language_codes = [ context[:locales] ].flatten
       cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""

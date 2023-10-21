@@ -41,6 +41,10 @@ export default class JsonEditor extends Component {
    @flow('componentWillUnmountBefore')
    componentWillUnmount() {}
 
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    // events
    onChange(valueIn) {
       console.debug("[onChange] <<< valueIn:", valueIn["json"], valueIn)
@@ -58,14 +62,14 @@ export default class JsonEditor extends Component {
    }
 
    renderValue() {
-      if (this.state.value) {
-         switch (this.state.value.constructor.name) {
+      if (this.props.value) {
+         switch (this.props.value.constructor.name) {
             case "String":
                try {
-                  return JSON.parse(this.state.value)
+                  return JSON.parse(this.props.value)
                } catch (e) {}
             case "Object":
-               return this.state.value
+               return this.props.value
          }
       }
 

@@ -226,7 +226,6 @@ export default class Memory extends Component {
 
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
-      console.log("[calcEventDates] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='row'>

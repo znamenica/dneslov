@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_18_172555) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_21_180142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -179,7 +179,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_172555) do
     t.boolean "feasible", default: false, null: false
     t.string "state_code", null: false
     t.index ["memory_id", "id"], name: "index_memory_names_on_memory_id_and_id"
-    t.index ["memory_id", "nomen_id"], name: "index_memory_names_on_memory_id_and_nomen_id", unique: true
+    t.index ["memory_id", "nomen_id", "state_code"], name: "index_memory_names_on_memory_id_and_nomen_id_and_state_code", unique: true
     t.index ["memory_id"], name: "index_memory_names_on_memory_id"
     t.index ["nomen_id"], name: "index_memory_names_on_nomen_id"
   end

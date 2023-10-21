@@ -114,22 +114,25 @@ class Nomen < ActiveRecord::Base
 
    singleton_class.send(:alias_method, :t, :by_token)
 
-   validates_presence_of :bind_kind
+   validates_presence_of :bind_kind, :bind_kind_path
    validates_presence_of :bond_to_id, if: :bond?
    validates_absence_of :bond_to_id, unless: :bond?
 
    before_validation -> { self.bind_kind_name ||= 'несвязаное' }, on: :create
+   before_validation :fill_bind_kind_path
    after_save :fill_root_id, unless: :root_id?
 
    def bond?
       bind_kind_name != 'несвязаное'
    end
 
-   def store_bind_kind_path!
+   def fill_bind_kind_path
       parent = bond_to.nomina.where(root_id: self.root_id).first || bond_to.nomina.first if bond_to_id
-      self.bind_kind_path ||= [parent&.store_bind_kind_path!, bind_kind.order].compact.join(".")
+      self.bind_kind_path = [parent&.store_bind_kind_path!, bind_kind.order].compact.join(".")
+   end
 
-      save! if changed?
+   def store_bind_kind_path!
+      save! if fill_bind_kind_path && changed?
 
       self.bind_kind_path
    end

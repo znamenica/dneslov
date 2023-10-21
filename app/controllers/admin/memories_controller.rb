@@ -21,7 +21,7 @@ class Admin::MemoriesController < Admin::CommonController
       params.require(:memory).permit(
          :id, :covers_to_id, :bond_to_id, :short_name, :council, :quantity, :base_year,
          slug_attributes: %i(id text),
-         memory_names_attributes: %i(id name_id state_code feasible ored _destroy),
+         memory_names_attributes: %i(id nomen_id state_code feasible ored _destroy),
          events_attributes: [
             :id, :happened_at, :kind_code, :person_name, :type_number,
             :about_string, :tezo_string, :council, :place_id, :item_id, :_destroy,
