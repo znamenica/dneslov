@@ -49,8 +49,8 @@ Rails.application.routes.draw do
    get '/images/*path' => 'images#cache', format: false
    get '/:lat' => 'errors#show', constraints: { lat: /[a-z]+/ }
 
-   get '/:slug' => 'memories#show'#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
-   get '/:slug/:event' => 'events#show', constraints: { event: /[0-9]{1,6}/ }
-   get '/:c/:slug' => 'memories#show'
-   get '/:c/:slug/:event' => 'events#show', constraints: { event: /[0-9]{1,6}/ }
+   get '/:slug' => 'memories#show', as: :slug#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
+   get '/:slug/:event' => 'events#show', as: :slug_event, constraints: { event: /[0-9]{1,6}/ }
+   get '/:c/:slug' => 'memories#show', as: :cslug
+   get '/:c/:slug/:event' => 'events#show', as: :cslug_event, constraints: { event: /[0-9]{1,6}/ }
 end

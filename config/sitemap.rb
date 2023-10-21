@@ -22,11 +22,20 @@ SitemapGenerator::Sitemap.create do
    add('/', priority: 1, changefreq: 'daily')
    add('/about', priority: 1, changefreq: 'monthly')
 
-   # Add '/articles'
-   #
-   #   add articles_path, :priority => 0.7, :changefreq => 'daily'
-
    Memory.find_each do |memory|
       add(slug_path(memory.slug.text), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+
+      memory.events.each do |event|
+         add(slug_event_path(memory.slug.text, event), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+
+         event.calendaries.each do |calendary|
+            add(cslug_event_path(calendary.slug.text, memory.slug.text, event), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+         end
+      end
+
+      memory.calendaries.each do |cal|
+         add(slug_path(cal.slug.text), priority: 0.7, changefreq: 'daily')
+         add(cslug_path(cal.slug.text, memory.slug.text), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+      end
    end
 end

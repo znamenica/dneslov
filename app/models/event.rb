@@ -64,7 +64,6 @@ class Event < ActiveRecord::Base
    belongs_to :item, optional: true
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
    has_many :kind_titles, through: :kind, source: :names
-
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs = nil
          if calendary_slugs
@@ -75,6 +74,7 @@ class Event < ActiveRecord::Base
          end
       end
    end
+   has_many :calendaries, -> { distinct }, through: :memos
 
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :calendaries, -> { distinct }, through: :memos
