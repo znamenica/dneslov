@@ -158,6 +158,6 @@ class Subject < ActiveRecord::Base
    validates :meta, json: { schema: JSON_SCHEMA }
 
    def order
-      meta["order"]
+      meta["order"] || 0
    end
 end

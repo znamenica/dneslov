@@ -9,7 +9,7 @@ class UriValidator < ActiveModel::EachValidator
       # validates :url, format: { with: /\.(?i-mx:jpg|png)\z/ } # TODO
 
       if [301, 303, 307].include?(response.code.to_i)
-         new_url = response[:headers]["Location"]
+         new_url = response[:headers]&.[]("Location") || value
          if options[:allow_lost_slash] && value + "/" == new_url
             return true
          end
@@ -22,9 +22,9 @@ class UriValidator < ActiveModel::EachValidator
       unless [200, 302].include?(response.code.to_i)
          raise SocketError
       end
-   rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
-      record.errors[attribute] << I18n.t('activerecord.errors.invalid_uri', uri: value)
+   rescue URI::InvalidURIError, Addressable::URI::InvalidURIError, ArgumentError
+      record.errors.add(attribute, :invalid_uri, message: I18n.t('activerecord.errors.invalid_uri', uri: value))
    rescue SocketError, Errno::ECONNREFUSED, OpenSSL::SSL::SSLError, Net::OpenTimeout
-      record.errors[attribute] << I18n.t('activerecord.errors.inaccessible_uri', uri: value)
+      record.errors.add(attribute, :inaccessible_uri, message: I18n.t('activerecord.errors.inaccessible_uri', uri: value))
    end
 end

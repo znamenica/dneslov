@@ -63,6 +63,7 @@ class Event < ActiveRecord::Base
    belongs_to :place, optional: true
    belongs_to :item, optional: true
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
+   has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :kind_titles, through: :kind, source: :names
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs = nil
@@ -75,24 +76,17 @@ class Event < ActiveRecord::Base
       end
    end
    has_many :calendaries, -> { distinct }, through: :memos
-
-   has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
-   has_many :calendaries, -> { distinct }, through: :memos
    has_many :titles, -> { title }, as: :describable, class_name: :Description do
       def by_default this
         self.or(Appellation.merge(this.kind.names)).order(:describable_type).distinct
       end
    end
-
    has_many :default_titles, -> { distinct }, through: :kind, source: :names, class_name: :Appellation
    has_many :all_titles, ->(this) do
       where( describable_type: "Event", describable_id: this.id, kind: "Title" )
         .or( Appellation.merge(this.kind.names) )
      .order( :describable_type )
    end, primary_key: nil, class_name: :Description
-
-   # synod : belongs_to
-   # czin: has_one/many
 
    scope :notice, -> { where(kind_code: NOTICE) }
    scope :usual, -> { where(kind_code: USUAL) }

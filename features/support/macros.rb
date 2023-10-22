@@ -84,19 +84,18 @@ module MacrosSupport
       new_attrs = {}
 
       search_attrs.to_a.each do |(attr, value)|
-         if value.is_a?( String ) && /^\^(?<match_value>.*)/ =~ value
+         if value.is_a?(String) && /^\^(?<match_value>.*)/ =~ value
             /(?<base_attr>[^\.]+)(?:\.(?<relation>.*))?/ =~ attr
             /(?<attr>[^:]*)(?::(?<modelname>.*))?/ =~ base_attr
-#            binding.pry
-            submodel = ( modelname || base_attr.singularize ).camelize.constantize
+            submodel = (modelname || base_attr).camelize.constantize
             new_attrs["#{attr}_id"] =
             if relation
-               subattr = base_field( modelname || relation.singularize )
-               submodel.joins( relation.to_sym ).where( relation => { subattr => match_value }).first.id
+               subattr = base_field(modelname || relation.singularize)
+               submodel.joins(relation.to_sym).where(relation => { subattr => match_value }).first.id
             else
-               subattr = base_field( modelname || base_attr.singularize )
-               submodel.where( subattr => match_value ).first.id ;end
-            if model.new.respond_to?( "#{attr}_type" )
+               subattr = base_field(modelname || base_attr)
+               submodel.where(subattr => match_value).first.id ;end
+            if model.new.respond_to?("#{attr}_type")
                new_attrs["#{attr}_type"] = modelname.camelize ; end
          else
             value = value.is_a?(String) && YAML.load(value) || value
@@ -107,16 +106,16 @@ module MacrosSupport
    def try_create model, *args
       search_attrs = args.select { |x| x.is_a?(Hash) }.first
       attrs = args.select { |x| x.is_a?(Hash) }.last
-      new_attrs = expand_attributes( model, search_attrs )
+      new_attrs = expand_attributes(model, search_attrs)
 
-      if model.is_a?( Symbol )
+      if model.is_a?(Symbol)
          syms = args.select { |x| x.is_a?(Symbol) }
-         object = FactoryBot.build( model, *syms, new_attrs )
+         object = FactoryBot.build(model, *syms, new_attrs)
          #  binding.pry
          object.save
          object
       else
-         model.create( attrs.merge( new_attrs ) ) ;end ;end
+         model.create(attrs.merge(new_attrs)) ;end ;end
 
    def create model, *args
       object = try_create(model, *args)
@@ -124,11 +123,10 @@ module MacrosSupport
       object ;end
 
    def find_or_create model, search_attrs, attrs = {}
-      new_attrs = expand_attributes( model, search_attrs )
+      new_attrs = expand_attributes(model, search_attrs)
 
-      # binding.pry
       model_class = model.is_a?(Symbol) && model.to_s.camelize.constantize || model
-      model_class.where( new_attrs ).first || create( model, search_attrs, attrs ) ;end
+      model_class.where(new_attrs).first || create(model, search_attrs, attrs) ;end
 
    def get_type type_name
       types = { 'целый' => :integer, 'строка' => :string, 'текст' => :text }
@@ -150,24 +148,23 @@ module MacrosSupport
                /slug|слуг[а]/                         => :text,
                /link|ссылк[аиу]/                      => :url }
 
-      hash.reduce( nil ) { |s, (re, prop)| re =~ name && prop || s } ;end
+      hash.reduce(nil) { |s, (re, prop)| re =~ name && prop || s } ;end
 
    def relation_field name
       hash = { /description|описан(ий|ие|ия|ье)/      => 'describable' }
 
-      hash.reduce( nil ) { |s, (re, prop)| re =~ name && prop || s } ;end
+      hash.reduce(nil) { |s, (re, prop)| re =~ name && prop || s } ;end
 
    def model_of name
-      MODELS.reduce( nil ) { |s, (re, model)| re =~ name && model || s } ;end
+      MODELS.reduce(nil) { |s, (re, model)| re =~ name && model || s } ;end
 
    def relation_of name
-      model_of( name ).to_s.tableize ;end
+      model_of(name).to_s.tableize ;end
 
    def extract_key_to r, key
-      similar_to = r.delete( key )
+      similar_to = r.delete(key)
       if similar_to
-         r[key] = Name.where( similar_to.deep_dup ).first ; end ; end
-
+         r[key] = Name.where(similar_to.deep_dup).first ; end ; end
 
    def make_attrs_for hash, model
       joins = []
@@ -177,8 +174,8 @@ module MacrosSupport
          if /^\^(?<match_value>.*)$/ =~ value
             attrs = attr.to_s.split('.')
 
-            new_attrs = attrs[0..-2].map( &:to_sym )
-            joins.concat( new_attrs )
+            new_attrs = attrs[0..-2].map(&:to_sym)
+            joins.concat(new_attrs)
             model_name = model.to_s
             new_attrs = new_attrs.map do |a|
                model_name = model.reflections[a.to_s].class_name
@@ -191,8 +188,8 @@ module MacrosSupport
             /(?<real_attr>[^>]*)(?:>(?<relation>.*))?/ =~ attr1
 
             if not real_attr.empty?
-               new_attrs << ( model_name.constantize.try( :default_key ) ||
-                  "#{real_attr}_id" )
+               new_attrs << (model_name.constantize.try(:default_key) ||
+                  "#{real_attr}_id")
 
                target_model_name ||= real_attr.singularize
                model = target_model_name.camelize.constantize
@@ -207,27 +204,28 @@ module MacrosSupport
 
             sample =
             if relation
-               subattr = base_field( relation.singularize )
+               subattr = base_field(relation.singularize)
                # binding.pry
-               model.joins( relation.to_sym ).where( relation.tableize => { subattr => match_value }).first
+               model.joins(relation.to_sym).where(relation.tableize => { subattr => match_value }).first
             else
-               model.where( base_field( target_model_name ) => match_value ).first ;end
+               model.where(base_field(target_model_name) => match_value).first
+            end
 
             new_value = /id$/ =~ new_attrs.last && sample.id ||
-               sample.try( :default_key ) || sample
+               sample.try(:default_key) || sample
 
-            [new_attrs.join( '.' ), new_value]
+            [new_attrs.join('.'), new_value]
          else
             [attr, value] ;end;end
-      .concat( [add_attrs] ).compact.to_h
+      .concat([add_attrs]).compact.to_h
 
       [attrs, joins] ;end
 
    def merge_array table, options = {}
       table.map do |e|
          [options[:merge]].compact.flatten.select{ |h| e[h] }.each do |h|
-            e.merge!( e[h] )
-            e.delete( h ) ; end
+            e.merge!(e[h])
+            e.delete(h) ; end
          e.map { |k, v| [k, v.to_s] }.to_h ; end ; end ; end
 
 World(MacrosSupport)

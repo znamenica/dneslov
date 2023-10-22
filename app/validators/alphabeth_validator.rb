@@ -32,9 +32,9 @@ class AlphabethValidator < ActiveModel::EachValidator
 
       if res && value.present? && value !~ ( re = /^[#{res}]+$/ )
          invalid_is = []
-         chars = value.unpack( "U*" ).map.with_index do |c, i|
+         chars = value.unpack("U*").map.with_index do |c, i|
             begin
-               re !~ [ c ].pack( "U" ) && c || nil
+               re !~ [ c ].pack("U") && c || nil
             rescue Encoding::CompatibilityError
                invalid_is << i
                nil
@@ -42,18 +42,15 @@ class AlphabethValidator < ActiveModel::EachValidator
          end.compact.uniq.sort.pack( "U*" )
 
          if chars.present?
-            record.errors[ attribute ] <<
-            I18n.t('activerecord.errors.invalid_language_char',
-               alphabeth: record.alphabeth_code,
-               chars: chars)
+            record.errors.add(attribute, :invalid_language_char,
+               message: I18n.t('activerecord.errors.invalid_language_char', alphabeth: record.alphabeth_code, chars: chars))
          end
 
          if invalid_is.any?
             parts = invalid_is.map { |i| value[ i - 2..i + 2 ] }
-            record.errors[ attribute ] <<
-            I18n.t( 'activerecord.errors.invalid_utf8_char',
-               alphabeth: record.alphabeth_code,
-               parts: '"' + parts.join('", "') + '"')
+            record.errors.add(attribute, :invalid_language_char,
+               message: I18n.t( 'activerecord.errors.invalid_utf8_char', alphabeth: record.alphabeth_code,
+               parts: '"' + parts.join('", "') + '"'))
          end
       end
    end

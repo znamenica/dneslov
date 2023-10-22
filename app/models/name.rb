@@ -9,6 +9,8 @@ class Name < ActiveRecord::Base
    belongs_to :alphabeth, primary_key: :key, foreign_key: :alphabeth_code, class_name: :Subject
 
    has_many :nomina
+   has_many :memory_names, through: :nomina
+   has_many :memories, through: :memory_names
 
    has_alphabeth on: { text: [ :nosyntax, allow: " ‑" ] }
 

@@ -5,7 +5,7 @@ class Service < ActiveRecord::Base
 
    has_many :service_scripta
    has_many :scripta, through: :service_scripta
-   has_many :canto, through: :service_scripta, source: :scriptum
+   has_many :cantoes, through: :service_scripta, source: :scriptum
    has_many :chants, through: :service_scripta, source: :scriptum
    has_many :orisons, through: :service_scripta, source: :scriptum
    has_many :canticles, through: :service_scripta, source: :scriptum

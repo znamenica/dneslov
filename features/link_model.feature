@@ -79,15 +79,15 @@
 
 
    @language
-   Сценарий: Действительная связь вики ссылки и её описания
-      Допустим есть иконная ссылка "http://www.wiki.ru" без описания
-
-      Если создадим новое описание с полями:
-        | language_code    | ру                    |
-        | alphabeth_code   | РУ                    |
-        | text             | Мурмур                |
-        | describable:link | ^http://www.wiki.ru   |
-      То русская иконная ссылка "http://www.wiki.ru" будет действительной
+#   Сценарий: Действительная связь вики ссылки и её описания
+#      Допустим есть иконная ссылка "http://www.wiki.ru" без описания
+#
+#      Если создадим новое описание с полями:
+#        | language_code    | ру                    |
+#        | alphabeth_code   | РУ                    |
+#        | text             | Мурмур                |
+#        | describable:link | ^http://www.wiki.ru   |
+#      То русская иконная ссылка "http://www.wiki.ru" будет действительной
 
 
    @language
@@ -99,5 +99,6 @@
          """
          Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
          Descriptions is invalid
+         Url is inaccessible at http://www.wiki.ru
          """
       И ссылки "http://www.wiki.ru" не будет
