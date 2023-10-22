@@ -42,8 +42,5 @@ module Dneslov
 
       # queue adapter
       config.active_job.queue_adapter = :sidekiq
-
-      # https://guides.rubyonrails.org/active_record_multiple_databases.html#migrate-to-the-new-connection-handling
-      config.active_record.legacy_connection_handling = false
    end
 end
