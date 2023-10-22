@@ -23,7 +23,7 @@ application up and running.
 ### Requirements
 
 List of the requirements (packages are named as in ALT conventions) are the following:
-
+0. gcc-c++
 1. libhiredis-devel
 2. libsnappy-devel
 3. libruby-devel
