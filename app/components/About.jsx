@@ -55,7 +55,7 @@ export default class About extends Component {
                                  <td>{r}</td>
                                  <td>
                                     {index == 0 &&
-                                       "1.1" ||
+                                       "1.3" ||
                                        <i
                                           className='small material-icons green'>
                                           done</i>}
