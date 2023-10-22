@@ -2,6 +2,8 @@
 # related_to[belongs_to]      - отношение к предмету
 #
 class Slug < ActiveRecord::Base
+   RE = /^[а-яё0-9]{1,6}$/
+
    belongs_to :sluggable, polymorphic: true
 
    has_many :memories, primary_key: :text, foreign_key: :order
@@ -31,4 +33,7 @@ class Slug < ActiveRecord::Base
          first = words[ 0 ][ 0...5 - last.size ]
          first + last
       else
-         words.first[ 0..5 ] ;end;end;end
+         words.first[ 0..5 ]
+      end
+   end
+end

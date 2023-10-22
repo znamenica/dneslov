@@ -120,7 +120,8 @@ export class Intro extends Component {
    }
 
    state = {
-      enabled: this.isRunRequired(),
+      enabled: this.props.enabled,
+      runRequired: this.isRunRequired(),
       introLetterDate: this.calculateLatterStepDateStamp(this.props)
    }
 
@@ -158,6 +159,10 @@ export class Intro extends Component {
       }, '0')
    }
 
+   getStyle() {
+      return this.state.runRequired && ' active' || ''
+   }
+
    // events
    handleNameChange(name) {
       const { cookies } = this.props
@@ -166,7 +171,7 @@ export class Intro extends Component {
    }
 
    onRunIntroClick() {
-      this.setState({ enabled: true })
+      this.setState({ enabled: true, runRequired: false })
       this.setLatterStepDateStamp()
    }
 
@@ -175,7 +180,7 @@ export class Intro extends Component {
    }
 
    render() {
-      return (
+      return [
          <div className="fixed-action-btn">
             <Steps
                enabled={this.state.enabled}
@@ -199,9 +204,12 @@ export class Intro extends Component {
                onExit={this.onExitIntro.bind(this)}
             />
             <a
-               className="run-intro btn-floating btn-large waves-effect waves-light terracota"
+               className={"run-intro btn shockwave btn-specific" + this.getStyle()}
                onClick={this.onRunIntroClick.bind(this)}>
-               <i className="material-icons">account_balance_wallet</i></a>
-</div>)}}
+               <i className="material-icons">account_balance_wallet</i>
+            </a>
+         </div>]
+   }
+}
 
 export default withCookies(Intro)

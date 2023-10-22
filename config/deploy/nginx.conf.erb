@@ -1,0 +1,74 @@
+upstream dneslov_rails {
+   server unix:<%= fetch(:app_server_socket) %> fail_timeout=0;
+}
+
+# https://docs.nginx.com/nginx/admin-guide/security-controls/terminating-ssl-http/
+server {
+   listen 80;
+   <% if fetch(:nginx_use_ssl) %>
+   listen 443 ssl;
+   <% end %>
+
+   root <%= current_path %>/public;
+
+   server_name <%= fetch(:nginx_domains) %>;
+
+   keepalive_timeout <%= fetch(:nginx_read_timeout) %>;
+   client_max_body_size 4G;
+
+   <% if fetch(:nginx_use_ssl) %>
+   ssl_protocols TLSv1.2;
+   ssl_ciphers HIGH:!aNULL:!MD5:!3DES;
+   ssl_certificate_key  <%= File.join(fetch(:nginx_ssl_certificate_key_path), fetch(:nginx_ssl_certificate_key)) %>;
+   ssl_certificate      <%= File.join(fetch(:nginx_ssl_certificate_path), fetch(:nginx_ssl_certificate)) %>;
+   <% end %>
+   # add_header Strict-Transport-Security 'max-age=604800';   
+
+   try_files $uri @dneslov;
+
+   error_page 500 502 503 504 /500.html;
+   location = /500.html {
+      root <%= current_path %>/public;
+   }
+
+   location ~ ^/(assets)/ {
+      gzip_static on;
+
+      add_header Cache-Control public;
+      expires 4w;
+      gzip on;
+      gzip_vary on;
+      gzip_proxied any;
+      gzip_disable "MSIE [1-6]\.";
+      gzip_comp_level 6;
+      gzip_types application/x-javascript text/css image/x-icon image/png image/jpeg image/gif;
+   }
+
+   location ~ ^/(images)/ {
+      set             $redis_key "$uri";
+      redis_pass      127.0.0.1:6379;
+      default_type    image/webp;
+      error_page      404 500 502 503 504 = @dneslov;
+   }
+
+   location ~ ^/(dneslov.*png$|robots.txt$|favicons/|fonts/|.*\.json$|.*\.gz$|$) {
+      root            /var/www/dneslov/current/public;
+
+      error_page      403 404 405 = @dneslov;
+   }
+
+   location ~ ^/(?![а-яё0-9]+|dashboard|auth|about|index|icons|short_\w+) {
+      return          404;
+   }
+
+   location @dneslov {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Ssl on;
+      proxy_read_timeout 30;
+      proxy_redirect off;
+      proxy_pass http://dneslov_rails;
+   }
+}

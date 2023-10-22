@@ -89,12 +89,21 @@ export const memoMeta = {
             "Событие должно быть избрано": /^$/
          }
       },
+      add_date: {
+         kind: 'text',
+         title: 'Пора добавления',
+         placeholder: 'Введи пору',
+         display_scheme: '12-6-3-3',
+         validations: {
+            "Пора отсутствует":matchEmptyObject,
+         }
+      },
       year_date: {
          kind: 'text',
          title: 'Дата в году',
          placeholder: 'Введи дату в году',
          data: { length: '7' },
-         display_scheme: '12-6-2-2',
+         display_scheme: '12-3-2-2',
          validations: {
             "Слишком длинное значение даты в году": /^.{8,}$/,
             "Годовая дата отсутствует": (value, context) => {
@@ -113,12 +122,13 @@ export const memoMeta = {
          codeNames: {
             '': 'Избери вид привязки...',
             'несвязаный': 'Не привязаный',
-            'соборный': 'Соборный',
+            'соборный': 'Соборный помин',
             'навечерие': 'Навечерие',
             'предпразднество': 'Предпразднество',
             'попразднество': 'Попразднество',
          },
-         display_scheme: '12-6-3-3',
+         display_scheme: '12-3-3-3',
+         subscribeTo: '@bond_to_id',
          validations: {
             'Пункт из списка должен быть выбран': matchEmptyObject,
             'Вид привязки не должен иметь значение "Не привязаный" в случае, если привязка задана': (value, context) => {
@@ -138,8 +148,11 @@ export const memoMeta = {
          pathname: 'short_memoes',
          key_name: 'value',
          value_name: 'key',
+         subscribeTo: '@bind_kind_code',
+         visible_if: { bind_kind_code: ["соборный", "навечерие", "предпразднество", "попразднество"] },
          context_names: {
            'calendary_id': true,
+           'memory_id': true,
          },
          validations: {
             'Привязаная дата не должна соответствовать текущей дате': (value, context) => {
@@ -149,15 +162,6 @@ export const memoMeta = {
                return value && yearDate == context.year_date && context.bind_kind_code != 'соборный'
             }
          },
-      },
-      add_date: {
-         kind: 'text',
-         title: 'Пора добавления',
-         placeholder: 'Введи пору',
-         display_scheme: '12-6-3-3',
-         validations: {
-            "Пора отсутствует":matchEmptyObject,
-         }
       },
       memo_orders: {
          kind: 'collection',
@@ -212,6 +216,7 @@ export const memoMeta = {
                title: 'Заголовок',
                placeholder: 'Введи заголовок',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   "Заголовок отсутствует": matchEmptyObject,
                   'Заголовок содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -220,13 +225,14 @@ export const memoMeta = {
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -235,13 +241,14 @@ export const memoMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -249,41 +256,41 @@ export const memoMeta = {
             },
          }
       },
-      links: {
+      notes: {
          kind: 'collection',
-         title: 'Ссылки',
-         action: 'Добавь ссылку',
-         single: 'Ссылка',
-         placeholder: 'Введи ссылку',
+         title: 'Заметки',
+         action: 'Добавь заметку',
+         single: 'Заметка',
+         placeholder: 'Введи заметку',
+         source: "descriptions",
+         filter: { type: "Note" },
          display_scheme: '12-12-12-12',
-         validations: {
-            "Языки в ссылках не могут совпадать": matchLanguages,
-            "Азбуки в ссылках не могут совпадать": matchAlphabeths,
-         },
          meta: {
             id: {
                kind: 'hidden',
             },
-            url: {
-               kind: 'text',
-               title: 'Ссылка',
-               placeholder: 'Введи ссылка',
-               display_scheme: '12-12-6-6',
+            text: {
+               kind: 'tale',
+               title: 'Заметка',
+               placeholder: 'Введи заметку',
+               display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
-                  "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки": [ "!", UrlRegexp ],
+                  'Текст заметки отсутствует': matchEmptyObject,
+                  'Заметка содержит знаки вне перечня избранной азбуки': matchLetters,
                }
             },
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-6-3-3',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -292,13 +299,14 @@ export const memoMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-6-3-3',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -323,6 +331,7 @@ export const memoMeta = {
                title: 'Описание',
                placeholder: 'Введи описание',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст описания отсутствует': matchEmptyObject,
                   'Описание содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -331,13 +340,14 @@ export const memoMeta = {
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -346,17 +356,88 @@ export const memoMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-12-6-6',
+               display_scheme: '12-6-6-6',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
                }
+            },
+         }
+      },
+      links: {
+         kind: 'collection',
+         display_scheme: '12-12-12-12',
+         title: 'Ссылки',
+         action: 'Добавь ссылку',
+         placeholder: 'Введи ссылку',
+         source: "links",
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            url: {
+               kind: 'text',
+               title: 'Ссылка',
+               placeholder: 'Введи ссылку',
+               display_scheme: '12-12-6-6',
+               subscribeTo: '@alphabeth_code',
+               validations: {
+                  "Ссылка отсутствует": matchEmptyObject,
+                  "Неверный формат ссылки": [ "!", UrlRegexp ],
+               }
+            },
+            language_code: {
+               kind: 'dynamic',
+               title: 'Язык',
+               display_scheme: '12-4-2-2',
+               pathname: 'short_subjects',
+               humanized_name: 'language',
+               context_value: { k: "Language" },
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
+               validations: {
+                  'Избранный язык не соотвествует избранной азбуке': matchCodes,
+                  'Язык из списка должен быть выбран': matchEmptyObject,
+               }
+            },
+            alphabeth_code: {
+               kind: 'dynamic',
+               title: 'Азбука',
+               display_scheme: '12-4-2-2',
+               pathname: 'short_subjects',
+               humanized_name: 'alphabeth',
+               context_value: { k: "Alphabeth" },
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
+               validations: {
+                  'Избранная азбука не соотвествует избранному языку': matchCodes,
+                  'Азбука из списка должна быть выбрана': matchEmptyObject,
+               }
+            },
+            type: {
+               kind: 'select',
+               title: 'Вид ссылки',
+               codeNames: {
+                  '': 'Избери вид текста...',
+                  'DescriptiveLink': 'Описательная ссылка',
+                  'ServiceLink': 'Службовая ссылка',
+                  'BeingLink': 'Бытийная ссылка',
+               },
+               display_scheme: '12-4-2-2',
+               validations: {
+                  'Пункт из списка должен быть выбран': matchEmptyObject,
+               },
             },
          }
       },

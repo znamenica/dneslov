@@ -1,3 +1,4 @@
+require 'pry'
 # Load DSL and set up stages
 require "capistrano/setup"
 
@@ -8,8 +9,9 @@ require 'capistrano/bundler' # Rails needs Bundler, right?
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/nginx'
-# require 'capistrano/rake'
+require 'capistrano/rake'
 require 'capistrano/rvm'
+require 'capistrano/sitemap_generator'
 # require 'capistrano/sidekiq'
 require "capistrano/systemd/multiservice"
 install_plugin Capistrano::Systemd::MultiService.new_service("sidekiq")
@@ -47,6 +49,7 @@ install_plugin Capistrano::Nginx
 # require "capistrano/rails/assets"
 # require "capistrano/rails/migrations"
 # require "capistrano/passenger"
+require 'capistrano-db-tasks'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }

@@ -1,4 +1,4 @@
-class ChangeIndexOnDescriptions < ActiveRecord::Migration[4.2]
+class ChangeIndexOnDescriptions < ActiveRecord::Migration[5.2]
    def change
       enable_extension "btree_gin"
 

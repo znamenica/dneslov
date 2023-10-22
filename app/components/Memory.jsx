@@ -17,12 +17,14 @@ export default class Memory extends Component {
       names: [],
       links: [],
       events: [],
-      cantoes: [],
-      selected_calendaries: [],
-      default_calendary_slug: null
+      scripta: [],
+      selectedCalendaries: [],
+      defaultCalendarySlug: null,
+      specifiedCalendarySlug: null,
+      calendarStyle: 'julian'
    }
 
-   static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration" ]
+   static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration", "Miracle", "Writing", "Resurrection", "Monasticry", "Council", "Marriage" ]
    static happenedAtKindCodes = [ "Miracle", "Appearance", "Writing", "Veneration", "Repose", "Resurrection" ]
 
    static getDerivedStateFromProps(props, state) {
@@ -42,7 +44,7 @@ export default class Memory extends Component {
             describedMemoIds: Memory.getDescribedMemoIds(describedMemoes),
             links: Memory.getLinks(props),
             iconLinks: Memory.getIconLinks(props),
-            cantoes: Memory.selectCantoes(props),
+            scripta: Memory.selectScripta(props),
             happenedAt: Memory.getHappenedAt(props)
          }
       }
@@ -51,8 +53,8 @@ export default class Memory extends Component {
    }
 
    static calculateDefaultCalendarySlug(props) {
-      return props.selected_calendaries &&
-         props.selected_calendaries.reduce((cal, calendarySlug) => {
+      return props.selectedCalendaries &&
+         props.selectedCalendaries.reduce((cal, calendarySlug) => {
             if (!cal) {
                cal = props.titles.reduce((cal, title) => {
                   if (!cal && title.calendary == calendarySlug) {
@@ -64,7 +66,7 @@ export default class Memory extends Component {
             }
 
             return cal
-         }, props.default_calendary_slug) || props.default_calendary_slug
+         }, props.defaultCalendarySlug) || props.defaultCalendarySlug
    }
 
    static collectKlugs(props) {
@@ -75,8 +77,8 @@ export default class Memory extends Component {
       }).flat().concat([ props.slug ]).compact().uniq()
    }
 
-   static selectCantoes(props) {
-      return props.cantoes.filter(c => { return c.text })
+   static selectScripta(props) {
+      return props.scripta.filter(c => { return c.text })
    }
 
    static getMsDate(props) {
@@ -89,7 +91,7 @@ export default class Memory extends Component {
 
    static getCalendaryTitle(props, cslug) {
       let title = props.events.reduce((tt, e) => {
-         return e.memoes.reduce((t, m) => { return t || cslug == m.calendary_slug && m.title }, tt)
+         return e.memoes.reduce((t, m) => { return t || cslug == m.calendary_slug && m.title || null }, tt)
       }, null)
 
       return title || props.short_name
@@ -147,7 +149,7 @@ export default class Memory extends Component {
    }
 
    static isInCalendaries(props, memo) {
-      let selected = props.selected_calendaries.filter(calendarySlug => {
+      let selected = props.selectedCalendaries.filter(calendarySlug => {
          return memo.calendary_slug == calendarySlug
       })
 
@@ -159,7 +161,7 @@ export default class Memory extends Component {
          return order || e.memoes.reduce((_order, m) => {
             return _order || this.isInCalendaries(props, m) && Object.values(m.orders)[0]
          }, order)
-      }, null)
+      }, props.order || null)
    }
 
    static getHappenedAt(props) {
@@ -174,15 +176,52 @@ export default class Memory extends Component {
    state = {}
 
    // custom
-   getCantoTitle(canto) {
+   ScriptumTable = {
+      'Irmos': 'Ирмос',
+      'Ikos': 'Икос',
+      'Troparion': 'Тропарь',
+      'Kontakion': 'Кондак',
+      'Stichira': 'Стихира',
+      'CryStichira': 'Воззвашна',
+      'Exapostilarion': 'Светилен',
+      'SessionalHymn': 'Седальна',
+      'Kanonion': 'Седальна канона',
+      'Kathismion': 'Седальна кафизмы',
+      'Polileosion': 'Седальна полиелея',
+      'Apostichus': 'Стиховна',
+      'Stichiron': 'Литийна',
+      'Praision': 'Хвалитна',
+      'Sedation': 'Степенна',
+      'Anatolion': 'Восточна',
+      'Resurrexion': 'Воскресна',
+      'Ipakoi': 'Ипакой', // на 17-й кафизмѣ
+      'Magnification': 'Величание',
+      'Prayer': 'Молитва',
+      'Orison': 'Моление',
+      'Canticle': 'Спевна',
+      'Chant': 'Песнопение',
+      'Canto': 'Песма',
+      'Bible': 'Библия',
+      'Scriptum': 'Текст',
+   }
+
+   getScriptumTitle(scriptum) {
       return [
          [
-            canto.type == "Troparion" && "Тропарь" || "Кондак",
-            canto.title && "«" + canto.title + "»",
+            this.ScriptumTable[scriptum.type],
+            scriptum.title && "«" + scriptum.title + "»",
          ].compact().join(" "),
-         canto.prosomeion_title && "подобен «" + canto.prosomeion_title + "»",
-         canto.tone && "глас " + canto.tone + "-й",
+         scriptum.prosomeion_title && "подобен «" + scriptum.prosomeion_title + "»",
+         scriptum.tone && "глас " + scriptum.tone + "-й",
       ].compact().join(", ")
+   }
+
+   sortedScripta() {
+      let keys = Object.keys(this.ScriptumTable)
+
+      return this.state.scripta.sort((a, b) => {
+         return keys.indexOf(a.type) - keys.indexOf(b.type)
+      })
    }
 
    render() {
@@ -197,7 +236,7 @@ export default class Memory extends Component {
                         color={this.getSlugColor(this.state.order)}
                         text={this.state.order} />
                      <Name
-                        short_name={this.state.short_name}
+                        short_name={this.props.short_name}
                         defaultNameInCalendary={this.state.title}
                         klugs={this.state.klugs}
                         names={this.props.names} />
@@ -223,14 +262,14 @@ export default class Memory extends Component {
                               url={link.url}
                               color={Memory.getColorForLink(link)}
                               text={Memory.getLinkText(link)} />)}</div></div></div>}
-            {this.state.cantoes.isPresent() &&
+            {this.state.scripta.isPresent() &&
                <div className='col s12'>
-                  {this.state.cantoes.map((canto) =>
+                  {this.sortedScripta().map((scriptum) =>
                      <div className='row'>
                         <div className='col s12 title'>
-                           {this.getCantoTitle(canto)}</div>
+                           {this.getScriptumTitle(scriptum)}</div>
                         <div className='col s12'>
-                           {canto.text}</div></div>)}</div>}
+                           {scriptum.text}</div></div>)}</div>}
             {this.props.events.isPresent() &&
                <div className='col s12'>
                   <div className='row'>
@@ -239,6 +278,9 @@ export default class Memory extends Component {
                      <div className='col s12'>
                         <EventSpans
                            msDate={this.state.msDate}
+                           slug={this.props.slug}
+                           calendarStyle={this.props.calendarStyle}
                            describedMemoIds={this.state.describedMemoIds}
                            defaultCalendarySlug={this.state.defaultCalendarySlug}
+                           specifiedCalendarySlug={this.props.specifiedCalendarySlug}
                            events={this.props.events} /></div></div></div>}</div>)}}

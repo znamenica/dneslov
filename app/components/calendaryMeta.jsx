@@ -73,6 +73,7 @@ export const calendaryMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования языка...',
+         subscribeTo: '@alphabeth_code',
          validations: {
             'Избранный язык не соотвествует избранной азбуке': matchCodes,
             'Язык из списка должен быть выбран': matchEmptyObject,
@@ -88,6 +89,7 @@ export const calendaryMeta = {
          key_name: 'value',
          value_name: 'key',
          placeholder: 'Начни ввод наименования азбуки...',
+         subscribeTo: '@language_code',
          validations: {
             'Избранная азбука не соотвествует избранному языку': matchCodes,
             'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -122,6 +124,7 @@ export const calendaryMeta = {
                placeholder: 'Введи имя',
                name: 'text',
                display_scheme: '12-12-6-6',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Текст имени отсутствует': matchEmptyObject,
                   'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
@@ -137,6 +140,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -152,6 +156,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -177,10 +182,11 @@ export const calendaryMeta = {
             text: {
                kind: 'tale',
                title: 'Имя',
+               name: 'text',
                placeholder: 'Введи имя',
                display_scheme: '12-12-12-12',
+               subscribeTo: '@alphabeth_code',
                validations: {
-               name: 'text',
                   'Текст имени отсутствует': matchEmptyObject,
                   'Набранный текст содержит знаки вне перечня избранной азбуки': matchLetters,
                }
@@ -195,6 +201,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -210,6 +217,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -253,6 +261,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -268,6 +277,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,
@@ -311,6 +321,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования языка...',
+               subscribeTo: '@alphabeth_code',
                validations: {
                   'Избранный язык не соотвествует избранной азбуке': matchCodes,
                   'Язык из списка должен быть выбран': matchEmptyObject,
@@ -326,6 +337,7 @@ export const calendaryMeta = {
                key_name: 'value',
                value_name: 'key',
                placeholder: 'Начни ввод наименования азбуки...',
+               subscribeTo: '@language_code',
                validations: {
                   'Избранная азбука не соотвествует избранному языку': matchCodes,
                   'Азбука из списка должна быть выбрана': matchEmptyObject,

@@ -7,48 +7,40 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Dneslov
-  class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+   class Application < Rails::Application
+      # Settings in config/environments/* take precedence over those specified here.
+      # Application configuration should go into files in config/initializers
+      # -- all .rb files in that directory are automatically loaded.
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-    folders = %w(lib
-                 app/models/subject
-                 app/models/events
-                 app/models/cantoes
-                 app/models/cantoes/canticles
-                 app/models/cantoes/canticles/chants
-                 app/models/cantoes/canticles/chants/sessional_hymns
-                 app/models/cantoes/canticles/chants/stichiras
-                 app/models/cantoes/orisons
-                 app/models/descriptions
-                 app/models/links)
-    folders.each do |folder|
-       config.autoload_paths << Rails.root.join(folder) ;end
+      # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+      # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+      config.time_zone = 'Moscow'
+      folders = %w(app/models/subject
+                   app/models/events
+                   app/models/scriptum
+                   app/models/scriptum/cantoes
+                   app/models/scriptum/cantoes/canticles
+                   app/models/scriptum/cantoes/canticles/chants
+                   app/models/scriptum/cantoes/canticles/chants/sessional_hymns
+                   app/models/scriptum/cantoes/canticles/chants/stichiras
+                   app/models/scriptum/cantoes/orisons
+                   app/models/descriptions
+                   app/models/links
+                   app/controllers/concerns
+                   app/lib).each do |folder|
+         config.autoload_paths << Rails.root.join(folder)
+      end
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = :ru
-    config.i18n.fallbacks = [:en]
+      %w(lib/concerns).each do |folder|
+         config.autoload_once_paths << folder
+      end
 
-    config.npm.enable_watch = Rails.env.development?
+      # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+      # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+      config.i18n.default_locale = :ru
+      config.i18n.fallbacks = [:en]
 
-    config.npm.install = ['yarn']
-
-    # Command to build production assets
-    config.npm.build = ['yarn run build']
-
-    # Command to start a file watcher
-    config.npm.watch = ['yarn run start']
-
-    config.npm.install_on_asset_precompile = true
-
-    config.npm.install_on_rails_server = true
-
-    # queue adapter
-    config.active_job.queue_adapter = :sidekiq
-  end
+      # queue adapter
+      config.active_job.queue_adapter = :sidekiq
+   end
 end

@@ -1,7 +1,7 @@
-process.env.NODE_ENV = process.env.RAILS_ENV || 'production'
+process.env.NODE_ENV = 'production'
 
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const CompressionPlugin = require('compression-webpack-plugin')
 const sharedConfig = require('./base')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -44,7 +44,9 @@ const customConfig = merge(sharedConfig, {
          new TerserPlugin({
             parallel: true,
             terserOptions: {
+               ecma: 6,
                compress: {
+                  drop_console: true,
                   pure_funcs: [
                      'console.log',
                      'console.debug',
@@ -56,15 +58,20 @@ const customConfig = merge(sharedConfig, {
                      'console.debug',
                   ],
                },
-               format: {
-                  comments: false,
-               },
                minify: TerserPlugin.uglifyJsMinify,
+               keep_classnames: undefined,
+               keep_fnames: false,
+               toplevel: false,
+               output: {
+                  comments: false,
+                  beautify: false
+               }
             },
             extractComments: false,
          }),
          new OptimizeCSSAssetsPlugin({}),
       ],
+      moduleIds: 'hashed',
    },
 
    output: {
@@ -90,7 +97,9 @@ const customConfig = merge(sharedConfig, {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
-                              "uglify": true
+                              chrome: 59,
+                              edge: 13,
+                              firefox: 50,
                            },
                            "useBuiltIns": "usage"
                         },

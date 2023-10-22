@@ -6,11 +6,15 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
    inflect.plural /(.*o)$/i, '\1es'
    inflect.singular /(.*o)es/i, '\1'
+   inflect.plural /(.*)en$/i, '\1ina'
+   inflect.singular /(.*)ina/i, '\1en'
+#   inflect.plural /(.*)um$/i, '\1a'
+#   inflect.singular /(.*)a/i, '\1um'
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
-   end
+end
 
 # These inflection rules are supported but not enabled by default:
 # ActiveSupport::Inflector.inflections(:en) do |inflect|

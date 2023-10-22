@@ -7,9 +7,15 @@ class ApplicationController < ActionController::Base
       session.update(hashes.reduce { |res, hash| res.merge(hash) })
    end
 
+   def render_not_exist_error e
+      error = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+      logger.error(error)
+      render :index, locals: { error: error, status: 404 }
+   end
+
    def render_default_error e
       error = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
       logger.error(error)
-      render plain: error, status: 500
+      render :index, locals: { error: error, status: 500 }
    end
 end

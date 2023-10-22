@@ -8,6 +8,8 @@ import { nameMeta } from 'nameMeta'
 import { memoMeta } from 'memoMeta'
 import { orderMeta } from 'orderMeta'
 import { subjectMeta } from 'subjectMeta'
+import { scriptumMeta } from 'scriptumMeta'
+import { readingMeta } from 'readingMeta'
 import Records from 'Records'
 
 const Metas = {
@@ -15,6 +17,8 @@ const Metas = {
    'memories': memoryMeta,
    'names': nameMeta,
    'memoes': memoMeta,
+   'scripta': scriptumMeta,
+   'readings': readingMeta,
    'orders': orderMeta,
    'subjects': subjectMeta,
 }
@@ -90,7 +94,7 @@ export default class Dashboard extends Component {
                      href='/'
                      alt="Днеслов">
                      <img
-                        src="dneslov-title.png" /></a>
+                        src="/dneslov-title.png" /></a>
                   {this.state.login &&
                      <ul id="nav-mobile" className="right">
                         {Object.entries(Metas).map(([path, meta]) =>

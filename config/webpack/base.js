@@ -13,16 +13,18 @@ const customConfig = {
    context: global.rootpath,
 
    entry: {
-      //'babel-polyfill': 'babel-polyfill/lib/index.js',
-      //'react-hot-loader/patch', // hot reloading react components
-      // JavaScript
-      'javascripts/app': './app/webpack/js/app.js',
-      'javascripts/admin': './app/webpack/js/admin.js',
-      'javascripts/about': './app/webpack/js/about.js',
-      // Stylesheets
-      'stylesheets/app': './app/webpack/css/app.js',
-      'stylesheets/admin': './app/webpack/css/admin.js',
-      'stylesheets/about': './app/webpack/css/about.js',
+      'application': [
+         './app/assets/javascripts/application.js',
+         './app/assets/stylesheets/application.scss'
+      ],
+      'application.admin': [
+         './app/assets/javascripts/application.admin.js',
+         './app/assets/stylesheets/application.admin.scss',
+      ],
+      'application.about': [
+         './app/assets/javascripts/application.about.js',
+         './app/assets/stylesheets/application.about.scss',
+      ]
    },
 
    module: {
@@ -34,25 +36,26 @@ const customConfig = {
             loader: 'ignore-loader'
          },
          {
-            test: /\.(png|jpe?g|gif|svg)$/,
+            test: /\.(png|jpe?g|gif|svg|webp)$/,
             loaders: [
                'file?hash=sha512&digest=hex&name=[hash].[ext]',
                'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
             ]
          },
          {
-            test: /\.(sa|sc)ss$/,
+            test: /\.s[ac]ss$/,
             use: [
                {
                   loader: MiniCssExtractPlugin.loader,
-                  options: {
-                     hmr: DEBUG,
-                     reloadAll: true,
-                  },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-               { loader: 'postcss-loader', options: {} },
-               { loader: 'sass-loader', options: { sourceMap: true } },
+               "postcss-loader",
+               {
+                  loader: "sass-loader",
+                  options: {
+                     implementation: require("sass"),
+                  },
+               },
             ],
          },
          {
@@ -60,17 +63,13 @@ const customConfig = {
             use: [
                {
                   loader: MiniCssExtractPlugin.loader,
-                  options: {
-                     hmr: DEBUG,
-                     reloadAll: true,
-                  },
                },
                { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
                { loader: 'postcss-loader', options: {} },
             ],
          },
          {
-            test: /\.(woff|woff2|ttf|eot)$/,
+            test: /\.(woff2?|ttf|eot)$/,
             use: [{
                loader: 'file-loader',
             }]
@@ -79,7 +78,7 @@ const customConfig = {
    },
 
    output: {
-      path: join(global.rootpath, 'vendor/assets'),
+      path: join(global.rootpath, 'app/assets/builds'),
       filename: '[name].js',
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
@@ -101,11 +100,12 @@ const customConfig = {
          debug: DEBUG ? true : false,
          options: {
             sassLoader: {
-               includePaths: join(global.rootpath, 'node_modules'),
+               includePaths: [join(global.rootpath, 'public'), join(global.rootpath, 'node_modules')],
                outputStyle: DEBUG ? 'nested' : 'compressed'
             },
          },
          postcss: [
+            require('postcss-import')(),
             require('autoprefixer')(),
          ],
       }),
@@ -117,7 +117,7 @@ const customConfig = {
          React: 'react',
          ReactDOM: 'react-dom',
       },
-      extensions: [ '.js', '.jsx', 'css', 'scss' ],
+      extensions: [ '.js', '.jsx', '.css', '.scss' ],
       modules: ['components', 'node_modules'],
    },
 }

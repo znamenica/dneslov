@@ -1,13 +1,13 @@
-process.env.NODE_ENV = process.env.RAILS_ENV || 'test'
+process.env.NODE_ENV = 'development'
 
 const { join } = require('path')
 const { env } = require('process')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const sharedConfig = require('./base')
 const webpack = require('webpack')
 
 const customConfig = merge(sharedConfig, {
-   mode: "test",
+   mode: "development",
 
    module: {
       rules: [
@@ -28,7 +28,6 @@ const customConfig = merge(sharedConfig, {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
-                              "uglify": true
                            },
                            "useBuiltIns": false
                         },

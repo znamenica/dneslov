@@ -9,6 +9,7 @@ import SearchField from 'SearchField'
 import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
+import Eventee from 'Eventee'
 import Intro from 'Intro'
 import { getCalendariesString, getDateString, getPathsFromState, getTitleFromState, parseDateString, parseCalendariesString } from 'support'
 
@@ -38,6 +39,8 @@ export default class MemoriesForm extends Component {
                memories: props.memories.list,
                memoriesTotal: props.memories.total,
                memory: props.memory,
+               eventee: props.eventee,
+               calendarySlug: props.calendaries_used.length == 1 ? props.calendaries_used[0] : null,
                query: {
                   c: getCalendariesString(props),
                   d: getDateString(props),
@@ -49,6 +52,7 @@ export default class MemoriesForm extends Component {
          document.title = getTitleFromState(state)
          let [ path, json_path ] = getPathsFromState(state)
          history.replaceState({ query: state.query, path: json_path }, document.title, path)
+         console.debug("[getDerivedStateFromProps] <<<", { toNewState: state })
          return state
       }
 
@@ -63,6 +67,7 @@ export default class MemoriesForm extends Component {
       document.title = getTitleFromState(state)
       history.replaceState({ query: state.query, path: json_path }, document.title, path)
 
+      console.debug("[getDerivedStateFromProps] <<<", { newState: state })
       this.setState(state)
    }
 
@@ -84,9 +89,16 @@ export default class MemoriesForm extends Component {
    }
 
    defaultCalendarySlug() {
-      return this.props.calendaries_used &&
+      return this.state.calendarySlug ||
+             this.props.calendaries_used &&
              this.props.calendaries_used[0] ||
              this.props.calendaries_cloud[0].slug
+   }
+
+   defaultUsedCalendary() {
+      let calendaries = this.calendariesUsed()
+
+      return calendaries && calendaries[0]
    }
 
    // handlers
@@ -123,7 +135,7 @@ export default class MemoriesForm extends Component {
    }
 
    onSearchUpdate(query) {
-      this.pushSubmit(merge(this.state.query, {q: query, p: 1}))
+      this.pushSubmit(merge(this.state.query, {q: query, p: 1, d: null}))
    }
 
    onCalendarUpdate(value) {
@@ -151,7 +163,7 @@ export default class MemoriesForm extends Component {
       console.debug("[onPopState] <<<", { e: e })
 
       if (e.state) {
-         this.submit(e.state.query, e.state.path)
+         this.submit(e.state.query.merge({p: 1}), e.state.path)
       }
    }
 
@@ -181,11 +193,14 @@ export default class MemoriesForm extends Component {
 
    onLoadSuccess(response) {
       console.debug("[onLoadSuccess] <<< response", response)
+      console.debug("[onLoadSuccess] <<< response", response.data, response.data.total)
 
-      if (response.config.url.match(/index.json/)) {
+      if (response.data.total) {
          this.memoriesParse(response.data, response.config)
-      } else {
+      } else if (response.data.events) {
          this.memoryParse(response.data, response.config)
+      } else {
+         this.eventParse(response.data, response.config)
       }
    }
 
@@ -205,12 +220,14 @@ export default class MemoriesForm extends Component {
          state = merge(this.state, {
             memories: newMemories,
             memoriesTotal: memories.total,
-            memory: null})
+            memory: null,
+            eventee: null})
       } else {
          state = merge(this.state, {
             memories: memories.list,
             memoriesTotal: memories.total,
-            memory: null})
+            memory: null,
+            eventee: null})
       }
 
       document.body.classList.remove('in-progress')
@@ -221,19 +238,37 @@ export default class MemoriesForm extends Component {
    memoryParse(memory, config) {
       let state = merge(this.state,
                         { memory: memory,
-                          memories: null,
-                          query: config.params })
+                          memories: [],
+                          query: config.params,
+                          eventee: null})
+
+      document.body.classList.remove('in-progress')
+      this.updateState(state)
+   }
+
+   eventParse(eventee, config) {
+      let state = merge(this.state,
+                        { memory: null,
+                          memories: [],
+                          query: config.params,
+                          eventee: eventee})
 
       document.body.classList.remove('in-progress')
       this.updateState(state)
    }
 
    dateFromQuery() {
-      return this.state.query.d.match(/\d{2}\.\d{2}\.\d{4}/)[0]
+      let date = this.state.query.d || "",
+          match = date.match(/\d{2}\.\d{2}\.\d{4}/)
+
+      return match && match[0]
    }
 
    calendarStyleFromQuery() {
-      if (this.state.query.d.match(/ю/)) {
+      let date = this.state.query.d || "",
+          match = date.match(/ю/)
+
+      if (match) {
          return 'julian'
       } else {
          return 'neojulian'
@@ -242,6 +277,8 @@ export default class MemoriesForm extends Component {
 
    render() {
       console.log("[render] * ", { props: this.props, state: this.state})
+      console.log("[render] * ", )
+
 
       return (
          [<header>
@@ -252,7 +289,7 @@ export default class MemoriesForm extends Component {
                      href='/'
                      alt="Днеслов">
                      <img
-                        src="dneslov-title.png" /></a>
+                        src="/dneslov-title.png" /></a>
                   <ul id="nav-mobile" className="right hide-on-med-and-down">
                      <li>
                         <a
@@ -267,11 +304,11 @@ export default class MemoriesForm extends Component {
                <div className='row'>
                   <Intro />
                   <form>
-                     <div className='col s12 m5 l3 xl2'>
+                     <div className='col s12 m4 l3 xl2'>
                         <div className='hidden' id='calendary' />
                         <div className='row'>
                            <PickMeUpCalendar
-                              calendary={this.calendariesUsed()[0]}
+                              calendary={this.defaultUsedCalendary()}
                               withDate={this.dateFromQuery()}
                               calendarStyle={this.calendarStyleFromQuery()}
                               onUpdate={this.onCalendarUpdate.bind(this)} />
@@ -279,15 +316,26 @@ export default class MemoriesForm extends Component {
                               calendaries={this.props.calendaries_cloud}
                               calendaries_used={this.calendariesUsed()}
                               onAct={this.onCloudAct.bind(this)} /></div></div>
-                     <div className='col s12 m7 l9 xl10'>
+                     <div className='col s12 m8 l9 xl10'>
                         {this.state.memory &&
                            <Memory
                               key='memory'
                               date={parseDateString(this.state.query.d).pop()}
-                              default_calendary_slug={this.defaultCalendarySlug()}
-                              selected_calendaries={this.state.query.c?.split(",")}
+                              calendarStyle={this.calendarStyleFromQuery()}
+                              defaultCalendarySlug={this.defaultCalendarySlug()}
+                              specifiedCalendarySlug={this.state.calendarySlug}
+                              selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.memory} />}
-                        {! this.state.memory &&
+                        {this.state.eventee &&
+                           <Eventee
+                              key='eventee'
+                              date={parseDateString(this.state.query.d).pop()}
+                              calendarStyle={this.calendarStyleFromQuery()}
+                              defaultCalendarySlug={this.defaultCalendarySlug()}
+                              specifiedCalendarySlug={this.state.calendarySlug}
+                              selectedCalendaries={this.state.query.c?.split(",")}
+                              {...this.state.eventee} />}
+                        {this.props.memories.list && !this.state.eventee && !this.state.memory &&
                            <div>
                               <div className='row'>
                                  <SearchField

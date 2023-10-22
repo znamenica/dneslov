@@ -5,6 +5,9 @@ class FixIndecesInLinks < ActiveRecord::Migration[5.2]
          t.index %i(language_code)
          t.index %i(alphabeth_code)
          t.index %i(url)
-         t.index %i(info_id)
+         t.index %i(info_id), if_not_exists: true
          t.index %i(info_type)
-         t.index %i(info_type info_id) ;end;end;end
+         t.index %i(info_type info_id)
+      end
+   end
+end

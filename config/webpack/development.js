@@ -2,7 +2,7 @@ process.env.NODE_ENV = process.env.RAILS_ENV || 'development'
 
 const { join } = require('path')
 const { env } = require('process')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const sharedConfig = require('./base')
 const LiveReloadPlugin = require('webpack-livereload-plugin')
 const webpack = require('webpack')
@@ -61,7 +61,9 @@ const customConfig = merge(sharedConfig, {
                            "modules": false,
                            "targets": {
                               "browsers": "> 1%",
-                              "uglify": true
+                              chrome: 59,
+                              edge: 13,
+                              firefox: 50,
                            },
                            "useBuiltIns": false
                         },
@@ -117,6 +119,14 @@ const customConfig = merge(sharedConfig, {
    stats: {
       errorDetails: true,
       children: true
+   },
+
+   watch: true,
+
+   watchOptions: {
+      aggregateTimeout: 500,
+      poll: 1000,
+      ignored: '**/node_modules/',
    },
 })
 

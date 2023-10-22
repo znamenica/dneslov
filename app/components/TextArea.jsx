@@ -1,13 +1,15 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 import { CharacterCounter } from 'materialize-css'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 
 import { valueToObject } from 'support'
 
+@mixin(Subscribed)
 @mixin(Validation)
 export default class TextArea extends Component {
    static defaultProps = {
@@ -31,12 +33,21 @@ export default class TextArea extends Component {
    }
 
    // system
+   @flow('componentDidMountBefore')
    componentDidMount() {
       if (this.props.data && this.props.data['length']) {
          this.counter = CharacterCounter.init(this.$input)
       }
 
       this.componentDidRender()
+   }
+
+   @flow('componentWillUnmountBefore')
+   componentWillUnmount() {
+      if (this.counter) {
+         this.counter.destroy()
+         this.counter = null
+      }
    }
 
    componentDidUpdate() {
@@ -49,13 +60,6 @@ export default class TextArea extends Component {
       M.textareaAutoResize(this.$input)
    }
 
-   componentWillUnmount() {
-      if (this.counter) {
-         this.counter.destroy()
-         this.counter = null
-      }
-   }
-
    shouldComponentUpdate(nextProps, nextState) {
       return this.props.value !== nextProps.value
    }
@@ -64,7 +68,7 @@ export default class TextArea extends Component {
    onChange(e) {
       console.log("[onChange] <<<")
       let object = valueToObject(this.props.name, e.target.value),
-          ce = new CustomEvent('dneslov-update-path', { detail: object })
+          ce = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
       document.dispatchEvent(ce)
 
@@ -79,14 +83,16 @@ export default class TextArea extends Component {
    }
 
    renderValue() {
-      switch (this.props.value.constructor.name) {
-         case "String":
-            return this.props.value
-         case "Object":
-            return JSON.stringify(this.props.value)
-         default:
-            return ""
+      if (this.props.value) {
+         switch (this.props.value.constructor.name) {
+            case "String":
+               return this.props.value
+            case "Object":
+               return JSON.stringify(this.props.value)
+         }
       }
+
+      return ""
    }
 
    render() {

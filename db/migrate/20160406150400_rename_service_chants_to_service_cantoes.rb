@@ -1,4 +1,4 @@
-class RenameServiceChantsToServiceCantoes < ActiveRecord::Migration[4.2]
+class RenameServiceChantsToServiceCantoes < ActiveRecord::Migration[5.2]
    def change
       rename_table :service_chants, :service_cantoes
       
@@ -7,4 +7,7 @@ class RenameServiceChantsToServiceCantoes < ActiveRecord::Migration[4.2]
 
          t.rename :chant_id, :canto_id
 
-         t.index ["service_id", "canto_id"], unique: true; end ;end ;end
+         t.index ["service_id", "canto_id"], unique: true
+      end
+   end
+end

@@ -16,9 +16,10 @@ require 'when_easter'
 # id[int]                     - опознаватель
 class Memo < ActiveRecord::Base
    extend TotalSize
-   extend AsJson
+   include WithDescriptions
+   include WithLinks
+   include DistinctBy
 
-   EXCEPT = %i(created_at updated_at)
    DAYS = %w(нд пн вт ср чт пт сб)
    DAYSR = DAYS.dup.reverse
    DAYSN = DAYS.dup.rotate
@@ -38,7 +39,7 @@ class Memo < ActiveRecord::Base
    has_one :order, through: :memo_order
    has_one :memory, through: :event
    has_one :slug, through: :memory
-   has_one :thumb_link, through: :memory, source: :thumb_links
+   has_one :thumb_link, through: :memory, source: :thumbs
    has_one :calendary_slug, through: :calendary, source: :slug, class_name: :Slug
    has_one :memory_slug, through: :memory, source: :slug, class_name: :Slug
 
@@ -48,11 +49,9 @@ class Memo < ActiveRecord::Base
    has_many :order_titles, through: :orders, source: :tweets
    has_many :bond_memo_titles, through: :bond_to, source: :titles
    has_many :event_titles, through: :event, source: :titles
-   has_many :service_links, as: :info, inverse_of: :info #ЧИНЬ превод во services
-   has_many :services, as: :info, inverse_of: :info
-   has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
+   has_many :services, as: :info, inverse_of: :info # TODO додаь задачу превода service_links/ServiceLink во Service
    has_many :titles, -> { title }, as: :describable, dependent: :delete_all
-   has_many :links, as: :info, dependent: :delete_all, class_name: :BeingLink
+   has_many :notes, as: :describable, dependent: :delete_all, class_name: :Note
 
    delegate :quantity, to: :memory
    delegate :quantity, to: :bond_to, prefix: true, allow_nil: true
@@ -171,26 +170,17 @@ class Memo < ActiveRecord::Base
       where(calendary_id: calendary_id)
    end
 
+   scope :by_memory_id, -> (memory_id) do
+      joins(:event).merge(Event.by_memory_id(memory_id))
+   end
+
    scope :notice, -> { joins(:event).merge(Event.notice) }
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :q, :by_tokens)
    singleton_class.send(:alias_method, :d, :by_date)
+   singleton_class.send(:alias_method, :mid, :by_memory_id)
    singleton_class.send(:alias_method, :c, :in_calendaries)
-
-   scope :distinct_by, -> *args do
-      _selector = self.select_values.dup
-      if _selector.empty?
-        _selector << "ON (#{args.join(', ')}) memoes.*"
-      else
-         selector = _selector.uniq
-         selector.unshift( "ON (#{args.join(', ')}) " + selector.shift )
-      end
-
-      rela = self.distinct
-      rela.select_values = selector
-      rela
-   end
 
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'
@@ -224,29 +214,90 @@ class Memo < ActiveRecord::Base
       left_outer_joins(:thumb_link).select(selector).group('_thumb_url')
    end
 
-   scope :with_bond_to_title, -> language_code do
-      selector = 'bond_memo_titles_memoes.text AS _bond_to_title'
+   scope :with_bond_to_title, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      /`(?<scope_name>[^']*)'/ =~ caller.grep(/delegation/)[1]
 
-      left_outer_joins(:bond_memo_titles).select(selector).group('_bond_to_title')
+      selector = "descriptions_#{scope_name}.text AS _bond_to_title"
+      join =
+         "LEFT OUTER JOIN memoes
+                       AS memoes_#{scope_name}
+                       ON memoes_#{scope_name}.id = #{join_name}.bond_to_id
+          LEFT OUTER JOIN descriptions
+                       AS descriptions_#{scope_name}
+                       ON descriptions_#{scope_name}.describable_type = '#{model}'
+                      AND descriptions_#{scope_name}.describable_id = memoes_#{scope_name}.id
+                      AND descriptions_#{scope_name}.type = 'Title'
+                      AND descriptions_#{scope_name}.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                      AND descriptions_#{scope_name}.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector).group('_bond_to_title')
    end
 
-   scope :with_event_title, -> language_code do
-      selector = 'event_titles_memoes.text AS _event_title'
+   scope :with_event_title, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      /`(?<scope_name>[^']*)'/ =~ caller.grep(/delegation/)[1]
 
-      left_outer_joins(:event_titles).select(selector).group('_event_title')
+      selector = "event_titles_#{scope_name}.text AS _event_title"
+      join =
+         "    LEFT OUTER JOIN events AS events_#{scope_name}
+                           ON events_#{scope_name}.id = #{join_name}.event_id
+              LEFT OUTER JOIN subjects AS event_kinds_#{scope_name}
+                           ON event_kinds_#{scope_name}.key = events_#{scope_name}.kind_code
+                          AND event_kinds_#{scope_name}.kind_code = 'EventKind'
+              LEFT OUTER JOIN descriptions AS event_titles_#{scope_name}
+                           ON event_titles_#{scope_name}.id IS NOT NULL
+                          AND (event_titles_#{scope_name}.describable_id = events_#{scope_name}.id
+                          AND event_titles_#{scope_name}.describable_type = 'Event'
+                          AND event_titles_#{scope_name}.type = 'Title'
+                           OR event_titles_#{scope_name}.describable_id = event_kinds_#{scope_name}.id
+                          AND event_titles_#{scope_name}.describable_type = 'Subject'
+                          AND event_titles_#{scope_name}.type = 'Appellation')
+                          AND event_titles_#{scope_name}.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                          AND event_titles_#{scope_name}.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector).group('_event_title')
    end
 
-   scope :with_calendary_slug_text, -> do
+   scope :with_calendary_slug_text, ->(context) do
       selector = 'calendary_slugs_memoes.text AS _calendary_slug'
 
       left_outer_joins(:calendary_slug).select(selector).group('_calendary_slug')
    end
 
-   scope :with_orders, -> language_code do
-      selector = "COALESCE(jsonb_object_agg(DISTINCT slugs_memoes.text || '', order_titles_memoes.text)
-         FILTER (WHERE slugs_memoes.id IS NOT NULL AND order_titles_memoes.id IS NOT NULL), '{}') AS _orders"
+   scope :with_orders, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      /`(?<scope_name>[^']*)'/ =~ caller.grep(/delegation/)[1]
 
-      left_outer_joins(:slugs, :order_titles).select(selector)
+      selector =
+         "COALESCE(jsonb_object_agg(
+          DISTINCT slugs_#{scope_name}.text || '', titles_#{scope_name}.text)
+            FILTER (
+             WHERE slugs_#{scope_name}.id IS NOT NULL
+               AND titles_#{scope_name}.id IS NOT NULL), '{}')
+                AS _orders"
+      join =
+         "LEFT OUTER JOIN memo_orders AS memo_orders_#{scope_name}
+                       ON memo_orders_#{scope_name}.memo_id = #{join_name}.id
+          LEFT OUTER JOIN orders AS orders_#{scope_name}
+                       ON orders_#{scope_name}.id = memo_orders_#{scope_name}.order_id
+          LEFT OUTER JOIN slugs AS slugs_#{scope_name}
+                       ON slugs_#{scope_name}.sluggable_type = 'Order'
+                      AND slugs_#{scope_name}.sluggable_id = orders_#{scope_name}.id
+          LEFT OUTER JOIN descriptions AS titles_#{scope_name}
+                       ON titles_#{scope_name}.describable_type = 'Order'
+                      AND titles_#{scope_name}.describable_id = orders_#{scope_name}.id
+                      AND titles_#{scope_name}.type = 'Tweet'
+                      AND titles_#{scope_name}.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                      AND titles_#{scope_name}.language_code IN ('#{language_codes.join("', '")}')"
+
+      joins(join).select(selector)
    end
 
    scope :with_slug, -> do
@@ -259,43 +310,22 @@ class Memo < ActiveRecord::Base
       left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
    end
 
-   scope :with_description, -> language_code do
-      selector = self.select_values.dup
-      if selector.empty?
-         selector << 'memoes.*'
-      end
-      selector << 'descriptions.text AS _description'
-      language_codes = [ language_code ].flatten
-      join = "LEFT OUTER JOIN descriptions ON descriptions.describable_id = memoes.id
-                          AND descriptions.describable_type = 'Memo'
-                          AND descriptions.type = 'Description'
-                          AND descriptions.language_code IN ('#{language_codes.join("', '")}')"
+   scope :with_title, -> context do
+      join_name = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      /`(?<scope_name>[^']*)'/ =~ caller.grep(/delegation/)[1]
 
-      joins(join).select(selector.uniq).group('_description')
-   end
-
-   scope :with_title, -> language_code do
-      selector = self.select_values.dup
-      if selector.empty?
-         selector << 'memoes.*'
-      end
-      selector << 'titles.text AS _title'
-      language_codes = [ language_code ].flatten
-      join = "LEFT OUTER JOIN descriptions AS titles ON titles.describable_id = memoes.id
-                          AND titles.describable_type = 'Memo'
-                          AND titles.type = 'Title'
-                          AND titles.language_code IN ('#{language_codes.join("', '")}')"
+      selector = self.select_values.dup | ["#{join_name}.*", "descriptions_#{scope_name}.text AS _title"]
+      join =
+         "LEFT OUTER JOIN descriptions AS descriptions_#{scope_name}
+                       ON descriptions_#{scope_name}.describable_id = memoes.id
+                      AND descriptions_#{scope_name}.describable_type = '#{model}'
+                      AND descriptions_#{scope_name}.type = 'Title'
+                      AND descriptions_#{scope_name}.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                      AND descriptions_#{scope_name}.language_code IN ('#{language_codes.join("', '")}')"
 
       joins(join).select(selector.uniq).group('_title')
-   end
-
-   scope :with_pure_links, -> do
-      selector = "COALESCE((SELECT jsonb_agg(links)
-                              FROM links
-                             WHERE links.info_id = memories.id
-                               AND links.info_type = 'Memory'), '[]'::jsonb) AS _links"
-
-      select(selector).group(:id)
    end
 
    scope :with_bond_to_year_date, -> context do
@@ -425,99 +455,19 @@ class Memo < ActiveRecord::Base
                                               'event_kind_titles.text')
    end
 
-   scope :with_descriptions, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'memoes.*'
-      end
-
-      selector << "COALESCE((WITH __descriptions AS (
-                      SELECT DISTINCT ON(descriptions.id)
-                             descriptions.id AS id,
-                             descriptions.type AS type,
-                             descriptions.text AS text,
-                             descriptions.language_code AS language_code,
-                             descriptions.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM descriptions
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = descriptions.language_code
-                        JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = descriptions.alphabeth_code
-                        JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE descriptions.describable_id = memoes.id
-                         AND descriptions.describable_type = 'Memo'
-                         AND descriptions.type IN ('Title', 'Description')
-                    GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__descriptions)
-                        FROM __descriptions), '[]'::jsonb) AS _descriptions"
-
-      select(selector).group(:id)
-   end
-
-   scope :with_links, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'memoes.*'
-      end
-
-      selector << "COALESCE((with __links as (
-                      SELECT DISTINCT ON(links.id)
-                             links.id as id,
-                             links.type as type,
-                             links.url as url,
-                             links.language_code AS language_code,
-                             links.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM links
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = links.language_code
-                        JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = links.alphabeth_code
-                        JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE links.info_id = memoes.id
-                         AND links.info_type = 'Memo'
-                    GROUP BY links.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__links)
-                        FROM __links), '[]'::jsonb) AS _links"
-
-      select(selector).group(:id)
-   end
-
-   accepts_nested_attributes_for :service_links, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :services, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :memo_orders, reject_if: :all_blank, allow_destroy: true
 
    validates_presence_of :calendary, :event
    validates_presence_of :year_date, unless: :bond_to_quantity
    validates_absence_of :year_date, if: :bond_to_quantity
    validates :year_date, format: { with: /\A((0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])([%<>~][0-6])?|[+-]\d{1,3})\z/ }, if: :year_date
+   validate :bind_kind_code_present, :same_calendaries, :same_memories, if: :bond_to_id
 
    before_validation :fix_year_date
-   before_save -> { self.bind_kind_code ||= 'несвязаный' }, on: :create
+   before_create -> { self.bind_kind_code ||= 'несвязаный' }
 
    class << self
       def dates_to_days dates_in, julian
@@ -561,6 +511,24 @@ class Memo < ActiveRecord::Base
       end
    rescue StandardError
       Time.at(0)
+   end
+
+   def same_calendaries
+      if bond_to.calendary_id != calendary_id
+         errors.add(:bond_to_id, "'s calendary must be the same as self calendary")
+      end
+   end
+
+   def same_memories
+      if bond_to.memory.id != memory.id
+         errors.add(:bond_to_id, "'s memory must be the same as self memory")
+      end
+   end
+
+   def bind_kind_code_present
+      if bind_kind_code.blank?
+         errors.add(:bind_kind_code, 'must be present when memo is bond to')
+      end
    end
 
    def fix_year_date

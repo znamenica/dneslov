@@ -6,45 +6,45 @@ class MemoService
       event_kind_code: "Betraial",
       order: "Спаситель",
       ranges: {
-         (10..341): {
+         (10..341) => {
             step: 7,
             titles: {
                ру_РУ: "Среда \#{week}-я по Пасхе"
             }
          },
-         (12..341): {
+         (12..341) => {
             step: 7,
             titles: {
                ру_РУ: "Пятница \#{week}-я по Пасхе"
             }
          },
          #4.04/22.03 
-         (57..98): {
+         (57..98) => {
             step: 1,
             condition: '<29.06',
             titles: {
                ру_РУ: "\#{weekday} \{week}-я Петрова поста"
             }
          },
-         ('01.08'..'14.08'): {
+         ('01.08'..'14.08') => {
             step: 1,
             titles: {
                ру_РУ: "\{day}-й день Успенского поста"
             }
          },
-         ('01.08'..'14.08'): {
+         ('01.08'..'14.08') => {
             step: 1,
             titles: {
                ру_РУ: "\{day}-й день Рождественского поста"
             }
          },
-         ('01.08'..'14.08'): {
+         ('01.08'..'14.08') => {
             step: 1,
             titles: {
                ру_РУ: "\#{weekday} \{week}-я Великого поста"
             }
          },
-         ('01.08'..'14.08'): {
+         ('01.08'..'14.08') => {
             step: 1,
             titles: {
                ру_РУ: "\{day}-й день Страстного поста"
@@ -81,9 +81,11 @@ class MemoService
                                   calendary_id: calendary.id,
                                   event_id: event.id,
                                   titles: titles)
+            end
+         end
       end
 
       binding.pry
-      # Book.import(memoes)
+      Book.import(memoes)
    end
 end

@@ -1,4 +1,4 @@
-class CreateEvents < ActiveRecord::Migration[4.2]
+class CreateEvents < ActiveRecord::Migration[5.2]
    def change
       create_table :events do |t|
          t.string :happened_at
@@ -8,4 +8,7 @@ class CreateEvents < ActiveRecord::Migration[4.2]
          t.string :type, null: false
          t.timestamps null: false
 
-         t.index %i(subject type memory_id) end;end;end
+         t.index %i(subject type memory_id)
+      end
+   end
+end

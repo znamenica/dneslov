@@ -2,13 +2,15 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { merge } from 'merge-anything'
 import * as uuid from 'uuid/v1'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 import { renderElement } from 'render'
 import ErrorSpan from 'ErrorSpan'
 import { propsAsArray, valueToObject } from 'support'
 
+@mixin(Subscribed)
 @mixin(Validation)
 export default class Collection extends Component {
 
@@ -50,6 +52,12 @@ export default class Collection extends Component {
       return this.props.value !== nextProps.value
    }
 
+   @flow('componentDidMountBefore')
+   componentDidMount() {}
+
+   @flow('componentWillUnmountBefore')
+   componentWillUnmount() {}
+
    // events
    onAddItem() {
       let key = uuid(),
@@ -63,8 +71,8 @@ export default class Collection extends Component {
       }
 
       detail = valueToObject(this.props.name, { [key]: value }),
-      e = new CustomEvent('dneslov-update-path', { detail: detail })
-      console.debug("[onAddItem] ** detail", detail)
+      e = new CustomEvent('dneslov-update-path', { detail: { value: detail, path: this.props.name }})
+      console.debug("[onAddItem] ** detail:", detail, "path:", this.props.name)
 
       document.dispatchEvent(e)
    }
@@ -73,7 +81,7 @@ export default class Collection extends Component {
       console.debug("[onToggleItem] >>>>", element, this.props.value)
       let new_state = !element.value._destroy,
           object = valueToObject( element.name, { _destroy: new_state }),
-          e = new CustomEvent('dneslov-update-path', { detail: object })
+          e = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
       console.debug("[onToggleItem] **", object)
 

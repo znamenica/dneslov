@@ -20,6 +20,9 @@ set :nginx_ssl_certificate_key, 'dneslov.org.key'
 set :nginx_sites_available_dir, "/etc/nginx/sites-available.d"
 set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 
+### database
+set :disallow_pushing, true
+
 # role-based syntax
 # ==================
 
@@ -68,13 +71,8 @@ set :nginx_sites_enabled_dir, "/etc/nginx/sites-enabled.d"
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
-#
-#
-
-
 set :stage, :production
 set :branch, ENV['BRANCH'] || "master"
-
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :server_name, "www.dneslov.org dneslov.org"
@@ -82,3 +80,5 @@ set :deploy_to, "/var/www/dneslov"
 
 set :rails_env, :production
 set :enable_ssl, true
+
+after 'deploy', 'sitemap:refresh'

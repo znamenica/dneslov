@@ -44,7 +44,7 @@ const Validation = {
             break
          case 'Function':
             console.debug("[getErrorText] > value_in", value_in, "context:", context)
-            if (rule(value_in, context)) {
+            if (rule(value_in, context, this.state)) {
                errors.push(e)
             }
          }

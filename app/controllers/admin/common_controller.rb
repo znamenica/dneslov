@@ -1,6 +1,6 @@
 class Admin::CommonController < ApplicationController
-   include Concerns::Auth
-   include Pundit
+   include ::Auth
+   include ::Pundit::Authorization
 
    before_action :authenticate_user!, except: %i(dashboard)
    before_action :validate_session
@@ -28,9 +28,9 @@ class Admin::CommonController < ApplicationController
          format.json do
             render :index,
                plain: {
-                     total: @objects.total_size,
-                     list: @objects.limit(500).jsonize(only: %i(key value)),
-                  }.to_json
+                  total: @objects.total_size,
+                  list: @objects.limit(500).jsonize(short_context(only: %i(key value))),
+               }.to_json
          end
       end
    end
@@ -62,7 +62,6 @@ class Admin::CommonController < ApplicationController
    def update
       @object.update!(permitted_params)
 
-      # binding.pry
       #TODO: render json: @object.jsonize(context)
       render json: prepare_object(@object.reload).jsonize(context)
    end
@@ -92,6 +91,10 @@ class Admin::CommonController < ApplicationController
       %w(with_key with_value)
    end
 
+   def index_with_list
+      []
+   end
+
    def with_list
       send({
          "all" => :short_with_list,
@@ -112,8 +115,16 @@ class Admin::CommonController < ApplicationController
       @context ||= { locales: @locales }
    end
 
+   def short_context context_in = {}
+      @short_context ||= context_in.deep_merge(except: %i(created_at updated_at id meta))
+   end
+
    def model
-     self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
+      self.class.to_s.gsub(/.*::/, "").gsub("Controller", "").singularize.constantize
+   end
+
+   def table_name
+      model.to_s.tableize
    end
 
    def validate_session
@@ -153,17 +164,14 @@ class Admin::CommonController < ApplicationController
       @object = model.new( permitted_params )
    end
 
-   def context
-      { locales: @locales }
+   def include_list
+      []
    end
 
-   def include_list
-      [] ;end
-
    def issue_with query, with_method
-      query.send( with_method, context )
+      query.send(with_method, context)
    rescue ArgumentError
-      query.send( with_method )
+      query.send(with_method)
    end
 
    def prepare_object object
@@ -181,7 +189,14 @@ class Admin::CommonController < ApplicationController
    end
 
    def fetch_objects
-      @objects = prepare_objects.page( params[ :p ])
+      query = prepare_objects.page(params[:p])
+
+      @objects =
+         if query.respond_to?(:distinct_by)
+            query.distinct_by("#{table_name}.#{model.primary_key}")
+         else
+            query
+         end
    end
 
    def fetch_object

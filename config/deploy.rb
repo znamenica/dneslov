@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.16.0"
+lock "3.17.2"
 
 set :user, 'majioa'
 set :application, "dneslov"
@@ -22,10 +22,10 @@ set :repo_url, "git@github.com:znamenica/dneslov.git"
 # Default value for :pty is false
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
+append :linked_files, "config/database.yml", ".env"
 
 # Default value for linked_dirs is []
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "node_modules", "public/images"
 
 set :tests, []
 
@@ -48,23 +48,59 @@ set :default_env, { path: "#{release_path}/node_modules/yarn/bin:#{release_path}
 
 set :nginx_roles, :web
 set :nginx_static_dir, "public"
-set :nginx_template, "#{stage_config_path}/#{fetch :stage}/nginx.conf.erb"
+set :nginx_template, "#{stage_config_path}/nginx.conf.erb"
 
 set :rvm_type, :user                      # Defaults to: :auto
-set :rvm_ruby_version, '2.7.5@dneslov --create'    # Defaults to: 'default'
+
+# determine ruby version
+/ (?<version>[\d\.]+)?/ =~ Bundler.setup.instance_variable_get(:@definition).locked_gems.ruby_version
+set :rvm_ruby_version, "#{version}@dneslov --create"    # Defaults to: 'default'
 # set :rvm_custom_path, '~/.rvm'          # only needed if not detected
 set :rvm_roles, [:app, :web]
 
 set :systemd_redis_service, "redis"
 
+
+### database
+
+# if you want to remove the local dump file after loading
+set :db_local_clean, true
+
+# if you want to remove the dump file from the server after downloading
+set :db_remote_clean, true
+
+# if you want to exclude table from dump
+set :db_ignore_tables, []
+
+# if you want to exclude table data (but not table schema) from dump
+set :db_ignore_data_tables, []
+
+# configure location where the dump file should be created
+set :db_dump_dir, "./db"
+
+# If you want to import assets, you can change default asset dir (default = system)
+# This directory must be in your shared directory on the server
+set :assets_dir, %w(public/assets public/att)
+set :local_assets_dir, %w(public/assets public/att)
+
+# if you want to work on a specific local environment (default = ENV['RAILS_ENV'] || 'development')
+set :locals_rails_env, ENV['RAILS_ENV'] || "production"
+
+# if you prefer bzip2/unbzip2 instead of gzip
+set :compressor, :bzip2
+
+### tasks
+
+# setup
 task :setup do
 end
 
+after 'setup', 'systemd:sidekiq:setup'
+after 'setup', 'systemd:core:setup'
+after 'setup', 'systemd:sidekiq:enable'
+after 'setup', 'systemd:core:enable'
+
 # deploy
-after 'deploy:publishing', 'systemd:sidekiq:setup'
-after 'deploy:publishing', 'systemd:core:setup'
-after 'deploy:publishing', 'systemd:sidekiq:enable'
-after 'deploy:publishing', 'systemd:core:enable'
 after 'deploy:finishing', 'deploy:cleanup'
 
 # deploy:restart
@@ -74,4 +110,5 @@ before 'nginx:restart', 'nginx:site:enable'
 before 'deploy:restart', 'nginx:restart'
 after 'deploy:restart', 'systemd:sidekiq:reload-or-restart'
 after 'deploy:restart', 'systemd:core:reload-or-restart'
-
+before 'deploy:migrate', 'db:remote:createrole'
+after 'db:remote:createrole', 'db:remote:createdb'

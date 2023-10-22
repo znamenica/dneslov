@@ -1,15 +1,17 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 import { CharacterCounter } from 'materialize-css'
 import JSONInput from '@soon92/react-json-editor-ajrm/es'
 import locale from '@soon92/react-json-editor-ajrm/locale/ru'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 
 import { valueToObject } from 'support'
 
+@mixin(Subscribed)
 @mixin(Validation)
 export default class JsonEditor extends Component {
    static defaultProps = {
@@ -33,11 +35,21 @@ export default class JsonEditor extends Component {
    // system
    state = { value: this.props.value }
 
+   @flow('componentDidMountBefore')
+   componentDidMount() {}
+
+   @flow('componentWillUnmountBefore')
+   componentWillUnmount() {}
+
+   shouldComponentUpdate(nextProps, nextState) {
+      return this.props.value !== nextProps.value
+   }
+
    // events
    onChange(valueIn) {
       console.debug("[onChange] <<< valueIn:", valueIn["json"], valueIn)
       let object = valueToObject(this.props.name, valueIn["json"]),
-          ce = new CustomEvent('dneslov-update-path', { detail: object })
+          ce = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
       document.dispatchEvent(ce)
    }
@@ -50,14 +62,14 @@ export default class JsonEditor extends Component {
    }
 
    renderValue() {
-      if (this.state.value) {
-         switch (this.state.value.constructor.name) {
+      if (this.props.value) {
+         switch (this.props.value.constructor.name) {
             case "String":
                try {
-                  return JSON.parse(this.state.value)
+                  return JSON.parse(this.props.value)
                } catch (e) {}
             case "Object":
-               return this.state.value
+               return this.props.value
          }
       }
 

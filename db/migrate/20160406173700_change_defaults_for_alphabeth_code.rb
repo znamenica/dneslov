@@ -1,16 +1,23 @@
-class ChangeDefaultsForAlphabethCode < ActiveRecord::Migration[4.2]
+class ChangeDefaultsForAlphabethCode < ActiveRecord::Migration[5.2]
    def change
       change_table :cantoes do |t|
-         t.change_default :alphabeth_code, nil ;end
+         t.change_default :alphabeth_code, nil
+      end
 
       change_table :descriptions do |t|
-         t.change_default :alphabeth_code, nil ;end
+         t.change_default :alphabeth_code, nil
+      end
 
       change_table :links do |t|
-         t.change_default :alphabeth_code, nil ;end
+         t.change_default :alphabeth_code, nil
+      end
 
       change_table :names do |t|
-         t.change_default :alphabeth_code, nil ;end
+         t.change_default :alphabeth_code, nil
+      end
 
       change_table :services do |t|
-         t.change_default :alphabeth_code, nil ;end ;end ;end
+         t.change_default :alphabeth_code, nil
+      end
+   end
+end

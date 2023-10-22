@@ -1,10 +1,10 @@
-class AddSomeFieldsToMemoryNames < ActiveRecord::Migration[4.2]
+class AddSomeFieldsToMemoryNames < ActiveRecord::Migration[5.2]
    def change
-      safety_assured do
-      add_column :memory_names, :state, :integer
-      add_column :memory_names, :feasibly, :integer, default: 0, null: false
-      add_column :memory_names, :created_at, :timestamp
-      add_column :memory_names, :updated_at, :timestamp
-
-      change_column_null :memory_names, :created_at, false
-      change_column_null :memory_names, :updated_at, false end;end;end
+      change_table :memory_names do |t|
+         t.integer :state
+         t.integer :feasibly, default: 0, null: false
+         t.timestamp :created_at, null: false
+         t.timestamp :updated_at, null: false
+      end
+   end
+end

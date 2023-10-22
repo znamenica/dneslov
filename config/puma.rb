@@ -16,7 +16,7 @@ def root
   File.expand_path('../..', __FILE__)
 end
 
-if Rails.env.production?
+if Rails.env.production? or Rails.env.staging?
    app_dir = File.expand_path("../..", __FILE__)
    shared_dir = File.expand_path("#{app_dir}/../../shared")
    threads_count = Integer(ENV['MAX_THREADS'] || 5)

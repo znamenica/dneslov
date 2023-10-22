@@ -1,13 +1,15 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 import { CharacterCounter } from 'materialize-css'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 
 import { valueToObject } from 'support'
 
+@mixin(Subscribed)
 @mixin(Validation)
 export default class TextField extends Component {
    static defaultProps = {
@@ -30,12 +32,14 @@ export default class TextField extends Component {
    }
 
    // system
+   @flow('componentDidMountBefore')
    componentDidMount() {
       if (this.props.data && this.props.data['length']) {
          this.counter = CharacterCounter.init(this.$input)
       }
    }
 
+   @flow('componentWillUnmountBefore')
    componentWillUnmount() {
       if (this.counter) {
          this.counter.destroy()
@@ -51,7 +55,7 @@ export default class TextField extends Component {
    onChange(e) {
       console.log("[onChange] <<<")
       let object = valueToObject(this.props.name, e.target.value),
-          ce = new CustomEvent('dneslov-update-path', { detail: object })
+          ce = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
       document.dispatchEvent(ce)
 
@@ -63,6 +67,10 @@ export default class TextField extends Component {
                this.props.wrapperClassName,
                this.getErrorText(this.props.value) && 'invalid' ].
          filter((x) => { return x }).join(" ")
+   }
+
+   value() {
+      return (this.props.value === undefined || this.props.value === null) ? "" : String(this.props.value)
    }
 
    render() {
@@ -79,7 +87,7 @@ export default class TextField extends Component {
                name={this.props.name}
                ref={c => {this.$input = c}}
                placeholder={this.props.placeholder}
-               value={this.props.value || ''}
+               value={this.value()}
                data-length={this.props.data && this.props.data['length']}
                onChange={this.onChange.bind(this)} />
             <label

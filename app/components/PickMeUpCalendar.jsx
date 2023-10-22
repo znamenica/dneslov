@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 export default class PickMeUpCalendar extends Component {
    static defaultProps = {
       withDate: null,
-      calendarStyle: 'julian',
+      calendarStyle: 'neojulian',
       calendary: {},
       pickmeup: {
          first_day: 0,
@@ -48,17 +48,13 @@ export default class PickMeUpCalendar extends Component {
       this.onPickmeupChange = this.onPickmeupChange.bind(this)
       this.onYesterdayClick = this.onYesterdayClick.bind(this)
       this.onTomorrowClick = this.onTomorrowClick.bind(this)
-      this.onChangeStyle = this.onChangeStyle.bind(this)
       this.uprenderCalendar = this.uprenderCalendar.bind(this)
    }
 
    setState(value) {
-      Object.keys(value).forEach((key) => {
-         this.state[key] = value[key]
-      })
-
+      Object.keys(value).forEach((key) => { this.state[key] = value[key] })
       this.props.onUpdate({ withDate: this.state.withDate })
-      console.log("state", this.state)
+      console.log("[setState] * state", this.state)
    }
 
    componentDidMount() {
@@ -89,9 +85,6 @@ export default class PickMeUpCalendar extends Component {
       this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
          el.addEventListener('click', this.onTomorrowClick)
       })
-      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         el.addEventListener('click', this.onChangeStyle, { passive: true })
-      })
    }
 
    componentWillUnmount() {
@@ -104,16 +97,13 @@ export default class PickMeUpCalendar extends Component {
       this.$calendar.querySelectorAll('.pmu-tomorrow').forEach((el) => {
          el.removeEventListener('click', this.onTomorrowClick)
       })
-      this.$calendar.querySelectorAll('.pmu-style').forEach((el) => {
-         removeEventListener('click', this.onChangeStyle)
-      })
    }
 
    // specific
    selectedString() {
       let selected
 
-      if (this.state.withDate) {
+      if (this.state.withDate && this.state.withDate.first()) {
          let parts = this.state.withDate.first().split(".")
 
          selected = new Date(+parts[2], +parts[1] - 1, +parts[0])
@@ -253,14 +243,18 @@ export default class PickMeUpCalendar extends Component {
       return +date === +this.easterDate(date.getFullYear())
    }
 
+   fastDays() {
+      let calendary = this.props.calendary
+
+      return calendary && calendary["meta"] && calendary["meta"]["fast_days"] || []
+   }
+
    matchFastDate(date) {
       let year = date.getFullYear(),
           weekDay = (date.getDay() - this.recalculateGap()) % 7,
-          easter = this.easterDate(year),
-          fastDays = this.props.calendary["meta"]["fast_days"] || []
+          easter = this.easterDate(year)
 
-
-      return fastDays.reduce((measure, rule) => {
+      return this.fastDays().reduce((measure, rule) => {
          let fast = [rule["days"]].flat().some((ranges) => {
             return [ranges].flat().some((range) => {
                let baseDateRef = {},
@@ -313,10 +307,8 @@ export default class PickMeUpCalendar extends Component {
       e.stopPropagation()
    }
 
-   onChangeStyle(e) {
-      let radio_id = e.target.getAttribute('for'),
-          radio = e.target.parentElement.querySelector('#' + radio_id),
-          newCalendarStyle = radio.getAttribute('value')
+   onClick(e) {
+      let newCalendarStyle = e.target.getAttribute('id')
 
       if (newCalendarStyle != this.state.calendarStyle) {
          let new_date = this.pmu.get_date()
@@ -327,42 +319,51 @@ export default class PickMeUpCalendar extends Component {
          }
          this.state.calendarStyle = newCalendarStyle
          this.pmu.set_date(new_date, new_date)
+         e.target.classList.add('clicked')
+
          this.setState({
             withDate: [ this.pmu.get_date(true), newCalendarStyle ]
          })
       }
    }
 
+   labelClassName(type) {
+      let klass = ['pmu-style', type]
+
+      if (this.state.calendarStyle == type) {
+         klass = klass.concat('checked')
+      }
+
+      return klass.join(" ")
+   }
+
    render() {
       console.log("[render] * this.props", this.props)
+
       return (
          <div className='row calendary'>
             <div className='hidden'>
                <nav
+                  key="calendarStyles"
                   className='style-select'
                   id='calendar-styles'>
-                  <input
-                     className='hidden'
-                     id='julian'
-                     type='radio'
-                     name='calendar-style'
-                     defaultChecked
-                     value='julian' />
                   <label
-                     className='pmu-style julian'
+                     id='julian'
+                     className={this.labelClassName('julian')}
+                     key="labelJulian"
+                     onClick={this.onClick.bind(this)}
                      htmlFor='julian'>
                         Юлианский</label>
-                  <input
-                     className='hidden'
-                     id='neojulian'
-                     type='radio'
-                     name='calendar-style'
-                     value='neojulian' />
                   <label
-                     className='pmu-style neo-julian'
+                     id='neojulian'
+                     className={this.labelClassName('neojulian')}
+                     key="labelNeojulian"
+                     onClick={this.onClick.bind(this)}
                      htmlFor="neojulian">
                         Новоюлианский</label></nav>
-               <nav className='next-prev'>
+               <nav
+                  key="dayNavigate"
+                  className='next-prev'>
                   <div
                      className='pmu-yesterday pmu-button'>◀ Вчера</div>
                   <div

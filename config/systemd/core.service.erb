@@ -1,21 +1,20 @@
 [Unit]
-Description=<%= fetch(:application) %> application server
+Description=<%= fetch(:application) %> application core server
 After=network.target remote-fs.target nss-lookup.target
-Wants=postgresql.service dneslov-sidekiq.service
-Requires=redis.service
+Requires=redis.service postgresql.service dneslov_sidekiq.service
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
+User=_nginx
+Group=_nginx
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'exec bundle exec puma'
+ExecStart=/bin/bash -lc 'bundle exec rails s'
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
 TimeoutSec=30
-SyslogIdentifier=dneslov
+SyslogIdentifier=dneslov-core
 
 [Install]
 WantedBy=multi-user.target

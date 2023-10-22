@@ -1,4 +1,4 @@
-class CreateMentions < ActiveRecord::Migration[4.2]
+class CreateMentions < ActiveRecord::Migration[5.2]
    def change
       create_table :mentions do |t|
          t.belongs_to :calendary, null: false
@@ -8,4 +8,7 @@ class CreateMentions < ActiveRecord::Migration[4.2]
 
          t.timestamps null: false
 
-         t.index %i(calendary_id event_id year_date), unique: true end;end;end
+         t.index %i(calendary_id event_id year_date), unique: true
+      end
+   end
+end

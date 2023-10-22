@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import M from 'materialize-css'
 
 import Chip from 'Chip'
+import Name from 'Name'
 import GetSlugColor from 'mixins/GetSlugColor'
 import Markdown from 'Markdown'
 
@@ -13,6 +14,7 @@ export default class Description extends Component {
    static defaultProps = {
       describedMemoes: [],
       defaultCalendarySlug: null,
+      i18: { title: "Описание" }
    }
 
    // system
@@ -34,9 +36,25 @@ export default class Description extends Component {
       return this.props.describedMemoes.length > 0
    }
 
+   indexActiveMemo() {
+      this.index = this.index || this.props.describedMemoes.indexOf((memo) => {
+         return memo.calendary_slug == this.props.defaultCalendarySlug
+      })
+
+      console.debug("[indexActiveMemo] >>>", this.index)
+
+      return this.index
+   }
+
    activeClassFor(memo) {
-      if (memo.calendary_slug == this.props.defaultCalendarySlug) {
-         return "active"
+      if (this.indexActiveMemo() >= 0) {
+         if (memo.calendary_slug == this.props.defaultCalendarySlug) {
+            return "active"
+         }
+      } else {
+         if (memo.calendary_slug == this.props.describedMemoes[0].calendary_slug) {
+            return "active"
+         }
       }
 
       return ""
@@ -49,7 +67,7 @@ export default class Description extends Component {
          <div className='col s12'>
             <div className='row'>
                <div className='col s12 title'>
-                  Описание</div>
+                  {this.props.i18.title}</div>
                <div className='col s12'>
                   <ul
                      key='description-list'
@@ -66,11 +84,20 @@ export default class Description extends Component {
                                  className='calendary'
                                  text={memo.calendary_title}
                                  color={this.getSlugColor(memo.calendary_slug)}
-                                 url={memo.calendary_url} /></div>
+                                 url={memo.calendary_url} />
+                              <Name
+                                 short_name={memo.title} />
+                              <Chip
+                                 key={memo.calendary_slug + '-description-year-date'}
+                                 className='year-date right'
+                                 text={memo.year_date}
+                                 color={this.getSlugColor(memo.year_date)}
+                                 url={memo.url} /></div>
                            <div className="collapsible-body">
-                              <div className='container'>
-                                 <div className='row'>
-                                    <div className='col s12 description'>
-                                       <Markdown source={memo.description} /></div></div></div></div></li>)}</ul></div></div></div>)
+                              {memo.description &&
+                                 <div className='container'>
+                                    <div className='row'>
+                                       <div className='col s12 description'>
+                                          <Markdown source={memo.description} /></div></div></div>}</div></li>)}</ul></div></div></div>)
    }
 }

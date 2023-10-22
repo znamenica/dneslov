@@ -1,4 +1,4 @@
-class AddFieldsToCalendaries < ActiveRecord::Migration[4.2]
+class AddFieldsToCalendaries < ActiveRecord::Migration[5.2]
    def change
       change_table :calendaries do |t|
          t.index :slug, unique: true
@@ -7,4 +7,7 @@ class AddFieldsToCalendaries < ActiveRecord::Migration[4.2]
 
          t.belongs_to :place, optional: true
          t.string :author_name
-         t.string :counsil ;end;end;end
+         t.string :counsil
+      end
+   end
+end

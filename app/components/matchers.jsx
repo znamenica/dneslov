@@ -1,4 +1,9 @@
 import { merge } from 'merge-anything'
+import UrlRegexp from 'UrlRegexp'
+
+export function matchValidUrl(text) {
+   return !text || !text.match(UrlRegexp) && !text.match(/^\//)
+}
 
 export function matchValidJson(text) {
    if (text) {
@@ -23,20 +28,25 @@ export function matchLetters(textIn, context) {
 
    console.debug("[matchLetters] ** text:", text, "context:", context)
 
+   if (!text) {
+      return res
+   }
+
    switch (context.alphabeth_code) {
-   case 'РУ':
-      res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=>\[\]\(\)!\|]+$/)
+   case 'РО':
+      res = ! text.match(/^[А-ЯЁа-яё:,.!?;\-\/*()0-9«»́–—\r\n†№IVXLCDM \*~`\+\-#=\[\]\(\)!\|\<\>]+$/)
       break
    case 'ЦС':
-      res = ! text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
-   case 'РП':
+      res = ! text.match(/^[҂҃҄҇꙼꙾ⷣⷮ꙽ꙿА-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѼѾꙖꙊа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѽѿꙗꙋ:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
+      break
+   case 'РУ':
       res = ! text.match(/^[А-ЯЁІѢѲѴа-яёіѣѳѵ:,.!;\-\/*()0-9«»́–—\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
       break
    case 'ЦР':
       res = ! text.match(/^[А-ЯЁа-яё_<>:,.!;\-\/*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
    case 'СС':
-      res = ! text.match(/^[А-ЬЮЅІѠѢѦѮѰѲѴѶѸѺѾꙖа-ьюєѕіѡѣѧѯѱѳѵѷѹѻѿꙗ.,;*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
+      res = ! text.match(/^[꙯꙰꙲꙱ⷠⷡⷢⷣⷤⷥⷦⷧⷨⷩⷪⷫⷬⷭⷮⷯⷰⷱⷲⷳⷴⷵⷶⷷⷸⷹⷺⷻⷼⷽⷾⷿꙴꙵꙶꙷꙸꙹꙺꙻ꙽ꙿꚜꚝꚞꚟ︮︯꙳꙼꙾҂҃҄҇҈҉А-ЬЮЅІѠѢѦѪѮѰѲѴѶѸѺѾꙖа-ьюєѕіѡѣѧѫѯѱѳѵѷѹѻѿꙗѨѩѬѭѸѹҀҁꙀꙁꙂꙃꙄꙅꙆꙇꙈꙉꙊꙋꙌꙍꙎꙏꙐꙑꙒꙓꙔꙕꙘꙙꙚꙛꙜꙝꙨꙩꙪꙫꙬꙭꙮꚘꚙꚚꚛ.,;*\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
    case 'УК':
       res = ! text.match(/^[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ:,.!?\-()0-9́«»–—\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
@@ -47,7 +57,7 @@ export function matchLetters(textIn, context) {
    case 'МК':
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
-   case 'СР':
+   case 'СЕ':
       res = ! text.match(/^[ЂЈ-ЋЏА-ИК-Шђј-ћа-ик-ш:,.!?\-\/()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
       break
    case 'ХР':
@@ -66,7 +76,7 @@ export function matchLetters(textIn, context) {
       res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
    case 'ПО':
-      res = ! text.match(/^[:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
+      res = ! text.match(/^[A-ZÓĘĆĄŚŹŻŃŁa-zóęćąśźżńł:,.()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
    case 'АР':
       res = ! text.match(/^[Ա-Ֆա-և:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
@@ -125,15 +135,15 @@ export function matchCodes(eIn, context) {
    let e = eIn || {}
 
    const language_tree = {
-      ру: ['РП', 'РУ'],
+      ру: ['РУ', 'РО'],
+      ср: ['СР'],
       др: ['ДР'],
-      цс: ['ЦС', 'РП', 'РУ', 'ЦР'],
+      цс: ['ЦС', 'РУ', 'РО', 'ЦР'],
       сс: ['СС', 'ЦР'],
-      мс: ['МСК', 'МСЛ', 'КМСК', 'КМСЛ'],
       ук: ['УК'],
       бл: ['БЛ'],
       мк: ['МК'],
-      сх: ['СР', 'ХР'],
+      сх: ['СЕ', 'ХР'],
       со: ['СО'],
       бг: ['БГ'],
       чх: ['ЧХ'],
@@ -209,11 +219,15 @@ export function matchAlphabeths(objectIn) {
    return false
 }
 
-export function matchEmptyCollection(value, context) {
+export function matchSelection(value, _context, state) {
+   return !Number.isInteger(state.start) || !Number.isInteger(state.end)
+}
+
+export function matchEmptyCollection(value) {
    return value.reduce((res, v) => { return res && v.value._destroy }, true)
 }
 
-export function matchEmptyObject(value, context) {
+export function matchEmptyObject(value) {
    let res = false
 
    console.debug("[matchEmptyObject] ** value:", value)

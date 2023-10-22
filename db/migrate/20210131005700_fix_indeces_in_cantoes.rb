@@ -38,4 +38,7 @@ class FixIndecesInCantoes < ActiveRecord::Migration[5.2]
          t.index %i(title), unique: true
          t.index %i(author)
          t.index %i(language_code alphabeth_code)
-         t.index %i(id language_code) ;end;end;end
+         t.index %i(id language_code)
+      end
+   end
+end

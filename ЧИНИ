@@ -1,3 +1,8 @@
+gems:
+https://github.com/gregnavis/active_record_doctor
+
+
+
 2.1
 - Memo.where("year_date ~ '%'") review each to %,>,<,~
 - .env move to prod
@@ -162,6 +167,7 @@ http://akafist.narod.ru
  - http://drevo-info.ru/articles/5315.html
 
 женатый (брак) епископ
+  Филипп муж Клавдии, отец Евгении Римской
   Ириней Сирмийский?
   Герман Оксеррский?
 
@@ -174,7 +180,7 @@ http://www.saint.gr/4286/saint.aspx
 21 марта - собор Катанских святых?
 
 кельтские святые - http://celtic-arc.upelsinka.com/calendar
-русские святые 19-го века http://tvereparhia.ru/publikaczii/voprosy-k-pravoslavnym/7864-evgenij-poselyanin-russkie-podvizhniki-19-veka
+русские святые 19-го века https://web.archive.org/web/20190327083221/http://tvereparhia.ru/publikaczii/voprosy-k-pravoslavnym/7864-evgenij-poselyanin-russkie-podvizhniki-19-veka
 карта Греции - https://ru.wikipedia.org/wiki/Номы_Греции
 грузинские святые и молитвы - http://www.georgianweb.com/religion.html
 мощи святых - http://azbyka.ru/spravochniki/ukazatel-mestonakhozhdenija-svjatyn-all.shtml
@@ -199,6 +205,7 @@ http://otpusk-zdorovo.ru/starets-apollonij-v-gorode-murom/
 
 ----
 https://crkvenikalendar.com/
+https://bg-patriarshia.bg/calendar
 http://drevo-info.ru/articles/1511.html
 http://azbyka.ru/days/2015-06-24
 http://days.pravoslavie.ru/Days/20150611.html
@@ -216,7 +223,7 @@ http://www.orthodoxy.ge/lotsvani/troparebi/tarigi/aprili.htm
 http://oca.org/saints/lives/2015/04/09
 http://www.ecclesia.gr/greek/synaxaire/synaxari.asp?minas=4&id=220
 http://martyrs.pstbi.ru/cl0.htm
-http://files2.regentjob.ru/minea/apr2/apr2102.html
+https://web.archive.org/web/20181201140623/http://files2.regentjob.ru/minea/apr2/apr2102.html
 http://mylektsii.ru/5-30983.html
 http://www.orthodoxengland.org.uk/saintsf.htm
 http://www.forum-orthodoxe.com/synaxaire_presentation.php
@@ -232,6 +239,8 @@ http://www.tveni.ge/
 https://www.facebook.com/%E1%83%94%E1%83%99%E1%83%9A%E1%83%94%E1%83%A1%E1%83%98%E1%83%98%E1%83%A1-%E1%83%99%E1%83%90%E1%83%9A%E1%83%94%E1%83%9C%E1%83%93%E1%83%90%E1%83%A0%E1%83%98-325555340800366/
 http://korolev.msk.ru/minea/oct/oct943.html
 https://www.nashavera.com/holydate/saints/20-avgusta-sv-proroka-samuila/
+http://www.catholic-saints.info/
+http://www.catholic.org/saints/
 https://en.wikipedia.org/wiki/List_of_Catholic_saints
 http://константиновохрам.рф/kanonnik/bogorodice/index.html
 http://www.palomnik.by/palomnik/sermons/
@@ -247,11 +256,14 @@ https://www.facebook.com/dobrin.velev.3
 https://www.facebook.com/ეკლესიის-კალენდარი-325555340800366/
 http://kalendar.or.cz/day.pl
 http://www.cerkiew.pl
+http://www.verapravoslavnaya.ru/?Poselyanin_Bogomatermz#01-21-O
 http://www.calendar-ortodox.ro/index.htm
 http://www.pravoslavieto.com/1/calendar.htm
----
-греки
-https://plus.google.com/communities/108805309814661542475/stream/b82da115-59f8-4623-b0a2-b6ab85b2b07d
+http://www.newmartyros.ru/
+https://novisrbljak.livejournal.com/
+https://translated.turbopages.org/proxy_u/en-ru.ru.2926f60e-6397431f-348e99f8-74722d776562/https/en.wikipedia.org/wiki/November_30_(Eastern_Orthodox_liturgics)
+graeca.mrezha.net/glt/
+
 --- катлические
 https://www.heiligenlexikon.de/
 http://www.catholic-saints.info/
@@ -380,4 +392,15 @@ https://github.com/scriptum/UBFG
 Егорий Тирнавский  - отчество
 Василий Выползовский:
 
+обновить в БД:
+31.07-03.08.2000 -> 31.07.2000
+31.07.2000-03.08.2000 -> 31.07.2000
+вид. -> оц.
+вид.ок. -> оц.
+Ссылки вида https://calendar.rop.ru/?idd=175 для памятей удалить
+
+искать: "Сведения о нем помещены", и проверять ссылку текущую и целевую на присутствие, подобно: http://calendar.rop.ru/?svt=may27-ferapont-monzenskij
+
+имена
+-----
 https://ru.wikipedia.org/wiki/Список_имён_славянского_происхождения

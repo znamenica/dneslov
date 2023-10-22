@@ -1,4 +1,7 @@
-class AddBaseYearToMemories < ActiveRecord::Migration[4.2]
+class AddBaseYearToMemories < ActiveRecord::Migration[5.2]
    def change
       change_table :memories do |t|
-         t.integer :base_year, index: true ;end;end;end
+         t.integer :base_year, index: true
+      end
+   end
+end

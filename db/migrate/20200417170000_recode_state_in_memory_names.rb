@@ -1,4 +1,4 @@
-class RecodeStateInMemoryNames < ActiveRecord::Migration[4.2]
+class RecodeStateInMemoryNames < ActiveRecord::Migration[5.2]
    safety_assured
 
    def up
@@ -14,5 +14,8 @@ class RecodeStateInMemoryNames < ActiveRecord::Migration[4.2]
          t.string :state_code, index: true end
 
       MemoryName.find_each { |mn| mn.update!(state_code: states[mn._state_code]) }
+
       remove_column :memory_names, :_state_code
-      change_column_null :memory_names, :state_code, false end;end
+      change_column_null :memory_names, :state_code, false
+   end
+end

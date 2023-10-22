@@ -55,12 +55,13 @@ export function parseDateString(string) {
 }
 
 export function getPathsFromState(state) {
-   let path = "/" + (state.memory?.slug || ""),
+   console.debug("[getPathsFromState] **", state.calendarySlug, state.memory?.slug, state.eventee)
+   let path = "/" + [state.calendarySlug, (state.memory?.slug || state.eventee?.memory?.slug), state.eventee?.id].compact().join("/"),
        json_path = (path === '/' && 'index' || path) + '.json',
        args = "",
        anchor = null,
        params = Object.entries(state.query).reduce((line, [key, value]) => {
-         console.log("[getPathFromState] *", "key:", key, "value:", value, "query:", line)
+         console.log("[getPathsFromState] *", "key:", key, "value:", value, "query:", line)
          if (value && value.length > 0) {
             let part = key + "=" + encodeURIComponent(value)
             return line && line + "&" + part || part
@@ -77,7 +78,41 @@ export function getPathsFromState(state) {
       args += "?" + params
    }
 
+   console.debug("getPathsFromState", path, json_path)
    return [ path + args, json_path + args ]
+}
+
+export function getUrlsFrom(calendarySlug, memory, eventee) {
+   console.debug("[getUrlsFrom] <<<", calendarySlug, memory, eventee)
+   console.debug("[getUrlsFrom] **", Object.fromEntries(new URLSearchParams(window.location.search)))
+   let path = "/" + [calendarySlug, (memory?.slug || eventee?.memory?.slug), eventee?.id].compact().join("/"),
+       json_path = (path === '/' && 'index' || path) + '.json',
+       args = "",
+       anchor = null,
+       query = Object.fromEntries(new URLSearchParams(window.location.search)),
+       params = Object.entries(query).reduce((line, [key, value]) => {
+         console.log("[getUrlsFrom] *", "key:", key, "value:", value, "query:", line)
+         if (value && value.length > 0) {
+            let part = key + "=" + encodeURIComponent(value)
+            return line && line + "&" + part || part
+         } else {
+            return line
+         }
+      }, "")
+
+   if (anchor) {
+      args += "#" + anchor
+   }
+
+   if (params) {
+      args += "?" + params
+   }
+
+   let fullPath = window.location.origin + path,
+       fullJsonPath = window.location.origin + json_path
+   console.debug("[getUrlsFrom] >>>", fullPath + args, fullJsonPath + args)
+
+   return [ fullPath + args, fullJsonPath + args ]
 }
 
 export function getTitleFromState(state) {

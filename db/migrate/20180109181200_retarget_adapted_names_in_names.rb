@@ -1,4 +1,4 @@
-class RetargetAdaptedNamesInNames < ActiveRecord::Migration[4.2]
+class RetargetAdaptedNamesInNames < ActiveRecord::Migration[5.2]
    safety_assured
 
    def change
@@ -16,4 +16,5 @@ class RetargetAdaptedNamesInNames < ActiveRecord::Migration[4.2]
       #   bond.bind_kind = kind
       #   bond.root_id = name.id
       #   name.save!(validate: false) ;end
-      end;end
+   end
+end

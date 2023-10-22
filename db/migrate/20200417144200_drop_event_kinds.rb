@@ -1,3 +1,5 @@
-class DropEventKinds < ActiveRecord::Migration[4.2]
+class DropEventKinds < ActiveRecord::Migration[5.2]
    def change
-      drop_table( :event_kinds ) ;end;end
+      drop_table( :event_kinds )
+   end
+end

@@ -1,4 +1,4 @@
-class ReindexTextOnDescriptionsToMd5 < ActiveRecord::Migration[4.2]
+class ReindexTextOnDescriptionsToMd5 < ActiveRecord::Migration[5.2]
    def change
       change_table "descriptions" do |t|
          t.remove_index column: ["text"], name: "descriptions_text_index", using: :gin

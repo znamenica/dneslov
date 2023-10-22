@@ -1,12 +1,14 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mixin } from 'lodash-decorators'
+import { mixin, flow } from 'lodash-decorators'
 import { FormSelect } from 'materialize-css'
 
 import ErrorSpan from 'ErrorSpan'
 import Validation from 'Validation'
+import Subscribed from 'mixins/Subscribed'
 import { valueToObject } from 'support'
 
+@mixin(Subscribed)
 @mixin(Validation)
 export default class SelectField extends Component {
    static defaultProps = {
@@ -23,10 +25,10 @@ export default class SelectField extends Component {
       wrapperClassName: PropTypes.string.isRequired,
       codeNames: PropTypes.object.isRequired,
       title: PropTypes.string.isRequired,
-      value: PropTypes.string,
    }
 
    // system
+   @flow('componentDidMountBefore')
    componentDidMount() {
       // workaround to avoid bug in react to findout a proper option
       let selected = this.$select.parentElement.querySelector('option[value="' + this.props.value + '"]')
@@ -44,6 +46,7 @@ export default class SelectField extends Component {
       this.$wrap = this.$parent.querySelector('.select-wrapper')
    }
 
+   @flow('componentWillUnmountBefore')
    componentWillUnmount() {
       console.log("[componentWillUnmount] <<<")
       this.select.destroy()
@@ -57,7 +60,7 @@ export default class SelectField extends Component {
    // events
    onChange(e) {
       let object = valueToObject(this.props.name, e.target.value),
-          ce = new CustomEvent('dneslov-update-path', { detail: object })
+          ce = new CustomEvent('dneslov-update-path', { detail: { value: object, path: this.props.name }})
 
       document.dispatchEvent(ce)
    }
@@ -87,7 +90,6 @@ export default class SelectField extends Component {
                onChange={this.onChange.bind(this)} />
             {Object.keys(this.props.codeNames).map((option) =>
                <option
-                  {...{[option.length == 0 && 'disabled']: 'disabled'}}
                   key={option}
                   value={option} >
                   {this.props.codeNames[option]}</option>)}

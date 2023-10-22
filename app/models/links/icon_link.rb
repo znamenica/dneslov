@@ -6,4 +6,5 @@ class IconLink < Link
    accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
 
    validates :url, uri: { allow_redirect: true }
-   validates :descriptions, associated: true ;end
+   validates :descriptions, associated: true, allow_nil: true
+end

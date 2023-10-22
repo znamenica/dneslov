@@ -1,4 +1,4 @@
-class CreateServices < ActiveRecord::Migration[4.2]
+class CreateServices < ActiveRecord::Migration[5.2]
    def change
       create_table :services do |t|
          t.string  :name, null: false
@@ -8,4 +8,7 @@ class CreateServices < ActiveRecord::Migration[4.2]
          t.string  :type
          t.timestamps null: false
 
-         t.index %i(name language_code), unique: true end;end;end
+         t.index %i(name language_code), unique: true
+      end
+   end
+end

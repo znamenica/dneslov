@@ -1,4 +1,4 @@
-class RenameMemoryIdToDescribableIdInDescriptions < ActiveRecord::Migration[4.2]
+class RenameMemoryIdToDescribableIdInDescriptions < ActiveRecord::Migration[5.2]
    safety_assured
 
    def change
@@ -6,13 +6,13 @@ class RenameMemoryIdToDescribableIdInDescriptions < ActiveRecord::Migration[4.2]
          t.remove_index [ "memory_id", "language_code" ]
 
          t.rename :memory_id, :describable_id
-         t.string :describable_type
+         t.string :describable_type, default: 'Memory'
 
          t.index [ "describable_id", "describable_type", "language_code" ], unique: true,
-            name: 'index_descriptions_on_describable_and_language_code' ; end
-
-
-      Description.update_all( describable_type: 'Memory' )
+            name: 'index_descriptions_on_describable_and_language_code'
+      end
 
       change_column_null :descriptions, :describable_id, false
-      change_column_null :descriptions, :describable_type, false ; end ; end
+      change_column_null :descriptions, :describable_type, false 
+   end
+end

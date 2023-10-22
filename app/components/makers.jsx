@@ -1,4 +1,4 @@
-const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Translation', 'Sanctification']
+const event_types = ['Resurrection', 'Repose', 'Writing', 'Appearance', 'Translation', 'Sanctification', 'Veneration']
 
 export function makeTweet(value, locales, source = 'tweets', filter = null) {
    let tweets = locales.map((locale) => {
@@ -69,10 +69,10 @@ export function makeTitle(value, locales, source = 'titles', filter = null) {
    return titles[0] || ''
 }
 
-export function makeDate(value) {
-   let dates = [...event_types].map((event_type) => {
-      return value.events.reduce((res, event) => { return event.type == event_type && event.happened_at || res }, null)
-   }).filter((e) => { return e })
+export function makeDate(record) {
+   let dates = [...event_types].filterMap((event_type) => {
+      return record.events.find((e) => e.kind_code == event_type)?.happened_at
+   })
 
    return dates[0] || ''
 }

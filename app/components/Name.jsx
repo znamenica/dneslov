@@ -15,9 +15,12 @@ export default class Name extends Component {
 
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
+         let fullName = Name.generateFullName(props)
+
          return {
             prevProps: props,
-            fullName: Name.generateFullName(props),
+            fullName: fullName,
+            autoName: fullName || props.defaultNameInCalendary || props.short_name,
          }
       }
 
@@ -25,18 +28,20 @@ export default class Name extends Component {
    }
 
    static generateFullName(props) {
-      //return 
-      let fullName = [
-         this.getFirstName(props),
-         this.getNickName(props),
-         this.getLastName(props),
-         this.getFeatName(props)
+      let names = props.names.sort((a, b) => { return a.level < b.level }),
+          fullName = [
+         this.getFirstName(props, names),
+         this.getNickName(props, names),
+         this.getLastName(props, names),
+         this.getFeatName(props, names)
       ].compact()
 
-      return fullName.isPresent && fullName.slice(0, 2).join(" ") || props.defaultNameInCalendary
+      console.debug("[generateFullName] **", fullName, names)
+
+      return fullName.slice(0, 3).join(" ")
    }
 
-   static getFirstName(props) {
+   static getFirstName(props, namesIn) {
       let preprios = [
          'благословенное',
          'схимное',
@@ -49,26 +54,26 @@ export default class Name extends Component {
 
       let prios = this.priorities.reduce((pp, prio) => {
          let _prios = props.klugs.reduce((p, nameKlug) => {
-            return p.isBlank && prio['klugs'].includes(nameKlug) && prio['states'] || p
+            return p.isBlank() && prio['klugs'].includes(nameKlug) && prio['states'] || p
          }, [])
 
          return _prios.concat(pp)
       }, preprios).uniq()
 
-      let names = this.getNamesFor(prios, props.names)
-      //console.log("QQQQQQQQQQQQQ1", prios, names)
+      let names = this.getNamesFor(prios, namesIn),
+          secondaries = [] // namesIn.slice(1,-1).map((n) => n.name_text).compact()
 
-      return names.isPresent() && (names[0] && names[0].text + (names[1] && " (" + names[1].text + ")" || ""))
+      return names.isPresent() ? (names[0] && names[0].name_text + " " + (secondaries.isPresent() ? "(" + secondaries.join(", ") + ")" : "")) : ""
    }
 
-   static getNickName(props) {
+   static getNickName(props, namesIn) {
       let prios = [
          'прозвание' ]
 
-      return this.getNameFor(prios, props.names)
+      return this.getNameFor(prios, namesIn)
    }
 
-   static getLastName(props) {
+   static getLastName(props, namesIn) {
       let prios = [
          'мужнина',
          'наречёная',
@@ -76,13 +81,13 @@ export default class Name extends Component {
          'отечья',
          'матерня', ]
 
-      return this.getNameFor(prios, props.names)
+      return this.getNameFor(prios, namesIn)
    }
 
-   static getFeatName(props) {
+   static getFeatName(props, namesIn) {
       let prios = [
          'подвига_святительства',
-         'подвига҆_отшельничества',
+         'подвига_отшельничества',
          'подвига_пастырства',
          'подвига_мученичества',
          'подвига_страстотерпчества',
@@ -94,8 +99,15 @@ export default class Name extends Component {
          'подвига_страстотерпчества',
          'подвига_исповедничества', ]
 
-      return this.getNameFor(prios, props.names)
+      return this.getNameFor(prios, namesIn)
    }
+
+   static kinds = [
+         "переложеное",
+         "прилаженое",
+         "переводное",
+         "несвязаное",
+      ]
 
    static priorities = [
       {
@@ -116,15 +128,18 @@ export default class Name extends Component {
       }
    ]
 
-   static getNamesFor(prios, names_in) {
-      let names = prios.map((prio) => {
-      //console.log("WWWWEEEE", prio, names_in)
-         return names_in.find((name) => { 
-      //console.log("WWWWEEEE", prio, name)
-            return prio == name.state_code })
-      }).compact()
+   static getNamesFor(prios, namesIn) {
+      console.debug("[getNamesFor] <<< prios:", prios, "namesIn:", namesIn)
 
-      //console.log("WWWWWWWWWWWwww", names, prios)
+      let names = prios.filterMap((prio) => {
+         return Name.kinds.filterMap((k) => {
+            return namesIn.find((name) => {
+               return prio == name.state_code && name.name_bind_kind_name == k
+            })
+         })
+      }).flat()
+
+      console.debug("[getNamesFor] >>>", names)
 
       return names
    }
@@ -132,10 +147,16 @@ export default class Name extends Component {
    static getNameFor(prios, props) {
       let names = this.getNamesFor(prios, props)
 
-      return names.isPresent() && names[0] && names[0].text
+      return names.isPresent() && names[0] && names[0].name_text
    }
 
    state = {}
+
+   properUrl() {
+      let url = this.props.url.replace(/^http:\/\//, 'https://')
+
+      return url
+   }
 
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
@@ -143,6 +164,12 @@ export default class Name extends Component {
       return (
          <span
             className='name'>
-               {this.state.fullName}</span>
+            {this.props.url &&
+               <a
+                  href={this.properUrl()}
+                  target='_self' >
+                  {this.state.autoName}</a>}
+            {! this.props.url && this.state.autoName}</span>
       )
-   }}
+   }
+}
