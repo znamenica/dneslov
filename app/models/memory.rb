@@ -39,7 +39,7 @@ class Memory < ActiveRecord::Base
 
    scope :by_short_name, -> name { where( short_name: name ) }
    scope :by_slug, -> slug do
-      unscoped.joins(:slug).where(slugs: {text: slug})
+      unscoped.joins(:slug).where(slugs: {text: slug.split(",")})
    end
 
    scope :in_calendaries, -> calendaries_in do
