@@ -11,7 +11,7 @@ class Scriptum < ActiveRecord::Base
       where("#{join_name}.description ~* ?", "\\m#{text}.*").or(
       where("#{join_name}.title ~* ?", "\\m#{text}.*").or(
       where("#{join_name}.prosomeion_title ~* ?", "\\m#{text}.*").or(
-      where("#{join_name}.text ~* ?", "\\m#{text}.*"))))
+      where("unaccent(#{join_name}.text) ~* unaccent(?)", "\\m#{text}.*"))))
    end
    singleton_class.send(:alias_method, :t, :by_token)
 

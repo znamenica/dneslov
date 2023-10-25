@@ -15,7 +15,7 @@ class Nomen < ActiveRecord::Base
    belongs_to :name
 
    scope :by_token, -> text do
-      left_outer_joins(:name).where("names.text ~* ?", "\\m#{text}.*").distinct
+      left_outer_joins(:name).where("unaccent(names.text) ~* unaccent(?)", "\\m#{text}.*").distinct
    end
 
    # required for short list

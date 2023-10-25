@@ -16,7 +16,7 @@ class Name < ActiveRecord::Base
 
    scope :by_token, -> text do
       join_name = table.table_alias || table.name
-      where("#{join_name}.text ~* ?", "\\m#{text}.*")
+      where("unaccent(#{join_name}.text) ~* unaccent(?)", "\\m#{text}.*")
    end
    singleton_class.send(:alias_method, :t, :by_token)
 
@@ -38,7 +38,8 @@ class Name < ActiveRecord::Base
 
    scope :by_root, -> do
       if where_clause.send(:predicates).any?
-         model.joins(:nomina).where(nomina: { root_id: self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id').distinct
+         model.joins(:nomina).where(nomina: { root_id:
+            self.joins(:nomina).select('nomina.root_id') }).group('nomina.root_id').distinct
       else
          self
       end
