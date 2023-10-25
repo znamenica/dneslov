@@ -436,6 +436,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
 
    validates_presence_of :short_name, :events
    validates :base_year, format: { with: /\A-?\d+\z/ }
+   validates :quantity, format: { with: /\A[0-9?+]+?\z/ }, allow_blank: true
 
    before_create :set_slug
    before_validation :set_base_year, on: :create
