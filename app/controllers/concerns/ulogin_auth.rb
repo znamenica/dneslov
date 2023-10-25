@@ -4,7 +4,9 @@ module UloginAuth
    def ulogin
       token = ''
       http_host = ''
-      response = Excon.get('http://ulogin.ru/token.php', token: token, host: http_host)
+      uri = URI('http://ulogin.ru/token.php')
+      uri.query = URI.encode_www_form({ token: token, host: http_host })
+      response = Net::HTTP.get_response(uri)
 
       user = JSON.decode(response, true);
       #              //$user['network'] - соц. сеть, через которую авторизовался пользователь
