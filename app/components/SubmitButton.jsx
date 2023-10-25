@@ -41,6 +41,8 @@ export default class SubmitButton extends Component {
    }
 
    render() {
+      console.log("[render] * this.state:", this.state, "this.props:", this.props)
+
       return (
          <button
             type='submit'

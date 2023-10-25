@@ -39,7 +39,7 @@ class Memory < ActiveRecord::Base
 
    scope :by_short_name, -> name { where( short_name: name ) }
    scope :by_slug, -> slug do
-      unscoped.joins(:slug).where(slugs: {text: slug})
+      unscoped.joins(:slug).where(slugs: {text: slug.split(",")})
    end
 
    scope :in_calendaries, -> calendaries_in do
@@ -276,6 +276,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
    end
 
    scope :with_events, -> context do
+      as = table.table_alias || table.name
       language_codes = [ context[:locales] ].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
       selector = self.select_values.dup
@@ -292,7 +293,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                              events.place_id AS place_id,
                              place_names.text AS place,
                              events.item_id AS item_id,
-                             item_names.text AS item,
+                             COALESCE(item_names.text, #{as}_item_type_names.text) AS item,
                              events.person_name AS person_name,
                              events.type_number AS type_number,
                              events.about_string AS about_string,
@@ -360,10 +361,16 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                           ON place_names.describable_id = events.place_id
                          AND place_names.describable_type = 'Place'
                          AND place_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN items AS #{as}_items
+                          ON #{as}_items.id = events.item_id
              LEFT OUTER JOIN descriptions AS item_names
-                          ON item_names.describable_id = events.item_id
+                          ON item_names.describable_id = #{as}_items.id
                          AND item_names.describable_type = 'Item'
                          AND item_names.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN descriptions AS #{as}_item_type_names
+                          ON #{as}_item_type_names.describable_id = #{as}_items.item_type_id
+                         AND #{as}_item_type_names.describable_type = 'ItemType'
+                         AND #{as}_item_type_names.language_code IN ('#{language_codes.join("', '")}')
              LEFT OUTER JOIN subjects AS event_kinds
                           ON event_kinds.kind_code = 'EventKind'
                          AND event_kinds.key = events.kind_code
@@ -373,7 +380,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                          AND event_kind_titles.type = 'Appellation'
                          AND event_kind_titles.language_code IN ('#{language_codes.join("', '")}')
                        WHERE events.memory_id = memories.id
-                    GROUP BY events.id, place_names.text, item_names.text, event_kind_titles.text)
+                    GROUP BY events.id, place_names.text, item_names.text, #{as}_item_type_names.text, event_kind_titles.text)
                       SELECT jsonb_agg(__events)
                         FROM __events), '[]'::jsonb) AS _events"
 
@@ -436,6 +443,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
 
    validates_presence_of :short_name, :events
    validates :base_year, format: { with: /\A-?\d+\z/ }
+   validates :quantity, format: { with: /\A[0-9?+]+?\z/ }, allow_blank: true
 
    before_create :set_slug
    before_validation :set_base_year, on: :create

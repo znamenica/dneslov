@@ -1,5 +1,3 @@
-require 'excon'
-
 class UriValidator < ActiveModel::EachValidator
    def validate_each(record, attribute, value)
       # if a local link just return true
@@ -24,7 +22,8 @@ class UriValidator < ActiveModel::EachValidator
       end
    rescue URI::InvalidURIError, Addressable::URI::InvalidURIError, ArgumentError
       record.errors.add(attribute, :invalid_uri, message: I18n.t('activerecord.errors.invalid_uri', uri: value))
-   rescue SocketError, Errno::ECONNREFUSED, OpenSSL::SSL::SSLError, Net::OpenTimeout
+   rescue Errno::ECONNREFUSED, OpenSSL::SSL::SSLError, Net::OpenTimeout
       record.errors.add(attribute, :inaccessible_uri, message: I18n.t('activerecord.errors.inaccessible_uri', uri: value))
+   rescue SocketError
    end
 end

@@ -111,6 +111,9 @@ export const memoryMeta = {
          title: 'Количество',
          placeholder: 'Введи количество',
          display_scheme: '12-6-3-3',
+         validations: {
+            'Неверный формат поля: допустимые знаки - цифры, вопрос и плюс': /[^0-9\?\+]/,
+         }
       },
       bond_to_id: {
          kind: 'dynamic',
@@ -323,8 +326,11 @@ export const memoryMeta = {
          title: "Имена",
          action: "Добавь имя",
          display_scheme: '12-12-12-12',
+         subscribeTo: '@quantity',
          validations: {
-            'Минимум одно имя должно быть задано':  matchEmptyCollection
+            'Минимум одно имя должно быть задано': (value, context) => {
+               if (!context.quantity && matchEmptyObject(value, context)) { return true }
+            }
          },
          meta: {
             id: {

@@ -32,9 +32,10 @@ class Calendary < ActiveRecord::Base
    end
    scope :titled_as, -> name { joins( :titles ).where( descriptions: { text: name } ) }
    scope :described_as, -> name { joins( :descriptions ).where( descriptions: { text: name } ) }
-   scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug } ) }
+   scope :by_slug, -> slug { joins( :slug ).where( slugs: { text: slug.split(",") } ) }
    scope :by_slugs, -> slugs do
       return self if slugs.blank?
+      slugs = slugs.split(",") if slugs.is_a?(String)
       # TODO add correct sort by slugs pos
       select("calendaries.*, slugs.*")
        .from("slugs, calendaries")

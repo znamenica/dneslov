@@ -105,6 +105,7 @@ export default class MemoriesForm extends Component {
    onCloudAct(data) {
       let c = (this.state.query.c || "").split(",").filter(c => c).concat([ data.slug ]).join(",")
 
+      console.debug("[onCloudAct] **", merge(this.state.query, {c: c, p: 1}))
       this.pushSubmit(merge(this.state.query, {c: c, p: 1}))
    }
 
@@ -141,7 +142,7 @@ export default class MemoriesForm extends Component {
    onCalendarUpdate(value) {
       let d = (value['withDate'][1] == 'julian' && 'ю' || 'н') +  value['withDate'][0]
 
-      this.pushSubmit(merge(this.state.query, {d: d, p: 1}))
+      this.pushSubmit(merge(this.state.query, {d: d, p: 1}), '/index.json')
    }
 
    onFetchNext() {
@@ -168,11 +169,19 @@ export default class MemoriesForm extends Component {
    }
 
    // remote data processing
+   // query - new query
+   // path - new path request
    pushSubmit(query, path) {
       console.debug("[pushSubmit] <<< ", { query: query, path: path })
-      let [ cpath, json_cpath ] = getPathsFromState(this.state)
-      history.pushState({ query: this.state.query, path: json_cpath }, document.title, cpath)
 
+      // storing current path and query
+      let [ currentPath, jsonCurrentPath ] = getPathsFromState(merge(this.state, { query: query }))
+      history.pushState({ query: this.state.query, path: jsonCurrentPath }, document.title, currentPath)
+
+      // when path is undefined it is filled with current one
+      path ||= jsonCurrentPath
+
+      console.debug("[pushSubmit] **", this.state, query, path)
       this.submit(query, path)
    }
 

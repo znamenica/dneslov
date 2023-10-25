@@ -23,19 +23,19 @@ SitemapGenerator::Sitemap.create do
    add('/about', priority: 1, changefreq: 'monthly')
 
    Memory.find_each do |memory|
-      add(slug_path(memory.slug.text), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+      add(slug_path(memory.slug.text), lastmod: memory.updated_at, changefreq: 'daily')
 
       memory.events.each do |event|
-         add(slug_event_path(memory.slug.text, event), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+         add(slug_event_path(memory.slug.text, event), lastmod: memory.updated_at, changefreq: 'monthly')
 
          event.calendaries.each do |calendary|
-            add(cslug_event_path(calendary.slug.text, memory.slug.text, event), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+            add(cslug_event_path(calendary.slug.text, memory.slug.text, event), lastmod: memory.updated_at, changefreq: 'monthly')
          end
       end
 
       memory.calendaries.each do |cal|
          add(slug_path(cal.slug.text), priority: 0.7, changefreq: 'daily')
-         add(cslug_path(cal.slug.text, memory.slug.text), lastmod: memory.updated_at, expires: Time.now + 2.weeks)
+         add(cslug_path(cal.slug.text, memory.slug.text), lastmod: memory.updated_at, changefreq: 'monthly')
       end
    end
 end
