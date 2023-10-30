@@ -108,7 +108,10 @@ class PdfBookService
             inline_format: true
          )
          pdf.bounding_box([250, y_position], width: 200, height: 240) do
-            pdf.image(URI.parse(icon_link.url).open, fit: [200, 240])
+            begin
+               pdf.image(URI.parse(icon_link.url).open, fit: [200, 240])
+            rescue Prawn::Errors::UnsupportedImageType
+            end
          end
          pdf.text(excess_text, width: 450, inline_format: true)
       end

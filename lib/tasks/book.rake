@@ -3,6 +3,6 @@ namespace :book do
    task :pdf, %i(name calendary dates year) => :environment do |t, args|
       Rails.logger.info "Generate PDF Book with args #{args.inspect}"
 
-      PDFBookService.new(args).generate
+      PdfBookService.new(args).generate
    end
 end
