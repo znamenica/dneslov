@@ -3,6 +3,10 @@ class MemoPolicy < ApplicationPolicy
       !@user.nil?
    end
 
+   def memoried?
+      !@user.nil?
+   end
+
    def index?
       !@user.nil?
    end

@@ -26,4 +26,11 @@ namespace :fix do
 
       true
    end
+
+   desc "Fix memo_scripta for scripta"
+   task memo_scripta: :environment do
+      Tasks.fix_memo_scripta_for_scripta
+
+      true
+   end
 end

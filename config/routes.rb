@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get '/short_orders' => 'orders#all'
       get '/short_calendaries' => 'calendaries#all'
       get '/short_memoes' => 'memoes#all'
+      get '/short_full_memoes' => 'memoes#memoried'
       get '/short_events' => 'events#all'
       get '/short_memories' => 'memories#all'
       get '/short_names' => 'names#all'

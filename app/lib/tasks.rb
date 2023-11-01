@@ -88,5 +88,27 @@ module Tasks
 
          raise failed.each {|x| puts x } if failed.any?
       end
+
+      def fix_memo_scripta_for_scripta
+         Scriptum.transaction do
+            Scriptum.find_each do |s|
+               begin
+                  if s.memo_scripta.blank? && s.service_scripta.present?
+                     s.services.find_each do |svc|
+                        if svc.info.is_a?(Memo)
+                           s.memo_scripta.create!(memo_id: svc.info.id, kind: "To")
+                        elsif svc.info.is_a?(Memory)
+                           svc.info.memos.each do |m|
+                              s.memo_scripta.create!(memo_id: m.id, kind: "To")
+                           end
+                        else
+                           raise
+                        end
+                     end
+                  end
+               end
+            end
+         end
+      end
    end
 end

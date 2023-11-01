@@ -1,7 +1,7 @@
 import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection } from 'matchers'
 
 export const scriptumMeta = {
-   default: 'scriptum',
+   default: "text", //TODO (value) => { return value.text || value.ref_title || value.title },
    remoteNames: 'scripta',
    remoteName: 'scriptum',
    title: 'Тексты',
@@ -18,6 +18,7 @@ export const scriptumMeta = {
          title: 'Вид',
          value: (value) => {
             const scriptumTable = {
+               'Prolog': 'Пролог',
                'Irmos': 'Ирмос',
                'Ikos': 'Икос',
                'Troparion': 'Тропарь',
@@ -55,18 +56,6 @@ export const scriptumMeta = {
       alphabeth_code: {
          title: 'Азбука',
       },
-      tone: {
-         title: 'Глас',
-      },
-      title: {
-         title: 'Заголовок',
-      },
-      prosomeion_title: {
-         title: 'Подобен',
-      },
-      ref_title: {
-         title: 'Ссылка на...',
-      },
       text: {
          title: 'Текст',
          value: (value) => {
@@ -77,55 +66,24 @@ export const scriptumMeta = {
             }
          },
       },
-      description: {
-         title: 'Описание',
-         value: (value) => {
-            if (value.description && value.description.length > 30) {
-               return value.description.slice(0, 30) + '...'
-            } else {
-               return value.description
-            }
-         },
+      memo: {
+         title: 'Память',
+         value: (value) => { return value.memo_scripta && value.memo_scripta[0] && value.memo_scripta[0].memo_name },
+      },
+      tone: {
+         title: 'Глас',
+      },
+      prosomeion_title: {
+         title: 'Подобен',
+      },
+      ref_title: {
+         title: 'Ссылка на...',
       },
       author: {
          title: 'Автор',
       },
    },
    form: {
-      title: {
-         kind: 'text',
-         title: 'Написание заголовка',
-         placeholder: 'Введи написание заголовка',
-         display_scheme: '12-6-4-4',
-      },
-      prosomeion_title: {
-         kind: 'text',
-         title: 'Подобен',
-         placeholder: 'Введи текст подобна',
-         display_scheme: '12-6-4-4',
-      },
-      ref_title: {
-         kind: 'text',
-         title: 'Заголовочная ссылка',
-         placeholder: 'Заполни текстовую ссылку',
-         display_scheme: '12-6-4-4',
-      },
-      tone: {
-         kind: 'select',
-         title: 'Глас',
-         codeNames: {
-            '': 'Избери глас...',
-            '1': '1-й',
-            '2': '2-й',
-            '3': '3-й',
-            '4': '4-й',
-            '5': '5-й',
-            '6': '6-й',
-            '7': '7-й',
-            '8': '8-й',
-         },
-         display_scheme: '12-6-1-1',
-      },
       type: {
          kind: 'select',
          title: 'Вид текста',
@@ -133,6 +91,7 @@ export const scriptumMeta = {
             '': 'Избери вид текста...',
             'Scriptum': 'Текст',
             'Bible': 'Библия',
+            'Prolog': 'Пролог',
             'Canto': 'Песма',
             'Chant': 'Песнопение',
             'Canticle': 'Спевна',
@@ -158,7 +117,7 @@ export const scriptumMeta = {
             'Resurrexion': 'Воскресна',
             'Ipakoi': 'Ипакой' // на 17-й кафизмѣ
          },
-         display_scheme: '12-6-2-2',
+         display_scheme: '12-6-3-3',
          validations: {
             'Пункт из списка должен быть выбран': matchEmptyObject,
          },
@@ -212,6 +171,100 @@ export const scriptumMeta = {
                return !context.ref_title && matchEmptyObject(value)
             },
             'Текст содержит знаки вне перечня избранной азбуки': matchLetters,
+         }
+      },
+      tone: {
+         kind: 'select',
+         title: 'Глас',
+         visible_if: { type: [
+            "Irmos", "Troparion", "Stichira", "Kontakion", "Exapostilarion", "SessionalHymn",
+            "Kanonion", "Kathismion", "Polileosion", "Apostichus", "CryStichira",
+            "Stichiron", "Praision", "Sedation", "Anatolion", "Resurrexion", "Ipakoi"] },
+         codeNames: {
+            '': 'Избери глас...',
+            '1': '1-й',
+            '2': '2-й',
+            '3': '3-й',
+            '4': '4-й',
+            '5': '5-й',
+            '6': '6-й',
+            '7': '7-й',
+            '8': '8-й',
+         },
+         display_scheme: '12-6-1-1',
+      },
+      title: {
+         kind: 'text',
+         title: 'Написание заголовка',
+         visible_if: { type: [
+            "Irmos", "Troparion", "Stichira", "Kontakion", "Exapostilarion", "SessionalHymn",
+            "Kanonion", "Kathismion", "Polileosion", "Apostichus", "CryStichira",
+            "Stichiron", "Praision", "Sedation", "Anatolion", "Resurrexion", "Ipakoi"] },
+         placeholder: 'Введи написание заголовка',
+         display_scheme: '12-6-3-3',
+      },
+      prosomeion_title: {
+         kind: 'text',
+         title: 'Подобен',
+         visible_if: { type: [
+            "Irmos", "Troparion", "Stichira", "Kontakion", "Exapostilarion", "SessionalHymn",
+            "Kanonion", "Kathismion", "Polileosion", "Apostichus", "CryStichira",
+            "Stichiron", "Praision", "Sedation", "Anatolion", "Resurrexion", "Ipakoi"] },
+         placeholder: 'Введи текст подобна',
+         display_scheme: '12-6-4-4',
+      },
+      ref_title: {
+         kind: 'text',
+         title: 'Заголовочная ссылка',
+         visible_if: { type: [
+            "Irmos", "Troparion", "Stichira", "Kontakion", "Exapostilarion", "SessionalHymn",
+            "Kanonion", "Kathismion", "Polileosion", "Apostichus", "CryStichira",
+            "Stichiron", "Praision", "Sedation", "Anatolion", "Resurrexion", "Ipakoi"] },
+         placeholder: 'Заполни текстовую ссылку',
+         display_scheme: '12-6-4-4',
+      },
+      memo_scripta: {
+         kind: 'collection',
+         title: "Памятные отношения",
+         action: "Добавь отношение",
+         display_scheme: '12-12-12-12',
+         validations: {
+            'Минимум одно отношение должно быть задано': (value, context) => {
+               if (matchEmptyObject(value, context)) { return true }
+            }
+         },
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            kind: {
+               kind: 'select',
+               title: 'Род отношения',
+               display_scheme: '12-6-3-3',
+               codeNames: {
+                  '': 'Избери вид отношения...',
+                  'From': 'Обращение от...',
+                  'To': 'Обращение к...',
+                  'About': 'Текст о...',
+                  'Author': 'Автор',
+               },
+               validations: {
+                  'Пункт из списка должен быть выбран': matchEmptyObject,
+               },
+            },
+            memo_id: {
+               kind: 'dynamic',
+               title: 'Память',
+               humanized_name: 'memo_name',
+               display_scheme: '12-6-9-9',
+               placeholder: 'Начни ввод текста имени или описания памяти...',
+               pathname: 'short_full_memoes',
+               key_name: 'value',
+               value_name: 'key',
+               validations: {
+                  'Память должна быть избрана':  matchEmptyObject,
+               }
+            },
          }
       },
       description: {
