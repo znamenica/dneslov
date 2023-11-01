@@ -3,11 +3,8 @@ class Canto < Scriptum
               Stichira Kontakion Exapostilarion SessionalHymn Kanonion Kathismion
               Polileosion Apostichus CryStichira Stichiron)
 
-   has_many :service_scripta, inverse_of: :scriptum
+   has_many :service_scripta, inverse_of: :scriptum, foreign_key: :scriptum_id
    has_many :services, through: :service_scripta
-   has_many :scriptum_memories, inverse_of: :scriptum
-   has_many :memories, through: :scriptum_memories
-   has_many :targets, through: :scriptum_memories, foreign_key: :memory_id, source: :memory
 
    has_alphabeth on: %i(prosomeion_title)
 

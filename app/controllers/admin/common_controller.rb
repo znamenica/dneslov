@@ -96,14 +96,19 @@ class Admin::CommonController < ApplicationController
    end
 
    def with_list
-      send({
-         "all" => :short_with_list,
-         "index" => :index_with_list,
-         "create" => :index_with_list,
-         "update" => :index_with_list,
-         "show" => :index_with_list,
-         "destroy" => :index_with_list,
-      }[action_name])
+      method_name =
+         {
+            "all" => :short_with_list,
+            "index" => :index_with_list,
+            "create" => :index_with_list,
+            "update" => :index_with_list,
+            "show" => :index_with_list,
+            "destroy" => :index_with_list,
+         }[action_name] || "#{action_name}_with_list"
+
+      send(method_name)
+   rescue
+      []
    end
 
    # TODO SQLize

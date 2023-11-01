@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_25_184113) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_31_005858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -136,6 +136,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_25_184113) do
     t.index ["memo_id"], name: "index_memo_orders_on_memo_id"
     t.index ["order_id", "memo_id"], name: "index_memo_orders_on_order_id_and_memo_id", unique: true
     t.index ["order_id"], name: "index_memo_orders_on_order_id"
+  end
+
+  create_table "memo_scripta", force: :cascade do |t|
+    t.bigint "memo_id"
+    t.bigint "scriptum_id"
+    t.string "kind", comment: "Тип свѧзке от, к, или авторство"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kind"], name: "index_memo_scripta_on_kind"
+    t.index ["memo_id", "scriptum_id", "kind"], name: "index_memo_scripta_on_memo_id_and_scriptum_id_and_kind", unique: true
+    t.index ["memo_id"], name: "index_memo_scripta_on_memo_id"
+    t.index ["scriptum_id"], name: "index_memo_scripta_on_scriptum_id"
   end
 
   create_table "memoes", id: :serial, force: :cascade do |t|

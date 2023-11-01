@@ -8,6 +8,7 @@ import Chip from 'Chip'
 import Name from 'Name'
 import Description from 'Description'
 import GetSlugColor from 'mixins/GetSlugColor'
+import Markdown from 'Markdown'
 
 @mixin(GetSlugColor)
 export default class Memory extends Component {
@@ -202,6 +203,7 @@ export default class Memory extends Component {
       'Chant': 'Песнопение',
       'Canto': 'Песма',
       'Bible': 'Библия',
+      'Prolog': 'Пролог',
       'Scriptum': 'Текст',
    }
 
@@ -268,8 +270,8 @@ export default class Memory extends Component {
                      <div className='row'>
                         <div className='col s12 title'>
                            {this.getScriptumTitle(scriptum)}</div>
-                        <div className='col s12'>
-                           {scriptum.text}</div></div>)}</div>}
+                        <div className='col s12 scriptum'>
+                           <Markdown source={scriptum.text} /></div></div>)}</div>}
             {this.props.events.isPresent() &&
                <div className='col s12'>
                   <div className='row'>

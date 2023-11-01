@@ -182,6 +182,54 @@ class Memo < ActiveRecord::Base
    singleton_class.send(:alias_method, :mid, :by_memory_id)
    singleton_class.send(:alias_method, :c, :in_calendaries)
 
+   scope :with_value_memoried, -> context do 
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for(language_codes).flatten
+      as = table.table_alias || table.name
+      selector = self.select_values.dup
+
+      joi = "LEFT OUTER JOIN descriptions AS #{as}_titles
+                          ON #{as}_titles.describable_id = #{as}.id
+                         AND #{as}_titles.describable_type = 'Memo'
+                         AND #{as}_titles.type = 'Title'
+                         AND #{as}_titles.language_code IN ('#{language_codes.join("', '")}')
+                         AND #{as}_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+             LEFT OUTER JOIN events AS #{as}_events
+                          ON #{as}.event_id = #{as}_events.id
+                        JOIN subjects AS #{as}_event_kinds
+                          ON #{as}_event_kinds.key = #{as}_events.kind_code
+                         AND #{as}_event_kinds.kind_code = 'EventKind'
+                        JOIN descriptions AS #{as}_event_titles
+                          ON #{as}_event_titles.id IS NOT NULL
+                         AND (#{as}_event_titles.describable_id = #{as}_events.id
+                         AND #{as}_event_titles.describable_type = 'Event'
+                         AND #{as}_event_titles.type = 'Title'
+                          OR #{as}_event_titles.describable_id = #{as}_event_kinds.id
+                         AND #{as}_event_titles.describable_type = 'Subject'
+                         AND #{as}_event_titles.type = 'Appellation')
+                         AND #{as}_event_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                         AND #{as}_event_titles.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN calendaries AS #{as}_calendaries
+                          ON #{as}_calendaries.id = #{as}.calendary_id
+                        JOIN descriptions AS #{as}_calendary_titles
+                          ON #{as}_calendary_titles.describable_id = #{as}_calendaries.id
+                         AND #{as}_calendary_titles.describable_type = 'Calendary'
+                         AND #{as}_calendary_titles.type = 'Appellation'
+                         AND #{as}_calendary_titles.language_code IN ('#{language_codes.join("', '")}')
+                         AND #{as}_calendary_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+             LEFT OUTER JOIN memories AS #{as}_memories
+                          ON #{as}_memories.id = #{as}_events.memory_id"
+
+      selector << "#{as}_memories.short_name || ' [' ||
+         COALESCE(#{as}_event_titles.text, '') || ' (' ||
+         #{as}_events.happened_at || ')]: ' ||
+         COALESCE(#{as}_titles.text, '') || '[' ||
+         COALESCE(#{as}_calendary_titles.text, '') || ' (' ||
+         memoes.year_date || ')]' AS _value"
+
+      joins(joi).select(selector).group(:id, "#{as}_memories.short_name", "#{as}_events.happened_at", "#{as}_event_titles.text", "#{as}_titles.text", "#{as}_calendary_titles.text", "memoes.year_date")
+   end
+
    scope :with_event, -> do
       selector = 'order_table.order_no AS _event_code'
       list = Event::SORT.map.with_index {|x, i| "('#{x}', #{i})" }

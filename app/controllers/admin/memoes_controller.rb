@@ -1,8 +1,19 @@
 class Admin::MemoesController < Admin::CommonController
+   before_action :fetch_objects, only: %i(memoried)
+
    has_scope :by_memory_id, only: %i(index all)
    has_scope :by_calendary_id, only: %i(index all)
+   has_scope :t, only: %i(memoried)
+
+   def memoried
+      all
+   end
 
    protected
+
+   def memoried_with_list
+      %w(with_key with_value_memoried)
+   end
 
    def index_with_list
       %w(with_descriptions with_links with_memory_event

@@ -187,21 +187,36 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       select(selector).group(:id)
    end
 
-   scope :with_scripta, -> (language_code) do
-      language_codes = [ language_code ].flatten
+   scope :with_scripta, -> (context) do
+      as = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = context[:codes] || Languageble.alphabeth_list_for(language_codes).flatten
+      calendaries_join =
+         if context[:calendary_slugs]
+             "JOIN calendaries AS #{as}_calendaries
+                ON #{as}_calendaries.id = #{as}_memoes.calendary_id
+              JOIN slugs AS #{as}_calendary_slugs
+                ON #{as}_calendary_slugs.id = #{as}_calendaries.id
+               AND #{as}_calendary_slugs.sluggable_type = 'Calendary'
+               AND #{as}_calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')"
+         end
+
       selector = self.select_values.dup
       if selector.empty?
          selector << 'memories.*'
       end
       selector << "COALESCE((SELECT jsonb_agg(scripta)
                                FROM scripta
-                    LEFT OUTER JOIN services
-                                 ON services.info_id = memories.id
-                                AND services.info_type = 'Memory'
-                    LEFT OUTER JOIN service_scripta
-                                 ON service_scripta.service_id = services.id
-                              WHERE scripta.id = service_scripta.scriptum_id
-                                AND scripta.language_code IN ('#{language_codes.join("', '")}')), '[]'::jsonb) AS _scripta"
+                               JOIN events
+                                 ON memories.id = events.memory_id
+                               JOIN memoes AS #{as}_memoes
+                                 ON events.id = #{as}_memoes.event_id
+                               JOIN memo_scripta
+                                 ON memo_scripta.memo_id = #{as}_memoes.id
+                                    #{calendaries_join}
+                              WHERE scripta.id = memo_scripta.scriptum_id
+                                AND scripta.language_code IN ('#{language_codes.join("', '")}')
+                                AND scripta.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')), '[]'::jsonb) AS _scripta"
 
       select(selector).group(:id)
    end
@@ -277,7 +292,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
 
    scope :with_events, -> context do
       as = table.table_alias || table.name
-      language_codes = [ context[:locales] ].flatten
+      language_codes = [context[:locales]].flatten
       alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
       selector = self.select_values.dup
       if self.select_values.dup.empty?
