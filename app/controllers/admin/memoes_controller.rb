@@ -1,5 +1,5 @@
 class Admin::MemoesController < Admin::CommonController
-   before_action :fetch_objects, only: %i(memoried)
+   before_action :fetch_objects, only: %i(memoried all index)
 
    has_scope :by_memory_id, only: %i(index all)
    has_scope :by_calendary_id, only: %i(index all)
