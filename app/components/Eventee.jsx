@@ -111,7 +111,7 @@ export default class Eventee extends Component {
    static getTitle(props) {
       let titles = props.titles.sortByArray(this.types, "type")
 
-      return titles[0].text
+      return titles[0]?.text
    }
 
    // system

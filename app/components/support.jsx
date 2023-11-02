@@ -57,8 +57,8 @@ export function parseDateString(string) {
 export function getPathsFromState(state) {
    console.debug("[getPathsFromState] <<<", state)
    console.debug("[getPathsFromState] **", state.calendarySlug, state.memory?.slug, state.eventee)
-   let calendarySlug = state.query.c.split(",").length == 1 && state.query.c ||
-       state.query.c.split(",").length == 0 && state.calendarySlug || null,
+   let calendarySlug = state.query.c?.split(",").length == 1 && state.query.c ||
+       state.query.c?.split(",")?.length == 0 && state.calendarySlug || null,
        path = "/" + [calendarySlug, (state.memory?.slug || state.eventee?.memory?.slug), state.eventee?.id].compact().join("/"),
        jsonPath = (path === '/' && 'index' || path) + '.json',
        args = "",
