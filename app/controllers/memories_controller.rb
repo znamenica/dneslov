@@ -71,12 +71,14 @@ class MemoriesController < ApplicationController
 
    def fetch_events
       @events = @memory.events
-                       .memoed
+                       .memoed_for(@calendary_slugs)
+                       .with_orders(context)
                        .with_scripta(context)
                        .with_short_memoes(context)
                        .with_place(context)
                        .with_titles(context)
                        .with_description(context)
+                       .select("events.*")
    end
 
    def cslugs

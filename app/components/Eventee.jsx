@@ -56,13 +56,13 @@ export default class Eventee extends Component {
 
    static getDerivedStateFromProps(props, state) {
       if (props !== state.prevProps) {
-         let memo = Eventee.getMemo(props)
+         //let memo = Eventee.getMemo(props)
 
          return {
             prevProps: props,
             title: Eventee.getTitle(props),
             describedMemoes: Eventee.getDescribedMemoes(props),
-            //order: order,
+            order: Eventee.getOrder(props),
             //msDate: Event.getMsDate(props),
             //klugs: Event.collectKlugs(props),
             //describedMemoIds: Memory.getDescribedMemoIds(describedMemoes),
@@ -112,6 +112,20 @@ export default class Eventee extends Component {
       let titles = props.titles.sortByArray(this.types, "type")
 
       return titles[0]?.text
+   }
+
+   static isInCalendaries(props, memo) {
+      let selected = props.selectedCalendaries.filter(calendarySlug => {
+         return memo.calendary_slug == calendarySlug
+      })
+
+      return selected.length > 0
+   }
+
+   static getOrder(props) {
+      return props.memoes.reduce((order, m) => {
+         return order || this.isInCalendaries(props, m) && Object.values(m.orders)[0]
+      }, null) || props.order
    }
 
    // system
@@ -166,7 +180,7 @@ export default class Eventee extends Component {
                {! this.props.specific_title && [
                   <Chip
                      color={this.getSlugColor(this.props.order || this.props.memory?.order)}
-                     text={this.props.memory?.order} />,
+                     text={this.state.order} />,
                   <Name
                      short_name={this.props.memory?.short_name}
                      url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.memory)[0]}

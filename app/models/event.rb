@@ -288,6 +288,44 @@ class Event < ActiveRecord::Base
       select(selector).group(:id)
    end
 
+   scope :with_orders, -> context do
+      language_codes = [ context[:locales] ].flatten
+      cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""
+      as = table.table_alias || table.name
+
+      selector = "COALESCE((WITH __orders AS (
+                       SELECT DISTINCT ON(memo_slugs.text)
+                              memo_slugs.text AS slug,
+                              order_titles_memoes.text AS name
+                         FROM orders
+              LEFT OUTER JOIN memoes
+                           ON #{as}.id = memoes.event_id
+              LEFT OUTER JOIN calendaries
+                           ON calendaries.id = memoes.calendary_id
+              LEFT OUTER JOIN slugs AS calendary_slugs
+                           ON calendary_slugs.sluggable_id = calendaries.id
+                          AND calendary_slugs.sluggable_type = 'Calendary'
+                              #{cslugs_rule}
+              LEFT OUTER JOIN memo_orders
+                           ON memo_orders.memo_id = memoes.id
+              LEFT OUTER JOIN slugs AS memo_slugs
+                           ON memo_slugs.sluggable_id = orders.id
+                          AND memo_slugs.sluggable_type = 'Order'
+              LEFT OUTER JOIN descriptions AS order_titles_memoes
+                           ON order_titles_memoes.describable_id = orders.id
+                          AND order_titles_memoes.describable_type = 'Order'
+                          AND order_titles_memoes.type IN ('Tweet')
+                          AND order_titles_memoes.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE orders.id = memo_orders.order_id
+                          AND calendaries.licit = 't'
+                     GROUP BY order_titles_memoes.text, memo_slugs.text)
+                       SELECT jsonb_agg(__orders)
+                         FROM __orders), '[]'::jsonb) AS _orders"
+
+      #binding.pry
+      select(selector).group(:id)
+   end
+
    scope :with_memoes, -> context do
       language_codes = [ context[:locales] ].flatten
       cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""

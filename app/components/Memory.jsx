@@ -149,20 +149,12 @@ export default class Memory extends Component {
       return match[1]
    }
 
-   static isInCalendaries(props, memo) {
-      let selected = props.selectedCalendaries.filter(calendarySlug => {
-         return memo.calendary_slug == calendarySlug
-      })
-
-      return selected.length > 0
-   }
-
    static getOrder(props) {
       return props.events.reduce((order, e) => {
-         return order || e.memoes.reduce((_order, m) => {
-            return _order || this.isInCalendaries(props, m) && Object.values(m.orders)[0]
+         return e.orders.reduce((_order, o) => {
+            return _order || o.name
          }, order)
-      }, props.order || null)
+      }, null) || props.order
    }
 
    static getHappenedAt(props) {
