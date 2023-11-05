@@ -205,7 +205,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       if selector.empty?
          selector << 'memories.*'
       end
-      selector << "COALESCE((SELECT jsonb_agg(scripta)
+      selector << "COALESCE((SELECT jsonb_agg(DISTINCT scripta)
                                FROM scripta
                                JOIN events
                                  ON memories.id = events.memory_id
