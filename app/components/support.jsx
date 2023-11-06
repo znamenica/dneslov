@@ -85,10 +85,10 @@ export function getPathsFromState(state) {
    return [ path + args, jsonPath + args ]
 }
 
-export function getUrlsFrom(calendarySlug, memory, eventee) {
-   console.debug("[getUrlsFrom] <<<", calendarySlug, memory, eventee)
+export function getUrlsFrom(calendarySlug, memorySlug, eventeeId) {
+   console.debug("[getUrlsFrom] <<<", calendarySlug, memorySlug, eventeeId)
    console.debug("[getUrlsFrom] **", Object.fromEntries(new URLSearchParams(window.location.search)))
-   let path = "/" + [calendarySlug, (memory?.slug || eventee?.memory?.slug), eventee?.id].compact().join("/"),
+   let path = "/" + [calendarySlug, memorySlug, eventeeId].compact().join("/"),
        json_path = (path === '/' && 'index' || path) + '.json',
        args = "",
        anchor = null,

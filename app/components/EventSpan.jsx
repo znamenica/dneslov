@@ -62,7 +62,7 @@ export default class EventSpan extends Component {
                key={'event-span-' + this.props.date + '-' + this.props.happenedAt}>
                <Name
                   short_name={this.state.title}
-                  url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props, this.props)[0]} />
+                  url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.slug, this.props.id)[0]} />
                <Chip
                   className='happened-at'
                   text={this.props.happenedAt} />

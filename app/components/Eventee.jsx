@@ -193,7 +193,7 @@ export default class Eventee extends Component {
                      text={this.state.order} />,
                   <Name
                      short_name={this.props.memory?.short_name}
-                     url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.memory)[0]}
+                     url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.memory.slug)[0]}
                      names={this.props.names} />,
                   <Chip
                      color={this.getSlugColor(this.state.title)}

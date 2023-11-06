@@ -10,6 +10,7 @@ import Description from 'Description'
 import GetSlugColor from 'mixins/GetSlugColor'
 import Markdown from 'Markdown'
 import MetaTags from 'react-meta-tags'
+import { getUrlsFrom } from 'support'
 
 @mixin(GetSlugColor)
 export default class Memory extends Component {
@@ -236,9 +237,10 @@ export default class Memory extends Component {
             <div className='col s12'>
                <div className='row'>
                   <div className='col s12'>
-                     <Chip
-                        color={this.getSlugColor(this.state.order)}
-                        text={this.state.order} />
+                     {this.state.order &&
+                        <Chip
+                           color={this.getSlugColor(this.state.order)}
+                           text={this.state.order} />}
                      <Name
                         short_name={this.props.short_name}
                         defaultNameInCalendary={this.state.title}
@@ -250,6 +252,17 @@ export default class Memory extends Component {
             {this.state.iconLinks.isPresent() &&
                <Carousel
                   images={this.state.iconLinks} />}
+            {this.props.bond_memories.length > 0 &&
+               <div className='col s12'>
+                  <div className='row'>
+                     <div className='col s12 title'>
+                        Опорная память</div>
+                     <div className='col s12'>
+                        {this.props.bond_memories.filterMap((bm) =>
+                           <Chip
+                              color={this.getSlugColor(bm.kind)}
+                              url={getUrlsFrom(this.props.specifiedCalendarySlug, bm.slug)[0]}
+                              text={bm.name} />)}</div></div></div>}
             {this.state.describedMemoes.isPresent() &&
                <Description
                   describedMemoes={this.state.describedMemoes}

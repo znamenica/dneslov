@@ -106,6 +106,7 @@ module CoreFeatures
    def set_memory
       @memorys ||= Memory.with_scripta(context)
                          .with_names(context)
+                         .with_bond_memories(context)
                          .with_pure_links
                          .with_slug_text
 

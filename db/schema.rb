@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_31_005858) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_06_123424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -178,9 +178,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_005858) do
     t.string "order"
     t.string "council"
     t.integer "base_year"
-    t.integer "bond_to_id"
-    t.index ["bond_to_id"], name: "index_memories_on_bond_to_id"
     t.index ["short_name"], name: "index_memories_on_short_name", unique: true
+  end
+
+  create_table "memory_binds", force: :cascade do |t|
+    t.bigint "memory_id", comment: "Собственно память"
+    t.bigint "bond_to_id", comment: "Память как целевая связка"
+    t.string "kind", comment: "Вид связки: источник (Source) для списков икон, опора (Base) - иконы личностей, подобие (Similar) - для установления подобия"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bond_to_id"], name: "index_memory_binds_on_bond_to_id"
+    t.index ["memory_id", "bond_to_id"], name: "index_memory_binds_on_memory_id_and_bond_to_id", unique: true
+    t.index ["memory_id"], name: "index_memory_binds_on_memory_id"
   end
 
   create_table "memory_names", id: :serial, force: :cascade do |t|
@@ -353,6 +362,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_005858) do
   add_foreign_key "links", "resources", on_delete: :cascade
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict
+  add_foreign_key "memory_binds", "memories", column: "bond_to_id", on_delete: :cascade
+  add_foreign_key "memory_binds", "memories", on_delete: :cascade
   add_foreign_key "memory_names", "nomina", on_delete: :cascade
   add_foreign_key "service_scripta", "scripta", on_delete: :cascade
   add_foreign_key "service_scripta", "services", on_delete: :cascade

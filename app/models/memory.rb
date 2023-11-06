@@ -32,6 +32,8 @@ class Memory < ActiveRecord::Base
    has_many :notes, as: :describable, dependent: :destroy, class_name: :Note
    has_many :orders, -> { distinct.reorder('id') }, through: :memos, source: :orders
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
+   has_many :memory_binds
+   has_many :bond_memories, through: :memory_binds, foreign_key: :bond_to_id, class_name: :Memory
 
    default_scope { order( base_year: :asc, short_name: :asc, id: :asc ) }
 
@@ -217,6 +219,61 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                               WHERE scripta.id = memo_scripta.scriptum_id
                                 AND scripta.language_code IN ('#{language_codes.join("', '")}')
                                 AND scripta.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')), '[]'::jsonb) AS _scripta"
+
+      select(selector).group(:id)
+   end
+
+   scope :with_memory_binds, -> do
+      as = table.table_alias || table.name
+
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __memory_binds AS (
+                       SELECT #{as}_memory_binds.id AS id,
+                              #{as}_memory_binds.bond_to_id AS bond_to_id,
+                              #{as}_memory_binds.kind AS kind,
+                              #{as}_bond_memories.short_name AS bond_to_name
+                         FROM memory_binds AS #{as}_memory_binds
+                         JOIN memories AS #{as}_bond_memories
+                           ON #{as}_bond_memories.id = #{as}_memory_binds.bond_to_id
+                        WHERE #{as}.id = #{as}_memory_binds.memory_id)
+                       SELECT jsonb_agg(__memory_binds)
+                         FROM __memory_binds), '[]'::jsonb) AS _memory_binds"
+
+      select(selector).group(:id)
+   end
+
+   scope :with_bond_memories, ->(context) do
+      as = table.table_alias || table.name
+      language_codes = [context[:locales]].flatten
+      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
+
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __bond_memories AS (
+                      SELECT #{as}_memory_binds.id AS id,
+                             #{as}_memory_binds.kind AS kind,
+                             #{as}_memory_slugs.text AS slug,
+                             COALESCE(#{as}_bond_memo_titles.text, #{as}_bond_memories.short_name) AS name
+                        FROM memories AS #{as}_bond_memories
+             LEFT OUTER JOIN slugs AS #{as}_memory_slugs
+                          ON 'Memory' = #{as}_memory_slugs.sluggable_type
+                         AND #{as}_bond_memories.id = #{as}_memory_slugs.sluggable_id
+             LEFT OUTER JOIN memory_binds AS #{as}_memory_binds
+                          ON #{as}_bond_memories.id = #{as}_memory_binds.bond_to_id
+             LEFT OUTER JOIN events AS #{as}_events
+                          ON #{as}.id = #{as}_events.memory_id
+             LEFT OUTER JOIN memoes AS #{as}_memoes
+                          ON #{as}_memoes.event_id = #{as}_events.id
+             LEFT OUTER JOIN descriptions AS #{as}_bond_memo_titles
+                          ON #{as}_bond_memo_titles.describable_id = #{as}_memoes.id
+                         AND #{as}_bond_memo_titles.describable_type = 'Memo'
+                         AND #{as}_bond_memo_titles.type = 'Name'
+                         AND #{as}_bond_memo_titles.language_code IN ('#{language_codes.join("', '")}')
+                         AND #{as}_bond_memo_titles.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
+                       WHERE #{as}_memory_binds.memory_id = #{as}.id)
+                      SELECT jsonb_agg(__bond_memories)
+                        FROM __bond_memories), '[]'::jsonb) AS _bond_memories"
 
       select(selector).group(:id)
    end
@@ -445,6 +502,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
    singleton_class.send(:alias_method, :d, :by_date)
    singleton_class.send(:alias_method, :c, :in_calendaries)
 
+   accepts_nested_attributes_for :memory_binds, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :memory_names, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :paterics, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :events, reject_if: :all_blank, allow_destroy: true

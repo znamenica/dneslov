@@ -77,7 +77,7 @@ export const memoryMeta = {
       },
       base_year: {
          kind: 'text',
-         display_scheme: '12-3-3-3',
+         display_scheme: '12-3-2-2',
          title: 'Опорный год',
          placeholder: 'Введи опорный год',
          data: {length: '5'},
@@ -88,6 +88,21 @@ export const memoryMeta = {
             "Минус может только предварять число": /^.[\\-]{1,4}$/,
             "Цифры должны быть введены обязательно": /^-$/,
          }
+      },
+      quantity: {
+         kind: 'text',
+         title: 'Количество',
+         placeholder: 'Введи количество',
+         display_scheme: '12-6-1-1',
+         validations: {
+            'Неверный формат поля: допустимые знаки - цифры, вопрос и плюс': /[^0-9\?\+]/,
+         }
+      },
+      council: {
+         kind: 'text',
+         title: 'Собор',
+         placeholder: 'Введи сокращение собора',
+         display_scheme: '12-6-4-4',
       },
       place_id: {
          kind: 'dynamic',
@@ -100,30 +115,45 @@ export const memoryMeta = {
          value_name: 'key',
          placeholder: 'Начни ввод наименования места...',
       },
-      council: {
-         kind: 'text',
-         title: 'Собор',
-         placeholder: 'Введи сокращение собора',
-         display_scheme: '12-6-3-3',
-      },
-      quantity: {
-         kind: 'text',
-         title: 'Количество',
-         placeholder: 'Введи количество',
-         display_scheme: '12-6-3-3',
-         validations: {
-            'Неверный формат поля: допустимые знаки - цифры, вопрос и плюс': /[^0-9\?\+]/,
+      memory_binds: {
+         kind: 'collection',
+         title: 'Связанные памяти',
+         action: 'Добавь связанную память',
+         single: 'Связанная память',
+         placeholder: 'Задай связанную память',
+         display_scheme: '12-12-12-12',
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            kind: {
+               kind: 'select',
+               title: 'Вид связки',
+               display_scheme: '12-6-3-2',
+               codeNames: {
+                  '': 'Избери вид связки...',
+                  'Source': 'Источник (списка)', // для списков икон
+                  'Base': 'Опора (иконы)',
+                  'Similar': 'Подобие',
+               },
+               validations: {
+                  'Пункт из списка должен быть выбран': matchEmptyObject,
+               },
+            },
+            bond_to_id: {
+               kind: 'dynamic',
+               title: 'Память',
+               display_scheme: '12-6-9-10',
+               pathname: 'short_memories',
+               humanized_name: 'bond_to_name',
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод связанной памяти...',
+               validations: {
+                  'Связанная память должна быть выбрана': matchEmptyObject,
+               }
+            },
          }
-      },
-      bond_to_id: {
-         kind: 'dynamic',
-         title: 'Привязаный образ',
-         humanized_name: 'bond_to',
-         display_scheme: '12-6-6-6',
-         placeholder: 'Начни ввод имени образа...',
-         pathname: 'short_memoes',
-         key_name: 'value',
-         value_name: 'key',
       },
       descriptions: {
          kind: 'collection',
