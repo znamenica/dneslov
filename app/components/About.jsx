@@ -2,6 +2,7 @@ import { Component } from 'react'
 
 export default class About extends Component {
    static defaultProps = {
+      version: "1.4",
       done: [
          'Версия',
          'Полнотекстовый поиск по календарю',
@@ -55,7 +56,7 @@ export default class About extends Component {
                                  <td>{r}</td>
                                  <td>
                                     {index == 0 &&
-                                       "1.3" ||
+                                       this.props.version ||
                                        <i
                                           className='small material-icons green'>
                                           done</i>}
