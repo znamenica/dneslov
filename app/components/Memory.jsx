@@ -9,6 +9,7 @@ import Name from 'Name'
 import Description from 'Description'
 import GetSlugColor from 'mixins/GetSlugColor'
 import Markdown from 'Markdown'
+import MetaTags from 'react-meta-tags'
 
 @mixin(GetSlugColor)
 export default class Memory extends Component {
@@ -218,11 +219,20 @@ export default class Memory extends Component {
       })
    }
 
+   getDescription() {
+      return this.state.order + " " +
+             this.props.names.reduce((res, x) => { return res + " " + x.name_text }, "") +
+             this.state.describedMemoes.reduce((res, x) => { return res + " " + x.description }, "")
+   }
+
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='row'>
+            <MetaTags>
+               <meta id="meta-description" name="description" content={this.getDescription()} />
+            </MetaTags>
             <div className='col s12'>
                <div className='row'>
                   <div className='col s12'>

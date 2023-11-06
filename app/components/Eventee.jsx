@@ -8,6 +8,7 @@ import Name from 'Name'
 import Description from 'Description'
 import GetSlugColor from 'mixins/GetSlugColor'
 import Markdown from 'Markdown'
+import MetaTags from 'react-meta-tags'
 import { getUrlsFrom } from 'support'
 
 @mixin(GetSlugColor)
@@ -171,11 +172,20 @@ export default class Eventee extends Component {
       }
    }
 
+   getDescription() {
+      return this.props.short_name + " " +
+             this.props.names.reduce((res, x) => { return res + " " + x.name_text }, "") +
+             this.props.titles.reduce((res, x) => { return res + " " + x.text }, "")
+   }
+
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
       return (
          <div className='row'>
+            <MetaTags>
+               <meta id="meta-description" name="description" content={this.getDescription()} />
+            </MetaTags>
             <div className='col s12'>
                {! this.props.specific_title && [
                   <Chip
