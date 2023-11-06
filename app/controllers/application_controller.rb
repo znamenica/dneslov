@@ -8,14 +8,25 @@ class ApplicationController < ActionController::Base
    end
 
    def render_not_exist_error e
-      error = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
-      logger.error(error)
-      render :index, locals: { error: error, status: 404 }
+      render_error(e, 404)
    end
 
    def render_default_error e
-      error = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
-      logger.error(error)
-      render :index, locals: { error: error, status: 500 }
+      render_error(e, 500)
+   end
+
+   def render_error e, code
+      error_text = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+      logger.error(error_text)
+
+      render :index, status: code, locals: {
+         error: {
+            code: code,
+            klass: e.class,
+            message: t(e.class.to_s.split("::").map(&:downcase).join(".")) +
+               (e.class.to_s != e.message ? e.message : ""),
+            backtrace: e.backtrace,
+         },
+      }
    end
 end

@@ -1,5 +1,6 @@
 ru:
    activerecord:
+      recordnotfound: Запись не найдена
       errors:
          invalid_patronymic: имеет неверный вид отчества
          invalid_last_name: имеет неверный вид фамилии

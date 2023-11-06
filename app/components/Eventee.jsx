@@ -188,9 +188,10 @@ export default class Eventee extends Component {
             </MetaTags>
             <div className='col s12'>
                {! this.props.specific_title && [
-                  <Chip
-                     color={this.getSlugColor(this.props.order || this.props.memory?.order)}
-                     text={this.state.order} />,
+                  this.state.order &&
+                     <Chip
+                        color={this.getSlugColor(this.props.order || this.props.memory?.order)}
+                        text={this.state.order} />,
                   <Name
                      short_name={this.props.memory?.short_name}
                      url={getUrlsFrom(this.props.specifiedCalendarySlug, this.props.memory.slug)[0]}

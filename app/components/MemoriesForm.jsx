@@ -11,6 +11,7 @@ import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
 import Eventee from 'Eventee'
 import Intro from 'Intro'
+import Error from 'Error'
 import { getCalendariesString, getDateString, getPathsFromState, getTitleFromState, parseDateString, parseCalendariesString } from 'support'
 
 export default class MemoriesForm extends Component {
@@ -25,6 +26,7 @@ export default class MemoriesForm extends Component {
          total: 0,
       },
       memory: null,
+      error: null
    }
 
    state = {}
@@ -41,8 +43,9 @@ export default class MemoriesForm extends Component {
                memory: props.memory,
                eventee: props.eventee,
                calendarySlug: props.calendaries_used.length == 1 ? props.calendaries_used[0] : null,
+               calendariesCloud: props.calendaries_cloud || [],
                query: {
-                  c: getCalendariesString(props),
+                  c: getCalendariesString(props) || "",
                   d: getDateString(props),
                   q: props.query,
                   p: props.memories.page,
@@ -51,7 +54,9 @@ export default class MemoriesForm extends Component {
 
          document.title = getTitleFromState(state)
          let [ path, json_path ] = getPathsFromState(state)
-         history.replaceState({ query: state.query, path: json_path }, document.title, path)
+         if (!props.error) {
+            history.replaceState({ query: state.query, path: json_path }, document.title, path)
+         }
          console.debug("[getDerivedStateFromProps] <<<", { toNewState: state })
          return state
       }
@@ -82,7 +87,7 @@ export default class MemoriesForm extends Component {
    // props
    calendariesUsed() {
       return this.state.query.c && this.state.query.c.split(",").map((slug) => {
-         return this.props.calendaries_cloud.reduce((c, calendary) => {
+         return this.state.calendariesCloud.reduce((c, calendary) => {
             return c || calendary.slug == slug && calendary || null
          }, null)
       }).filter((x) => {return x})
@@ -92,7 +97,7 @@ export default class MemoriesForm extends Component {
       return this.state.calendarySlug ||
              this.props.calendaries_used &&
              this.props.calendaries_used[0] ||
-             this.props.calendaries_cloud[0].slug
+             this.state.calendariesCloud[0]?.slug
    }
 
    defaultUsedCalendary() {
@@ -103,7 +108,7 @@ export default class MemoriesForm extends Component {
 
    // handlers
    onCloudAct(data) {
-      let c = (this.state.query.c || "").split(",").filter(c => c).concat([ data.slug ]).join(",")
+      let c = this.state.query.c.split(",").filter(c => c).concat([ data.slug ]).join(",")
 
       console.debug("[onCloudAct] **", merge(this.state.query, {c: c, p: 1}))
       this.pushSubmit(merge(this.state.query, {c: c, p: 1}))
@@ -288,7 +293,6 @@ export default class MemoriesForm extends Component {
       console.log("[render] * ", { props: this.props, state: this.state})
       console.log("[render] * ", )
 
-
       return (
          [<header>
             <nav className='terracota'>
@@ -322,10 +326,13 @@ export default class MemoriesForm extends Component {
                               calendarStyle={this.calendarStyleFromQuery()}
                               onUpdate={this.onCalendarUpdate.bind(this)} />
                            <CalendariesCloud
-                              calendaries={this.props.calendaries_cloud}
+                              calendaries={this.state.calendariesCloud}
                               calendaries_used={this.calendariesUsed()}
                               onAct={this.onCloudAct.bind(this)} /></div></div>
                      <div className='col s12 m8 l9 xl10'>
+                        {this.props.error &&
+                           <Error
+                              error={this.props.error} />}
                         {this.state.memory &&
                            <Memory
                               key='memory'

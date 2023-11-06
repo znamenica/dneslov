@@ -11,8 +11,8 @@ module CoreFeatures
 
          rescue_from Exception, with: :render_default_error
          # NOTE https://stackoverflow.com/a/48744792/446267
-         rescue_from ActionController::UnknownFormat, with: ->{ render nothing: true }
-         rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to :root }
+         rescue_from ActionController::UnknownFormat, with: :render_default_error
+         rescue_from ActiveRecord::RecordNotFound, with: :render_not_exist_error
 
          has_scope :d, only: %i(index show) do |_, scope, value|
             if /(?<julian>[ню])?(?<date>[0-9\-\.]+)/ =~ value

@@ -1,12 +1,13 @@
 <%=
-   react_component 'MemoriesForm',
+   react_component('MemoriesForm',
       date: !@date.blank? && @date.strftime("%d.%m.%Y"),
+      error: (binding.local_variable_get(:error) rescue nil),
       memories: {
-         list: memoes,
          page: @page,
-         total: total
+         list: (binding.local_variable_get(:memoes) rescue nil),
+         total: (binding.local_variable_get(:total) rescue nil)
       },
-      calendaries_cloud: cloud,
+      calendaries_cloud: (binding.local_variable_get(:cloud) rescue nil),
       calendaries_used: @calendary_slugs,
-      query: @query
+      query: @query)
 -%>
