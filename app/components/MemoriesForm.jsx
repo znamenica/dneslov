@@ -42,6 +42,7 @@ export default class MemoriesForm extends Component {
                memoriesTotal: props.memories.total,
                memory: props.memory,
                eventee: props.eventee,
+               error: props.error,
                calendarySlug: props.calendaries_used.length == 1 ? props.calendaries_used[0] : null,
                calendariesCloud: props.calendaries_cloud || [],
                query: {
@@ -54,7 +55,9 @@ export default class MemoriesForm extends Component {
 
          document.title = getTitleFromState(state)
          let [ path, json_path ] = getPathsFromState(state)
-         if (!props.error) {
+         if (state.error) {
+            history.replaceState({ query: state.query, path: document.location.href + '.json' }, document.title, document.location.href)
+         } else {
             history.replaceState({ query: state.query, path: json_path }, document.title, path)
          }
          console.debug("[getDerivedStateFromProps] <<<", { toNewState: state })
@@ -70,7 +73,11 @@ export default class MemoriesForm extends Component {
 
       console.log("[updateState] * replace with", path)
       document.title = getTitleFromState(state)
-      history.replaceState({ query: state.query, path: json_path }, document.title, path)
+      if (state.error) {
+         history.replaceState({ query: state.query, path: document.location.href + '.json' }, document.title, document.location.href)
+      } else {
+         history.replaceState({ query: state.query, path: json_path }, document.title, path)
+      }
 
       console.debug("[getDerivedStateFromProps] <<<", { newState: state })
       this.setState(state)
@@ -166,7 +173,7 @@ export default class MemoriesForm extends Component {
    }
 
    onPopState(e) {
-      console.debug("[onPopState] <<<", { e: e })
+      console.debug("[onPopState] **", { e: e.state })
 
       if (e.state) {
          this.submit(e.state.query.merge({p: 1}), e.state.path)
@@ -218,11 +225,21 @@ export default class MemoriesForm extends Component {
       }
    }
 
-   onLoadFailure(response) {
-      console.debug("[onLoadFailure] <<< response", response)
+   onLoadFailure(err) {
+      console.debug("[onLoadFailure] <<< response", err.response)
+      console.debug("[onLoadFailure] <<< response", err.config)
 
-      history.go(1)
+      let state = merge(this.state, {
+         memories: [],
+         memory: null,
+         eventee: null,
+         error: {
+            message: err.response.data.message,
+            code: err.response.status
+         }
+      })
       document.body.classList.remove('in-progress')
+      this.updateState(merge(state, {query: err.response.config.params}))
       this.isNextRequesting = false
    }
 
@@ -235,13 +252,15 @@ export default class MemoriesForm extends Component {
             memories: newMemories,
             memoriesTotal: memories.total,
             memory: null,
-            eventee: null})
+            eventee: null,
+            error: null})
       } else {
          state = merge(this.state, {
             memories: memories.list,
             memoriesTotal: memories.total,
             memory: null,
-            eventee: null})
+            eventee: null,
+            error: null})
       }
 
       document.body.classList.remove('in-progress')
@@ -254,7 +273,8 @@ export default class MemoriesForm extends Component {
                         { memory: memory,
                           memories: [],
                           query: config.params,
-                          eventee: null})
+                          eventee: null,
+                          error: null})
 
       document.body.classList.remove('in-progress')
       this.updateState(state)
@@ -265,7 +285,8 @@ export default class MemoriesForm extends Component {
                         { memory: null,
                           memories: [],
                           query: config.params,
-                          eventee: eventee})
+                          eventee: eventee,
+                          error: null})
 
       document.body.classList.remove('in-progress')
       this.updateState(state)
@@ -330,9 +351,9 @@ export default class MemoriesForm extends Component {
                               calendaries_used={this.calendariesUsed()}
                               onAct={this.onCloudAct.bind(this)} /></div></div>
                      <div className='col s12 m8 l9 xl10'>
-                        {this.props.error &&
+                        {this.state.error &&
                            <Error
-                              error={this.props.error} />}
+                              error={this.state.error} />}
                         {this.state.memory &&
                            <Memory
                               key='memory'
@@ -351,7 +372,7 @@ export default class MemoriesForm extends Component {
                               specifiedCalendarySlug={this.state.calendarySlug}
                               selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.eventee} />}
-                        {this.props.memories.list && !this.state.eventee && !this.state.memory &&
+                        {this.props.memories.list && !this.state.error && !this.state.eventee && !this.state.memory &&
                            <div>
                               <div className='row'>
                                  <SearchField

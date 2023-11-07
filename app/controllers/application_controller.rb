@@ -18,15 +18,17 @@ class ApplicationController < ActionController::Base
    def render_error e, code
       error_text = "[#{e.class}]: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
       logger.error(error_text)
-
-      render :index, status: code, locals: {
-         error: {
-            code: code,
-            klass: e.class,
-            message: t(e.class.to_s.split("::").map(&:downcase).join(".")) +
-               (e.class.to_s != e.message ? e.message : ""),
-            backtrace: e.backtrace,
-         },
+      error = {
+         code: code,
+         klass: e.class,
+         message: t(e.class.to_s.split("::").map(&:downcase).join(".")) +
+            (e.class.to_s != e.message ? e.message : ""),
+         backtrace: e.backtrace,
       }
+
+      respond_to do |format|
+         format.html { render action_name, status: code, locals: { error: error }}
+         format.json { render json: error, status: code }
+      end
    end
 end
