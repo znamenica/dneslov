@@ -4,6 +4,7 @@ class Calendary < ActiveRecord::Base
    include Languageble
    include WithLocaleNames
    include WithDescriptions
+   include WithLinks
 
    JSON_SCHEMA = Rails.root.join('config', 'schemas', 'calendary.json')
    JSONIZE_ATTRS = {
@@ -14,8 +15,6 @@ class Calendary < ActiveRecord::Base
 
    belongs_to :place, optional: true
 
-   has_many :descriptions, -> { where( type: :Description ).desc }, as: :describable, dependent: :delete_all
-   has_many :links, as: :info, dependent: :delete_all, class_name: :Link
    has_many :titles, as: :describable, dependent: :delete_all, class_name: :Appellation
    has_many :wikies, as: :info, dependent: :delete_all, class_name: :WikiLink
    has_many :beings, as: :info, dependent: :delete_all, class_name: :BeingLink
@@ -167,49 +166,7 @@ class Calendary < ActiveRecord::Base
       joins(join).select(selector).group(:id, 'calendary_slugs.id', 'calendary_slugs.text')
    end
 
-   scope :with_links, -> context do
-      language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
-      selector = self.select_values.dup
-      if self.select_values.dup.empty?
-         selector << 'calendaries.*'
-      end
-
-      selector << "COALESCE((with __links as (
-                      SELECT DISTINCT ON(links.id)
-                             links.id as id,
-                             links.type as type,
-                             links.url as url,
-                             links.language_code AS language_code,
-                             links.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM links
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = links.language_code
-             LEFT OUTER JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = links.alphabeth_code
-             LEFT OUTER JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE links.info_id = calendaries.id
-                         AND links.info_type = 'Calendary'
-                    GROUP BY links.id, language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__links)
-                        FROM __links), '[]'::jsonb) AS _links"
-
-      select(selector).group(:id)
-   end
-
-   accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :wikies, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :beings, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :place, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank, allow_destroy: true
 
@@ -217,7 +174,7 @@ class Calendary < ActiveRecord::Base
    validates :language_code, inclusion: { in: Languageble.language_list }
    validates :alphabeth_code, inclusion: { in: proc { |l| Languageble.alphabeth_list_for(l.language_code)}}
    validates :slug, :titles, :date, presence: true
-   validates :descriptions, :titles, :wikies, :beings, :place, associated: true
+   validates :titles, :place, associated: true
    validates :meta, json: { schema: JSON_SCHEMA }
 
    def default_title

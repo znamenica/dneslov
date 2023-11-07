@@ -1,4 +1,4 @@
-import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection, matchValidJson } from 'matchers'
+import { matchLanguages, matchAlphabeths, matchLetters, matchEmptyObject, matchCodes, matchEmptyCollection, matchValidJson, matchValidUrl } from 'matchers'
 import { makeTitle } from 'makers'
 import UrlRegexp from 'UrlRegexp'
 
@@ -225,41 +225,53 @@ export const calendaryMeta = {
             },
          }
       },
-      wikies: {
+      links: {
          kind: 'collection',
-         title: "Вики-ссылки",
-         action: "Добавь вики-ссылку",
          display_scheme: '12-12-12-12',
+         title: 'Ссылки',
+         action: 'Добавь ссылку',
+         placeholder: 'Введи ссылку',
          source: "links",
-         filter: { type: "WikiLink" },
-         validations: {
-            'Языки в описаниях не могут совпадать': matchLanguages,
-            'Азбуки в описаниях не могут совпадать': matchAlphabeths,
-
-         },
          meta: {
             id: {
                kind: 'hidden',
             },
             url: {
                kind: 'text',
-               title: 'Имя',
-               placeholder: 'Введи имя',
+               title: 'Ссылка',
+               placeholder: 'Введи ссылку',
                display_scheme: '12-12-6-6',
                validations: {
                   "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки": [ "!", UrlRegexp ],
+                  "Неверный формат ссылки": matchValidUrl,
                }
+            },
+            type: {
+               kind: 'select',
+               title: 'Вид ссылки',
+               display_scheme: '12-4-2-2',
+               codeNames: {
+                  '': 'Избери вид текста...',
+                  'WikiLink': 'Вики-ссылка',
+                  'DescriptiveLink': 'Описательная ссылка',
+                  'BeingLink': 'Бытийная ссылка',
+                  'ThumbLink': 'Кругляшовая ссылка',
+                  'PhotoLink': 'Фото-ссылка',
+               },
+               validations: {
+                  'Пункт из списка должен быть выбран': matchEmptyObject,
+               },
             },
             language_code: {
                kind: 'dynamic',
                title: 'Язык',
-               display_scheme: '12-6-3-3',
+               display_scheme: '12-4-2-2',
                pathname: 'short_subjects',
                humanized_name: 'language',
                context_value: { k: "Language" },
                key_name: 'value',
                value_name: 'key',
+               visible_if: { type: ["WikiLink", "DescriptiveLink", "BeingLink"] },
                placeholder: 'Начни ввод наименования языка...',
                subscribeTo: '@alphabeth_code',
                validations: {
@@ -270,72 +282,13 @@ export const calendaryMeta = {
             alphabeth_code: {
                kind: 'dynamic',
                title: 'Азбука',
-               display_scheme: '12-6-3-3',
+               display_scheme: '12-4-2-2',
                pathname: 'short_subjects',
                humanized_name: 'alphabeth',
                context_value: { k: "Alphabeth" },
                key_name: 'value',
                value_name: 'key',
-               placeholder: 'Начни ввод наименования азбуки...',
-               subscribeTo: '@language_code',
-               validations: {
-                  'Избранная азбука не соотвествует избранному языку': matchCodes,
-                  'Азбука из списка должна быть выбрана': matchEmptyObject,
-               }
-            },
-         }
-      },
-      beings: {
-         kind: 'collection',
-         title: "Ссылки",
-         action: "Добавь ссылку",
-         display_scheme: '12-12-12-12',
-         source: "links",
-         filter: { type: "BeingLink" },
-         validations: {
-            'Языки в описаниях не могут совпадать': matchLanguages,
-            'Азбуки в описаниях не могут совпадать': matchAlphabeths,
-
-         },
-         meta: {
-            id: {
-               kind: 'hidden',
-            },
-            url: {
-               kind: 'text',
-               title: 'Имя',
-               placeholder: 'Введи имя',
-               display_scheme: '12-12-6-6',
-               validations: {
-                  "Ссылка отсутствует": matchEmptyObject,
-                  "Неверный формат ссылки": [ "!", UrlRegexp ],
-               }
-            },
-            language_code: {
-               kind: 'dynamic',
-               title: 'Язык',
-               display_scheme: '12-6-3-3',
-               pathname: 'short_subjects',
-               humanized_name: 'language',
-               context_value: { k: "Language" },
-               key_name: 'value',
-               value_name: 'key',
-               placeholder: 'Начни ввод наименования языка...',
-               subscribeTo: '@alphabeth_code',
-               validations: {
-                  'Избранный язык не соотвествует избранной азбуке': matchCodes,
-                  'Язык из списка должен быть выбран': matchEmptyObject,
-               }
-            },
-            alphabeth_code: {
-               kind: 'dynamic',
-               title: 'Азбука',
-               display_scheme: '12-6-3-3',
-               pathname: 'short_subjects',
-               humanized_name: 'alphabeth',
-               context_value: { k: "Alphabeth" },
-               key_name: 'value',
-               value_name: 'key',
+               visible_if: { type: ["WikiLink", "DescriptiveLink", "ServiceLink", "PatericLink", "BeingLink"] },
                placeholder: 'Начни ввод наименования азбуки...',
                subscribeTo: '@language_code',
                validations: {
