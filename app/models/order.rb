@@ -18,8 +18,8 @@ class Order < ActiveRecord::Base
       left_outer_joins( :slug, :descriptions, :notes, :tweets ).
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
          where( "unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
-         where( "unaccent(tweets_orders.text ~* unaccent(?)", "\\m#{text}.*" ).or(
-         where( "unaccent(notes_orders.text ~* unaccent(?)", "\\m#{text}.*" )))).distinct
+         where( "unaccent(tweets_orders.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(notes_orders.text) ~* unaccent(?)", "\\m#{text}.*" )))).distinct
    end
 
    scope :by_tokens, -> string_in do
