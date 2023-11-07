@@ -4,7 +4,9 @@ class Place < ActiveRecord::Base
    has_many :descriptions, as: :describable
    has_many :events
 
-   scope :by_token, -> text { left_outer_joins(:descriptions).where( "descriptions.text ~* ?", "\\m#{text}.*" ) }
+   scope :by_token, -> text do
+      left_outer_joins(:descriptions).where("unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*" )
+   end
 
    singleton_class.send(:alias_method, :t, :by_token)
 

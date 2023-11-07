@@ -9,11 +9,11 @@ class Scriptum < ActiveRecord::Base
    has_many :targets, through: :memo_scripta, foreign_key: :memo_id, source: :memo
 
    scope :by_token, -> text do
-      join_name = table.table_alias || table.name
-      where("#{join_name}.description ~* ?", "\\m#{text}.*").or(
-      where("#{join_name}.title ~* ?", "\\m#{text}.*").or(
-      where("#{join_name}.prosomeion_title ~* ?", "\\m#{text}.*").or(
-      where("unaccent(#{join_name}.text) ~* unaccent(?)", "\\m#{text}.*"))))
+      as = table.table_alias || table.name
+      where("unaccent(#{as}.description) ~* unaccent(?)", "\\m#{text}.*").or(
+      where("unaccent(#{as}.title) ~* unaccent(?)", "\\m#{text}.*").or(
+      where("unaccent(#{as}.prosomeion_title) ~* unaccent(?)", "\\m#{text}.*").or(
+      where("unaccent(#{as}.text) ~* unaccent(?)", "\\m#{text}.*"))))
    end
    singleton_class.send(:alias_method, :t, :by_token)
 

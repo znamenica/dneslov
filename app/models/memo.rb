@@ -137,9 +137,9 @@ class Memo < ActiveRecord::Base
    end
 
    scope :by_token, -> text do
-      left_outer_joins( :descriptions, :titles, :memory ).
-         where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
-         where( "titles_memoes.text ~* ?", "\\m#{text}.*" ).or(
+      left_outer_joins(:descriptions, :titles, :memory).
+         where( "unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(titles_memoes.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
          where( "memories.short_name ~* ?", "\\m#{text}.*" ).or(
          where( "memoes.add_date ~* ?", "\\m#{text}.*" ).or(
          where( "memoes.year_date ~* ?", "\\m#{text}.*" )))))
@@ -325,7 +325,7 @@ class Memo < ActiveRecord::Base
 
       selector =
          "COALESCE(jsonb_object_agg(
-          DISTINCT slugs_#{scope_name}.text || '', titles_#{scope_name}.text)
+          DISTINCT COALESCE(slugs_#{scope_name}.text, ''), titles_#{scope_name}.text)
             FILTER (
              WHERE slugs_#{scope_name}.id IS NOT NULL
                AND titles_#{scope_name}.id IS NOT NULL), '{}')

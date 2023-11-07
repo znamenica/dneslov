@@ -17,11 +17,10 @@ class Order < ActiveRecord::Base
    scope :by_token, -> text do
       left_outer_joins( :slug, :descriptions, :notes, :tweets ).
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
-         where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
-         where( "tweets_orders.text ~* ?", "\\m#{text}.*" ).or(
-         where( "notes_orders.text ~* ?", "\\m#{text}.*" )))).distinct
+         where( "unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(tweets_orders.text ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(notes_orders.text ~* unaccent(?)", "\\m#{text}.*" )))).distinct
    end
-
 
    scope :by_tokens, -> string_in do
       return self if string_in.blank?

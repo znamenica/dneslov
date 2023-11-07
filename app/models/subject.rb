@@ -19,11 +19,11 @@ class Subject < ActiveRecord::Base
    end
 
    scope :by_token, -> text do
-      join_name = table.table_alias || table.name
+      as = table.table_alias || table.name
 
       self.left_outer_joins(:names, :descriptions).
-         where("#{join_name}.key ~* ?", "\\m#{text}.*").or(
-         where("descriptions.text ~* ?", "\\m#{text}.*")).
+         where("unaccent(#{as}.key) ~* unaccent(?)", "\\m#{text}.*").or(
+         where("unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*")).
          distinct
    end
 

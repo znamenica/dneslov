@@ -47,11 +47,11 @@ class Calendary < ActiveRecord::Base
 
    scope :by_token, -> text do
       left_outer_joins( :slug, :descriptions, :titles ).
-         where( "calendaries.author_name ~* ?", "\\m#{text}.*" ).or(
-         where( "calendaries.council ~* ?", "\\m#{text}.*" ).or(
+         where( "unaccent(calendaries.author_name) ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(calendaries.council) ~* unaccent(?)", "\\m#{text}.*" ).or(
          where( "slugs.text ~* ?", "\\m#{text}.*" ).or(
-         where( "descriptions.text ~* ?", "\\m#{text}.*" ).or(
-         where( "titles_calendaries.text ~* ?", "\\m#{text}.*" )))))
+         where( "unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*" ).or(
+         where( "unaccent(titles_calendaries.text) ~* unaccent(?)", "\\m#{text}.*" )))))
    end
 
    scope :by_tokens, -> string_in do

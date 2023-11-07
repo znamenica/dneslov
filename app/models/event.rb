@@ -96,11 +96,11 @@ class Event < ActiveRecord::Base
    scope :by_token, -> text do
       left_outer_joins( :kind, :titles ).
          merge(Subject.by_token(text)).
-         where("events.kind_code ~* ?", "\\m#{text}.*").or(
+         where("unaccent(events.kind_code) ~* unaccent(?)", "\\m#{text}.*").or(
          where(type_number: text.to_i).or(
-         where("descriptions.text ~* ?", "\\m#{text}.*").or(
-         where("names_subjects.text ~* ?", "\\m#{text}.*").or(
-         where("descriptions_subjects.text ~* ?", "\\m#{text}.*")))))
+         where("unaccent(descriptions.text) ~* unaccent(?)", "\\m#{text}.*").or(
+         where("unaccent(names_subjects.text) ~* unaccent(?)", "\\m#{text}.*").or(
+         where("unaccent(descriptions_subjects.text) ~* unaccent(?)", "\\m#{text}.*")))))
    end
    scope :by_event_code, -> code do
       if code =~ /^\d+$/

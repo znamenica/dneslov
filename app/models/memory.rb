@@ -55,7 +55,8 @@ class Memory < ActiveRecord::Base
 
    scope :by_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
-         where("descriptions.text ~* ? OR names.text ~* ?", "\\m#{text}.*", "\\m#{text}.*")).distinct
+         where("unaccent(descriptions.text) ~* unaccent(?) OR unaccent(names.text) ~* unaccent(?)",
+            "\\m#{text}.*", "\\m#{text}.*")).distinct
    end
 
    scope :by_tokens, -> string_in do
@@ -204,9 +205,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
          end
 
       selector = self.select_values.dup
-      if selector.empty?
-         selector << 'memories.*'
-      end
+      selector << "#{as}.*" if selector.empty?
       selector << "COALESCE((SELECT jsonb_agg(DISTINCT scripta)
                                FROM scripta
                                JOIN events
