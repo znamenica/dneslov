@@ -43,7 +43,7 @@ export default class MemoriesForm extends Component {
                memory: props.memory,
                eventee: props.eventee,
                error: props.error,
-               calendarySlug: props.calendaries_used.length == 1 ? props.calendaries_used[0] : null,
+               calendarySlug: props.calendaries_used?.length == 1 ? props.calendaries_used[0] : null,
                calendariesCloud: props.calendaries_cloud || [],
                query: {
                   c: getCalendariesString(props) || "",
@@ -216,7 +216,7 @@ export default class MemoriesForm extends Component {
       console.debug("[onLoadSuccess] <<< response", response)
       console.debug("[onLoadSuccess] <<< response", response.data, response.data.total)
 
-      if (response.data.total) {
+      if (response.data.list) {
          this.memoriesParse(response.data, response.config)
       } else if (response.data.events) {
          this.memoryParse(response.data, response.config)
@@ -229,17 +229,20 @@ export default class MemoriesForm extends Component {
       console.debug("[onLoadFailure] <<< response", err.response)
       console.debug("[onLoadFailure] <<< response", err.config)
 
-      let state = merge(this.state, {
-         memories: [],
-         memory: null,
-         eventee: null,
-         error: {
-            message: err.response.data.message,
-            code: err.response.status
-         }
-      })
-      document.body.classList.remove('in-progress')
-      this.updateState(merge(state, {query: err.response.config.params}))
+      if (err.response) {
+         let state = merge(this.state, {
+            memories: [],
+            memory: null,
+            eventee: null,
+            error: {
+               message: err.response.data.message,
+               code: err.response.status
+            }
+         })
+         document.body.classList.remove('in-progress')
+         this.updateState(merge(state, {query: err.response.config.params}))
+      }
+
       this.isNextRequesting = false
    }
 
