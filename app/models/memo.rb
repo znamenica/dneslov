@@ -429,12 +429,13 @@ class Memo < ActiveRecord::Base
 
    scope :with_memo_orders, -> context do
       language_codes = [ context[:locales] ].flatten
+      this = table.table_alias || table.name
+      /`(?<as>[^']*)'/ =~ caller.grep(/delegation/)[1]
       selector = self.select_values.dup
-      if selector.empty?
-         selector << 'memoes.*'
-      end
+      selector << "#{this}.*" if selector.empty?
+
       selector << "COALESCE((WITH __memo_orders AS (
-                      SELECT DISTINCT ON(memo_orders.order_id)
+                      SELECT DISTINCT ON(memo_orders.updated_at, memo_orders.order_id)
                              memo_orders.id AS id,
                              memo_orders.order_id AS order_id,
                              memo_order_titles.text AS order
@@ -447,7 +448,8 @@ class Memo < ActiveRecord::Base
                          AND memo_order_titles.type = 'Note'
                          AND memo_order_titles.language_code IN ('#{language_codes.join("', '")}')
                        WHERE memoes.id = memo_orders.memo_id
-                    GROUP BY memo_orders.id, memo_order_titles.text)
+                    GROUP BY memo_orders.id, memo_order_titles.text
+                    ORDER BY memo_orders.updated_at, memo_orders.order_id)
                       SELECT jsonb_agg(__memo_orders)
                         FROM __memo_orders), '[]'::jsonb) AS _memo_orders"
 

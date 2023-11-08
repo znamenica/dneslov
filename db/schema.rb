@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_06_123424) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_08_222314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -133,6 +133,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_06_123424) do
   create_table "memo_orders", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "memo_id"
+    t.datetime "updated_at", precision: nil
+    t.datetime "created_at", precision: nil
     t.index ["memo_id"], name: "index_memo_orders_on_memo_id"
     t.index ["order_id", "memo_id"], name: "index_memo_orders_on_order_id_and_memo_id", unique: true
     t.index ["order_id"], name: "index_memo_orders_on_order_id"
