@@ -52,8 +52,8 @@ class Memory < ActiveRecord::Base
 
    scope :by_token, -> text do
       left_outer_joins(:names, :descriptions).where( "short_name ~* ?", "\\m#{text}.*" ).or(
-         where("unaccent(descriptions.text) ~* unaccent(?) OR unaccent(names.text) ~* unaccent(?)",
-            "\\m#{text}.*", "\\m#{text}.*")).distinct
+         where("unaccent(descriptions.text) ~* unaccent(?) OR unaccent(names.text) ~* unaccent(?)", "\\m#{text}.*", "\\m#{text}.*")).or(merge(
+         Nomen.joins(:name).where("unaccent(names.text) ~* unaccent(?)", "\\m#{text}.*").by_root)).distinct
    end
 
    scope :by_tokens, -> string_in do
