@@ -73,7 +73,7 @@
     "@majioa/react-scroll-pagination": "^0.2.3",
     "@soon92/react-json-editor-ajrm": "^2.5.15",
     "@types/react": "17.0.38",
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "classlist-polyfill": "^1.2.0",
     "custom-event-polyfill": "^0.3.0",
     "date-easter": "^1.0.1",
