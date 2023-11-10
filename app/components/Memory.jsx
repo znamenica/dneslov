@@ -21,6 +21,7 @@ export default class Memory extends Component {
       links: [],
       events: [],
       scripta: [],
+      coverings: [],
       selectedCalendaries: [],
       defaultCalendarySlug: null,
       specifiedCalendarySlug: null,
@@ -44,6 +45,7 @@ export default class Memory extends Component {
             msDate: Memory.getMsDate(props),
             klugs: Memory.collectKlugs(props),
             describedMemoes: describedMemoes,
+            coverings: props.coverings,
             describedMemoIds: Memory.getDescribedMemoIds(describedMemoes),
             links: Memory.getLinks(props),
             iconLinks: Memory.getIconLinks(props),
@@ -275,10 +277,21 @@ export default class Memory extends Component {
                      <div className='col s12'>
                         {this.state.links.map((link) =>
                            <Chip
-                              key={link.id}
+                              key={'link-'+link.id}
                               url={link.url}
                               color={Memory.getColorForLink(link)}
                               text={Memory.getLinkText(link)} />)}</div></div></div>}
+            {this.state.coverings.isPresent() &&
+               <div className='col s12'>
+                  <div className='row'>
+                     <div className='col s12 title'>
+                        Покровитель:</div>
+                     <div className='col s12'>
+                        {this.state.coverings.map((c) =>
+                           <Chip
+                              key={'covering-' + c.id}
+                              color={Memory.getColorForLink(c.name)}
+                              text={c.name} />)}</div></div></div>}
             {this.state.scripta.isPresent() &&
                <div className='col s12'>
                   {this.sortedScripta().map((scriptum) =>

@@ -43,8 +43,8 @@ class Place < ActiveRecord::Base
                           AND alphabeth_names.describable_type = 'Order'
                           AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')"
 
-      selector << "titles.text AS _value"
+      selector << "titles.text || ' (' || titles.language_code || '_' || titles.alphabeth_code || ')' AS _value"
 
-      joins(join).select(selector).group(:id, "titles.text")
+      joins(join).select(selector).group(:id, "titles.text", "titles.language_code", "titles.alphabeth_code")
    end
 end

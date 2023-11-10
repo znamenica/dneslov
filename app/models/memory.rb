@@ -1,8 +1,6 @@
 # council[string]       - соборы для памяти
 # short_name[string]    - краткое имя
-# covers_to_id[integer] - прокровительство
 # quantity[string]      - количество
-# bond_to_id[integer]   - отношение к (для икон это замысел или оригинал списка)
 #
 class Memory < ActiveRecord::Base
    extend TotalSize
@@ -12,9 +10,6 @@ class Memory < ActiveRecord::Base
    include WithLinks
 
    has_default_key :short_name
-
-   belongs_to :covers_to, class_name: :Place, optional: true
-   belongs_to :bond_to, class_name: :Memory, optional: true
 
    has_one :slug, as: :sluggable, dependent: :destroy
    has_many :memory_names, dependent: :destroy
@@ -34,6 +29,8 @@ class Memory < ActiveRecord::Base
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
    has_many :memory_binds
    has_many :bond_memories, through: :memory_binds, foreign_key: :bond_to_id, class_name: :Memory
+   has_many :coverings
+   has_many :places, through: :coverings
 
    default_scope { order( base_year: :asc, short_name: :asc, id: :asc ) }
 
@@ -238,6 +235,56 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
                         WHERE #{as}.id = #{as}_memory_binds.memory_id)
                        SELECT jsonb_agg(__memory_binds)
                          FROM __memory_binds), '[]'::jsonb) AS _memory_binds"
+
+      select(selector).group(:id)
+   end
+
+   scope :with_covering_names, -> context do
+      as = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __coverings AS (
+                       SELECT #{as}_coverings.id AS id,
+                              #{as}_coverings.add_date AS add_date,
+                              #{as}_coverings.place_id AS place_id,
+                              #{as}_place_descriptions.text || ' (' || #{as}_place_descriptions.language_code || '_' || #{as}_place_descriptions.alphabeth_code || ')' AS place_name
+                         FROM coverings AS #{as}_coverings
+                         JOIN places AS #{as}_places
+                           ON #{as}_places.id = #{as}_coverings.place_id
+              LEFT OUTER JOIN descriptions AS #{as}_place_descriptions
+                           ON #{as}_place_descriptions.describable_id = #{as}_places.id
+                          AND #{as}_place_descriptions.describable_type = 'Place'
+                          AND #{as}_place_descriptions.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE #{as}.id = #{as}_coverings.memory_id)
+                       SELECT jsonb_agg(__coverings)
+                         FROM __coverings), '[]'::jsonb) AS _coverings"
+
+      select(selector).group(:id)
+   end
+
+   scope :with_coverings, -> context do
+      as = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __coverings AS (
+                       SELECT #{as}_coverings.id AS id,
+                              #{as}_coverings.add_date AS add_date,
+                              #{as}_coverings.place_id AS place_id,
+                              #{as}_place_descriptions.text AS name
+                         FROM coverings AS #{as}_coverings
+                         JOIN places AS #{as}_places
+                           ON #{as}_places.id = #{as}_coverings.place_id
+              LEFT OUTER JOIN descriptions AS #{as}_place_descriptions
+                           ON #{as}_place_descriptions.describable_id = #{as}_places.id
+                          AND #{as}_place_descriptions.describable_type = 'Place'
+                          AND #{as}_place_descriptions.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE #{as}.id = #{as}_coverings.memory_id)
+                       SELECT jsonb_agg(__coverings)
+                         FROM __coverings), '[]'::jsonb) AS _coverings"
 
       select(selector).group(:id)
    end
@@ -509,7 +556,7 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
    accepts_nested_attributes_for :thumbs, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :icons, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :photos, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :covers_to, reject_if: :all_blank, allow_destroy: true
+   accepts_nested_attributes_for :coverings, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank
 

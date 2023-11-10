@@ -104,16 +104,37 @@ export const memoryMeta = {
          placeholder: 'Введи сокращение собора',
          display_scheme: '12-6-4-4',
       },
-      place_id: {
-         kind: 'dynamic',
-         display_scheme: '12-6-4-4',
-         title: 'Покровительство',
-         pathname: 'short_places',
-         humanized_name: 'place',
-         name: 'place_id',
-         key_name: 'value',
-         value_name: 'key',
-         placeholder: 'Начни ввод наименования места...',
+      coverings: {
+         kind: 'collection',
+         title: 'Покровительства',
+         action: 'Добавь покровительство',
+         single: 'Покровительство',
+         placeholder: 'Задай покровительства',
+         display_scheme: '12-12-12-12',
+         meta: {
+            id: {
+               kind: 'hidden',
+            },
+            place_id: {
+               kind: 'dynamic',
+               title: 'Место',
+               display_scheme: '12-9-10-10',
+               pathname: 'short_places',
+               humanized_name: 'place_name',
+               key_name: 'value',
+               value_name: 'key',
+               placeholder: 'Начни ввод наименования места...',
+               validations: {
+                  'Место должно быть выбрано': matchEmptyObject,
+               }
+            },
+            add_date: {
+               kind: 'text',
+               display_scheme: '12-3-2-2',
+               title: 'Дата установления',
+               placeholder: 'Введи дату установления',
+            },
+         }
       },
       memory_binds: {
          kind: 'collection',

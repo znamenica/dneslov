@@ -14,13 +14,14 @@ class Admin::MemoriesController < Admin::CommonController
    protected
 
    def index_with_list
-      %w(with_slug with_descriptions with_links with_events with_memory_names with_orders with_memory_binds)
+      %w(with_slug with_descriptions with_links with_events with_memory_names with_orders with_memory_binds with_covering_names)
    end
 
    def permitted_params
       params.require(:memory).permit(
-         :id, :covers_to_id, :short_name, :council, :quantity, :base_year,
+         :id, :short_name, :council, :quantity, :base_year,
          slug_attributes: %i(id text),
+         coverings_attributes: %i(id add_date place_id _destroy),
          memory_binds_attributes: %i(id kind bond_to_id _destroy),
          memory_names_attributes: %i(id nomen_id state_code feasible ored _destroy),
          events_attributes: [

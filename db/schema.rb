@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_08_222314) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_10_175648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -34,6 +34,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_222314) do
     t.integer "canto_id", null: false
     t.integer "memory_id", null: false
     t.index ["canto_id", "memory_id"], name: "canto_memories_index", unique: true
+  end
+
+  create_table "coverings", force: :cascade do |t|
+    t.bigint "place_id", comment: "Ссылка на место"
+    t.bigint "memory_id", comment: "Ссылка на память"
+    t.datetime "add_date", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id", "place_id"], name: "index_coverings_on_memory_id_and_place_id", unique: true
+    t.index ["memory_id"], name: "index_coverings_on_memory_id"
+    t.index ["place_id"], name: "index_coverings_on_place_id"
   end
 
   create_table "descriptions", id: :serial, force: :cascade do |t|
@@ -175,7 +186,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_222314) do
     t.string "short_name", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.integer "covers_to_id"
     t.string "quantity"
     t.string "order"
     t.string "council"
@@ -361,6 +371,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_222314) do
     t.index ["kind_code"], name: "index_subjects_on_kind_code"
   end
 
+  add_foreign_key "coverings", "memories", on_delete: :cascade
+  add_foreign_key "coverings", "places", on_delete: :cascade
   add_foreign_key "links", "resources", on_delete: :cascade
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict
