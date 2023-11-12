@@ -35,6 +35,7 @@ webpack.config.js
 public/webpack/manifest.json
 public/javascripts/
 public/stylesheets/
+public/images
 
 *.log
 *.sql
