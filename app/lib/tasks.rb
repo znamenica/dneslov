@@ -110,5 +110,47 @@ module Tasks
             end
          end
       end
+
+      def fix_links_for_calendary string, slug
+         cal = Calendary.by_slug(slug).first
+
+         Link.transaction do
+            Link.where("url ~* ?", string).where(info_type: "Memory").map do |x|
+               memoes_in = x.info.memos.in_calendaries(slug)
+               m =
+                  if memoes_in.blank?
+                     memoes_tmp =
+                        Event::NOTICE.map do |name|
+                           x.info.events.where(kind_code: name).first&.memos
+                        end.flatten.compact
+                     memoried = memoes_tmp.find {|m| m.memory == x.info && m.bind_kind_code == "несвязаный" }
+
+                     if memoried
+                        memo = memoried.dup
+                        memo.calendary_id = cal.id
+                        memo.add_date = cal.date
+                        memo.titles = memoried.titles.map(&:dup)
+                        memo.memo_orders = memoried.memo_orders.map(&:dup)
+                        memo
+                     else
+                        event = x.info.events.first
+                        /(?<year_date>14\.03\.)/ =~ event.happened_at
+                        year_date ||= '01.09'
+                        memo = Memo.new(add_date: cal.date, year_date: year_date, calendary_id: cal.id,
+                           bind_kind_code: "несвязаный", event_id: x.info.events.first.id)
+                        memo.titles << Title.new(text: event.memory.short_name, alphabeth_code: "РО", language_code: "ру")
+                        memo
+                     end
+                  else
+                     memoes_in.first
+                  end
+
+               m.save!(validate: false)
+               x.info_id = m.id
+               x.info_type = m.model_name.name
+               x.save!(validate: false)
+            end
+         end if cal
+      end
    end
 end

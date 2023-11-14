@@ -33,4 +33,13 @@ namespace :fix do
 
       true
    end
+
+   #
+   # rake fix:links_for_calendary[http://martyrs.pstbi.ru/,нмр]
+   desc "Fix memoes for calendary from another"
+   task :links_for_calendary, [:string, :slug]  => :environment do |t, args|
+      Tasks.fix_links_for_calendary(args[:string], args[:slug])
+
+      true
+   end
 end
