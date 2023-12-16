@@ -113,12 +113,13 @@ gem 'tiun', github: 'majioa/tiun', ref: '2b09248'
 gem 'sitemap_generator'
 
 # images
+gem 'carrierwave', '~> 3.0.5'
 gem 'carrierwave-base64'
 gem 'carrierwave-i18n'
 gem 'carrierwave_backgrounder'
 gem 'carrierwave-processing'
-gem 'carrierwave', '~> 3.0.5'
-gem 'carrierwave-postgresql'
+#gem 'fog'
+#gem 'fog-'
 gem 'rmagick'
 
 group :development do

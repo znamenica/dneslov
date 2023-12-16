@@ -98,9 +98,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   end
 
   create_table "image_attitudes", force: :cascade do |t|
-    t.string "imageable_type"
-    t.bigint "imageable_id"
-    t.bigint "picture_id"
+    t.string "imageable_type", null: false
+    t.bigint "imageable_id", null: false
+    t.bigint "picture_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_attitudes_on_imageable"
@@ -380,14 +380,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
     t.index ["text"], name: "index_slugs_on_text", unique: true
   end
 
-  create_table "subject_thumbs", force: :cascade do |t|
-    t.bigint "event_id"
-    t.oid "thumb", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_subject_thumbs_on_event_id"
-  end
-
   create_table "subjects", id: :serial, force: :cascade do |t|
     t.string "kind_code", null: false
     t.string "key", null: false
@@ -398,6 +390,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
     t.index ["kind_code", "key", "id"], name: "index_subjects_on_kind_code_and_key_and_id"
     t.index ["kind_code", "key"], name: "index_subjects_on_kind_code_and_key"
     t.index ["kind_code"], name: "index_subjects_on_kind_code"
+  end
+
+  create_table "thumbs", force: :cascade do |t|
+    t.uuid "uid", null: false
+    t.oid "thumb", null: false
+    t.string "thumbable_type", null: false
+    t.bigint "thumbable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["thumbable_type", "thumbable_id"], name: "index_thumbs_on_thumbable"
+    t.index ["uid"], name: "index_thumbs_on_uid", unique: true
   end
 
   add_foreign_key "coverings", "memories", on_delete: :cascade

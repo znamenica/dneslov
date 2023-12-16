@@ -12,7 +12,7 @@ CarrierWave.configure do |config|
    elsif Rails.env.production?
       config.asset_host = proc do |file|
         identifier = "dneslov"
-        "http://#{identifier}.cdn.vk.com"
+        "https://#{identifier}.cdn.vk.com"
       end
    end
 end

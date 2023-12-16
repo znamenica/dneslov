@@ -18,6 +18,8 @@ require 'ffaker'
 
 FactoryBot.definition_file_paths = %w(features/factories)
 FactoryBot.lint
+#Fog.mock!
+
 World(FactoryBot::Syntax::Methods)
 World(Rack::Test::Methods)
 
@@ -41,6 +43,8 @@ end
 After do
    Dir.chdir(@owd)
    FileUtils.remove_entry_secure(@workdir)
+   FileUtils.rm_rf(Dir["#{Rails.root}/public/public"])
+   FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads"])
 end
 
 at_exit do

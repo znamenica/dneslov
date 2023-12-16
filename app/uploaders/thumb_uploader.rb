@@ -1,3 +1,3 @@
 class ThumbUploader < CarrierWave::Uploader::Base
-   storage :postgresql_lo
+   storage :file
 end

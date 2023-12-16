@@ -227,8 +227,6 @@ GEM
       mime-types (~> 3.0)
     carrierwave-i18n (3.0.0)
       carrierwave (>= 3.0.0, < 4)
-    carrierwave-postgresql (0.3.0)
-      carrierwave (>= 0.10.0)
     carrierwave-processing (1.1.0)
       carrierwave
     carrierwave_backgrounder (1.0.2)
@@ -667,7 +665,6 @@ DEPENDENCIES
   carrierwave (~> 3.0.5)
   carrierwave-base64
   carrierwave-i18n
-  carrierwave-postgresql
   carrierwave-processing
   carrierwave_backgrounder
   cssbundling-rails
