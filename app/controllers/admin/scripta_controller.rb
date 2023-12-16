@@ -9,6 +9,6 @@ class Admin::ScriptaController < Admin::CommonController
       params.require(:scriptum).permit(
          :id, :language_code, :alphabeth_code, :title, :text, :description, :prosomeion_title,
          :ref_title, :type, :author, :tone,
-         memo_scripta_attributes: %i(id memo_id kind))
+         memo_scripta_attributes: %i(id memo_id kind _destroy))
    end
 end

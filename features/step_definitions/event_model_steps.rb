@@ -1,5 +1,7 @@
-Если(/^попробуем создать новое событие с неверным описанием$/) do
-   sample { try_create :event, :with_invalid_description } ; end
+Допустим('есть событие {string} для памяти {string}') do |title, memory_title|
+   FactoryBot.create(:event, title: title, memory_title: memory_title)
+end
 
-Допустим(/^есть русское место "([^"]*)"$/) do |place|
-   FactoryBot.create( :place, ru_description: place ) ;end
+Если(/^попробуем создать новое событие с неверным описанием$/) do
+   sample { try_create :event, :with_invalid_description }
+end

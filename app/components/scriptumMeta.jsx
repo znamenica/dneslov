@@ -57,9 +57,11 @@ export const scriptumMeta = {
          title: 'Азбука',
       },
       text: {
-         title: 'Текст',
+         title: 'Буке',
          value: (value) => {
-            if (value.text && value.text.length > 30) {
+            if (value.title) {
+               return value.title
+            } else if (value.text && value.text.length > 30) {
                return value.text.slice(0, 30) + '...'
             } else {
                return value.text

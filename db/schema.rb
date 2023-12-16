@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_10_175648) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
@@ -95,6 +95,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_10_175648) do
     t.index ["place_id"], name: "index_events_on_place_id"
     t.index ["tezo_string"], name: "index_events_on_tezo_string"
     t.index ["type_number"], name: "index_events_on_type_number"
+  end
+
+  create_table "image_attitudes", force: :cascade do |t|
+    t.string "imageable_type"
+    t.bigint "imageable_id"
+    t.bigint "picture_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["imageable_type", "imageable_id"], name: "index_image_attitudes_on_imageable"
+    t.index ["picture_id"], name: "index_image_attitudes_on_picture_id"
   end
 
   create_table "item_types", id: :serial, force: :cascade do |t|
@@ -251,6 +261,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_10_175648) do
     t.index ["significance"], name: "index_orders_on_significance"
   end
 
+  create_table "pictures", force: :cascade do |t|
+    t.uuid "uid", null: false
+    t.string "type", null: false
+    t.string "image", null: false
+    t.jsonb "meta", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["meta"], name: "index_pictures_on_meta", using: :gin
+    t.index ["uid"], name: "index_pictures_on_uid", unique: true
+  end
+
   create_table "places", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -357,6 +378,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_10_175648) do
     t.integer "sluggable_id"
     t.index ["sluggable_type", "sluggable_id"], name: "index_slugs_on_sluggable_type_and_sluggable_id"
     t.index ["text"], name: "index_slugs_on_text", unique: true
+  end
+
+  create_table "subject_thumbs", force: :cascade do |t|
+    t.bigint "event_id"
+    t.oid "thumb", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_subject_thumbs_on_event_id"
   end
 
   create_table "subjects", id: :serial, force: :cascade do |t|

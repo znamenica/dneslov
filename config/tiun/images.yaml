@@ -1,0 +1,112 @@
+---
+types:
+ - name: image
+   model: Picture
+   version: 1.0
+   fields:
+    - name: uid
+      kind: natural
+      descriptions: :tiun.types.image.uid
+    - name: language
+      kind: string
+      descriptions: :tiun.types.image.language
+    - name: alphabeth
+      kind: string
+      descriptions: :tiun.types.image.alphabeth
+    - name: title
+      kind: string
+      descriptions: :tiun.types.image.title
+    - name: description
+      kind: string
+      descriptions: :tiun.types.image.description
+    - name: uri
+      kind: uri
+      descriptions: :tiun.types.image.uri
+    - name: type
+      kind: enum <Icon, Painting, Photo>
+      descriptions: :tiun.types.image.type
+ - name: full_image
+   model: Picture
+   version: 1.0
+   fields:
+    - name: uid
+      kind: natural
+      descriptions: :tiun.types.image.uid
+    - name: language
+      kind: string
+      descriptions: :tiun.types.image.language
+    - name: alphabeth
+      kind: string
+      descriptions: :tiun.types.image.alphabeth
+    - name: title
+      kind: string
+      descriptions: :tiun.types.image.title
+    - name: description
+      kind: string
+      descriptions: :tiun.types.image.description
+    - name: uri
+      kind: uri
+      descriptions: :tiun.types.image.uri
+    - name: meta
+      kind: json
+      descriptions: :tiun.types.image.meta
+    - name: type
+      kind: enum <Icon, Painting, Photo>
+      descriptions: :tiun.types.image.type
+    - name: attitudes
+      kind: attitude
+      descriptions: :tiun.types.image.attitudes
+resources:
+ - name: image.index
+   path: /api/v1/images.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: image page
+      descriptions: :tiun.resources.image.index.get
+      auth: no
+      allowed_errors: [200, 206, 416, 422.3, 500]
+      args:
+       - name: per
+         kind: natural
+         default: 10 
+         maximum: 50
+         descriptions: :tiun.resources.image.index.args.per_page
+       - name: page
+         kind: natural
+         default: 1
+         descriptions: :tiun.resources.image.index.args.page
+       - name: l
+         kind: string
+         descriptions: :tiun.resources.image.index.args.language
+       - name: a
+         kind: string
+         descriptions: :tiun.resources.image.index.args.alphabeth
+       - name: m
+         kind: string
+         descriptions: :tiun.resources.image.index.args.memory
+       - name: e
+         kind: string
+         descriptions: :tiun.resources.image.index.args.event
+       - name: t
+         kind: string
+         descriptions: :tiun.resources.image.index.args.type
+ - name: image.get
+   path: /api/v1/images/<uid>.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: full_image
+      descriptions: :tiun.resources.image.get
+      auth: no
+      allowed_errors: [200, 206, 416, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.image.index.args.uid
+       - name: l
+         kind: string
+         descriptions: :tiun.resources.image.index.args.language
+       - name: a
+         kind: string
+         descriptions: :tiun.resources.image.index.args.alphabeth

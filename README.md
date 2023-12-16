@@ -41,6 +41,7 @@ List of the requirements (packages are named as in ALT conventions) are the foll
 15. node
 16. yarn
 17. gostsum
+18. libImageMagick-devel
 
 If you have an ALT installation, just install requirements by single line:
 

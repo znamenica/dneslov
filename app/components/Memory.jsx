@@ -198,7 +198,7 @@ export default class Memory extends Component {
       'Canticle': 'Спевна',
       'Chant': 'Песнопение',
       'Canto': 'Песма',
-      'Bible': 'Библия',
+      'Bible': 'Зачало',
       'Prolog': 'Пролог',
       'Scriptum': 'Текст',
    }

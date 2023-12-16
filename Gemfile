@@ -112,6 +112,15 @@ gem 'tiun', github: 'majioa/tiun', ref: '2b09248'
 # sitemap
 gem 'sitemap_generator'
 
+# images
+gem 'carrierwave-base64'
+gem 'carrierwave-i18n'
+gem 'carrierwave_backgrounder'
+gem 'carrierwave-processing'
+gem 'carrierwave', '~> 3.0.5'
+gem 'carrierwave-postgresql'
+gem 'rmagick'
+
 group :development do
    gem "capistrano", "~> 3.17", require: false
    gem "capistrano3-nginx", require: false, git: "https://github.com/treenewbee/capistrano3-nginx.git"
