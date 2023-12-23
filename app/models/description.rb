@@ -43,4 +43,10 @@ class Description < ActiveRecord::Base
    validates :text, :language_code, :alphabeth_code, presence: true
 
    before_create -> { self.type ||= 'Description' }
+
+   before_validation :fill_in_la
+
+   def fill_in_la
+      self.language_code, self.alphabeth_code = Languageble.la_for_string(text) if text
+   end
 end

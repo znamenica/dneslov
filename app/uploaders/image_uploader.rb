@@ -11,9 +11,10 @@ class ImageUploader < CarrierWave::Uploader::Base
    def store_dir
       'public/images'
    end
-   #TODO
+
+   # If you upload 'file.jpg', you'll get 'image.webp' because of convert
    def filename
-      "image.#{file.extension}" # If you upload 'file.jpg', you'll get 'image.jpg'
+      "#{model.uid}.#{file.extension}"
    end
 
    def content_type_allowlist

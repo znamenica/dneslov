@@ -5,7 +5,7 @@ types:
    version: 1.0
    fields:
     - name: uid
-      kind: natural
+      kind: uuid
       descriptions: :tiun.types.image.uid
     - name: language
       kind: string
@@ -19,7 +19,7 @@ types:
     - name: description
       kind: string
       descriptions: :tiun.types.image.description
-    - name: uri
+    - name: url
       kind: uri
       descriptions: :tiun.types.image.uri
     - name: type
@@ -30,7 +30,7 @@ types:
    version: 1.0
    fields:
     - name: uid
-      kind: natural
+      kind: uuid
       descriptions: :tiun.types.image.uid
     - name: language
       kind: string
@@ -44,7 +44,7 @@ types:
     - name: description
       kind: string
       descriptions: :tiun.types.image.description
-    - name: uri
+    - name: url
       kind: uri
       descriptions: :tiun.types.image.uri
     - name: meta
@@ -63,9 +63,9 @@ resources:
     - name: get
       version: 1.0
       kind: image page
-      descriptions: :tiun.resources.image.index.get
+      descriptions: :tiun.resources.image.index
       auth: no
-      allowed_errors: [200, 206, 416, 422.3, 500]
+      allowed_errors: [200, 204, 206, 416, 422.3, 500]
       args:
        - name: per
          kind: natural
@@ -91,22 +91,99 @@ resources:
        - name: t
          kind: string
          descriptions: :tiun.resources.image.index.args.type
- - name: image.get
-   path: /api/v1/images/<uid>.json
+ - name: create image
+   path: /api/v1/images/create.json
+   methods:
+    - name: post
+      version: 1.0
+      kind: full_image
+      descriptions: :tiun.resources.image.create
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.image.put.uid
+       - name: language
+         kind: string
+         descriptions: :tiun.resources.image.put.language
+       - name: alphabeth
+         kind: string
+         descriptions: :tiun.resources.image.put.alphabeth
+       - name: title
+         kind: string
+         descriptions: :tiun.resources.image.put.title
+       - name: description
+         kind: string
+         descriptions: :tiun.resources.image.put.description
+       - name: image
+         kind: file
+         descriptions: :tiun.resources.image.put.image
+       - name: meta
+         kind: json
+         descriptions: :tiun.resources.image.put.meta
+       - name: type
+         kind: enum <Icon, Painting, Photo>
+         descriptions: :tiun.resources.image.put.type
+ - name: image
+   path: /api/v1/images/:uid.json
    methods:
     - name: get
       version: 1.0
       kind: full_image
       descriptions: :tiun.resources.image.get
       auth: no
-      allowed_errors: [200, 206, 416, 422.3, 500]
+      allowed_errors: [200, 404, 406, 422.3, 500]
       args:
        - name: uid
          kind: string
-         descriptions: :tiun.resources.image.index.args.uid
+         descriptions: :tiun.resources.image.get.args.uid
        - name: l
          kind: string
-         descriptions: :tiun.resources.image.index.args.language
+         alias: language
+         descriptions: :tiun.resources.image.get.args.language
        - name: a
          kind: string
-         descriptions: :tiun.resources.image.index.args.alphabeth
+         alias: alphabeth
+         descriptions: :tiun.resources.image.get.args.alphabeth
+    - name: put
+      version: 1.0
+      kind: full_image
+      descriptions: :tiun.resources.image.put
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.image.put.uid
+       - name: language
+         kind: string
+         descriptions: :tiun.resources.image.put.language
+       - name: alphabeth
+         kind: string
+         descriptions: :tiun.resources.image.put.alphabeth
+       - name: title
+         kind: string
+         descriptions: :tiun.resources.image.put.title
+       - name: description
+         kind: string
+         descriptions: :tiun.resources.image.put.description
+       - name: image
+         kind: file
+         descriptions: :tiun.resources.image.put.image
+       - name: meta
+         kind: json
+         descriptions: :tiun.resources.image.put.meta
+       - name: type
+         kind: enum <Icon, Painting, Photo>
+         descriptions: :tiun.resources.image.put.type
+    - name: delete
+      version: 1.0
+      kind: full_image
+      descriptions: :tiun.resources.image.delete
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.image.delete.args.uid

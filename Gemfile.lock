@@ -29,15 +29,6 @@ GIT
       railties (>= 3.2)
 
 GIT
-  remote: https://github.com/majioa/jsonize.git
-  revision: 96c8b7702761e75a0a645798d0705f79d20782ba
-  ref: 96c8b77
-  specs:
-    jsonize (0.1.1)
-      activerecord (>= 4.2)
-      redisize
-
-GIT
   remote: https://github.com/majioa/prawn.git
   revision: 10e29240e0e05cc4a908069f72c8f81fa874191e
   ref: 10e29240e
@@ -62,16 +53,6 @@ GIT
     ruby-prof (1.4.2)
 
 GIT
-  remote: https://github.com/majioa/tiun.git
-  revision: 2b0924859839ebfa00a653b3a5a04f83ff2fc0b2
-  ref: 2b09248
-  specs:
-    tiun (0.1.0)
-      activesupport (>= 4.1.0)
-      jsonize (~> 0.1, >= 0.1.1)
-      railties (>= 4.1.0)
-
-GIT
   remote: https://github.com/majioa/zero_downtime_migrations.git
   revision: 96f7e1fef71c8bf2ee3d54ae7d2ecd02d7459a15
   ref: devel
@@ -93,6 +74,26 @@ GIT
   specs:
     capistrano3-nginx (3.0.4)
       capistrano (~> 3.0)
+
+PATH
+  remote: /usr/local/home/majioa/git/jsonize
+  specs:
+    jsonize (0.1.1)
+      activerecord (>= 4.2)
+      redisize
+
+PATH
+  remote: /usr/local/home/majioa/git/rack
+  specs:
+    rack (2.2.8)
+
+PATH
+  remote: /usr/local/home/majioa/git/tiun
+  specs:
+    tiun (0.1.0)
+      activesupport (>= 4.1.0)
+      jsonize (~> 0.1, >= 0.1.1)
+      railties (>= 4.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -452,7 +453,6 @@ GEM
     pundit (2.3.1)
       activesupport (>= 3.0.0)
     racc (1.7.1)
-    rack (2.2.8)
     rack-cache (1.14.0)
       rack (>= 0.4)
     rack-test (2.1.0)
@@ -668,7 +668,7 @@ DEPENDENCIES
   carrierwave-processing
   carrierwave_backgrounder
   cssbundling-rails
-  cucumber-rails (~> 2.6)
+  cucumber-rails (~> 2.6.1)
   database_cleaner-active_record
   database_cleaner-redis
   debug
@@ -700,6 +700,7 @@ DEPENDENCIES
   pry-stack_explorer (>= 0.6.1)
   puma (~> 5.6)
   pundit
+  rack!
   rails (~> 7.0.0, >= 7.0.4.1)
   rdoba!
   rdoc (~> 6.3.2)
@@ -719,7 +720,7 @@ DEPENDENCIES
   sentry-ruby (~> 5.3, >= 5.3.1)
   sentry-sidekiq
   shoulda-matchers (~> 4.0)
-  shoulda-matchers-cucumber (~> 1.0)
+  shoulda-matchers-cucumber (~> 1.0, >= 1.0.1)
   sidekiq (>= 6.4.0)
   sidekiq-limit_fetch
   sidekiq-worker-killer
