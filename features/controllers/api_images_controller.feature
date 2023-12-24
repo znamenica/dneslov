@@ -40,7 +40,7 @@
            description:
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          page: 1
-         per: 25
+         per: 10
          total: 1
          """
 
@@ -120,7 +120,7 @@
 
    @create @object
    Пример: Користник створяє картинку
-      Если запытаю створенје изнахоѕи "/api/v1/images/create.json" сꙛ даными:
+      Если запытаю створенје изнахоѕи картинци "/api/v1/images/create.json" сꙛ даными:
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
          | type         | Picture                              |
          | meta         | {}                                   |
@@ -158,7 +158,7 @@
          attitudes: []
          """
 
-   @updata @object @error
+   @updata @object @error @404
    Пример: Користник поновяє дане картинке
       Если запытаю одсланје картинке в изнаходь "/api/v1/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.json" сꙛ даными:
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |

@@ -103,6 +103,16 @@ class Event < ActiveRecord::Base
       where(memory_id: memory_id)
    end
 
+   scope :by_title_and_short_name, -> title, short_name do
+      joins(:memory).merge(Memory.by_short_name(short_name)).by_title(title)
+   end
+   scope :by_did_and_short_name, -> did, short_name do
+      if /^[0-9]+$/ =~ did
+         where(id: did)
+      else
+         by_title(did)
+      end.joins(:memory).merge(Memory.by_short_name(short_name))
+   end
    # required for short list
    scope :with_key, -> _ do
       selector = [ 'events.id AS _key' ]

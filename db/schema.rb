@@ -394,7 +394,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
 
   create_table "thumbs", force: :cascade do |t|
     t.uuid "uid", null: false
-    t.oid "thumb", null: false
+    t.string "thumb", null: false
     t.string "thumbable_type", null: false
     t.bigint "thumbable_id", null: false
     t.datetime "created_at", null: false

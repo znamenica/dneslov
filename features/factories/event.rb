@@ -1,8 +1,8 @@
 FactoryBot.define do
    factory :event do
       happened_at { Date.today.to_s }
-      kind_code { 'Canonization' }
 
+      kind { association :event_kind }
       association :item
       association :memory
       association :place
