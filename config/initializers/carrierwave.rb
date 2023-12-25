@@ -9,10 +9,5 @@ CarrierWave.configure do |config|
       config.ignore_download_errors = false
    elsif Rails.env.test?
       config.enable_processing = false
-   elsif Rails.env.production?
-      config.asset_host = proc do |file|
-        identifier = "dneslov"
-        "https://#{identifier}.cdn.vk.com"
-      end
    end
 end
