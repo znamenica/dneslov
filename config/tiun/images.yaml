@@ -54,8 +54,24 @@ types:
       kind: enum <Icon, Painting, Photo>
       descriptions: :tiun.types.image.type
     - name: attitudes
-      kind: attitude
+      kind: attitude array
       descriptions: :tiun.types.image.attitudes
+ - name: attitude
+   model: ImageAttitude
+   version: 1.0
+   fields:
+    - name: pos
+      kind: circle
+      descriptions: :tiun.types.attitude.pos
+    - name: imageable_type
+      kind: enum <Memory, Event, Group>
+      descriptions: :tiun.types.attitude.kind
+    - name: meta
+      kind: json
+      descriptions: :tiun.types.attitude.meta
+    - name: imageable_name
+      kind: string
+      descriptions: :tiun.types.attitude.imageable_name
 resources:
  - name: image.index
    path: /api/v1/images.json
@@ -91,7 +107,7 @@ resources:
        - name: t
          kind: string
          descriptions: :tiun.resources.image.index.args.type
- - name: create image
+ - name: image.create
    path: /api/v1/images/create.json
    methods:
     - name: post
@@ -125,6 +141,9 @@ resources:
        - name: type
          kind: enum <Icon, Painting, Photo>
          descriptions: :tiun.resources.image.put.type
+       - name: attitudes
+         kind: attitude array
+         descriptions: :tiun.resources.image.put.attitudes
  - name: image
    path: /api/v1/images/:uid.json
    methods:
@@ -177,6 +196,9 @@ resources:
        - name: type
          kind: enum <Icon, Painting, Photo>
          descriptions: :tiun.resources.image.put.type
+       - name: attitudes
+         kind: attitude array
+         descriptions: :tiun.resources.image.put.attitudes
     - name: delete
       version: 1.0
       kind: full_image

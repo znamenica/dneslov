@@ -98,12 +98,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   end
 
   create_table "image_attitudes", force: :cascade do |t|
-    t.string "imageable_type", null: false
-    t.bigint "imageable_id", null: false
     t.bigint "picture_id", null: false
+    t.string "imageable_type"
+    t.bigint "imageable_id"
+    t.jsonb "meta", default: {}
+    t.circle "pos"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["imageable_type", "imageable_id"], name: "index_image_attitudes_on_imageable"
+    t.index ["meta"], name: "index_image_attitudes_on_meta", using: :gin
     t.index ["picture_id"], name: "index_image_attitudes_on_picture_id"
   end
 

@@ -40,7 +40,6 @@
       И добѫдꙛ вывод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
            url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            thumbable_name: Памѧтно
@@ -50,10 +49,9 @@
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
            url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            thumbable_name: Памѧтно#200202
-         page: 1
-         per: 10
-         total: 3
          """
+      А добѫдꙛ охватъ "0-9/3"
+      И добѫдꙛ длину охвата "3"
 
    @get @collection
    Пример: Запрос постраничный к контроллеру личинок в АПИ
@@ -62,30 +60,52 @@
       И добѫдꙛ приблизнъ извод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
            url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            thumbable_name: Памѧтно
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
            url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            thumbable_name: Памѧтно#200201
-         page: 1
-         per: 2
-         total: 3
          """
+      А добѫдꙛ охватъ "0-1/3"
+      И добѫдꙛ длину охвата "2"
       Если сдѣлаю "GET" запытъ до адреса "/api/v1/thumbs.json" сꙛ доводом "per=2&page=2"
       То добѫдꙛ кодъ поврата "200"
       И добѫдꙛ приблизнъ извод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
            url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            thumbable_name: Памѧтно#200202
-         page: 2
-         per: 2
-         total: 3
          """
+      А добѫдꙛ охватъ "2-3/3"
+      И добѫдꙛ длину охвата "1"
+
+   @get @collection @error @416
+   Пример: Запрос к контроллеру картинок в АПИ
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/thumbs.json" сꙛ доводом "page=111111"
+      То добѫдꙛ кодъ поврата "416"
+      И добѫдꙛ приблизнъ извод:
+         """
+         ---
+         args:
+           page: '111111'
+         """
+
+   @get @collection @error @416
+   Пример: Запрос к контроллеру картинок в АПИ
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/thumbs.json" сꙛ заглавјем:
+         """
+         ---
+         Range: records=100000-200000
+         """
+      То добѫдꙛ кодъ поврата "416"
+      И добѫдꙛ приблизнъ извод:
+         """
+         ---
+         args: {}
+         """
+
 
    @create @object
    Пример: Користник створяє личинку

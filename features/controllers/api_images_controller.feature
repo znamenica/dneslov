@@ -2,7 +2,6 @@
 @api @image @controller @json
 Свойство: Правач картинок
    Предыстория:
-      * не єствує ни єдне картинке
       * є картинка сѫ даными:
          | id           | 200001                               |
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053 |
@@ -10,6 +9,15 @@
          | meta         | {}                                   |
          | image_path   | features/fixtures/canvas.jpg         |
          | title        | Картинка                             |
+      * єствує памѧть "Памѧтно"
+      * є картинка сѫ даными:
+         | id           | 200012                               |
+         | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063 |
+         | type         | Photo                                |
+         | meta         | {}                                   |
+         | image_path   | features/fixtures/canvas.jpg         |
+         | title        | Фотка                                |
+         | attitude_to  | Памѧтно(10,100)                      |
 
    @get @collection
    Пример: Запрос к контроллеру картинок в АПИ при отсутствии картинок
@@ -31,7 +39,6 @@
       И добѫдꙛ вывод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
            type: Picture
            language: ру
@@ -39,10 +46,16 @@
            title: Картинка
            description:
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
-         page: 1
-         per: 10
-         total: 1
+         - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
+           type: Photo
+           language: ру
+           alphabeth: РУ
+           title: Фотка
+           description:
+           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
          """
+      А добѫдꙛ охватъ "0-9/2"
+      И добѫдꙛ длину охвата "2"
 
    @get @collection
    Пример: Запрос постраничный к контроллеру картинок в АПИ
@@ -68,12 +81,11 @@
            meta: {}
            title: Aperçu 4
          """
-      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ доводом "per=2"
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ доводом "per=3"
       То добѫдꙛ кодъ поврата "206"
       И добѫдꙛ приблизнъ извод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
            type: Picture
            language: ру
@@ -81,6 +93,13 @@
            title: Картинка
            description:
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
+           type: Photo
+           language: ру
+           alphabeth: РУ
+           title: Фотка
+           description:
+           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
            type: Icon
            language: ру
@@ -88,16 +107,14 @@
            title: Картинка 2
            description:
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         page: 1
-         per: 2
-         total: 4
          """
-      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ доводом "per=2&page=2"
+      А добѫдꙛ охватъ "0-2/5"
+      И добѫдꙛ длину охвата "3"
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ доводом "per=3&page=2"
       То добѫдꙛ кодъ поврата "200"
       И добѫдꙛ приблизнъ извод:
          """
          ---
-         list:
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
            type: Painting
            language: ан
@@ -112,9 +129,33 @@
            title: Aperçu 4
            description:
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
-         page: 2
-         per: 2
-         total: 4
+         """
+      А добѫдꙛ охватъ "3-5/5"
+      И добѫдꙛ длину охвата "2"
+
+   @get @collection @error @416
+   Пример: Запрос к контроллеру картинок в АПИ
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ доводом "page=111111"
+      То добѫдꙛ кодъ поврата "416"
+      И добѫдꙛ приблизнъ извод:
+         """
+         ---
+         args:
+           page: '111111'
+         """
+
+   @get @collection @error @416
+   Пример: Запрос к контроллеру картинок в АПИ
+      Если сдѣлаю "GET" запытъ до адреса "/api/v1/images.json" сꙛ заглавјем:
+         """
+         ---
+         Range: records=100000-200000
+         """
+      То добѫдꙛ кодъ поврата "416"
+      И добѫдꙛ приблизнъ извод:
+         """
+         ---
+         args: {}
          """
 
 
@@ -242,3 +283,4 @@
       Пусть не єствує ни єдне картинке
       Если покушаю створити "GET" запытъ до адреса "/api/v1/images.jsonp"
       То не добѫдꙛ кодъ поврата
+      А вывода не бѫдє

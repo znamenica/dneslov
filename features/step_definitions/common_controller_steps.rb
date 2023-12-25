@@ -6,6 +6,11 @@ end
    @response = send(proto.downcase, address, parms)
 end
 
+Если('сдѣлаю {string} запытъ до адреса {string} сꙛ заглавјем:') do |proto, address, doc_string|
+   YAML.load(doc_string).each { |title, value| header(title, value) }
+   @response = send(proto.downcase, address)
+end
+
 То('добѫдꙛ кодъ поврата {string}') do |code|
    expect(@response.status).to eq(code.to_i)
 end
@@ -29,4 +34,16 @@ end
 
 То('не добѫдꙛ кодъ поврата') do
    expect(@response).to_not respond_to(:status)
+end
+
+То('добѫдꙛ охватъ {string}') do |range|
+   expect(@response.headers["Content-Range"]).to eql("records #{range}")
+end
+
+То('добѫдꙛ длину охвата {string}') do |size|
+   expect(@response.headers["Content-Length"]).to eql(size.to_i)
+end
+
+То('вывода не бѫдє') do
+   expect(@response).to be_nil
 end
