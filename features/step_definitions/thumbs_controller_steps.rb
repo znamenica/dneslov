@@ -42,3 +42,8 @@ end
    thumb = Thumb.by_thumbable_name(name).first
    expect(thumb).to be_blank
 end
+
+То('изнахоѕи личинци {string} не бѫдє') do |name|
+   thumb = Thumb.by_thumbable_name(name).first
+   expect(thumb).to be_blank
+end

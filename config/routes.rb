@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+   self.default_url_options = Rails.application.config.action_mailer.default_url_options
+
    # The priority is based upon order of creation: first created -> highest priority.
    # See how all your routes lay out with "rake routes".
 

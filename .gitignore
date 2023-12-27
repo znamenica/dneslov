@@ -35,7 +35,8 @@ webpack.config.js
 public/webpack/manifest.json
 public/javascripts/
 public/stylesheets/
-public/images
+public/images/
+public/uploads/
 
 *.log
 *.sql
@@ -51,6 +52,3 @@ app/assets/config/manifest.js
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
-public/images/
-public/uploads/
-public/public/

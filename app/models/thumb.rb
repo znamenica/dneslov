@@ -9,6 +9,7 @@ class Thumb < ApplicationRecord
    belongs_to :memory, -> { where(thumbs: { thumbable_type: "Memory" }) }, foreign_key: 'thumbable_id'
 
    validates_presence_of :uid, :thumb
+   validates :thumb, file_size: { less_than: 1.megabytes }, size: { height: { min: 300 }, ratio: { range: (1.0..1.0) }}
 
    scope :by_uid, ->(uid) { where(uid: uid) }
    scope :by_thumbable_name, ->(name) do
@@ -19,9 +20,22 @@ class Thumb < ApplicationRecord
       end
    end
 
+   before_validation :fill_in_uid, :fill_in_digest
+
+   delegate :width, :height, to: :thumb
+
+   # callbacks
+   def fill_in_digest
+      self.digest ||= Digest::SHA2.hexdigest(IO.read(thumb.file.file))
+   end
+
+   def fill_in_uid
+      self.uid ||= SecureRandom.uuid
+   end
+
    # serialized
    def url
-      "/thumbs/#{uid}.webp"
+      File.join *[thumb.asset_host.to_s, thumb.store_dir, thumb.filename]
    end
 
    def thumbable_name= value

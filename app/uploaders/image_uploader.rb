@@ -1,15 +1,16 @@
 class ImageUploader < CarrierWave::Uploader::Base
    include CarrierWave::RMagick
 
-   process resize_to_fit: [100, 1000]
+   storage :file
+
    process convert: 'webp'
 
    version :thumb do
-      process resize_to_fill: [300,300]
+      process resize_to_fit: [300,300]
    end
 
    def store_dir
-      'public/images'
+      'images'
    end
 
    # If you upload 'file.jpg', you'll get 'image.webp' because of convert
@@ -19,5 +20,16 @@ class ImageUploader < CarrierWave::Uploader::Base
 
    def content_type_allowlist
       [/image\//]
+   end
+
+   def asset_host
+      case h = Rails.application.config.asset_host
+      when Proc
+         h[]
+      when String, Symbol
+         h
+      else
+         nil
+      end
    end
 end

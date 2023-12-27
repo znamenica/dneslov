@@ -1,4 +1,5 @@
 require 'rdoba/roman'
+require 'open-uri'
 
 module Tasks
    class << self
@@ -152,5 +153,41 @@ module Tasks
             end
          end if cal
       end
+
+      def convert_icon_links_into_images
+      require 'excon'
+      Excon.defaults[:ssl_verify_peer] = false
+
+         uri = URI.join(Rails.application.routes.url_helpers.root_url, "/api/v1/images/create.json")
+         #uri = Rails.config.
+         IconLink.find_each do |l|
+            begin
+               body = URI.parse((Addressable::URI.parse(l.url).normalize)).read
+
+               request = Net::HTTP::Post.new(uri)
+               form = {
+                  "type" => "Icon",
+                  "image" => body,
+                  "description" => l.descriptions.first&.text,
+                  "language" => l.descriptions.first&.language_code,
+                  "alphabeth" => l.descriptions.first&.alphabeth_code
+               }
+        binding.pry
+             a= Excon.post(Addressable::URI.parse(uri).normalize.to_s, :body => URI.encode_www_form(form),
+                  :headers => { "Content-Type" => "application/x-www-form-urlencoded" })
+            #request = Net::HTTP.post uri, data, "Content-Type" => "application/json"
+            #request.set_form data, 'multipart/form-data'
+            #Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+            #   response = http.request(request)
+        binding.pry
+            #end
+           rescue SocketError, OpenURI::HTTPError
+           end
+
+         end
+
+         #IconLink.delete_all
+      end
+
    end
 end

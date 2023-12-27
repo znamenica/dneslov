@@ -39,3 +39,16 @@ en:
                attributes:
                   meta:
                      invalid_json: "has improper according to schema JSON"
+         size:
+            height:
+               min: "has %{value} px. height less than %{cond} px."
+               max: "has %{value} px. height more than %{cond} px."
+               range: "has %{value} px. height that is unmatched to the range %{cond}"
+            width:
+               min: "has %{value} px. width less than %{cond} px."
+               max: "has %{value} px. width more than %{cond} px."
+               range: "has %{value} px. width that is unmatched to the range %{cond}"
+            ratio:
+               min: "has %{value} aspect ratio less than %{cond}"
+               max: "has %{value} aspect ratio more than %{cond}"
+               range: "has %{value} aspect ratio that is unmatched to the range %{cond}"

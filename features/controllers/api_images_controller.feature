@@ -7,7 +7,7 @@
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053 |
          | type         | Picture                              |
          | meta         | {}                                   |
-         | image_path   | features/fixtures/canvas.jpg         |
+         | image_path   | features/fixtures/y1000-blue.jpg     |
          | title        | Картинка                             |
       * єствує памѧть "Памѧтно"
       * є картинка сѫ даными:
@@ -15,7 +15,7 @@
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063 |
          | type         | Photo                                |
          | meta         | {}                                   |
-         | image_path   | features/fixtures/canvas.jpg         |
+         | image_path   | features/fixtures/y1000.png          |
          | title        | Фотка                                |
          | attitude_to  | Памѧтно(10,100)                      |
 
@@ -45,6 +45,7 @@
            alphabeth: РУ
            title: Картинка
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
            type: Photo
@@ -52,6 +53,7 @@
            alphabeth: РУ
            title: Фотка
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
          """
       А добѫдꙛ охватъ "0-9/2"
@@ -65,19 +67,19 @@
          - id: 200002
            uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
            type: Icon
-           image_path: features/fixtures/canvas.jpg
+           image_path: features/fixtures/y2000-green.webp
            meta: {}
            title: Картинка 2
          - id: 200003
            uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
            type: Painting
-           image_path: features/fixtures/canvas.jpg
+           image_path: features/fixtures/y1000-green.gif
            meta: {}
            title: Picture 3
          - id: 200004
            uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f056
            type: Photo
-           image_path: features/fixtures/canvas.jpg
+           image_path: features/fixtures/y1000-green.webp
            meta: {}
            title: Aperçu 4
          """
@@ -92,6 +94,7 @@
            alphabeth: РУ
            title: Картинка
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
            type: Photo
@@ -99,6 +102,7 @@
            alphabeth: РУ
            title: Фотка
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
            type: Icon
@@ -106,6 +110,7 @@
            alphabeth: РУ
            title: Картинка 2
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          """
       А добѫдꙛ охватъ "0-2/5"
@@ -121,6 +126,7 @@
            alphabeth: АН
            title: Picture 3
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f056
            type: Photo
@@ -128,6 +134,7 @@
            alphabeth: ФР
            title: Aperçu 4
            description:
+           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
          """
       А добѫдꙛ охватъ "3-5/5"
@@ -165,8 +172,8 @@
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
          | type         | Picture                              |
          | meta         | {}                                   |
-         | image_path   | features/fixtures/canvas.jpg         |
-         | title        | Картинка                             |
+         | image_path   | features/fixtures/y2000-green.webp   |
+         | title        | Картинка 1                           |
          | description  | Описание                             |
          | language     | ру                                   |
          | alphabeth    | РУ                                   |
@@ -176,36 +183,85 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
          type: Picture
+         width: 300
+         height: 2000
          meta: {}
          language: ру
          alphabeth: РУ
-         title: Картинка
+         title: Картинка 1
          description: Описание
+         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          attitudes: []
          """
-      И изнахоѕь картинци "Картинка" бѫдє яко:
+      И изнахоѕь картинци "Картинка 1" бѫдє яко:
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
          type: Picture
          meta: {}
+         width: 300
+         height: 2000
          language: ру
          alphabeth: РУ
-         title: Картинка
+         title: Картинка 1
          description: Описание
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         image: "/public/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         image: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          attitudes: []
          """
 
-   @updata @object @error @404
+   @create @object @error @422
+   Пример: Користник кушає створити подвојну картинку, и не можє
+      Если запытаю створенје изнахоѕи картинци "/api/v1/images/create.json" сꙛ даными:
+         | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
+         | type         | Picture                              |
+         | meta         | {}                                   |
+         | image_path   | features/fixtures/y1000-blue.jpg     |
+         | title        | Картинка 1                           |
+         | description  | Описание                             |
+         | language     | ру                                   |
+         | alphabeth    | РУ                                   |
+      То добѫдꙛ кодъ поврата "422"
+      И добѫдꙛ вывод:
+         """
+         ---
+         args: {}
+         error: |
+           PG::UniqueViolation: ОШИБКА:  повторяющееся значение ключа нарушает ограничение уникальности "index_pictures_on_digest"
+           DETAIL:  Ключ "(digest)=(\x66616661666633343763343535623366373833356133633836643236373237656261363931333639643263626637623338666532376639623637343436643233)" уже существует.
+         """
+      А изнахоѕи картинци "Картинка 1" не бѫдє
+
+   @create @object @error @422
+   Пример: Користник кушає створити малу картинку, и не можє
+      Если запытаю створенје изнахоѕи картинци "/api/v1/images/create.json" сꙛ даными:
+         | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
+         | type         | Picture                              |
+         | meta         | {}                                   |
+         | image_path   | features/fixtures/canvas.jpg         |
+         | title        | Картинка 1                           |
+         | description  | Описание                             |
+         | language     | ру                                   |
+         | alphabeth    | РУ                                   |
+      То добѫдꙛ кодъ поврата "422"
+      И добѫдꙛ вывод:
+         """
+         ---
+         args: {}
+         error:
+           image:
+           - has 100 px. height less than 1000 px.
+         """
+      А изнахоѕи картинци "Картинка 1" не бѫдє
+
+   @update @object @error @404
    Пример: Користник поновяє дане картинке
       Если запытаю одсланје картинке в изнаходь "/api/v1/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.json" сꙛ даными:
          | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
          | type         | Picture                              |
          | meta         | {}                                   |
-         | image_path   | features/fixtures/canvas.jpg         |
+         | image_path   | features/fixtures/y2000-green.webp   |
          | title        | Картинка 1                           |
          | description  | Описание 1                           |
          | language     | ру                                   |
@@ -216,11 +272,14 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
          type: Picture
+         height: 2000
+         width: 300
          meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
+         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          attitudes: []
          """
@@ -231,11 +290,14 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
          type: Picture
+         height: 2000
+         width: 300
          meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
+         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          attitudes: []
          """
@@ -250,11 +312,14 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
          type: Picture
+         width: 800
+         height: 1000
          meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка
          description:
+         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          attitudes: []
          """
@@ -268,11 +333,14 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
          type: Picture
+         width: 800
+         height: 1000
          meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка
          description:
+         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          attitudes: []
          """

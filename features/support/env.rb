@@ -82,7 +82,8 @@ After do
    Dir.chdir(@owd)
    DatabaseCleaner.clean
    FileUtils.remove_entry_secure(@workdir)
-   FileUtils.rm_rf(Dir["#{Rails.root}/public/public"])
+   FileUtils.rm_rf(Dir["#{Rails.root}/public/images"])
+   FileUtils.rm_rf(Dir["#{Rails.root}/public/thumbs"])
    FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads"])
 end
 

@@ -118,9 +118,9 @@ gem 'carrierwave-base64'
 gem 'carrierwave-i18n'
 gem 'carrierwave_backgrounder'
 gem 'carrierwave-processing'
-#gem 'fog'
-#gem 'fog-'
+gem 'file_validators'
 gem 'rmagick'
+gem 'excon'
 
 # fix
 #gem 'rack', github: "majioa/rack", ref: "2.2.8"

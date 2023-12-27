@@ -7,7 +7,7 @@ class ThumbUploader < CarrierWave::Uploader::Base
    process convert: 'webp'
 
    def store_dir
-      'public/thumbs'
+      'thumbs'
    end
 
    def filename
@@ -16,5 +16,16 @@ class ThumbUploader < CarrierWave::Uploader::Base
 
    def content_type_allowlist
       [/image\//]
+   end
+
+   def asset_host
+      case h = Rails.application.config.asset_host
+      when Proc
+         h[]
+      when String, Symbol
+         h
+      else
+         nil
+      end
    end
 end

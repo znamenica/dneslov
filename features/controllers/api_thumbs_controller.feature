@@ -4,22 +4,22 @@
    Предыстория:
       * єствує памѧть "Памѧтно"
       * єствує личинка сѫ даными:
-         | id              | 200001                               |
-         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053 |
-         | thumbable_name  | Памѧтно                              |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | id              | 200001                                     |
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053       |
+         | thumbable_name  | Памѧтно                                    |
+         | thumb_path      | features/fixtures/300x300-green.webp       |
       * єствує сꙛбытие "Сꙛбытие" сꙛ озом "200201" ѫ памѧти "Памѧтно"
       * єствує личинка сѫ даными:
-         | id              | 200002                               |
-         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
-         | thumbable_name  | Памѧтно#Сꙛбытие                      |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | id              | 200002                                     |
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054       |
+         | thumbable_name  | Памѧтно#Сꙛбытие                            |
+         | thumb_path      | features/fixtures/400x400-transparent.png  |
       * єствує сꙛбытие "Сꙛбытко" сꙛ озом "200202" ѫ памѧти "Памѧтно"
       * єствує личинка сѫ даными:
-         | id              | 200003                               |
-         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055 |
-         | thumbable_name  | Памѧтно#200202                       |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | id              | 200003                                     |
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055       |
+         | thumbable_name  | Памѧтно#200202                             |
+         | thumb_path      | features/fixtures/500x500-blue.webp        |
 
    @get @collection
    Пример: Запрос к контроллеру личинок в АПИ при отсутствии личинок
@@ -111,7 +111,7 @@
    Пример: Користник створяє личинку
       Если запытаю створенје изнахоѕи личинци "/api/v1/thumbs/create.json" сꙛ даными:
          | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f059 |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | thumb_path      | features/fixtures/301x301-yellow.bmp |
          | thumbable_name  | Памѧтно                              |
       То добѫдꙛ кодъ поврата "200"
       И добѫдꙛ вывод:
@@ -128,17 +128,70 @@
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f059
          url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
-         thumb: "/public/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
+         thumb: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
          thumbable_name: Памѧтно
          event_did:
          memory_short_name: Памѧтно
          """
 
-   @updata @object @error @404
+   @create @object @error @422
+   Пример: Користник кушає створити подвојну личинку, и не можє.
+           Излетає бо изключеие ActionController::ParameterMissing
+      Если єствує сꙛбытие "Сꙛбытково" сꙛ озом "200203" ѫ памѧти "Памѧтно"
+      И запытаю створенје изнахоѕи личинци "/api/v1/images/create.json" сꙛ даными:
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f064 |
+         | thumb_path      | features/fixtures/300x300-green.webp |
+         | thumbable_name  | Памѧтно#200203                       |
+      То добѫдꙛ кодъ поврата "422"
+      И добѫдꙛ вывод:
+         """
+         ---
+         args: {}
+         error: 'param is missing or the value is empty: picture'
+         """
+      А изнахоѕи личинци "Памѧтно#200203" не бѫдє
+
+   @create @object @error @422
+   Пример: Користник кушає створити подвојну личинку, и не можє
+      Если єствує сꙛбытие "Сꙛбытково" сꙛ озом "200203" ѫ памѧти "Памѧтно"
+      И запытаю створенје изнахоѕи личинци "/api/v1/thumbs/create.json" сꙛ даными:
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f064 |
+         | thumb_path      | features/fixtures/300x300-green.webp |
+         | thumbable_name  | Памѧтно#200203                       |
+      То добѫдꙛ кодъ поврата "422"
+      И добѫдꙛ вывод:
+         """
+         ---
+         args: {}
+         error: |
+           PG::UniqueViolation: ОШИБКА:  повторяющееся значение ключа нарушает ограничение уникальности "index_thumbs_on_digest"
+           DETAIL:  Ключ "(digest)=(\x36316562656533363363643865346262373436616338316535353362613138323136393730623432333134383364356631353665633839353665363764663231)" уже существует.
+         """
+      А изнахоѕи личинци "Памѧтно#200203" не бѫдє
+
+   @create @object @error @422
+   Пример: Користник кушає створити малу личинку, и не можє
+      Если єствує сꙛбытие "Сꙛбытково" сꙛ озом "200203" ѫ памѧти "Памѧтно"
+      И запытаю створенје изнахоѕи личинци "/api/v1/thumbs/create.json" сꙛ даными:
+         | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f064 |
+         | thumb_path      | features/fixtures/canvas.jpg         |
+         | thumbable_name  | Памѧтно#200203                       |
+      То добѫдꙛ кодъ поврата "422"
+      И добѫдꙛ вывод:
+         """
+         ---
+         args: {}
+         error:
+           thumb:
+           - has 100 px. height less than 300 px.
+         """
+      А изнахоѕи личинци "Памѧтно#200203" не бѫдє
+
+   @update @object @error @404
    Пример: Користник поновяє дане личинке
       Если запытаю одсланје личинке в изнаходь "/api/v1/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.json" сꙛ даными:
          | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f060 |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | thumb_path      | features/fixtures/301x301-yellow.bmp |
          | thumbable_name  | Памѧтно#200202                       |
       То добѫдꙛ кодъ поврата "200"
       И добѫдꙛ вывод:
@@ -170,11 +223,11 @@
            uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
          """
 
-   @updata @object @error @422
+   @update @object @error @422
    Пример: Користник поновяє дане личинке
       Если запытаю одсланје личинке в изнаходь "/api/v1/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.json" сꙛ даными:
          | uid             | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
-         | thumb_path      | features/fixtures/canvas.jpg         |
+         | thumb_path      | features/fixtures/301x301-yellow.bmp |
          | thumbable_name  | Памѧтно#200202                       |
       То добѫдꙛ кодъ поврата "422"
       И добѫдꙛ вывод:

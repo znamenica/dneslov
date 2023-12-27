@@ -19,6 +19,9 @@ types:
     - name: description
       kind: string
       descriptions: :tiun.types.image.description
+    - name: thumb_url
+      kind: uri
+      descriptions: :tiun.types.image.thumb_uri
     - name: url
       kind: uri
       descriptions: :tiun.types.image.uri
@@ -44,9 +47,18 @@ types:
     - name: description
       kind: string
       descriptions: :tiun.types.image.description
+    - name: thumb_url
+      kind: uri
+      descriptions: :tiun.types.image.thumb_uri
     - name: url
       kind: uri
       descriptions: :tiun.types.image.uri
+    - name: width
+      kind: integer
+      descriptions: :tiun.types.image.width
+    - name: height
+      kind: integer
+      descriptions: :tiun.types.image.height
     - name: meta
       kind: json
       descriptions: :tiun.types.image.meta

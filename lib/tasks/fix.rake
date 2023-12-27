@@ -42,4 +42,11 @@ namespace :fix do
 
       true
    end
+
+   desc "Convert icon links into image resources"
+   task images: :environment do
+      Tasks.convert_icon_links_into_images
+
+      true
+   end
 end

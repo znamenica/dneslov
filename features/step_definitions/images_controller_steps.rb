@@ -46,3 +46,8 @@ end
    picture = Picture.by_title(title).first
    expect(picture).to be_blank
 end
+
+То('изнахоѕи картинци {string} не бѫдє') do |title|
+   picture = Picture.by_title(title).first
+   expect(picture).to be_blank
+end

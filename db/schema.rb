@@ -266,11 +266,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
 
   create_table "pictures", force: :cascade do |t|
     t.uuid "uid", null: false
+    t.binary "digest", null: false
     t.string "type", null: false
     t.string "image", null: false
+    t.integer "width", limit: 2, null: false
+    t.integer "height", limit: 2, null: false
     t.jsonb "meta", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["digest"], name: "index_pictures_on_digest", unique: true
     t.index ["meta"], name: "index_pictures_on_meta", using: :gin
     t.index ["uid"], name: "index_pictures_on_uid", unique: true
   end
@@ -397,11 +401,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
 
   create_table "thumbs", force: :cascade do |t|
     t.uuid "uid", null: false
+    t.binary "digest", null: false
     t.string "thumb", null: false
     t.string "thumbable_type", null: false
     t.bigint "thumbable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["digest"], name: "index_thumbs_on_digest", unique: true
     t.index ["thumbable_type", "thumbable_id"], name: "index_thumbs_on_thumbable"
     t.index ["uid"], name: "index_thumbs_on_uid", unique: true
   end
