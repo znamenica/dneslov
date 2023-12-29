@@ -40,21 +40,21 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-           type: Picture
            language: ру
            alphabeth: РУ
            title: Картинка
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           type: Picture
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
-           type: Photo
            language: ру
            alphabeth: РУ
            title: Фотка
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           type: Photo
          """
       А добѫдꙛ охватъ "0-9/2"
       И добѫдꙛ длину охвата "2"
@@ -89,29 +89,29 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-           type: Picture
            language: ру
            alphabeth: РУ
            title: Картинка
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           type: Picture
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
-           type: Photo
            language: ру
            alphabeth: РУ
            title: Фотка
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           type: Photo
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-           type: Icon
            language: ру
            alphabeth: РУ
            title: Картинка 2
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+           type: Icon
          """
       А добѫдꙛ охватъ "0-2/5"
       И добѫдꙛ длину охвата "3"
@@ -121,21 +121,21 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
-           type: Painting
            language: ан
            alphabeth: АН
            title: Picture 3
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
+           type: Painting
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f056
-           type: Photo
            language: фр
            alphabeth: ФР
            title: Aperçu 4
            description:
            thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
            url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
+           type: Photo
          """
       А добѫдꙛ охватъ "3-5/5"
       И добѫдꙛ длину охвата "2"
@@ -169,30 +169,34 @@
    @create @object
    Пример: Користник створяє картинку
       Если запытаю створенје изнахоѕи картинци "/api/v1/images/create.json" сꙛ даными:
-         | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054 |
-         | type         | Picture                              |
-         | meta         | {}                                   |
-         | image_path   | features/fixtures/y2000-green.webp   |
-         | title        | Картинка 1                           |
-         | description  | Описание                             |
-         | language     | ру                                   |
-         | alphabeth    | РУ                                   |
+         | uid          | 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054    |
+         | type         | Picture                                 |
+         | meta         | {}                                      |
+         | image_path   | features/fixtures/100x600-yellow.tiff   |
+         | title        | Картинка 1                              |
+         | description  | Описание                                |
+         | language     | ру                                      |
+         | alphabeth    | РУ                                      |
+         | attitude_to  | Памѧтно(100,10)                         |
       То добѫдꙛ кодъ поврата "200"
       И добѫдꙛ вывод:
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-         type: Picture
-         width: 300
-         height: 2000
-         meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание
          thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         attitudes: []
+         width: 166
+         height: 1000
+         meta: {}
+         type: Picture
+         attitudes:
+         - attitude_to: Памѧтно
+           pos: "<(100,10),30>"
+           meta: {}
          """
       И изнахоѕь картинци "Картинка 1" бѫдє яко:
          """
@@ -200,15 +204,18 @@
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
          type: Picture
          meta: {}
-         width: 300
-         height: 2000
+         width: 166
+         height: 1000
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          image: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         attitudes: []
+         attitudes:
+         - attitude_to: Памѧтно
+           pos: "<(100,10),30>"
+           meta: {}
          """
 
    @create @object @error @422
@@ -227,9 +234,9 @@
          """
          ---
          args: {}
-         error: |
-           PG::UniqueViolation: ОШИБКА:  повторяющееся значение ключа нарушает ограничение уникальности "index_pictures_on_digest"
-           DETAIL:  Ключ "(digest)=(\x66616661666633343763343535623366373833356133633836643236373237656261363931333639643263626637623338666532376639623637343436643233)" уже существует.
+         error:
+           digest:
+           - has already been taken
          """
       А изнахоѕи картинци "Картинка 1" не бѫдє
 
@@ -251,7 +258,7 @@
          args: {}
          error:
            image:
-           - has 100 px. height less than 1000 px.
+           - has 100 px. height less than 600 px.
          """
       А изнахоѕи картинци "Картинка 1" не бѫдє
 
@@ -271,16 +278,16 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-         type: Picture
-         height: 2000
-         width: 300
-         meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
          thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         width: 300
+         height: 2000
+         meta: {}
+         type: Picture
          attitudes: []
          """
       Если запытаю добыванје из изнахоѕи "/api/v1/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.json"
@@ -289,16 +296,16 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-         type: Picture
-         height: 2000
-         width: 300
-         meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
          thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         width: 300
+         height: 2000
+         meta: {}
+         type: Picture
          attitudes: []
          """
       Если запытаю добыванје из изнахоѕи "/api/v1/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.json"
@@ -311,16 +318,16 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-         type: Picture
-         width: 800
-         height: 1000
-         meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка
          description:
          thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         width: 800
+         height: 1000
+         meta: {}
+         type: Picture
          attitudes: []
          """
 
@@ -332,16 +339,16 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-         type: Picture
-         width: 800
-         height: 1000
-         meta: {}
          language: ру
          alphabeth: РУ
          title: Картинка
          description:
          thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         width: 800
+         height: 1000
+         meta: {}
+         type: Picture
          attitudes: []
          """
       И картинка "Картинка" не будє єствовати

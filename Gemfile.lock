@@ -226,13 +226,6 @@ GEM
       carrierwave (>= 2.2.1)
       marcel (~> 1.0.0)
       mime-types (~> 3.0)
-    carrierwave-i18n (3.0.0)
-      carrierwave (>= 3.0.0, < 4)
-    carrierwave-processing (1.1.0)
-      carrierwave
-    carrierwave_backgrounder (1.0.2)
-      carrierwave (> 2.0, < 4.0)
-      rails (> 6.0, < 8.0)
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
@@ -302,7 +295,6 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.7)
     erubi (1.12.0)
-    excon (0.71.1)
     execjs (2.9.1)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -668,9 +660,6 @@ DEPENDENCIES
   capybara
   carrierwave (~> 3.0.5)
   carrierwave-base64
-  carrierwave-i18n
-  carrierwave-processing
-  carrierwave_backgrounder
   cssbundling-rails
   cucumber-rails (~> 2.6.1)
   database_cleaner-active_record
@@ -680,7 +669,6 @@ DEPENDENCIES
   dry_crud (>= 6.0.0)
   ed25519 (~> 1.2)
   email_spec
-  excon
   factory_bot_rails (>= 5.1.1)
   faker
   faraday (~> 1.0)

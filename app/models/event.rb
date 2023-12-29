@@ -66,6 +66,9 @@ class Event < ActiveRecord::Base
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :kind_titles, through: :kind, source: :names
+   has_many :thumbs, -> { where(thumbs: { thumbable_type: "Event" }) }, foreign_key: :thumbable_id, dependent: :destroy
+   has_many :attitudes, as: :imageable, class_name: :ImageAttitude
+   has_many :pictures, through: :attitudes
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs = nil
          if calendary_slugs

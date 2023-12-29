@@ -9,7 +9,10 @@ class Thumb < ApplicationRecord
    belongs_to :memory, -> { where(thumbs: { thumbable_type: "Memory" }) }, foreign_key: 'thumbable_id'
 
    validates_presence_of :uid, :thumb
-   validates :thumb, file_size: { less_than: 1.megabytes }, size: { height: { min: 300 }, ratio: { range: (1.0..1.0) }}
+   validates_uniqueness_of :digest, on: :create
+   validates_uniqueness_of :uid
+   validates :thumb, presence: true, on: :create, file_size: { less_than: 1.megabytes },
+      size: { height: { min: 300 }, ratio: { range: (1.0..1.0) }}
 
    scope :by_uid, ->(uid) { where(uid: uid) }
    scope :by_thumbable_name, ->(name) do
@@ -20,7 +23,8 @@ class Thumb < ApplicationRecord
       end
    end
 
-   before_validation :fill_in_uid, :fill_in_digest
+   before_validation :fill_in_uid
+   before_validation :fill_in_digest, if: -> { thumb.file }
 
    delegate :width, :height, to: :thumb
 

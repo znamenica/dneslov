@@ -29,6 +29,8 @@ class ImageAttitude < ApplicationRecord
          end
    end
 
+   alias_method :attitude_to, :imageable_name
+
    # format pos field is <(1,1),5>
    def pos_at= value
       /(?<x>[0-9]+),(?<y>[0-9]+)/ =~ value

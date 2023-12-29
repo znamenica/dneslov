@@ -72,18 +72,15 @@ types:
    model: ImageAttitude
    version: 1.0
    fields:
+    - name: attitude_to
+      kind: string
+      descriptions: :tiun.types.attitude.attitude_to
     - name: pos
       kind: circle
       descriptions: :tiun.types.attitude.pos
-    - name: imageable_type
-      kind: enum <Memory, Event, Group>
-      descriptions: :tiun.types.attitude.kind
     - name: meta
       kind: json
       descriptions: :tiun.types.attitude.meta
-    - name: imageable_name
-      kind: string
-      descriptions: :tiun.types.attitude.imageable_name
 resources:
  - name: image.index
    path: /api/v1/images.json
@@ -131,31 +128,34 @@ resources:
       args:
        - name: uid
          kind: string
-         descriptions: :tiun.resources.image.put.uid
+         descriptions: :tiun.resources.image.post.uid
        - name: language
          kind: string
-         descriptions: :tiun.resources.image.put.language
+         descriptions: :tiun.resources.image.post.language
        - name: alphabeth
          kind: string
-         descriptions: :tiun.resources.image.put.alphabeth
+         descriptions: :tiun.resources.image.post.alphabeth
        - name: title
          kind: string
-         descriptions: :tiun.resources.image.put.title
+         descriptions: :tiun.resources.image.post.title
        - name: description
          kind: string
-         descriptions: :tiun.resources.image.put.description
+         descriptions: :tiun.resources.image.post.description
        - name: image
          kind: file
-         descriptions: :tiun.resources.image.put.image
+         descriptions: :tiun.resources.image.post.image
        - name: meta
          kind: json
-         descriptions: :tiun.resources.image.put.meta
+         descriptions: :tiun.resources.image.post.meta
        - name: type
          kind: enum <Icon, Painting, Photo>
-         descriptions: :tiun.resources.image.put.type
+         descriptions: :tiun.resources.image.post.type
+       - name: attitude_to
+         kind: string
+         descriptions: :tiun.resources.image.post.attitude_to
        - name: attitudes
          kind: attitude array
-         descriptions: :tiun.resources.image.put.attitudes
+         descriptions: :tiun.resources.image.post.attitudes
  - name: image
    path: /api/v1/images/:uid.json
    methods:
@@ -208,6 +208,9 @@ resources:
        - name: type
          kind: enum <Icon, Painting, Photo>
          descriptions: :tiun.resources.image.put.type
+       - name: attitude_to
+         kind: string
+         descriptions: :tiun.resources.image.put.attitude_to
        - name: attitudes
          kind: attitude array
          descriptions: :tiun.resources.image.put.attitudes

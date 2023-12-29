@@ -155,38 +155,52 @@ module Tasks
       end
 
       def convert_icon_links_into_images
-      require 'excon'
-      Excon.defaults[:ssl_verify_peer] = false
-
          uri = URI.join(Rails.application.routes.url_helpers.root_url, "/api/v1/images/create.json")
-         #uri = Rails.config.
+
          IconLink.find_each do |l|
-            begin
-               body = URI.parse((Addressable::URI.parse(l.url).normalize)).read
+            url = Addressable::URI.parse(l.url).normalize.to_s
+            desc = l.descriptions.first
+            att =
+               case l.info_type
+               when "Memory"
+                  l.info.short_name
+               when "Event"
+                  "#{l.info.memory.short_name}##{l.info.id}"
+               end
 
-               request = Net::HTTP::Post.new(uri)
-               form = {
-                  "type" => "Icon",
-                  "image" => body,
-                  "description" => l.descriptions.first&.text,
-                  "language" => l.descriptions.first&.language_code,
-                  "alphabeth" => l.descriptions.first&.alphabeth_code
-               }
-        binding.pry
-             a= Excon.post(Addressable::URI.parse(uri).normalize.to_s, :body => URI.encode_www_form(form),
-                  :headers => { "Content-Type" => "application/x-www-form-urlencoded" })
-            #request = Net::HTTP.post uri, data, "Content-Type" => "application/json"
-            #request.set_form data, 'multipart/form-data'
-            #Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
-            #   response = http.request(request)
-        binding.pry
-            #end
-           rescue SocketError, OpenURI::HTTPError
-           end
+            puts "\nURL: #{url}"
+            str =
+               begin
+                  URI.parse(url).read
+               rescue SocketError, OpenURI::HTTPError, Errno::ECONNREFUSED, Net::OpenTimeout, RuntimeError, Errno::ECONNRESET
+                  puts "[#{$!.class}]: URL #{l.url} is unavailable"
+               rescue OpenSSL::SSL::SSLError
+                  url = url.gsub("https", "http")
+                  puts "reURL: #{url}"
+                  retry
+               end
 
+            if str
+               str.force_encoding("BINARY")
+               tfile = Tempfile.new(encoding: 'BINARY')
+               tfile.write(str, encoding: 'BINARY')
+               fn = tfile.path
+               tfile.close
+
+               curl = "curl -F picture[image]=@#{fn} -F picture[type]=Icon -F picture[attitude_to]='#{att}' --insecure"
+               curl << " -F picture[description]='#{desc.text.gsub("'", "\\'")}' -F picture[language]=#{desc.language_code} -F picture[alphabeth]=#{desc.alphabeth_code} " if desc
+
+               puts "#{curl} #{Addressable::URI.parse(uri).normalize.to_s}"
+               res = `#{curl} #{Addressable::URI.parse(uri).normalize.to_s}`
+               json = JSON.parse(res)
+
+               puts "#{json["error"] ? "[ERROR]" : "[OK]"}: #{json.inspect}\n"
+
+               tfile.unlink
+            end
          end
 
-         #IconLink.delete_all
+         IconLink.delete_all
       end
 
    end

@@ -60,7 +60,7 @@ module Spec
                deep_match(val, to_val, path | [index], exception: false)
             end
 
-         idx ? array.delete_at(idx) : error(to_val, array[index], path | [index], exception:)
+         idx ? array.to_a.delete_at(idx) : error(to_val, array[index], path | [index], exception:)
       end.any?
    end
 

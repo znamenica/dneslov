@@ -22,11 +22,13 @@ class Picture < ApplicationRecord
    end
 
    validates_presence_of :type, :uid, :image
-   validates :image, file_size: { less_than: 128.megabytes }, size: { height: { min: 1000, max: 30000 },
-                                                                      width: { min: 100, max: 30000 },
-                                                                      ratio: { range: (0.1..5.0) }}
+   validates_uniqueness_of :digest, on: :create
+   validates_uniqueness_of :uid
+   validates :image, presence: true, on: :create, file_size: { less_than: 128.megabytes },
+      size: { height: { min: 600, max: 30000 }, width: { min: 100, max: 30000 }, ratio: { range: (0.1..5.0) }}
 
-   before_validation :fill_in_title_description, :fill_in_uid, :fill_in_digest, :fill_in_dimensions
+   before_validation :fill_in_title_description, :fill_in_uid
+   before_validation :fill_in_digest, :fill_in_dimensions, if: -> { image.file }
 
    def fill_in_dimensions
       self.height = image.height
@@ -82,5 +84,12 @@ class Picture < ApplicationRecord
 
    def alphabeth
       @alphabeth ||= titles.first&.alphabeth_code || descriptions.first&.language_code
+   end
+
+   def attitude_to= value
+      imageable_name = value&.sub(/\(.*/, '')
+      pos_at = value&.sub(/.*\(/, '')
+
+      attitudes.new(imageable_name: imageable_name, pos_at: pos_at) if imageable_name.present?
    end
 end

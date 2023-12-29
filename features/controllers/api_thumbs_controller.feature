@@ -163,9 +163,9 @@
          """
          ---
          args: {}
-         error: |
-           PG::UniqueViolation: ОШИБКА:  повторяющееся значение ключа нарушает ограничение уникальности "index_thumbs_on_digest"
-           DETAIL:  Ключ "(digest)=(\x36316562656533363363643865346262373436616338316535353362613138323136393730623432333134383364356631353665633839353665363764663231)" уже существует.
+         error:
+           digest:
+           - has already been taken
          """
       А изнахоѕи личинци "Памѧтно#200203" не бѫдє
 
@@ -235,9 +235,9 @@
          ---
          args:
            uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-         error: |
-           PG::UniqueViolation: ОШИБКА:  повторяющееся значение ключа нарушает ограничение уникальности "index_thumbs_on_uid"
-           DETAIL:  Ключ "(uid)=(6b9e05cf-aabc-4dc3-97f7-4abd70d6f054)" уже существует.
+         error:
+           uid:
+           - has already been taken
          """
 
    @get @object

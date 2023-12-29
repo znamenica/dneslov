@@ -27,7 +27,7 @@ class AlphabethValidator < ActiveModel::EachValidator
             res += o[ :allow ]
          end
 
-         res += '\<\>'
+         res += '\<\>' + Languageble::SPECIFIC_SYNTAX
       end
 
       if res && value.present? && value !~ ( re = /^[#{res}]+$/ )

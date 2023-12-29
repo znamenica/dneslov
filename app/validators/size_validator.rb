@@ -7,6 +7,8 @@ class SizeValidator < ActiveModel::EachValidator
                value.send(type)
             when :ratio
                value.width.to_f / value.height.to_f
+            else
+               next
             end
 
          sub_options.each do |(kind, cond)|
@@ -35,6 +37,6 @@ class SizeValidator < ActiveModel::EachValidator
                                  message: I18n.t("activerecord.errors.size.#{type}.option", cond: cond))
             end
          end
-      end
+      end if value&.present?
    end
 end

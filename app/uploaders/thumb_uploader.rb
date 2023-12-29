@@ -3,11 +3,15 @@ class ThumbUploader < CarrierWave::Uploader::Base
 
    storage :file
 
-   process resize_to_fit: [300, 300]
+   process resize_to_fit: [300, 300], if: :match_size?
    process convert: 'webp'
 
    def store_dir
       'thumbs'
+   end
+
+   def match_size? file
+      height >= 300 if file
    end
 
    def filename
