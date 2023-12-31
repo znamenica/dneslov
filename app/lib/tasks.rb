@@ -191,9 +191,16 @@ module Tasks
                curl = "curl -F picture[image]=@#{fn} -F picture[type]=#{kind} -F picture[attitude_to]='#{att}' --insecure"
                curl << " -F picture[description]='#{desc.text.gsub("'", "\\'")}' -F picture[language]=#{desc.language_code} -F picture[alphabeth]=#{desc.alphabeth_code} " if desc
 
-               puts "#{curl} #{Addressable::URI.parse(uri).normalize.to_s}"
-               res = `#{curl} #{Addressable::URI.parse(uri).normalize.to_s}`
-               json = JSON.parse(res)
+               tries = 5
+               json =
+                  begin
+                     puts "#{curl} #{Addressable::URI.parse(uri).normalize.to_s}"
+                     res = `#{curl} #{Addressable::URI.parse(uri).normalize.to_s}`
+                     JSON.parse(res)
+                  rescue
+                     tries -= 1
+                     retry if tries >= 0
+                  end
 
                puts "#{json["error"] ? "[ERROR]" : "[OK]"}: #{json.inspect}\n"
 
