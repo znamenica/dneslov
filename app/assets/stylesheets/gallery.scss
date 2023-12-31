@@ -1,0 +1,9 @@
+.gallery {
+   .image {
+      .card.large, .card.small, .card.medium {
+         .card-image {
+            max-height: 75%;
+         }
+      }
+   }
+}

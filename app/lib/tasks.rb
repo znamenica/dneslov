@@ -157,8 +157,9 @@ module Tasks
       def convert_icon_links_into_images
          uri = URI.join(Rails.application.routes.url_helpers.root_url, "/api/v1/images/create.json")
 
-         IconLink.find_each do |l|
+         links = Link.where(type: ["IconLink", "PhotoLink"]).find_each do |l|
             url = Addressable::URI.parse(l.url).normalize.to_s
+            kind = l.type.gsub("Link", "")
             desc = l.descriptions.first
             att =
                case l.info_type
@@ -187,7 +188,7 @@ module Tasks
                fn = tfile.path
                tfile.close
 
-               curl = "curl -F picture[image]=@#{fn} -F picture[type]=Icon -F picture[attitude_to]='#{att}' --insecure"
+               curl = "curl -F picture[image]=@#{fn} -F picture[type]=#{kind} -F picture[attitude_to]='#{att}' --insecure"
                curl << " -F picture[description]='#{desc.text.gsub("'", "\\'")}' -F picture[language]=#{desc.language_code} -F picture[alphabeth]=#{desc.alphabeth_code} " if desc
 
                puts "#{curl} #{Addressable::URI.parse(uri).normalize.to_s}"
@@ -200,7 +201,7 @@ module Tasks
             end
          end
 
-         IconLink.delete_all
+         links.delete_all
       end
 
    end

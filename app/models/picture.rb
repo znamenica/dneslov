@@ -23,12 +23,12 @@ class Picture < ApplicationRecord
 
    validates_presence_of :type, :uid, :image
    validates_uniqueness_of :digest, on: :create
-   validates_uniqueness_of :uid
+   validates_uniqueness_of :uid, :url, :thumb_url
    validates :image, presence: true, on: :create, file_size: { less_than: 128.megabytes },
       size: { height: { min: 600, max: 30000 }, width: { min: 100, max: 30000 }, ratio: { range: (0.1..5.0) }}
 
    before_validation :fill_in_title_description, :fill_in_uid
-   before_validation :fill_in_digest, :fill_in_dimensions, if: -> { image.file }
+   before_validation :fill_in_digest, :fill_in_dimensions, :fill_in_url, :fill_in_thumb_url, if: -> { image.file }
 
    def fill_in_dimensions
       self.height = image.height
@@ -41,6 +41,14 @@ class Picture < ApplicationRecord
 
    def fill_in_uid
       self.uid ||= SecureRandom.uuid
+   end
+
+   def fill_in_url
+      self.url = File.join *[image.asset_host.to_s, image.store_dir, image.filename]
+   end
+
+   def fill_in_thumb_url
+      self.thumb_url = File.join *[image.asset_host.to_s, image.store_dir, "thumb_" + image.filename]
    end
 
    def fill_in_title_description
@@ -62,14 +70,6 @@ class Picture < ApplicationRecord
    end
 
    # serialized
-   def thumb_url
-      File.join *[image.asset_host.to_s, image.store_dir, "thumb_" + image.filename]
-   end
-
-   def url
-      File.join *[image.asset_host.to_s, image.store_dir, image.filename]
-   end
-
    def title
       @title ||= titles.where(language_code: language, alphabeth_code: alphabeth).first&.text
    end

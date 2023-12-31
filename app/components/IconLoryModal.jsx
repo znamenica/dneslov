@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { lory } from 'lory.js'
 
-import Image from 'Image'
+import PureImage from 'PureImage'
 
 export default class IconLoryModal extends Component {
    static defaultProps = {
@@ -208,7 +208,7 @@ export default class IconLoryModal extends Component {
                         {this.props.links.map((link) =>
                            <li
                               key={link.id} >
-                              <Image
+                              <PureImage
                                  wrapperClassName='icon'
                                  src={link.url}
                                  alt={link.description}

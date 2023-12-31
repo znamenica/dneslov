@@ -238,6 +238,8 @@
          error:
            uid:
            - has already been taken
+           url:
+           - has already been taken
          """
 
    @get @object

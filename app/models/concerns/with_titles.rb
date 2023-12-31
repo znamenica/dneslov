@@ -23,9 +23,8 @@ module WithTitles
             if selector.empty?
                selector << "#{model.table_name}.*"
             end
-            binding.pry
 
-            if self.attributes.include?(:kind_code)
+            if self.model.attribute_names.include?("kind_code")
                kind_join = 
                   "LEFT OUTER JOIN subjects AS #{as}_kinds
                                 ON #{as}_kinds.kind_code = '#{model.name}Kind'
@@ -33,8 +32,7 @@ module WithTitles
                kind_where = 
                                "OR titles.describable_id = #{as}_kinds.id
                                AND titles.describable_type = 'Subject'
-                               AND titles.type = 'Appellation')
-                               AND titles.language_code IN ('#{language_codes.join("', '")}')"
+                               AND titles.type = 'Appellation'"
             end
 
             selector << "COALESCE((WITH __titles AS (
@@ -63,8 +61,9 @@ module WithTitles
                              WHERE titles.id IS NOT NULL
                                AND (titles.describable_id = #{as}.id
                                AND titles.describable_type = '#{model}'
-                               AND titles.type = IN ('Title', 'Appellation')
-                                   #{kind_where}
+                               AND titles.type IN ('Title', 'Appellation')
+                                   #{kind_where})
+                               AND titles.language_code IN ('#{language_codes.join("', '")}')
                           GROUP BY titles.id, titles.describable_type, titles.text,
                                    language_names.text, alphabeth_names.text)
                             SELECT jsonb_agg(__titles)

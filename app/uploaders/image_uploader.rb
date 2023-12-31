@@ -8,7 +8,7 @@ class ImageUploader < CarrierWave::Uploader::Base
    process upfit: [100,1000], if: :match_size?
 
    version :thumb do
-      process resize_to_fit: [300,300]
+      process resize_to_fit: [400,400]
    end
 
    def match_size? file

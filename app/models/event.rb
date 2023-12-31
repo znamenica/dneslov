@@ -176,6 +176,36 @@ class Event < ActiveRecord::Base
       joins(join, :memory).merge(Memory.with_names(context)).select(selector).group(:id, 'memory_slugs.text')
    end
 
+   scope :with_icon, -> context do
+      as = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __picture AS (
+                      SELECT #{as}_pictures.url AS url,
+                             #{as}_pictures.width AS width,
+                             #{as}_pictures.height AS height,
+                             #{as}_image_attitudes.pos AS pos,
+                             #{as}_titles.text AS title
+                        FROM pictures AS #{as}_pictures
+             LEFT OUTER JOIN image_attitudes AS #{as}_image_attitudes
+                          ON #{as}_image_attitudes.imageable_id = #{as}.id
+                         AND #{as}_image_attitudes.imageable_type = 'Event'
+             LEFT OUTER JOIN descriptions AS #{as}_titles
+                          ON #{as}_titles.describable_id = #{as}_pictures.id
+                         AND #{as}_titles.describable_type = 'Picture'
+                         AND #{as}_titles.type = 'Title'
+                         AND #{as}_titles.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE #{as}_image_attitudes.picture_id = #{as}_pictures.id
+                         AND #{as}_pictures.type = 'Icon'
+                    ORDER BY random()
+                       LIMIT 1)
+                      SELECT jsonb_agg(__picture)
+                        FROM __picture), '[]'::jsonb) AS _picture"
+
+      select(selector).group(:id)
+   end
+
    scope :with_place, -> context do
       language_codes = [ context[:locales] ].flatten
       selector = "jsonb_build_object('id', places.id, 'name', place_descriptions.text) AS _place"

@@ -10,6 +10,7 @@ import SearchConditions from 'SearchConditions'
 import MemorySpans from 'MemorySpans'
 import Memory from 'Memory'
 import Eventee from 'Eventee'
+import Gallery from 'Gallery'
 import Intro from 'Intro'
 import Error from 'Error'
 import { getCalendariesString, getDateString, getPathsFromState, getTitleFromState, parseDateString, parseCalendariesString } from 'support'
@@ -26,6 +27,7 @@ export default class MemoriesForm extends Component {
          total: 0,
       },
       memory: null,
+      gallery: null,
       error: null
    }
 
@@ -42,6 +44,7 @@ export default class MemoriesForm extends Component {
                memoriesTotal: props.memories.total,
                memory: props.memory,
                eventee: props.eventee,
+               gallery: props.gallery,
                error: props.error,
                calendarySlug: props.calendaries_used?.length == 1 ? props.calendaries_used[0] : null,
                calendariesCloud: props.calendaries_cloud || [],
@@ -234,6 +237,7 @@ export default class MemoriesForm extends Component {
             memories: [],
             memory: null,
             eventee: null,
+            gallery: null,
             error: {
                message: err.response.data.message,
                code: err.response.status
@@ -256,6 +260,7 @@ export default class MemoriesForm extends Component {
             memoriesTotal: memories.total,
             memory: null,
             eventee: null,
+            gallery: null,
             error: null})
       } else {
          state = merge(this.state, {
@@ -263,6 +268,7 @@ export default class MemoriesForm extends Component {
             memoriesTotal: memories.total,
             memory: null,
             eventee: null,
+            gallery: null,
             error: null})
       }
 
@@ -277,6 +283,7 @@ export default class MemoriesForm extends Component {
                           memories: [],
                           query: config.params,
                           eventee: null,
+                          gallery: null,
                           error: null})
 
       document.body.classList.remove('in-progress')
@@ -289,6 +296,20 @@ export default class MemoriesForm extends Component {
                           memories: [],
                           query: config.params,
                           eventee: eventee,
+                          gallery: null,
+                          error: null})
+
+      document.body.classList.remove('in-progress')
+      this.updateState(state)
+   }
+
+   galleryParse(gallery, config) {
+      let state = merge(this.state,
+                        { memory: null,
+                          memories: [],
+                          query: config.params,
+                          eventee: null,
+                          gallery: gallery,
                           error: null})
 
       document.body.classList.remove('in-progress')
@@ -375,7 +396,16 @@ export default class MemoriesForm extends Component {
                               specifiedCalendarySlug={this.state.calendarySlug}
                               selectedCalendaries={this.state.query.c?.split(",")}
                               {...this.state.eventee} />}
-                        {this.props.memories.list && !this.state.error && !this.state.eventee && !this.state.memory &&
+                        {this.state.gallery &&
+                           <Gallery
+                              key='gallery'
+                              date={parseDateString(this.state.query.d).pop()}
+                              calendarStyle={this.calendarStyleFromQuery()}
+                              defaultCalendarySlug={this.defaultCalendarySlug()}
+                              specifiedCalendarySlug={this.state.calendarySlug}
+                              selectedCalendaries={this.state.query.c?.split(",")}
+                              {...this.state.gallery} />}
+                        {this.props.memories.list && !this.state.error && !this.state.eventee && !this.state.gallery && !this.state.memory &&
                            <div>
                               <div className='row'>
                                  <SearchField

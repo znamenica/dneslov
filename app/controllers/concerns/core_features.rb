@@ -52,7 +52,7 @@ module CoreFeatures
 
    def default_calendary_slugs
       #TODO make automatic detection of calendary depended on the IP and country of request
-      ['днес','рпц','озар','нмр']
+      ['днес','рпц','нмр']
    end
 
    def default
@@ -108,6 +108,7 @@ module CoreFeatures
                          .with_names(context)
                          .with_coverings(context)
                          .with_bond_memories(context)
+                         .with_icon(context)
                          .with_pure_links
                          .with_slug_text
 

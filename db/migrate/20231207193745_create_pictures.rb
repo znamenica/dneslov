@@ -3,6 +3,8 @@ class CreatePictures < ActiveRecord::Migration[7.0]
       create_table :pictures do |t|
          t.uuid :uid, index: { unique: true }, null: false
          t.binary :digest, index: { unique: true }, null: false
+         t.string :url, index: { unique: true }, null: false
+         t.string :thumb_url, index: { unique: true }, null: false
          t.string :type, null: false
          t.string :image, null: false
          t.integer :width, null: false, limit: 2

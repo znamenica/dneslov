@@ -21,9 +21,9 @@ class Memory < ActiveRecord::Base
    has_many :service_scripta, through: :services
    has_many :scripta, through: :service_scripta
    has_many :calendaries, -> { distinct.reorder('id') }, through: :memos
-   has_many :thumbs, as: :info, inverse_of: :info, class_name: :ThumbLink, dependent: :destroy
-   has_many :icons, as: :info, inverse_of: :info, class_name: :IconLink, dependent: :destroy
-   has_many :photos, as: :info, inverse_of: :info, class_name: :PhotoLink, dependent: :destroy
+   has_many :thumbs, -> { where(thumbs: { thumbable_type: "Memory" }) }, foreign_key: :thumbable_id, dependent: :destroy
+   has_many :attitudes, as: :imageable, class_name: :ImageAttitude
+   has_many :pictures, through: :attitudes
    has_many :notes, as: :describable, dependent: :destroy, class_name: :Note
    has_many :orders, -> { distinct.reorder('id') }, through: :memos, source: :orders
    has_many :slugs, -> { distinct.reorder('id') }, through: :orders, source: :slug
@@ -324,6 +324,55 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       select(selector).group(:id)
    end
 
+   # https://efim360.ru/postgresql-tablicza-prisutstvuet-v-zaprose-no-soslatsya-na-neyo-iz-etoj-chasti-zaprosa-nelzya/?ysclid=lqs5tozisb568391387
+   scope :with_icon, -> context do
+      as = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+      selector = self.select_values.dup
+      selector << "#{as}.*" if selector.empty?
+      selector << "jsonb_build_object(
+         'url', #{as}_pictures.url,
+         'thumb_url', #{as}_pictures.thumb_url,
+         'width', #{as}_pictures.width,
+         'height,', #{as}_pictures.height,
+         'pos', #{as}_pictures.pos,
+         'description', #{as}_pictures.description,
+         'title', #{as}_pictures.title) AS _picture"
+      join = "LEFT OUTER JOIN LATERAL (
+                      SELECT #{as}_pictures.url AS url,
+                             #{as}_pictures.thumb_url AS thumb_url,
+                             #{as}_pictures.width AS width,
+                             #{as}_pictures.height AS height,
+                             #{as}_image_attitudes.pos::text AS pos,
+                             #{as}_image_attitudes.imageable_id AS imageable_id,
+                             #{as}_image_attitudes.imageable_type AS imageable_type,
+                             #{as}_titles.text AS title,
+                             #{as}_descriptions.text AS description
+                        FROM pictures AS #{as}_pictures
+             LEFT OUTER JOIN image_attitudes AS #{as}_image_attitudes
+                          ON #{as}_image_attitudes.imageable_id = #{as}.id
+                         AND #{as}_image_attitudes.imageable_type = 'Memory'
+             LEFT OUTER JOIN descriptions AS #{as}_descriptions
+                          ON #{as}_descriptions.describable_id = #{as}_pictures.id
+                         AND #{as}_descriptions.describable_type = 'Picture'
+                         AND #{as}_descriptions.type = 'Description'
+                         AND #{as}_descriptions.language_code IN ('#{language_codes.join("', '")}')
+             LEFT OUTER JOIN descriptions AS #{as}_titles
+                          ON #{as}_titles.describable_id = #{as}_pictures.id
+                         AND #{as}_titles.describable_type = 'Picture'
+                         AND #{as}_titles.type = 'Title'
+                         AND #{as}_titles.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE #{as}_image_attitudes.picture_id = #{as}_pictures.id
+                         AND #{as}_pictures.type = 'Icon'
+                    ORDER BY random()
+                       LIMIT 1) AS #{as}_pictures
+                          ON #{as}_pictures.imageable_id = #{as}.id
+                         AND #{as}_pictures.imageable_type = 'Memory'"
+
+      joins(join).select(selector).group(:id, "#{as}_pictures.url", "#{as}_pictures.thumb_url", "#{as}_pictures.width",
+         "#{as}_pictures.height", "#{as}_pictures.pos", "#{as}_pictures.title", "#{as}_pictures.description")
+   end
+
    scope :with_slug_text, -> do
       selector = self.select_values.dup
       if selector.empty?
@@ -553,9 +602,6 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
    accepts_nested_attributes_for :paterics, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :events, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :memos, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :thumbs, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :icons, reject_if: :all_blank, allow_destroy: true
-   accepts_nested_attributes_for :photos, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :coverings, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
    accepts_nested_attributes_for :slug, reject_if: :all_blank

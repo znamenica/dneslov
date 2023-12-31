@@ -25,7 +25,17 @@ export default class Memory extends Component {
       selectedCalendaries: [],
       defaultCalendarySlug: null,
       specifiedCalendarySlug: null,
-      calendarStyle: 'julian'
+      calendarStyle: 'julian',
+      i18n: {
+         gallery: "Выставка",
+         base: "Опорная память",
+         externals: "Внешние ссылки",
+         patron: "Покровитель",
+         events: "События",
+         prosomeion: "подобен",
+         tone: "глас",
+         suffix: "-й",
+      }
    }
 
    static descriptionKindCodes = [ "Appearance", "Writing", "Repose", "Veneration", "Miracle", "Writing", "Resurrection", "Monasticry", "Council", "Marriage" ]
@@ -209,8 +219,8 @@ export default class Memory extends Component {
             this.ScriptumTable[scriptum.type],
             scriptum.title && "«" + scriptum.title + "»",
          ].compact().join(" "),
-         scriptum.prosomeion_title && "подобен «" + scriptum.prosomeion_title + "»",
-         scriptum.tone && "глас " + scriptum.tone + "-й",
+         scriptum.prosomeion_title && this.props.i18n.prosomeion + " «" + scriptum.prosomeion_title + "»",
+         scriptum.tone && + this.props.i18n.tone + " " + scriptum.tone + this.props.i18n.suffix,
       ].compact().join(", ")
    }
 
@@ -231,12 +241,14 @@ export default class Memory extends Component {
    render() {
       console.log("[render] *", { 'this.props': this.props, 'this.state': this.state })
 
-      return (
+      return [
+         <MetaTags>
+            <meta
+               id="meta-description"
+               name="description"
+               content={this.getDescription()} /></MetaTags>,
          <div className='row'>
-            <MetaTags>
-               <meta id="meta-description" name="description" content={this.getDescription()} />
-            </MetaTags>
-            <div className='col s12'>
+            <div className='col s10'>
                <div className='row'>
                   <div className='col s12'>
                      {this.state.order &&
@@ -250,15 +262,26 @@ export default class Memory extends Component {
                         names={this.props.names} />
                      {this.state.happenedAt && <Chip
                         className='happened-at'
-                        text={this.state.happenedAt} />}</div></div></div>
-            {this.state.iconLinks.isPresent() &&
-               <Carousel
-                  images={this.state.iconLinks} />}
+                        text={this.state.happenedAt} />}</div></div></div></div>,
+         <div className='row'>
+            {this.props.picture.url &&
+               <div className='col s12'>
+                  <div className="card hoverable small">
+                     <div className="card-image">
+                        <img
+                           src={this.props.picture.url}
+                           alt={this.props.picture.title} />
+                        <span className="card-title">{this.props.picture.title}</span></div>
+                  <div className="card-content">
+                     <p>{this.props.picture.description}</p></div>
+                  <div className="card-action">
+                     <a href={this.props.slug + "/gallery"}>{this.props.i18n.gallery}</a></div></div></div>}</div>,
+         <div className='row'>
             {this.props.bond_memories.length > 0 &&
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12 title'>
-                        Опорная память</div>
+                        {this.props.i18n.base}</div>
                      <div className='col s12'>
                         {this.props.bond_memories.filterMap((bm) =>
                            <Chip
@@ -273,7 +296,7 @@ export default class Memory extends Component {
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12 title'>
-                        Внешние ссылки</div>
+                        {this.props.i18n.externals}</div>
                      <div className='col s12'>
                         {this.state.links.map((link) =>
                            <Chip
@@ -285,7 +308,7 @@ export default class Memory extends Component {
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12 title'>
-                        Покровитель:</div>
+                        {this.props.i18n.patron}:</div>
                      <div className='col s12'>
                         {this.state.coverings.map((c) =>
                            <Chip
@@ -304,7 +327,7 @@ export default class Memory extends Component {
                <div className='col s12'>
                   <div className='row'>
                      <div className='col s12 title'>
-                        События</div>
+                        {this.props.i18n.events}</div>
                      <div className='col s12'>
                         <EventSpans
                            msDate={this.state.msDate}
@@ -313,4 +336,6 @@ export default class Memory extends Component {
                            describedMemoIds={this.state.describedMemoIds}
                            defaultCalendarySlug={this.state.defaultCalendarySlug}
                            specifiedCalendarySlug={this.props.specifiedCalendarySlug}
-                           events={this.props.events} /></div></div></div>}</div>)}}
+                           events={this.props.events} /></div></div></div>}</div>]
+   }
+}

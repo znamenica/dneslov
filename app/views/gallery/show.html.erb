@@ -1,0 +1,8 @@
+<%=
+   react_component('MemoriesForm',
+      date: !@date.blank? && @date.strftime("%d.%m.%Y"),
+      error: (binding.local_variable_get(:error) rescue nil),
+      calendaries_cloud: (binding.local_variable_get(:cloud) rescue nil),
+      calendaries_used: @calendary_slugs,
+      picture: (binding.local_variable_get(:picture) rescue nil))
+-%>

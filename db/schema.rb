@@ -267,6 +267,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   create_table "pictures", force: :cascade do |t|
     t.uuid "uid", null: false
     t.binary "digest", null: false
+    t.string "url", null: false
+    t.string "thumb_url", null: false
     t.string "type", null: false
     t.string "image", null: false
     t.integer "width", limit: 2, null: false
@@ -276,7 +278,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
     t.datetime "updated_at", null: false
     t.index ["digest"], name: "index_pictures_on_digest", unique: true
     t.index ["meta"], name: "index_pictures_on_meta", using: :gin
+    t.index ["thumb_url"], name: "index_pictures_on_thumb_url", unique: true
     t.index ["uid"], name: "index_pictures_on_uid", unique: true
+    t.index ["url"], name: "index_pictures_on_url", unique: true
   end
 
   create_table "places", id: :serial, force: :cascade do |t|
@@ -402,6 +406,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   create_table "thumbs", force: :cascade do |t|
     t.uuid "uid", null: false
     t.binary "digest", null: false
+    t.string "url", null: false
     t.string "thumb", null: false
     t.string "thumbable_type", null: false
     t.bigint "thumbable_id", null: false
@@ -410,10 +415,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
     t.index ["digest"], name: "index_thumbs_on_digest", unique: true
     t.index ["thumbable_type", "thumbable_id"], name: "index_thumbs_on_thumbable"
     t.index ["uid"], name: "index_thumbs_on_uid", unique: true
+    t.index ["url"], name: "index_thumbs_on_url", unique: true
   end
 
   add_foreign_key "coverings", "memories", on_delete: :cascade
   add_foreign_key "coverings", "places", on_delete: :cascade
+  add_foreign_key "image_attitudes", "pictures", on_delete: :cascade
   add_foreign_key "links", "resources", on_delete: :cascade
   add_foreign_key "markups", "readings", on_delete: :cascade
   add_foreign_key "markups", "scripta", on_delete: :restrict

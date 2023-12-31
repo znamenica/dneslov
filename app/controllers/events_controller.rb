@@ -28,6 +28,7 @@ class EventsController < ApplicationController
                        .with_place(context)
                        .with_titles(context)
                        .with_description(context)
+                       .with_icon(context)
                        .select("memories.base_year",
                                "memories.short_name",
                                "memories.id AS memory_id")

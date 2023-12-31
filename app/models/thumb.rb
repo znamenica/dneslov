@@ -10,7 +10,7 @@ class Thumb < ApplicationRecord
 
    validates_presence_of :uid, :thumb
    validates_uniqueness_of :digest, on: :create
-   validates_uniqueness_of :uid
+   validates_uniqueness_of :uid, :url
    validates :thumb, presence: true, on: :create, file_size: { less_than: 1.megabytes },
       size: { height: { min: 300 }, ratio: { range: (1.0..1.0) }}
 
@@ -24,7 +24,7 @@ class Thumb < ApplicationRecord
    end
 
    before_validation :fill_in_uid
-   before_validation :fill_in_digest, if: -> { thumb.file }
+   before_validation :fill_in_digest, :fill_in_url, if: -> { thumb.file }
 
    delegate :width, :height, to: :thumb
 
@@ -37,11 +37,11 @@ class Thumb < ApplicationRecord
       self.uid ||= SecureRandom.uuid
    end
 
-   # serialized
-   def url
-      File.join *[thumb.asset_host.to_s, thumb.store_dir, thumb.filename]
+   def fill_in_url
+      self.url = File.join *[thumb.asset_host.to_s, thumb.store_dir, thumb.filename]
    end
 
+   # assignments
    def thumbable_name= value
       @thumbable_name = value
 
