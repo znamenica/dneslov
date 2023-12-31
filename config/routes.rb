@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+   self.default_url_options = Rails.application.config.action_mailer.default_url_options
+
    # The priority is based upon order of creation: first created -> highest priority.
    # See how all your routes lay out with "rake routes".
 
@@ -46,12 +48,13 @@ Rails.application.routes.draw do
    end
 
    get '/index' => 'memories#index'
-   # caching images; NOTE don't keep images in public/images
-   get '/images/*path' => 'images#cache', format: false
    get '/:lat' => 'errors#show', constraints: { lat: /[a-z]+/ }
 
    get '/:slug' => 'memories#show', as: :slug#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
+   get '/:slug/gallery' => 'gallery#index', as: :gallery#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
+   #get '/:slug/gallery/:uid' => 'gallery#show', as: :picture#, constraints: { slug: /[ёа-я0-9]{1,6}/ }
    get '/:slug/:event' => 'events#show', as: :slug_event, constraints: { event: /[0-9]{1,6}/ }
+   get '/:slug/:event/gallery' => 'gallery#index', as: :event_gallery, constraints: { event: /[0-9]{1,6}/ }
    get '/:c/:slug' => 'memories#show', as: :cslug
    get '/:c/:slug/:event' => 'events#show', as: :cslug_event, constraints: { event: /[0-9]{1,6}/ }
 end

@@ -1,4 +1,5 @@
 require 'rdoba/roman'
+require 'open-uri'
 
 module Tasks
    class << self
@@ -151,6 +152,56 @@ module Tasks
                x.save!(validate: false)
             end
          end if cal
+      end
+
+      def convert_icon_links_into_images
+         uri = URI.join(Rails.application.routes.url_helpers.root_url, "/api/v1/images/create.json")
+
+         links = Link.where(type: ["IconLink", "PhotoLink"]).find_each do |l|
+            url = Addressable::URI.parse(l.url).normalize.to_s
+            kind = l.type.gsub("Link", "")
+            desc = l.descriptions.first
+            att =
+               case l.info_type
+               when "Memory"
+                  l.info.short_name
+               when "Event"
+                  "#{l.info.memory.short_name}##{l.info.id}"
+               end
+
+            puts "\nURL: #{url}"
+            str =
+               begin
+                  URI.parse(url).read
+               rescue SocketError, OpenURI::HTTPError, Errno::ECONNREFUSED, Net::OpenTimeout, RuntimeError, Errno::ECONNRESET
+                  puts "[#{$!.class}]: URL #{l.url} is unavailable"
+               rescue OpenSSL::SSL::SSLError
+                  url = url.gsub("https", "http")
+                  puts "reURL: #{url}"
+                  retry
+               end
+
+            if str
+               str.force_encoding("BINARY")
+               tfile = Tempfile.new(encoding: 'BINARY')
+               tfile.write(str, encoding: 'BINARY')
+               fn = tfile.path
+               tfile.close
+
+               curl = "curl -F picture[image]=@#{fn} -F picture[type]=#{kind} -F picture[attitude_to]='#{att}' --insecure"
+               curl << " -F picture[description]='#{desc.text.gsub("'", "\\'")}' -F picture[language]=#{desc.language_code} -F picture[alphabeth]=#{desc.alphabeth_code} " if desc
+
+               puts "#{curl} #{Addressable::URI.parse(uri).normalize.to_s}"
+               res = `#{curl} #{Addressable::URI.parse(uri).normalize.to_s}`
+               json = JSON.parse(res)
+
+               puts "#{json["error"] ? "[ERROR]" : "[OK]"}: #{json.inspect}\n"
+
+               tfile.unlink
+            end
+         end
+
+         Link.where(type: ["IconLink", "PhotoLink"]).delete_all
       end
    end
 end

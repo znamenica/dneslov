@@ -50,9 +50,9 @@ gem 'snappy'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
-# gem "jsonize", ">= 0.1.1", "~> 0.1"
+gem "jsonize", "~> 0.2"
 # gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
-gem "jsonize", github: 'majioa/jsonize', ref: '96c8b77'
+# gem "jsonize", github: 'majioa/jsonize', ref: '96c8b77'
 # gem "redisize", ">= 0.1.4", "~> 0.1"
 # gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
 gem 'redisize', github: 'majioa/redisize', ref: 'be60757'
@@ -89,7 +89,7 @@ gem 'when_easter'
 ## data
 gem 'activerecord-import', '~> 1.4.1'
 gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
-#gem 'zero_downtime_migrations', path: '/usr/local/home/majioa/git/zero_downtime_migrations'
+# gem 'zero_downtime_migrations', path: '/usr/local/home/majioa/git/zero_downtime_migrations'
 # gem 'active_record_extended'
 
 ## pdf
@@ -107,10 +107,20 @@ gem 'sprockets-rails'
 
 ## api
 # gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
-gem 'tiun', github: 'majioa/tiun', ref: '2b09248'
+gem 'tiun', github: 'majioa/tiun', ref: '2820b93'
 
 # sitemap
 gem 'sitemap_generator'
+
+# images
+gem 'carrierwave', '~> 3.0.5'
+gem 'carrierwave-base64'
+gem 'file_validators'
+gem 'rmagick'
+
+# fix
+gem 'rack', github: "majioa/rack", ref: "2.2.8"
+# gem 'rack', path: '/usr/local/home/majioa/git/rack'
 
 group :development do
    gem "capistrano", "~> 3.17", require: false
@@ -152,9 +162,9 @@ group :development, :test do
 end
 
 group :test do
-   gem 'cucumber-rails', '~> 2.6', require: nil
+   gem 'cucumber-rails', '~> 2.6.1', require: nil
    gem 'shoulda-matchers', '~> 4.0'
-   gem 'shoulda-matchers-cucumber', '~> 1.0'
+   gem 'shoulda-matchers-cucumber', '~> 1.0', '>= 1.0.1'
    gem 'rspec-expectations'
    gem 'simplecov', '~> 0.21'
    gem 'simplecov_json_formatter'

@@ -1,0 +1,127 @@
+---
+types:
+ - name: thumb
+   version: 1.0
+   fields:
+    - name: uid
+      kind: uuid
+      descriptions: :tiun.types.thumb.uid
+    - name: url
+      kind: uri
+      descriptions: :tiun.types.thumb.uri
+    - name: thumbable_name
+      kind: string
+      descriptions: :tiun.types.thumb.thumbable_name
+ - name: full_thumb
+   model: Thumb
+   version: 1.0
+   fields:
+    - name: uid
+      kind: uuid
+      descriptions: :tiun.types.thumb.uid
+    - name: url
+      kind: uri
+      descriptions: :tiun.types.thumb.uri
+    - name: thumbable_name
+      kind: string
+      descriptions: :tiun.types.thumb.thumbable_name
+    - name: event_did
+      kind: string
+      descriptions: :tiun.resources.thumb.get.args.event_did
+    - name: memory_short_name
+      kind: string
+      descriptions: :tiun.resources.thumb.get.args.memory_short_name
+resources:
+ - name: thumb.index
+   path: /api/v1/thumbs.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: thumb page
+      descriptions: :tiun.resources.thumb.index
+      auth: no
+      allowed_errors: [200, 204, 206, 416, 422.3, 500]
+      args:
+       - name: per
+         kind: natural
+         default: 10
+         maximum: 50
+         descriptions: :tiun.resources.thumb.index.args.per_page
+       - name: page
+         kind: natural
+         default: 1
+         descriptions: :tiun.resources.thumb.index.args.page
+       - name: e
+         kind: string
+         alias: event_did
+         descriptions: :tiun.resources.thumb.get.args.event_did
+       - name: m
+         kind: string
+         alias: memory_short_name
+         descriptions: :tiun.resources.thumb.get.args.memory_short_name
+ - name: create thumb
+   path: /api/v1/thumbs/create.json
+   methods:
+    - name: post
+      version: 1.0
+      kind: full_thumb
+      descriptions: :tiun.resources.thumb.create
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.thumb.put.uid
+       - name: thumbable_name
+         kind: string
+         descriptions: :tiun.types.thumb.thumbable_name
+       - name: thumb
+         kind: file
+         descriptions: :tiun.resources.thumb.put.thumb
+ - name: thumb
+   path: /api/v1/thumbs/:uid.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: full_thumb
+      descriptions: :tiun.resources.thumb.get
+      auth: no
+      allowed_errors: [200, 404, 406, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.thumb.get.args.uid
+       - name: e
+         kind: string
+         alias: event_did
+         descriptions: :tiun.resources.thumb.get.args.event_did
+       - name: m
+         kind: string
+         alias: memory_short_name
+         descriptions: :tiun.resources.thumb.get.args.memory_short_name
+    - name: put
+      version: 1.0
+      kind: full_thumb
+      descriptions: :tiun.resources.thumb.put
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.thumb.put.uid
+       - name: thumbable_name
+         kind: string
+         descriptions: :tiun.types.thumb.thumbable_name
+       - name: thumb
+         kind: file
+         descriptions: :tiun.resources.thumb.put.thumb
+    - name: delete
+      version: 1.0
+      kind: full_thumb
+      descriptions: :tiun.resources.thumb.delete
+      auth: no
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: uid
+         kind: string
+         descriptions: :tiun.resources.thumb.delete.args.uid

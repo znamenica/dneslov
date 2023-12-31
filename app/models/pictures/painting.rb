@@ -1,0 +1,2 @@
+class Painting < Picture
+end

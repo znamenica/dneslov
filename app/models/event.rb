@@ -11,6 +11,7 @@
 class Event < ActiveRecord::Base
    extend Informatible
    extend TotalSize
+   include WithTitles
    include WithDescriptions
 
    NOTICE = [
@@ -65,6 +66,9 @@ class Event < ActiveRecord::Base
    belongs_to :kind, primary_key: :key, foreign_key: :kind_code, class_name: :Subject
    has_one :coordinate, as: :info, inverse_of: :info, class_name: :CoordLink
    has_many :kind_titles, through: :kind, source: :names
+   has_many :thumbs, -> { where(thumbs: { thumbable_type: "Event" }) }, foreign_key: :thumbable_id, dependent: :destroy
+   has_many :attitudes, as: :imageable, class_name: :ImageAttitude
+   has_many :pictures, through: :attitudes
    has_many :memos, dependent: :delete_all do
       def for calendary_slugs = nil
          if calendary_slugs
@@ -76,18 +80,6 @@ class Event < ActiveRecord::Base
       end
    end
    has_many :calendaries, -> { distinct }, through: :memos
-   has_many :titles, -> { title }, as: :describable, class_name: :Description do
-      def by_default this
-        self.or(Appellation.merge(this.kind.names)).order(:describable_type).distinct
-      end
-   end
-   has_many :default_titles, -> { distinct }, through: :kind, source: :names, class_name: :Appellation
-   has_many :all_titles, ->(this) do
-      where( describable_type: "Event", describable_id: this.id, kind: "Title" )
-        .or( Appellation.merge(this.kind.names) )
-     .order( :describable_type )
-   end, primary_key: nil, class_name: :Description
-
    scope :notice, -> { where(kind_code: NOTICE) }
    scope :usual, -> { where(kind_code: USUAL) }
    scope :calendaried, ->(calendary_slugs) { self.joins(:memos).where(memoes: { calendary_id: Calendary.by_slugs(calendary_slugs).unscope(:select).select(:id) }) }
@@ -114,6 +106,16 @@ class Event < ActiveRecord::Base
       where(memory_id: memory_id)
    end
 
+   scope :by_title_and_short_name, -> title, short_name do
+      joins(:memory).merge(Memory.by_short_name(short_name)).by_title(title)
+   end
+   scope :by_did_and_short_name, -> did, short_name do
+      if /^[0-9]+$/ =~ did
+         where(id: did)
+      else
+         by_title(did)
+      end.joins(:memory).merge(Memory.by_short_name(short_name))
+   end
    # required for short list
    scope :with_key, -> _ do
       selector = [ 'events.id AS _key' ]
@@ -174,53 +176,33 @@ class Event < ActiveRecord::Base
       joins(join, :memory).merge(Memory.with_names(context)).select(selector).group(:id, 'memory_slugs.text')
    end
 
-   scope :with_titles, -> context do
+   scope :with_icon, -> context do
+      as = table.table_alias || table.name
       language_codes = [ context[:locales] ].flatten
-      alphabeth_codes = Languageble.alphabeth_list_for( language_codes ).flatten
       selector = self.select_values.dup
-      if selector.empty?
-         selector << "#{model.table_name}.*"
-      end
+      selector << "#{as}.*" if selector.empty?
+      selector << "COALESCE((WITH __picture AS (
+                      SELECT #{as}_pictures.url AS url,
+                             #{as}_pictures.width AS width,
+                             #{as}_pictures.height AS height,
+                             #{as}_image_attitudes.pos AS pos,
+                             #{as}_titles.text AS title
+                        FROM pictures AS #{as}_pictures
+             LEFT OUTER JOIN image_attitudes AS #{as}_image_attitudes
+                          ON #{as}_image_attitudes.imageable_id = #{as}.id
+                         AND #{as}_image_attitudes.imageable_type = 'Event'
+             LEFT OUTER JOIN descriptions AS #{as}_titles
+                          ON #{as}_titles.describable_id = #{as}_pictures.id
+                         AND #{as}_titles.describable_type = 'Picture'
+                         AND #{as}_titles.type = 'Title'
+                         AND #{as}_titles.language_code IN ('#{language_codes.join("', '")}')
+                       WHERE #{as}_image_attitudes.picture_id = #{as}_pictures.id
+                         AND #{as}_pictures.type = 'Icon'
+                    ORDER BY random()
+                       LIMIT 1)
+                      SELECT jsonb_agg(__picture)
+                        FROM __picture), '[]'::jsonb) AS _picture"
 
-      selector << "COALESCE((WITH __titles AS (
-                      SELECT DISTINCT ON(titles.id)
-                             titles.id AS id,
-                             titles.describable_type AS type,
-                             titles.text AS text,
-                             titles.language_code AS language_code,
-                             titles.alphabeth_code AS alphabeth_code,
-                             language_names.text AS language,
-                             alphabeth_names.text AS alphabeth
-                        FROM descriptions AS titles
-             LEFT OUTER JOIN subjects AS event_kinds
-                          ON event_kinds.kind_code = 'EventKind'
-                         AND event_kinds.key = events.kind_code
-             LEFT OUTER JOIN subjects AS languages
-                          ON languages.key = titles.language_code
-             LEFT OUTER JOIN descriptions AS language_names
-                          ON language_names.describable_id = languages.id
-                         AND language_names.describable_type = 'Subject'
-                         AND language_names.language_code IN ('#{language_codes.join("', '")}')
-             LEFT OUTER JOIN subjects AS alphabeths
-                          ON alphabeths.key = titles.alphabeth_code
-             LEFT OUTER JOIN descriptions AS alphabeth_names
-                          ON alphabeth_names.describable_id = alphabeths.id
-                         AND alphabeth_names.describable_type = 'Subject'
-                         AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
-                       WHERE titles.id IS NOT NULL
-                         AND (titles.describable_id = events.id
-                         AND titles.describable_type = 'Event'
-                         AND titles.type = 'Title'
-                          OR titles.describable_id = event_kinds.id
-                         AND titles.describable_type = 'Subject'
-                         AND titles.type = 'Appellation')
-                         AND titles.language_code IN ('#{language_codes.join("', '")}')
-                    GROUP BY titles.id, titles.describable_type, titles.text,
-                             language_names.text, alphabeth_names.text)
-                      SELECT jsonb_agg(__titles)
-                        FROM __titles), '[]'::jsonb) AS _titles"
-
-      # binding.pry
       select(selector).group(:id)
    end
 
@@ -421,7 +403,6 @@ class Event < ActiveRecord::Base
    accepts_nested_attributes_for :place, reject_if: :all_blank
    accepts_nested_attributes_for :coordinate, reject_if: :all_blank
    accepts_nested_attributes_for :item, reject_if: :all_blank
-   accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true
 
    singleton_class.send(:alias_method, :t, :by_token)
    singleton_class.send(:alias_method, :mid, :by_memory_id)

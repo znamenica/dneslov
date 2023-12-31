@@ -16,6 +16,7 @@ module Dneslov
       # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
       config.time_zone = 'Moscow'
       folders = %w(app/models/subject
+                   app/models/pictures
                    app/models/events
                    app/models/scriptum
                    app/models/scriptum/cantoes

@@ -26,7 +26,7 @@ types:
       kind: enum <Term, Saying, Interpretation, Idiom>
       descriptions: :tiun.types.calendary.kind
     - name: attitudes
-      kind: attitude
+      kind: calendary_attitude
       descriptions: :tiun.types.calendary.attitudes
 resources:
  - name: calendary.index
@@ -54,22 +54,3 @@ resources:
        - name: licit
          kind: bool
          descriptions: :tiun.resources.calendary.index.args.licit
-defaults:
-   poll_frequency: 3600 # 1 hour
-   optional: false # used in fields section
-   errors:
-    - code: 200
-      name: :tiun.defaults.errors.200.name
-      descriptions: :tiun.defaults.errors.200.description
-    - code: 206
-      name: :tiun.defaults.errors.206.name
-      descriptions: :tiun.defaults.errors.206.description
-    - code: 416
-      name: :tiun.defaults.errors.416.name
-      descriptions: :tiun.defaults.errors.416.description
-    - code: 422.3
-      name: :tiun.defaults.errors.422.3.name
-      descriptions: :tiun.defaults.errors.422.3.description
-    - code: 500
-      name: :tiun.defaults.errors.500.name
-      descriptions: :tiun.defaults.errors.500.description

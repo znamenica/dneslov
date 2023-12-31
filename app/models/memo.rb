@@ -39,7 +39,7 @@ class Memo < ActiveRecord::Base
    has_one :order, through: :memo_order
    has_one :memory, through: :event
    has_one :slug, through: :memory
-   has_one :thumb_link, through: :memory, source: :thumbs
+   has_one :thumb, -> { order(Arel.sql("random()")).select(:url).limit(1) }, through: :memory, source: :thumbs
    has_one :calendary_slug, through: :calendary, source: :slug, class_name: :Slug
    has_one :memory_slug, through: :memory, source: :slug, class_name: :Slug
 
@@ -257,9 +257,21 @@ class Memo < ActiveRecord::Base
    end
 
    scope :with_thumb_url, -> do
-      selector = 'links.url AS _thumb_url'
+      selector = 'thumbs.url AS _thumb_url'
 
-      left_outer_joins(:thumb_link).select(selector).group('_thumb_url')
+      left_outer_joins(:thumb).select(selector).group('_thumb_url')
+#      as = table.table_alias || table.name
+#      selector = self.select_values.dup
+#      selector << "#{as}.*" if selector.empty?
+#      selector << "COALESCE(
+#                      SELECT #{as}_thumbs.url AS thumb_url
+#                        FROM thumbs AS #{as}_thumbs
+#                       WHERE #{as}_thumbs.thumbable_id = #{as}.id
+#                         AND #{as}_thumbs.thumbable_type = 'Memory'
+#                    ORDER BY random()
+#                       LIMIT 1) AS _thumb_url"
+#
+#      select(selector).group(:id)
    end
 
    scope :with_bond_to_title, -> context do

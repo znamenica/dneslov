@@ -29,15 +29,6 @@ GIT
       railties (>= 3.2)
 
 GIT
-  remote: https://github.com/majioa/jsonize.git
-  revision: 96c8b7702761e75a0a645798d0705f79d20782ba
-  ref: 96c8b77
-  specs:
-    jsonize (0.1.1)
-      activerecord (>= 4.2)
-      redisize
-
-GIT
   remote: https://github.com/majioa/prawn.git
   revision: 10e29240e0e05cc4a908069f72c8f81fa874191e
   ref: 10e29240e
@@ -46,6 +37,13 @@ GIT
       matrix (~> 0.4)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
+
+GIT
+  remote: https://github.com/majioa/rack.git
+  revision: 66001eb1551b3bf33b0212432b89acce6cef4b6c
+  ref: 2.2.8
+  specs:
+    rack (2.2.8)
 
 GIT
   remote: https://github.com/majioa/redisize.git
@@ -63,12 +61,12 @@ GIT
 
 GIT
   remote: https://github.com/majioa/tiun.git
-  revision: 2b0924859839ebfa00a653b3a5a04f83ff2fc0b2
-  ref: 2b09248
+  revision: 2820b93edcf97168d46b81396ea0c6aa3075a57a
+  ref: 2820b93
   specs:
     tiun (0.1.0)
       activesupport (>= 4.1.0)
-      jsonize (~> 0.1, >= 0.1.1)
+      jsonize (~> 0.2)
       railties (>= 4.1.0)
 
 GIT
@@ -214,6 +212,17 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    carrierwave (3.0.5)
+      activemodel (>= 6.0.0)
+      activesupport (>= 6.0.0)
+      addressable (~> 2.6)
+      image_processing (~> 1.1)
+      marcel (~> 1.0.0)
+      ssrf_filter (~> 1.0)
+    carrierwave-base64 (2.10.0)
+      carrierwave (>= 2.2.1)
+      marcel (~> 1.0.0)
+      mime-types (~> 3.0)
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
@@ -318,6 +327,9 @@ GEM
     ffi (1.16.3)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
+    file_validators (3.0.0)
+      activemodel (>= 3.2)
+      mime-types (>= 1.0)
     foreman (0.87.2)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
@@ -331,6 +343,9 @@ GEM
     htmlentities (4.3.4)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     io-console (0.6.0)
     irb (1.8.3)
       rdoc
@@ -344,6 +359,9 @@ GEM
       regexp_parser (~> 2.0)
       simpleidn (~> 0.2)
       uri_template (~> 0.7)
+    jsonize (0.2.0)
+      activerecord (>= 4.2)
+      redisize
     jwt (2.7.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -378,6 +396,7 @@ GEM
     mime-types (3.5.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.1003)
+    mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
     msgpack (1.7.2)
@@ -407,6 +426,7 @@ GEM
       rails (>= 4.0.0)
     pdf-core (0.9.0)
     pg (1.5.4)
+    pkg-config (1.5.6)
     protobuf-cucumber (3.10.8)
       activesupport (>= 3.2)
       middleware
@@ -429,7 +449,6 @@ GEM
     pundit (2.3.1)
       activesupport (>= 3.0.0)
     racc (1.7.1)
-    rack (2.2.8)
     rack-cache (1.14.0)
       rack (>= 0.4)
     rack-test (2.1.0)
@@ -491,6 +510,8 @@ GEM
     reline (0.3.9)
       io-console (~> 0.5)
     rexml (3.2.6)
+    rmagick (5.3.0)
+      pkg-config (~> 1.4)
     rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
@@ -514,6 +535,8 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.2.0)
+      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -577,6 +600,7 @@ GEM
     sshkit (1.21.5)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    ssrf_filter (1.1.2)
     sys-uname (1.2.3)
       ffi (~> 1.1)
     thor (1.3.0)
@@ -634,8 +658,10 @@ DEPENDENCIES
   capistrano-systemd-multiservice!
   capistrano3-nginx!
   capybara
+  carrierwave (~> 3.0.5)
+  carrierwave-base64
   cssbundling-rails
-  cucumber-rails (~> 2.6)
+  cucumber-rails (~> 2.6.1)
   database_cleaner-active_record
   database_cleaner-redis
   debug
@@ -648,11 +674,12 @@ DEPENDENCIES
   faraday (~> 1.0)
   ffaker
   figaro
+  file_validators
   foreman
   has_scope (>= 0.7.2)
   hiredis (~> 0.6)
   jsbundling-rails
-  jsonize!
+  jsonize (~> 0.2)
   jwt
   kaminari (>= 1.1.1)
   launchy
@@ -667,6 +694,7 @@ DEPENDENCIES
   pry-stack_explorer (>= 0.6.1)
   puma (~> 5.6)
   pundit
+  rack!
   rails (~> 7.0.0, >= 7.0.4.1)
   rdoba!
   rdoc (~> 6.3.2)
@@ -675,6 +703,7 @@ DEPENDENCIES
   redis-rack-cache
   redis-rails!
   redisize!
+  rmagick
   rspec-expectations
   rubocop
   rubocop-rails
@@ -685,7 +714,7 @@ DEPENDENCIES
   sentry-ruby (~> 5.3, >= 5.3.1)
   sentry-sidekiq
   shoulda-matchers (~> 4.0)
-  shoulda-matchers-cucumber (~> 1.0)
+  shoulda-matchers-cucumber (~> 1.0, >= 1.0.1)
   sidekiq (>= 6.4.0)
   sidekiq-limit_fetch
   sidekiq-worker-killer

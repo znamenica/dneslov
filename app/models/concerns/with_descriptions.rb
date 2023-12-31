@@ -42,7 +42,7 @@ module WithDescriptions
                                AND alphabeth_names.alphabeth_code IN ('#{alphabeth_codes.join("', '")}')
                              WHERE descriptions.describable_id = #{join_name}.id
                                AND descriptions.describable_type = '#{model}'
-                               AND descriptions.type IN ('Description', 'Title', 'Appellation', 'Tweet', 'Note')
+                               AND descriptions.type IN ('Description', 'Appellation', 'Tweet', 'Note')
                           GROUP BY descriptions.id, language_names.text, alphabeth_names.text)
                             SELECT jsonb_agg(__descriptions)
                               FROM __descriptions), '[]'::jsonb) AS _descriptions"

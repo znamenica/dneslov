@@ -24,9 +24,15 @@ SitemapGenerator::Sitemap.create do
 
    Memory.find_each do |memory|
       add(slug_path(memory.slug.text), lastmod: memory.updated_at, changefreq: 'daily')
+      add(gallery_path(memory.slug.text), lastmod: memory.updated_at, changefreq: 'monthly')
+
+      #memory.pictures.each do |picture|
+      #   add(picture_path(memory.slug.text, picture), lastmod: memory.updated_at, changefreq: 'monthly')
+      #end
 
       memory.events.each do |event|
          add(slug_event_path(memory.slug.text, event), lastmod: memory.updated_at, changefreq: 'monthly')
+         add(event_gallery_path(memory.slug.text, event), lastmod: memory.updated_at, changefreq: 'monthly')
 
          event.calendaries.each do |calendary|
             add(cslug_event_path(calendary.slug.text, memory.slug.text, event), lastmod: memory.updated_at, changefreq: 'monthly')

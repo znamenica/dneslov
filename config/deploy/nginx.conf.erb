@@ -44,12 +44,11 @@ server {
       gzip_types application/x-javascript text/css image/x-icon image/png image/jpeg image/gif;
    }
 
-   #location ~ ^/(images)/ {
-   #   set             $redis_key "$uri";
-   #   redis_pass      127.0.0.1:6379;
-   #   default_type    image/webp;
-   #   error_page      404 500 502 503 504 = @dneslov;
-   #}
+   location ~ ^/(images)/ {
+      add_header Cache-Control public;
+
+      root /mnt/majioa@mail.ru/;
+   }
 
    location ~ ^/(dneslov.*png$|robots.txt$|favicons/|fonts/|.*\.json$|.*\.gz$|$) {
       root            /var/www/dneslov/current/public;

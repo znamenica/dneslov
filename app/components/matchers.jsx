@@ -85,7 +85,7 @@ export function matchLetters(textIn, context) {
       res = ! text.match(/^[ა-ჺჽა-ჺჽ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
       break
    case 'РМ':
-      res = ! text.match(/^[A-ZĂÂÎȘȚa-zăâîșț:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
+      res = ! text.match(/^[A-ZĂÂÎŞŢȘȚa-zăâîşţșț:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/)
       break
    case 'ЦУ':
       res = ! text.match(/^[:,.\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
@@ -132,6 +132,8 @@ export function matchLetters(textIn, context) {
    case 'ЕВ':
       res = ! text.match(/^[א-ת׳״שׁ-זּטּ-לּמּנּסּףּפּצּ-ﭏ֑-ׇ:,.!?\-()0-9\r\n \*~`\+\-#=>\[\]\(\)!\|]+$/) //TODO
       break
+   default:
+      res = false
    }
 
    return res
