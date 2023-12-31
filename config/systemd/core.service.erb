@@ -9,7 +9,7 @@ User=_nginx
 Group=_nginx
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'bundle exec rails s'
+ExecStart=/bin/bash -lc 'bundle exec foreman start -f config/procfiles/staging.rb -d .'
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog

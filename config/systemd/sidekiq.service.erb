@@ -9,7 +9,7 @@ User=_nginx
 Group=_nginx
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'bundle exec sidekiq'
+ExecStart=true
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
