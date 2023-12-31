@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import { merge } from 'merge-anything'
-import * as Axios from 'axios'
+import axios from 'axios'
 
 import PickMeUpCalendar from 'PickMeUpCalendar'
 import CalendariesCloud from 'CalendariesCloud'
@@ -210,7 +210,7 @@ export default class MemoriesForm extends Component {
           }
 
       document.body.classList.add('in-progress')
-      Axios.get(request.url, { params: request.data })
+      axios.get(request.url, { params: request.data })
         .then(this.onLoadSuccess.bind(this))
         .catch(this.onLoadFailure.bind(this))
    }

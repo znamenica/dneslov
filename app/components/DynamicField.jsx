@@ -2,7 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mixin, flow } from 'lodash-decorators'
 import { Autocomplete } from 'materialize-css'
-import * as Axios from 'axios'
+import axios from 'axios'
 import { merge } from 'merge-anything'
 
 import ErrorSpan from 'ErrorSpan'
@@ -270,7 +270,7 @@ export default class DynamicField extends Component {
       }
 
       console.log("[getDataFor] * load send", data, 'to /' + this.props.pathname + '.json')
-      Axios.get(request.url, { params: request.data })
+      axios.get(request.url, { params: request.data })
         .then(this.onLoadSuccess.bind(this))
         .catch(this.onLoadFailure.bind(this))
    }

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import * as Pickmeup from 'pickmeup/js/pickmeup.js'
 import { merge } from 'merge-anything'
-import * as Axios from 'axios'
 import {julianEaster, orthodoxEaster} from 'date-easter'
 import PropTypes from 'prop-types'
 

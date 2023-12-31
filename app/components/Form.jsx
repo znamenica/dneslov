@@ -2,7 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as uuid from 'uuid/v1'
 import { merge } from 'merge-anything'
-import * as Axios from 'axios'
+import axios from 'axios'
 import { mixin } from 'lodash-decorators'
 
 import Validation from 'Validation'
@@ -145,7 +145,7 @@ export default class Form extends Component {
 
       console.log("Form submit", request)
 
-      Axios(request)
+      axios(request)
         .then(this.onSubmitSuccess.bind(this))
         .catch(this.onSubmitError.bind(this))
    }

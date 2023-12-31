@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactScrollPagination from '@majioa/react-scroll-pagination'
-import * as Axios from 'axios'
+import axios from 'axios'
 import { merge } from 'merge-anything'
 import SearchField from 'SearchField'
 
@@ -123,7 +123,7 @@ export default class Records extends Component {
          method: 'delete'
       }
 
-      Axios(request).then(this.onSuccessRemove.bind(this))
+      axios(request).then(this.onSuccessRemove.bind(this))
    }
 
    onModalClose(e) {
@@ -195,7 +195,7 @@ export default class Records extends Component {
       console.log("[submit] * Sending...", query)
       document.body.classList.add('in-progress')
 
-      Axios.get(request.url, { params: query } )
+      axios.get(request.url, { params: query } )
            .then(this.onSuccessLoad.bind(this))
            .catch((error) => {})
            .then(() => {
