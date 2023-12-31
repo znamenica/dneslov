@@ -39,6 +39,13 @@ GIT
       ttfunk (~> 1.7)
 
 GIT
+  remote: https://github.com/majioa/rack.git
+  revision: 66001eb1551b3bf33b0212432b89acce6cef4b6c
+  ref: 2.2.8
+  specs:
+    rack (2.2.8)
+
+GIT
   remote: https://github.com/majioa/redisize.git
   revision: be6075704ea1debe1b523de05145072e3b6ccf87
   ref: be60757
@@ -51,6 +58,16 @@ GIT
   ref: devel
   specs:
     ruby-prof (1.4.2)
+
+GIT
+  remote: https://github.com/majioa/tiun.git
+  revision: 2820b93edcf97168d46b81396ea0c6aa3075a57a
+  ref: 2820b93
+  specs:
+    tiun (0.1.0)
+      activesupport (>= 4.1.0)
+      jsonize (~> 0.2)
+      railties (>= 4.1.0)
 
 GIT
   remote: https://github.com/majioa/zero_downtime_migrations.git
@@ -74,26 +91,6 @@ GIT
   specs:
     capistrano3-nginx (3.0.4)
       capistrano (~> 3.0)
-
-PATH
-  remote: /usr/local/home/majioa/git/jsonize
-  specs:
-    jsonize (0.2.0)
-      activerecord (>= 4.2)
-      redisize
-
-PATH
-  remote: /usr/local/home/majioa/git/rack
-  specs:
-    rack (2.2.8)
-
-PATH
-  remote: /usr/local/home/majioa/git/tiun
-  specs:
-    tiun (0.1.0)
-      activesupport (>= 4.1.0)
-      jsonize (~> 0.2)
-      railties (>= 4.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -362,6 +359,9 @@ GEM
       regexp_parser (~> 2.0)
       simpleidn (~> 0.2)
       uri_template (~> 0.7)
+    jsonize (0.2.0)
+      activerecord (>= 4.2)
+      redisize
     jwt (2.7.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -679,7 +679,7 @@ DEPENDENCIES
   has_scope (>= 0.7.2)
   hiredis (~> 0.6)
   jsbundling-rails
-  jsonize!
+  jsonize (~> 0.2)
   jwt
   kaminari (>= 1.1.1)
   launchy

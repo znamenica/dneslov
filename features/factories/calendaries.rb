@@ -7,7 +7,7 @@ FactoryBot.define do
       meta { '{ "fast_days": [] }' }
 
       transient do
-         slug { nil }
+         slug { attributes_for(:slug)[:text] }
          descriptions { true }
          titles { true }
       end

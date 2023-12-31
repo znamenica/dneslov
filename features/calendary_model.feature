@@ -23,7 +23,7 @@
       То у модели суть действенными многоимущие свойства:
          | свойства        | как          | зависимость  | имя рода     |
          | descriptions    | describable  | delete_all   | описание     |
-         | links           | describable  | delete_all   | найменование |
+         | links           | info         | destroy      | найменование |
          | titles          | describable  | delete_all   | найменование |
          | wikies          | describable  | delete_all   | найменование |
          | beings          | describable  | delete_all   | найменование |
@@ -32,8 +32,6 @@
       И модель принимает вложенные настройки для свойства "slug"
       И модель принимает вложенные настройки для свойства "place"
       И модель принимает вложенные настройки для свойства "titles"
-      И модель принимает вложенные настройки для свойства "wikies"
-      И модель принимает вложенные настройки для свойства "beings"
 
 
    @language
@@ -98,6 +96,6 @@
       То увидим сообщение календаря об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
+         Descriptions text contains invalid char(s) "ὴⰅ" for the specified alphabeth "ВС"
          """
       И календаря "клнд" не будет

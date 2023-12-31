@@ -201,8 +201,7 @@ module Tasks
             end
          end
 
-         links.delete_all
+         Link.where(type: ["IconLink", "PhotoLink"]).delete_all
       end
-
    end
 end

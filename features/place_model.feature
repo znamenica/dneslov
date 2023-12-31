@@ -37,7 +37,7 @@
       То увидим сообщение места об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
+         Descriptions text contains invalid char(s) "ὴⰅ" for the specified alphabeth "ВС"
          """
       И места не будет
 

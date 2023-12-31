@@ -56,16 +56,16 @@
       Допустим попробуем создать песму с полями:
         | alphabeth_code   | РУ              |
         | language_code    | ру              |
-        | text             | Тропаря текстJ  |
+        | text             | Тропаря текстἜ  |
         | type             | ---\n...        |
-        | prosomeion_title | Тропаря текстW  |
-        | title            | Тропаря текстR  |
+        | prosomeion_title | Тропаря текстѩ  |
+        | title            | Тропаря текстⰅ  |
       То русских песм не будет
       И увидим сообщение песмы об ошибке:
          """
-         Text contains invalid char(s) "J" for the specified alphabeth "РУ"
-         Prosomeion_title contains invalid char(s) "W" for the specified alphabeth "РУ"
-         Title contains invalid char(s) "R" for the specified alphabeth "РУ"
+         Text contains invalid char(s) "Ἔ" for the specified alphabeth "РУ"
+         Prosomeion_title contains invalid char(s) "ѩ" for the specified alphabeth "РУ"
+         Title contains invalid char(s) "Ⰵ" for the specified alphabeth "РУ"
          Type can't be blank
          """
 

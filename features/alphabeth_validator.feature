@@ -23,13 +23,13 @@
       Если попробуем создать описание с полями:
         | alphabeth_code      | РУ                    |
         | language_code       | ру                    |
-        | text                | Vasja                 |
+        | text                | Ἔὺὰ                   |
         | describable:memory  | ^Василий Памятливый   |
       То русского описания с текстом "Vasja" не будет
       И греческого описания не будет
       И увидим сообщение описания об ошибке:
          """
-         Text contains invalid char(s) "ajs" for the specified alphabeth "РУ"
+         Text contains invalid char(s) "Ἔὰὺ" for the specified alphabeth "РУ"
          """
 
 

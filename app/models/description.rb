@@ -47,6 +47,8 @@ class Description < ActiveRecord::Base
    before_validation :fill_in_la
 
    def fill_in_la
-      self.language_code, self.alphabeth_code = Languageble.la_for_string(text) if text
+      if text && !(self.language_code && self.alphabeth_code)
+         self.language_code, self.alphabeth_code = Languageble.la_for_string(text)
+      end
    end
 end

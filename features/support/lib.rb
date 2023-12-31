@@ -10,8 +10,13 @@ module Spec
       expect(subject)
    end
 
-   def subject
-      described_class.is_a?(Class) ? described_class.new : described_class
+   def subject &block
+      @subject ||=
+         if block.present?
+            @subject = block[]
+         else
+            described_class.is_a?(Class) ? described_class.new : described_class
+         end
    end
 
    def json_body

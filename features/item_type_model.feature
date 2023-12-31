@@ -37,6 +37,6 @@
       То увидим сообщение типа предмета об ошибке:
          """
          Descriptions is invalid
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
+         Descriptions text contains invalid char(s) "ὴⰅ" for the specified alphabeth "ВС"
          """
       И типа предмета не будет

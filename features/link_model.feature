@@ -32,8 +32,6 @@
       То свойство "info" модели есть отношение
       Если есть модель иконной ссылки
       То свойство "info" модели есть отношение
-      И свойство "descriptions" модели есть включения описания с зависимостями удаления
-      И модель принимает вложенные настройки для свойства "descriptions"
 
 
    @language
@@ -67,38 +65,37 @@
       Допустим есть память "Василий Памятливый"
 
       Если попробуем создать новую вики ссылку с полями:
-        | alphabeth_code   | РУ                    |
-        | language_code    | ру                    |
-        | url              | http://recource.ru    |
-        | info:memory      | ^Василий Памятливый   |
+        | alphabeth_code   | РУ                                            |
+        | language_code    | ру                                            |
+        | url              | https://kuz1.pstbi.ccas.ru/foto_1/ob4-01f.jpg |
+        | info:memory      | ^Василий Памятливый                           |
       То увидим сообщение ссылки об ошибке:
          """
-         Url is inaccessible at http://recource.ru
+         Url is inaccessible at https://kuz1.pstbi.ccas.ru/foto_1/ob4-01f.jpg
          """
       И ссылки "http://recource.ru" не будет
 
 
    @language
-#   Сценарий: Действительная связь вики ссылки и её описания
-#      Допустим есть иконная ссылка "http://www.wiki.ru" без описания
-#
-#      Если создадим новое описание с полями:
-#        | language_code    | ру                    |
-#        | alphabeth_code   | РУ                    |
-#        | text             | Мурмур                |
-#        | describable:link | ^http://www.wiki.ru   |
-#      То русская иконная ссылка "http://www.wiki.ru" будет действительной
+   Сценарий: Действительная связь вики ссылки и её описания
+      Допустим есть иконная ссылка "http://www.wiki.ru" без описания
+
+      Если создадим новое описание с полями:
+        | language_code    | ру                    |
+        | alphabeth_code   | РУ                    |
+        | text             | Мурмур                |
+        | describable:link | ^http://www.wiki.ru   |
+      То русская иконная ссылка "http://www.wiki.ru" будет действительной
 
 
    @language
    Сценарий: Недействительное описание иконной ссылки
       Допустим есть память "Василий Памятливый"
 
-      Если попробуем создать новую иконную ссылку "http://www.wiki.ru" с неверным описанием
+      Если попробуем создать новую иконную ссылку "http://www.wiki.su" с неверным описанием
       То увидим сообщение ссылки об ошибке:
          """
-         Descriptions text contains invalid char(s) "adilnv" for the specified alphabeth "РУ"
+         Descriptions text contains invalid char(s) "ὴⰅ" for the specified alphabeth "ВС"
          Descriptions is invalid
-         Url is inaccessible at http://www.wiki.ru
          """
       И ссылки "http://www.wiki.ru" не будет

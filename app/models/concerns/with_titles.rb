@@ -25,11 +25,11 @@ module WithTitles
             end
 
             if self.model.attribute_names.include?("kind_code")
-               kind_join = 
+               kind_join =
                   "LEFT OUTER JOIN subjects AS #{as}_kinds
                                 ON #{as}_kinds.kind_code = '#{model.name}Kind'
                                AND #{as}_kinds.key = #{as}.kind_code"
-               kind_where = 
+               kind_where =
                                "OR titles.describable_id = #{as}_kinds.id
                                AND titles.describable_type = 'Subject'
                                AND titles.type = 'Appellation'"

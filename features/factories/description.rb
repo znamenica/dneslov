@@ -2,8 +2,8 @@ FactoryBot.define do
    factory :description do
       type { 'Description' }
       text { FFaker::NameRU.name }
-      language_code { :ру }
-      alphabeth_code { :РУ }
+      language_code { Languageble.la_for_string(text).first }
+      alphabeth_code { Languageble.la_for_string(text).last }
    end
 
    factory :title, parent: :description, class: :Title do
@@ -23,6 +23,6 @@ FactoryBot.define do
    end
 
    factory :invalid_description, parent: :description do
-      text { 'Invalid' }
+      text { 'ЈὴⰅ' }
    end
 end
