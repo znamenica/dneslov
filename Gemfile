@@ -2,6 +2,11 @@ ruby '3.1.4'
 
 source 'https://rubygems.org'
 
+git_source(:bitbucket) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://bitbucket.org/#{repo_name}.git"
+end
+
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
@@ -11,7 +16,7 @@ end
 gem 'bundler', '>= 2.3.12'
 
 ## Environment
-gem 'dotenv-rails', require: 'dotenv/rails-now', github: "majioa/dotenv"
+gem 'dotenv-rails', require: 'dotenv/rails-now', bitbucket: "majioa/dotenv"
 
 ## Core
 gem "rails", "~> 7.0.0", ">= 7.0.4.1"
@@ -25,7 +30,7 @@ gem 'uglifier', '>= 2.7.2'
 ### JS and CSS bunding
 gem 'redcarpet'
 
-## Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+## Build JSON APIs with ease. Read more: https://bitbucket.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 ## bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 1.0.0', group: :doc
@@ -44,7 +49,7 @@ gem "figaro"
 ## cache, session, rack / json, with usage delayed_jobs
 gem 'hiredis', '~> 0.6'
 gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
-gem 'redis-rails', github: 'redis-store/redis-rails'
+gem 'redis-rails'#, bitbucket: 'redis-store/redis-rails'
 gem 'redis-rack-cache'
 gem 'snappy'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
@@ -52,10 +57,10 @@ gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
 gem "jsonize", "~> 0.2"
 # gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
-# gem "jsonize", github: 'majioa/jsonize', ref: '96c8b77'
+# gem "jsonize", bitbucket: 'majioa/jsonize', ref: '96c8b77'
 # gem "redisize", ">= 0.1.4", "~> 0.1"
 # gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
-gem 'redisize', github: 'majioa/redisize', ref: 'be60757'
+gem 'redisize', '~> 0.1.5'#, bitbucket: 'majioa/redisize', ref: 'be60757'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'
@@ -81,19 +86,20 @@ gem 'pundit'
 
 ## logging
 #gem 'rdoba', path: '/usr/local/home/majioa/git/rdoba'
-gem 'rdoba', git: 'https://github.com/3aHyga/rdoba.git'
+# gem 'rdoba', git: 'https://bitbucket.com/3aHyga/rdoba.git'
+gem 'rdoba', '~> 0.9.4'
 
 ## orthodox
 gem 'when_easter'
 
 ## data
 gem 'activerecord-import', '~> 1.4.1'
-gem 'zero_downtime_migrations', github: 'majioa/zero_downtime_migrations', ref: 'devel'
+gem 'zero_downtime_migrations', bitbucket: 'majioa/zero_downtime_migrations', ref: 'devel'
 # gem 'zero_downtime_migrations', path: '/usr/local/home/majioa/git/zero_downtime_migrations'
 # gem 'active_record_extended'
 
 ## pdf
-gem 'prawn', git: 'https://github.com/majioa/prawn.git', ref: '10e29240e'
+gem 'prawn', git: 'https://bitbucket.com/majioa/prawn.git', ref: '10e29240e'
 
 ## deploy start
 gem 'foreman'
@@ -107,7 +113,8 @@ gem 'sprockets-rails'
 
 ## api
 # gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
-gem 'tiun', github: 'majioa/tiun', ref: '2820b93'
+# gem 'tiun', bitbucket: 'majioa/tiun', ref: '2820b93'
+gem 'tiun', '~> 0.0.1'
 
 # sitemap
 gem 'sitemap_generator'
@@ -119,7 +126,7 @@ gem 'file_validators'
 gem 'rmagick'
 
 # fix
-gem 'rack', github: "majioa/rack", ref: "2.2.8"
+gem 'rack', bitbucket: "majioa/rack", ref: "2.2.8"
 # gem 'rack', path: '/usr/local/home/majioa/git/rack'
 
 group :development do
