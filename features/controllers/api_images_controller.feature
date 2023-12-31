@@ -44,16 +44,16 @@
            alphabeth: РУ
            title: Картинка
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            type: Picture
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
            language: ру
            alphabeth: РУ
            title: Фотка
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            type: Photo
          """
       А добѫдꙛ охватъ "0-9/2"
@@ -93,24 +93,24 @@
            alphabeth: РУ
            title: Картинка
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            type: Picture
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f063
            language: ру
            alphabeth: РУ
            title: Фотка
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f063.webp"
            type: Photo
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
            language: ру
            alphabeth: РУ
            title: Картинка 2
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            type: Icon
          """
       А добѫдꙛ охватъ "0-2/5"
@@ -125,16 +125,16 @@
            alphabeth: АН
            title: Picture 3
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            type: Painting
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f056
            language: фр
            alphabeth: ФР
            title: Aperçu 4
            description:
-           thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
-           url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
+           thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
+           url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f056.webp"
            type: Photo
          """
       А добѫдꙛ охватъ "3-5/5"
@@ -187,8 +187,8 @@
          alphabeth: РУ
          title: Картинка 1
          description: Описание
-         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          width: 166
          height: 1000
          meta: {}
@@ -210,8 +210,8 @@
          alphabeth: РУ
          title: Картинка 1
          description: Описание
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         image: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         image: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          attitudes:
          - attitude_to: Памѧтно
            pos: "<(100,10),30>"
@@ -282,8 +282,8 @@
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
-         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          width: 300
          height: 2000
          meta: {}
@@ -300,8 +300,8 @@
          alphabeth: РУ
          title: Картинка 1
          description: Описание 1
-         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
          width: 300
          height: 2000
          meta: {}
@@ -322,8 +322,8 @@
          alphabeth: РУ
          title: Картинка
          description:
-         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          width: 800
          height: 1000
          meta: {}
@@ -343,8 +343,8 @@
          alphabeth: РУ
          title: Картинка
          description:
-         thumb_url: "/images/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
-         url: "/images/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         thumb_url: "/images/6b/thumb_6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         url: "/images/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          width: 800
          height: 1000
          meta: {}

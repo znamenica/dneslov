@@ -16,7 +16,7 @@ class ImageUploader < CarrierWave::Uploader::Base
    end
 
    def store_dir
-      'images'
+      "images/#{model.uid[0..1]}"
    end
 
    # If you upload 'file.jpg', you'll get 'image.webp' because of convert

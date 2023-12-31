@@ -7,7 +7,7 @@ class ThumbUploader < CarrierWave::Uploader::Base
    process convert: 'webp'
 
    def store_dir
-      'thumbs'
+      "thumbs/#{model.uid[0..1]}"
    end
 
    def match_size? file

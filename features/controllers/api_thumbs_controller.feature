@@ -41,13 +41,13 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            thumbable_name: Памѧтно
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            thumbable_name: Памѧтно#200201
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            thumbable_name: Памѧтно#200202
          """
       А добѫдꙛ охватъ "0-9/3"
@@ -61,10 +61,10 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
            thumbable_name: Памѧтно
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f054
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f054.webp"
            thumbable_name: Памѧтно#200201
          """
       А добѫдꙛ охватъ "0-1/3"
@@ -75,7 +75,7 @@
          """
          ---
          - uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f055
-           url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
+           url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f055.webp"
            thumbable_name: Памѧтно#200202
          """
       А добѫдꙛ охватъ "2-3/3"
@@ -118,7 +118,7 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f059
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
          thumbable_name: Памѧтно
          event_did:
          memory_short_name: Памѧтно
@@ -127,8 +127,8 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f059
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
-         thumb: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
+         thumb: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f059.webp"
          thumbable_name: Памѧтно
          event_did:
          memory_short_name: Памѧтно
@@ -198,7 +198,7 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f060
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f060.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f060.webp"
          thumbable_name: Памѧтно#200202
          event_did: 200202
          memory_short_name: Памѧтно
@@ -209,7 +209,7 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f060
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f060.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f060.webp"
          thumbable_name: Памѧтно#200202
          event_did: 200202
          memory_short_name: Памѧтно
@@ -249,7 +249,7 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          thumbable_name: Памѧтно
          event_did:
          memory_short_name: Памѧтно
@@ -263,7 +263,7 @@
          """
          ---
          uid: 6b9e05cf-aabc-4dc3-97f7-4abd70d6f053
-         url: "/thumbs/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
+         url: "/thumbs/6b/6b9e05cf-aabc-4dc3-97f7-4abd70d6f053.webp"
          thumbable_name: Памѧтно
          event_did:
          memory_short_name: Памѧтно
