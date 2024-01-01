@@ -34,9 +34,9 @@ export default class Name extends Component {
          this.getNickName(props, names),
          this.getLastName(props, names),
          this.getFeatName(props, names)
-      ].compact()
+      ].compact().flat()
 
-      console.debug("[generateFullName] **", fullName, names)
+      console.debug("[generateFullName] **", fullName, "from:", names)
 
       return fullName.slice(0, 3).join(" ")
    }
@@ -49,8 +49,7 @@ export default class Name extends Component {
          'чернецкое',
          'покаянное',
          'крещенское',
-         'самоданное',
-         'наречёное' ]
+         'самоданное' ]
 
       let prios = this.priorities.reduce((pp, prio) => {
          let _prios = props.klugs.reduce((p, nameKlug) => {
@@ -68,9 +67,12 @@ export default class Name extends Component {
 
    static getNickName(props, namesIn) {
       let prios = [
-         'прозвание' ]
+         'прозвание',
+         'наречёное' ]
 
-      return this.getNameFor(prios, namesIn)
+      console.debug("[getNickName] <<< *********** ", namesIn)
+      console.debug("[getNickName] <<< *********** ", this.getNameFor(prios, namesIn, 4))
+      return this.getNameFor(prios, namesIn, 4)
    }
 
    static getLastName(props, namesIn) {
@@ -144,10 +146,10 @@ export default class Name extends Component {
       return names
    }
 
-   static getNameFor(prios, props) {
+   static getNameFor(prios, props, count = 1) {
       let names = this.getNamesFor(prios, props)
 
-      return names.isPresent() && names[0] && names[0].name_text
+      return names.slice(0, count - 1).map((n) => { return n.name_text }).join(", ")
    }
 
    state = {}
