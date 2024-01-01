@@ -51,21 +51,20 @@ module WithDescriptions
          end
 
          scope :with_description, -> context do
-            join_name = table.table_alias || table.name
+            as = table.table_alias || table.name
             language_codes = [context[:locales]].flatten
 
             selector = self.select_values.dup
-            if selector.empty?
-               selector << "#{join_name}.*"
-            end
-            selector << 'first_descriptions.text AS _description'
+            selector << "#{as}.*" if selector.empty?
+            selector << "#{as}_descriptions.text AS _description"
 
-            join = "LEFT OUTER JOIN descriptions AS first_descriptions ON first_descriptions.describable_id = #{join_name}.id
-                                AND first_descriptions.describable_type = '#{model}'
-                                AND first_descriptions.type IN ('Description', 'Note')
-                                AND first_descriptions.language_code IN ('#{language_codes.join("', '")}')"
+            join = "LEFT OUTER JOIN descriptions AS #{as}_descriptions
+                                 ON #{as}_descriptions.describable_id = #{as}.id
+                                AND #{as}_descriptions.describable_type = '#{model}'
+                                AND #{as}_descriptions.type IN ('Description', 'Note')
+                                AND #{as}_descriptions.language_code IN ('#{language_codes.join("', '")}')"
 
-            joins(join).select(selector.uniq).group('_description', "#{join_name}.id")
+            joins(join).select(selector.uniq).group('_description', "#{as}.id")
          end
 
          accepts_nested_attributes_for :descriptions, reject_if: :all_blank, allow_destroy: true

@@ -6,6 +6,7 @@ class Memory < ActiveRecord::Base
    extend TotalSize
    extend DefaultKey
    extend Informatible
+   include WithTitles
    include WithDescriptions
    include WithLinks
 
@@ -289,6 +290,83 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       select(selector).group(:id)
    end
 
+   scope :with_memoes, -> context do
+      as = table.table_alias || table.name
+      language_codes = [ context[:locales] ].flatten
+      cslugs_rule = context[:calendary_slugs] ? "AND calendary_slugs.text IN ('#{context[:calendary_slugs].join("','")}')" : ""
+
+      selector = "COALESCE((WITH __memoes AS (
+                       SELECT DISTINCT ON(memoes.id)
+                              memoes.id AS id,
+                              memoes.year_date AS year_date,
+                              events.kind_code AS kind_code,
+                              jsonb_object_agg(DISTINCT COALESCE(memo_slugs.text, 'Null'),
+                                                        order_titles_memoes.text) AS orders,
+                              memo_titles.text AS title,
+                              memo_descriptions.text AS description,
+                              memo_links.url AS url,
+                              calendary_links.url AS calendary_url,
+                              calendary_slugs.text AS calendary_slug,
+                              calendary_titles.text AS calendary_title
+                         FROM memoes
+                         JOIN calendaries
+                           ON calendaries.id = memoes.calendary_id
+                         JOIN slugs AS calendary_slugs
+                           ON calendary_slugs.sluggable_id = calendaries.id
+                          AND calendary_slugs.sluggable_type = 'Calendary'
+                              #{cslugs_rule}
+              LEFT OUTER JOIN events
+                           ON memoes.event_id = events.id
+                          AND events.kind_code IN ('#{Event::NOTICE.join("','")}')
+              LEFT OUTER JOIN links AS calendary_links
+                           ON calendary_links.info_id = calendaries.id
+                          AND calendary_links.info_type = 'Calendary'
+              LEFT OUTER JOIN descriptions AS memo_titles
+                           ON memo_titles.describable_id = memoes.id
+                          AND memo_titles.describable_type = 'Memo'
+                          AND memo_titles.type = 'Title'
+                          AND memo_titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN descriptions AS memo_descriptions
+                           ON memo_descriptions.describable_id = memoes.id
+                          AND memo_descriptions.describable_type = 'Memo'
+                          AND memo_descriptions.type = 'Description'
+                          AND memo_descriptions.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN links AS memo_links
+                           ON memo_links.info_id = memoes.id
+                          AND memo_links.info_type = 'Memo'
+              LEFT OUTER JOIN descriptions AS calendary_titles
+                           ON calendary_titles.describable_id = calendaries.id
+                          AND calendary_titles.describable_type = 'Calendary'
+                          AND calendary_titles.type = 'Appellation'
+                          AND calendary_titles.language_code IN ('#{language_codes.join("', '")}')
+              LEFT OUTER JOIN memo_orders
+                           ON memo_orders.memo_id = memoes.id
+              LEFT OUTER JOIN orders
+                           ON orders.id = memo_orders.order_id
+              LEFT OUTER JOIN slugs AS memo_slugs
+                           ON memo_slugs.sluggable_id = orders.id
+                          AND memo_slugs.sluggable_type = 'Order'
+              LEFT OUTER JOIN memo_orders AS memo_orders_memoes_join
+                           ON memo_orders_memoes_join.memo_id = memoes.id
+              LEFT OUTER JOIN orders AS orders_memoes_join
+                           ON orders_memoes_join.id = memo_orders_memoes_join.order_id
+              LEFT OUTER JOIN descriptions AS order_titles_memoes
+                           ON order_titles_memoes.describable_id = orders_memoes_join.id
+                          AND order_titles_memoes.describable_type = 'Order'
+                          AND order_titles_memoes.type IN ('Tweet')
+                          AND order_titles_memoes.language_code IN ('#{language_codes.join("', '")}')
+                        WHERE events.memory_id = #{as}.id
+                          AND memoes.bond_to_id IS NULL
+                          AND memoes.id IS NOT NULL
+                          AND calendaries.licit = 't'
+                     GROUP BY memoes.id, year_date, title, description, calendary_slug,
+                              calendary_title, calendary_url, memo_links.url, events.kind_code)
+                       SELECT jsonb_agg(__memoes)
+                         FROM __memoes), '[]'::jsonb) AS _memoes"
+
+      select(selector).group(:id)
+   end
+
    scope :with_bond_memories, ->(context) do
       as = table.table_alias || table.name
       language_codes = [context[:locales]].flatten
@@ -381,21 +459,6 @@ with recursive t(level,path,id,name_id,bind_kind_name,bond_to_id,root_id,name_al
       selector << 'slugs.text AS _slug'
 
       left_outer_joins(:slug).select(selector.uniq).group('_slug').order('_slug')
-   end
-
-   scope :with_note, -> language_code do
-      selector = self.select_values.dup
-      if selector.empty?
-         selector << 'memories.*'
-      end
-      selector << 'titles.text AS _title'
-      language_codes = [ language_code ].flatten
-      join = "LEFT OUTER JOIN descriptions AS titles ON titles.describable_id = memories.id
-                          AND titles.describable_type = 'Memory'
-                          AND titles.type = 'Title'
-                          AND titles.language_code IN ('#{language_codes.join("', '")}')"
-
-      joins(join).select(selector.uniq).group('_title')
    end
 
    scope :with_slug, -> do

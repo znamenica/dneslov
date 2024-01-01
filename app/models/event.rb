@@ -21,6 +21,10 @@ class Event < ActiveRecord::Base
       'Appearance',
       'Council',
       'Miracle',
+      'Resurrection',
+      'Monasticry',
+      'Council',
+      'Marriage'
    ]
 
    USUAL = [

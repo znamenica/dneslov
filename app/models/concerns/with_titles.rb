@@ -74,21 +74,20 @@ module WithTitles
          end
 
          scope :with_title, -> context do
-            join_name = table.table_alias || table.name
+            as = table.table_alias || table.name
             language_codes = [context[:locales]].flatten
 
             selector = self.select_values.dup
-            if selector.empty?
-               selector << "#{join_name}.*"
-            end
-            selector << 'first_descriptions.text AS _description'
+            selector << "#{as}.*" if selector.empty?
+            selector << "#{as}_titles.text AS _title"
 
-            join = "LEFT OUTER JOIN descriptions AS first_descriptions ON first_descriptions.describable_id = #{join_name}.id
-                                AND first_descriptions.describable_type = '#{model}'
-                                AND first_descriptions.type IN ('Description', 'Note')
-                                AND first_descriptions.language_code IN ('#{language_codes.join("', '")}')"
+            join = "LEFT OUTER JOIN descriptions AS #{as}_titles
+                                 ON #{as}_titles.describable_id = #{as}.id
+                                AND #{as}_titles.describable_type = '#{model}'
+                                AND #{as}_titles.type IN ('Title', 'Appellation')
+                                AND #{as}_titles.language_code IN ('#{language_codes.join("', '")}')"
 
-            joins(join).select(selector.uniq).group('_description', "#{join_name}.id")
+            joins(join).select(selector.uniq).group('_title', "#{as}.id")
          end
 
          accepts_nested_attributes_for :titles, reject_if: :all_blank, allow_destroy: true

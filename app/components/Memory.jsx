@@ -20,6 +20,7 @@ export default class Memory extends Component {
       names: [],
       links: [],
       events: [],
+      memoes: [],
       scripta: [],
       coverings: [],
       selectedCalendaries: [],
@@ -113,10 +114,10 @@ export default class Memory extends Component {
    }
 
    static getDescribedMemoes(props) {
-      let describedMemoes = props.events.filter((x) => {
-         return this.descriptionKindCodes.indexOf(x.kind_code) >= 0
-      }).sortByArray(this.descriptionKindCodes, "kind_code").map((e) => {
-         return e.memoes
+      let describedMemoes = props.memoes.filter((m) => {
+         return this.descriptionKindCodes.indexOf(m.kind_code) >= 0
+      }).sortByArray(this.descriptionKindCodes, "kind_code").map((m) => {
+         return m
       }).flat().compact().reduce((res, memo) => {
          if (memo.description) {
             res[memo.calendary_slug] ||= memo
@@ -164,9 +165,9 @@ export default class Memory extends Component {
    }
 
    static getOrder(props) {
-      return props.events.reduce((order, e) => {
-         return e.orders.reduce((_order, o) => {
-            return _order || o.name
+      return props.memoes.reduce((order, m) => {
+         return Object.values(m.orders).reduce((_order, o) => {
+            return _order || o
          }, order)
       }, null) || props.order
    }
@@ -219,8 +220,8 @@ export default class Memory extends Component {
             this.ScriptumTable[scriptum.type],
             scriptum.title && "«" + scriptum.title + "»",
          ].compact().join(" "),
-         scriptum.prosomeion_title && this.props.i18n.prosomeion + " «" + scriptum.prosomeion_title + "»",
-         scriptum.tone && + this.props.i18n.tone + " " + scriptum.tone + this.props.i18n.suffix,
+         scriptum.prosomeion_title && (this.props.i18n.prosomeion + " «" + scriptum.prosomeion_title + "»"),
+         scriptum.tone && (this.props.i18n.tone + " " + scriptum.tone + this.props.i18n.suffix),
       ].compact().join(", ")
    }
 

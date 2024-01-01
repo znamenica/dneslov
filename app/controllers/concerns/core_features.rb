@@ -105,10 +105,13 @@ module CoreFeatures
 
    def set_memory
       @memorys ||= Memory.with_scripta(context)
+                         .with_memoes(context)
                          .with_names(context)
                          .with_coverings(context)
                          .with_bond_memories(context)
                          .with_icon(context)
+                         .with_title(context)
+                         .with_description(context)
                          .with_pure_links
                          .with_slug_text
 
