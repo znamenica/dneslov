@@ -51,7 +51,6 @@ gem 'hiredis', '~> 0.6'
 gem 'redis', '~> 4.0', require: %w(redis redis/connection/hiredis)
 gem 'redis-rails'#, bitbucket: 'redis-store/redis-rails'
 gem 'redis-rack-cache'
-gem 'snappy'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
@@ -189,6 +188,9 @@ group :production, :staging do
    gem 'sentry-rails'
    gem 'sentry-ruby', '~> 5.3', '>= 5.3.1'
    gem 'sentry-sidekiq'
+   gem "rack-cors", require: "rack/cors"
+   gem 'snappy'
+   # gem 'redis-rack-cache'
 end
 
 group :production, :staging, :development do
