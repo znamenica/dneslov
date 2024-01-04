@@ -2,6 +2,9 @@
 Description=<%= fetch(:application) %> application sidekiq server
 After=network.target remote-fs.target nss-lookup.target
 Requires=redis.service
+# restart on failure https://ma.ttias.be/auto-restart-crashed-service-systemd/
+StartLimitIntervalSec=500
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -9,12 +12,14 @@ User=_nginx
 Group=_nginx
 Environment=RAILS_ENV=<%= fetch(:rails_env) %>
 WorkingDirectory=<%= current_path %>
-ExecStart=/bin/bash -lc 'bundle exec sidekiq'
+ExecStart=/bin/bash -lc 'bundle exec sidekiq  --environment <%= fetch(:rails_env) %> -r . -C ./config/sidekiq.yml'
 StandardInput=null
 StandardOutput=syslog
 StandardError=syslog
 TimeoutSec=30
 SyslogIdentifier=dneslov-sidekiq
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target

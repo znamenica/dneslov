@@ -1,8 +1,9 @@
 ---
 :concurrency: 5
-:verbose: false
-developent:
-   :verbose: true
+:verbose: true
+test:
+   :verbose: false
+   :backtrace: false
 :max_retries: 5
 :poll_interval_average: 2
 :average_scheduled_poll_interval: 2
