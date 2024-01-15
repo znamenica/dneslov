@@ -1,0 +1,78 @@
+---
+types:
+ - name: session
+   model: Session
+   version: 1.0
+   fields:
+    - name: session_token
+      kind: token
+      descriptions: :tiun.types.image.session_token
+    - name: refresh_token
+      kind: token
+      descriptions: :tiun.types.image.refresh_token
+ - name: token
+   model: Token
+   version: 1.0
+   fields:
+    - name: code
+      kind: string
+      descriptions: :tiun.types.image.code
+    - name: type
+      kind: enum <RefreshToken, ValidateToken, SessionToken>
+      descriptions: :tiun.types.image.type
+    - name: expires_at
+      kind: datetime
+      descriptions: :tiun.types.image.expires_at
+resources:
+ - name: session
+   template: auth
+   path: /api/v1/session.json
+   key: "no"
+   methods:
+    - name: post
+      version: 1.0
+      kind: session
+      descriptions: :tiun.resources.session.create
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: "no"
+         kind: string
+         descriptions: :tiun.resources.session.post.no
+       - name: type
+         kind: enum <Account::Uid, Account::Email>
+         descriptions: :tiun.resources.session.post.type
+       - name: password
+         kind: string
+         hidden: yes
+         descriptions: :tiun.resources.session.post.password
+    - name: put
+      version: 1.0
+      kind: session
+      descriptions: :tiun.resources.session.put
+      allowed_errors: [200, 404, 422.3, 500]
+      header:
+       - name: token
+         as: Authorization
+         kind: string
+         descriptions: :tiun.resources.session.put.header.token
+    - name: get
+      version: 1.0
+      kind: session
+      action: show
+      descriptions: :tiun.resources.session.get
+      allowed_errors: [200, 404, 422.3, 500]
+      header:
+       - name: session_token
+         as: Authorization
+         kind: string
+         descriptions: :tiun.resources.session.get.header.session_token
+    - name: delete
+      version: 1.0
+      kind: session
+      descriptions: :tiun.resources.session.delete
+      allowed_errors: [200, 404, 422.3, 500]
+      header:
+       - name: session_token
+         as: Authorization
+         kind: string
+         descriptions: :tiun.resources.session.get.header.session_token

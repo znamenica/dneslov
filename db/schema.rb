@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_05_004436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "plpgsql"
   enable_extension "unaccent"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "no", null: false
+    t.string "type", null: false
+    t.bigint "user_id", null: false
+    t.index ["no", "type"], name: "index_accounts_on_no_and_type", unique: true
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
 
   create_table "calendaries", id: :serial, force: :cascade do |t|
     t.string "date"
@@ -418,6 +426,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
     t.index ["url"], name: "index_thumbs_on_url", unique: true
   end
 
+  create_table "tokina", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "type", null: false
+    t.bigint "user_id", null: false
+    t.datetime "expires_at"
+    t.index ["code"], name: "index_tokina_on_code", unique: true
+    t.index ["expires_at"], name: "index_tokina_on_expires_at"
+    t.index ["type"], name: "index_tokina_on_type"
+    t.index ["user_id"], name: "index_tokina_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.jsonb "settings"
+    t.string "encrypted_password", null: false
+    t.string "salt"
+    t.datetime "last_login_at"
+    t.datetime "last_active_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["last_active_at"], name: "index_users_on_last_active_at"
+    t.index ["last_login_at"], name: "index_users_on_last_login_at"
+  end
+
+  add_foreign_key "accounts", "users", on_delete: :cascade
   add_foreign_key "coverings", "memories", on_delete: :cascade
   add_foreign_key "coverings", "places", on_delete: :cascade
   add_foreign_key "image_attitudes", "pictures", on_delete: :cascade
@@ -429,4 +461,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_185132) do
   add_foreign_key "memory_names", "nomina", on_delete: :cascade
   add_foreign_key "service_scripta", "scripta", on_delete: :cascade
   add_foreign_key "service_scripta", "services", on_delete: :cascade
+  add_foreign_key "tokina", "users", on_delete: :cascade
 end

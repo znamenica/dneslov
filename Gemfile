@@ -54,12 +54,12 @@ gem 'redis-rack-cache'
 gem 'sidekiq', ">= 6.4.0", require: %w(sidekiq sidekiq/web)
 gem 'sidekiq-worker-killer'
 gem 'sidekiq-limit_fetch'
-gem "jsonize", "~> 0.2"
-# gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
+#gem "jsonize", "~> 0.2"
+gem 'jsonize', path: '/usr/local/home/majioa/git/jsonize'
 # gem "jsonize", bitbucket: 'majioa/jsonize', ref: '96c8b77'
 # gem "redisize", ">= 0.1.4", "~> 0.1"
-# gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
-gem 'redisize', '~> 0.1.5'#, bitbucket: 'majioa/redisize', ref: 'be60757'
+gem 'redisize', path: '/usr/local/home/majioa/git/redisize'
+#gem 'redisize', '~> 0.1.5'#, bitbucket: 'majioa/redisize', ref: 'be60757'
 
 ## controllers
 gem 'has_scope', '>= 0.7.2'
@@ -111,9 +111,9 @@ gem 'sassc-rails'
 gem 'sprockets-rails'
 
 ## api
-# gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
+gem 'tiun', path: '/usr/local/home/majioa/git/tiun'
 # gem 'tiun', bitbucket: 'majioa/tiun', ref: '2820b93'
-gem 'tiun', '~> 0.0.1'
+#gem 'tiun', '~> 0.0.1'
 
 # sitemap
 gem 'sitemap_generator'
@@ -165,6 +165,7 @@ group :development, :test do
    gem 'ffaker'
    gem 'bundler-audit'
    gem 'faraday', '~> 1.0'
+   gem 'timecop', '~> 0.9'
 end
 
 group :test do

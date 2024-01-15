@@ -11,21 +11,48 @@ end
    @response = send(proto.downcase, address)
 end
 
+То('добѫдꙛ приблизнъ изводъ:') do |doc_string|
+   answer = JSON.parse(@response.body)
+   expect(answer).to match_record_yaml(doc_string)
+end
+
 То('добѫдꙛ кодъ поврата {string}') do |code|
    expect(@response.status).to eq(code.to_i)
 end
 
-Если('запытаю добыванје из изнахоѕи {string}') do |path|
+Если('запытаю добыванје из изнахоѕи {string}:') do |path, table|
+   pre, headers = table.rows_hash.transform_values { |value| YAML.load(value) }.reduce([[], []]) do |r, (k, v)|
+      if /(?<h>[^:]*):/ =~ k
+         [r.first, r.last | [[h, v]]]
+      else
+         [r.first | [[k, v]], r.last]
+      end
+   end
+   headers.each { |(name, value)| header(name, value) }
+
    @response = get(path)
 end
 
-То('добѫдꙛ вывод:') do |doc_string|
+То('добѫдꙛ выводъ:') do |doc_string|
    answer = JSON.parse(@response.body)
    expect(answer.to_yaml.strip).to eq(doc_string)
 end
 
 Если('запытаю изтрѣнје изнахоѕи {string}') do |url|
    @response = delete(url)
+end
+
+Если('запытаю изтрѣнје изнахоѕи {string}:') do |path, table|
+   pre, headers = table.rows_hash.transform_values { |value| YAML.load(value) }.reduce([[], []]) do |r, (k, v)|
+      if /(?<h>[^:]*):/ =~ k
+         [r.first, r.last | [[h, v]]]
+      else
+         [r.first | [[k, v]], r.last]
+      end
+   end
+   headers.each { |(name, value)| header(name, value) }
+
+   @response = delete(path)
 end
 
 Если('покушаю створити {string} запытъ до адреса {string}') do |proto, address|

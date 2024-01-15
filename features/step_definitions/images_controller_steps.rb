@@ -12,11 +12,6 @@ end
    FactoryBot.create_list(:picture, number.to_i)
 end
 
-То('добѫдꙛ приблизнъ извод:') do |doc_string|
-   answer = JSON.parse(@response.body)
-   expect(answer.to_yaml.strip).to eq(doc_string)
-end
-
 Допустим('є картинка сѫ даными:') do |table|
    attrs = table.rows_hash.transform_values { |value| YAML.load(value) }
    @current = FactoryBot.create(:picture, attrs)
