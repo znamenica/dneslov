@@ -49,13 +49,19 @@ class ImageUploader < CarrierWave::Uploader::Base
    end
 
    def asset_host
-      case h = Rails.application.config.asset_host
-      when Proc
-         h[]
-      when String, Symbol
-         h
-      else
-         nil
+      self.class.asset_host
+   end
+
+   class << self
+      def asset_host
+         case h = Rails.application.config.asset_host
+         when Proc
+            h[]
+         when String, Symbol
+            h
+         else
+            nil
+         end
       end
    end
 end

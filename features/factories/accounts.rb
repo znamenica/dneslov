@@ -5,7 +5,12 @@ FactoryBot.define do
       user
    end
 
-   factory :uid_account, parent: :account, class: :UidAccount do
+   factory :email_account, parent: :account, class: "Account::Email" do
+      no { Faker::Internet.email }
+      type { "Account::Email" }
+   end
+
+   factory :uid_account, parent: :account, class: "Account::Uid" do
       type { "Account::Uid" }
    end
 end

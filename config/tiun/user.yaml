@@ -1,0 +1,143 @@
+---
+types:
+ - name: short_user
+   model: User
+   version: 1.0
+   fields:
+    - name: uid
+      kind: string
+      descriptions: :tiun.types.short_user.uid
+    - name: name
+      kind: string
+      descriptions: :tiun.types.short_user.name
+ - name: user
+   model: User
+   version: 1.0
+   fields:
+    - name: settings
+      kind: json
+      descriptions: :tiun.types.user.settings
+    - name: accounts
+      kind: account array
+      descriptions: :tiun.types.user.accounts
+ - name: account
+   model: Account
+   version: 1.0
+   fields:
+    - name: "no"
+      kind: string
+      descriptions: :tiun.types.attitude.no
+    - name: type
+      kind: enum <Account::Uid, Account::Email>
+      descriptions: :tiun.types.attitude.string
+resources:
+ - name: user.index
+   path: /api/v1/users.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: short_user page
+      descriptions: :tiun.resources.user.index
+      allowed_errors: [200, 204, 206, 416, 422.3, 500]
+      args:
+       - name: per
+         kind: natural
+         default: 10 
+         maximum: 50
+         descriptions: :tiun.resources.user.index.args.per_page
+       - name: page
+         kind: natural
+         default: 1
+         descriptions: :tiun.resources.user.index.args.page
+ - name: user.create
+   path: /api/v1/users/create.json
+   methods:
+    - name: post
+      version: 1.0
+      kind: user
+      descriptions: :tiun.resources.user.create
+      allowed_errors: [200, 404, 422.3, 500]
+      args:
+       - name: "no"
+         kind: string
+         descriptions: :tiun.resources.user.post.no
+       - name: type
+         kind: enum <Account::Email>
+         descriptions: :tiun.resources.user.post.type
+       - name: password
+         kind: string
+         descriptions: :tiun.resources.user.post.password
+       - name: password_confirmation
+         kind: string
+         descriptions: :tiun.resources.user.post.password_confirmation
+       - name: settings
+         kind: json
+         descriptions: :tiun.resources.user.post.settings
+       - name: accounts
+         kind: account array
+         descriptions: :tiun.resources.user.post.accounts
+ - name: user
+   path: /api/v1/users/:uno.json
+   methods:
+    - name: get
+      version: 1.0
+      kind: user
+      policy: [user_read]
+      descriptions: :tiun.resources.user.get
+      allowed_errors: [200, 404, 406, 422.3, 500]
+      args:
+       - name: "no"
+         kind: string
+         descriptions: :tiun.resources.user.get.args.no
+       - name: type
+         kind: enum <Account::Uid, Account::Email>
+         descriptions: :tiun.resources.user.get.args.type
+    - name: put
+      version: 1.0
+      kind: user
+      policy: [user_write]
+      descriptions: :tiun.resources.user.put
+      allowed_errors: [200, 401, 404, 422.3, 500]
+      header:
+       - name: session_token
+         as: auth_token
+         kind: string
+         descriptions: :tiun.resources.session.put.header.session_token
+      args:
+       - name: "no"
+         kind: string
+         descriptions: :tiun.resources.user.put.args.no
+       - name: type
+         kind: enum <Account::Uid, Account::Email>
+         descriptions: :tiun.resources.user.put.args.type
+       - name: password
+         kind: string
+         descriptions: :tiun.resources.user.post.password
+       - name: password_confirmation
+         kind: string
+         descriptions: :tiun.resources.user.post.password_confirmation
+       - name: settings
+         kind: json
+         descriptions: :tiun.resources.user.put.settings
+       - name: accounts
+         kind: account array
+         descriptions: :tiun.resources.user.put.accounts
+    - name: delete
+      version: 1.0
+      kind: user
+      require: auth
+      policy: [user_write]
+      descriptions: :tiun.resources.user.delete
+      allowed_errors: [200, 401, 404, 422.3, 500]
+      header:
+       - name: session_token
+         as: auth_token
+         kind: string
+         descriptions: :tiun.resources.session.put.header.session_token
+      args:
+       - name: "no"
+         kind: string
+         descriptions: :tiun.resources.user.delete.args.no
+       - name: type
+         kind: enum <Account::Uid, Account::Email>
+         descriptions: :tiun.resources.user.delete.args.type

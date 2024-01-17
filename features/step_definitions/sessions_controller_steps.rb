@@ -48,6 +48,25 @@ end
    @current = FactoryBot.create(:user, validate_token: validate_token)
 end
 
+Если('поновям дане наряде в {string} сꙛ завѣрным токном для ужила {string}') do |path, croi|
+   token = User.by_credentials_or_id(croi).first.tokina.where(type: "Token::Validate").first
+   header("Authorization", "Validate #{token.code}")
+   @response = put(path)
+end
+
+То('завѣрям одсланје писма для ужила {string} сꙛ завѣрным токном') do |croi|
+   user = User.by_credentials_or_id(croi).first
+   expect(ActionMailer::Base.deliveries).to include(Mail::Message)
+   expect(ActionMailer::Base.deliveries.first.to.first).to eql(user.email.no)
+end
+
+То('одсланја писма для ужила {string} сꙛ завѣрным токном не бѫдє') do |croi|
+   user = User.by_credentials_or_id(croi).first
+   ActionMailer::Base.deliveries.each do |dela|
+      expect(dela&.to&.first).to_not eql(user.email.no)
+   end
+end
+
 Если('поновям дане и заглавкъ наряде в {string}:') do |path, table|
    pre, headers = table.rows_hash.transform_values { |value| YAML.load(value) }.reduce([[], []]) do |r, (k, v)|
       if /(?<h>[^:]*):/ =~ k

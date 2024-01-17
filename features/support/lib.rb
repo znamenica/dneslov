@@ -57,25 +57,25 @@ module Spec
    def array_match array_in, to_array, path, exception: true
       array = array_in.dup
 
-      error(to_array, array, path, exception:) if [array, to_array].any? {|x| !x.class.ancestors.include?(Enumerable) }
+      error(to_array, array, path, exception: exception) if [array, to_array].any? {|x| !x.class.ancestors.include?(Enumerable) }
 
       to_array.map.with_index do |to_val, index|
          idx =
             array.index do |val|
-               deep_match(val, to_val, path | [index], exception: false)
+               deep_match(val, to_val, path | [index], exception: exception)
             end
 
-         idx ? array.to_a.delete_at(idx) : error(to_val, array[index], path | [index], exception:)
+         idx ? array.to_a.delete_at(idx) : error(to_val, array[index], path | [index], exception: exception)
       end.any?
    end
 
    def hash_match hash, to_hash, path, exception: true
-      error(to_hash, hash, path, exception:) if [hash, to_hash].any? {|x| !(x.class.ancestors & [Hash, ActiveRecord::Base]).any? }
+      error(to_hash, hash, path, exception: exception) if [hash, to_hash].any? {|x| !(x.class.ancestors & [Hash, ActiveRecord::Base]).any? }
 
       to_hash.map do |(to_key, to_val)|
          value = hash.respond_to?(to_key) ? hash.send(to_key) : hash[to_key]
 
-         deep_match(value, to_val, path | [to_key], exception:)
+         deep_match(value, to_val, path | [to_key], exception: exception)
       end.any?
    end
 end

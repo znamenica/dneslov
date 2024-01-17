@@ -12,12 +12,15 @@ end
 end
 
 То('добѫдꙛ приблизнъ изводъ:') do |doc_string|
-   answer = JSON.parse(@response.body)
-   expect(answer).to match_record_yaml(doc_string)
+   expect(@response).to match_response_json_yaml(doc_string)
 end
 
 То('добѫдꙛ кодъ поврата {string}') do |code|
    expect(@response.status).to eq(code.to_i)
+end
+
+Если('запытаю добыванје из изнахоѕи {string}') do |path|
+   @response = get(path)
 end
 
 Если('запытаю добыванје из изнахоѕи {string}:') do |path, table|
