@@ -429,12 +429,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_05_004436) do
   create_table "tokina", force: :cascade do |t|
     t.string "code", null: false
     t.string "type", null: false
-    t.bigint "user_id", null: false
+    t.string "tokenable_type", null: false
+    t.bigint "tokenable_id", null: false
     t.datetime "expires_at"
     t.index ["code"], name: "index_tokina_on_code", unique: true
     t.index ["expires_at"], name: "index_tokina_on_expires_at"
+    t.index ["tokenable_type", "tokenable_id"], name: "index_tokina_on_tokenable"
     t.index ["type"], name: "index_tokina_on_type"
-    t.index ["user_id"], name: "index_tokina_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -461,5 +462,4 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_05_004436) do
   add_foreign_key "memory_names", "nomina", on_delete: :cascade
   add_foreign_key "service_scripta", "scripta", on_delete: :cascade
   add_foreign_key "service_scripta", "services", on_delete: :cascade
-  add_foreign_key "tokina", "users", on_delete: :cascade
 end

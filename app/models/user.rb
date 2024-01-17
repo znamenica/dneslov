@@ -2,7 +2,6 @@ class User < ApplicationRecord
    include Tiun::Model::Auth
 
    has_one :email, class_name: "Account::Email"
-   has_one :validate_token, class_name: "Token::Validate"
    has_one :session_token, class_name: "Token::Session"
    has_one :refresh_token, class_name: "Token::Refresh"
 
@@ -43,10 +42,6 @@ class User < ApplicationRecord
 
    def uid
       [accounts.first&.no, accounts.first&.type].join("#")
-   end
-
-   def validate_url
-     File.join *[ImageUploader.asset_host.to_s, 'token', CGI.escape(validate_token.code)]
    end
 
    def no= value

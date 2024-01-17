@@ -49,7 +49,7 @@ end
 end
 
 Если('поновям дане наряде в {string} сꙛ завѣрным токном для ужила {string}') do |path, croi|
-   token = User.by_credentials_or_id(croi).first.tokina.where(type: "Token::Validate").first
+   token = User.by_credentials_or_id(croi).first.email.validate_token
    header("Authorization", "Validate #{token.code}")
    @response = put(path)
 end
