@@ -119,7 +119,7 @@ gem 'tiun', '~> 0.0.1'
 gem 'sitemap_generator'
 
 # images
-gem 'carrierwave', '~> 3.0.5'
+gem 'carrierwave', '~> 3.0.7'
 gem 'carrierwave-base64'
 gem 'file_validators'
 gem 'rmagick'
