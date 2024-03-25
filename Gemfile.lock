@@ -458,7 +458,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rdoba (0.9.4)
-    rdoc (6.3.3)
+    rdoc (6.3.4.1)
     redcarpet (3.6.0)
     redis (4.8.1)
     redis-actionpack (5.3.0)
@@ -679,7 +679,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.0, >= 7.0.4.1)
   rdoba (~> 0.9.4)
-  rdoc (~> 6.3.2)
+  rdoc (~> 6.3.4)
   redcarpet
   redis (~> 4.0)
   redis-rack-cache

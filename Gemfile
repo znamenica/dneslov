@@ -34,7 +34,7 @@ gem 'redcarpet'
 # gem 'jbuilder', '~> 2.7'
 ## bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 1.0.0', group: :doc
-gem 'rdoc', '~> 6.3.2', group: :doc
+gem 'rdoc', '~> 6.3.4', group: :doc
 
 # gem 'globalize'
 # gem 'globalize-versioning'
